@@ -3,9 +3,9 @@
 var DESK_CONFIG = {
   // Newsletter form action URL from your email provider (e.g. Buttondown, Kit/ConvertKit, MailerLite, Beehiiv embed URL).
   // Leave '' until sign-ups open: the form then shows "Signups open soon" and stores/sends nothing.
-  newsletterAction: '',
+  newsletterAction: 'https://app.kit.com/forms/10006069/subscriptions',
   // Field name your provider expects for the email address (most use "email"; Kit uses "email_address").
-  newsletterEmailField: 'email',
+  newsletterEmailField: 'email_address',
   priceRefreshMs: 60000,
   halvingBlock: 1050000
 };

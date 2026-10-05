@@ -615,3 +615,13 @@ details.formula code{font:12px var(--mono);color:var(--text);background:#0e0f12;
 [data-q-more]{margin:4px 0 12px}
 /* footer disclaimer: quiet */
 footer .disclaimer,.site-footer .disclaimer{background:none;border-left:2px solid var(--line);color:var(--muted);font-size:12.5px;padding:2px 0 2px 12px}
+
+/* Compact home email capture */
+.signup-top{border-bottom:1px solid var(--line);background:rgba(247,147,26,.06);padding:10px 0}
+.signup-top-inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.signup-top-copy{margin:0;font-size:14px;color:var(--body);flex:1 1 180px}
+.signup-top-copy b{color:var(--text)}
+.signup-top .nl-bar{flex:2 1 280px;margin:0;max-width:420px}
+.signup-top .nl-row{margin:0}
+.signup-top .nl-msg{margin:4px 0 0;font-size:12px;min-height:0}
+@media (max-width:640px){.signup-top-inner{align-items:stretch}.signup-top .nl-bar{max-width:none}}
