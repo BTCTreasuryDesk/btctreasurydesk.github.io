@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /preview/
 Disallow: /downloads/
+Disallow: /library-files/
 
 Sitemap: https://btctreasurydesk.com/sitemap.xml
