@@ -1,0 +1,803 @@
+{
+ "appearances_as_of": "2026-10-04",
+ "appearances_note": "Each item was opened on its official upload (organizer, broadcaster, podcast or Strategy channel) on Oct 4, 2026. Dates are ET: live-stream start for streamed events, otherwise the YouTube publish date (the event itself may be a few days earlier). Topics are our own one-line summaries.",
+ "appearances": [
+  {
+   "id": "9sSKZelY0Yc",
+   "date": "2026-10-02",
+   "kind": "podcast",
+   "show": "Bitcoin Policy Institute, with Conner Brown",
+   "topic": "AI agents, digital capital and which money machines will use",
+   "channel": "Bitcoin Policy Institute",
+   "title": "Michael Saylor: What Money Will AI Agents Use?",
+   "venue": "Bitcoin Policy Institute, with Conner Brown",
+   "url": "https://www.youtube.com/watch?v=9sSKZelY0Yc",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "kerfDFUdFXk",
+   "date": "2026-09-28",
+   "kind": "interview",
+   "show": "Binance",
+   "topic": "Whether it is still early for Bitcoin, and Strategy’s accumulation and digital credit plans",
+   "channel": "Binance",
+   "title": "Are We Still Early to Bitcoin? Michael Saylor’s “Gold Rush” Through 2035",
+   "venue": "Binance",
+   "url": "https://www.youtube.com/watch?v=kerfDFUdFXk",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "bS9czFB7610",
+   "date": "2026-08-18",
+   "kind": "podcast",
+   "show": "Coin Stories with Natalie Brunell (with Phong Le)",
+   "topic": "Shareholder Q&A: lessons from the STRC drawdown and dilution questions",
+   "channel": "Natalie Brunell",
+   "title": "Michael Saylor & Phong Le Lay Out The Roadmap",
+   "venue": "Coin Stories with Natalie Brunell (with Phong Le)",
+   "url": "https://www.youtube.com/watch?v=bS9czFB7610",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "z5ky5nc4eEA",
+   "date": "2026-08-17",
+   "kind": "strategy",
+   "show": "Strategy Q2 2026 Investor Q&A",
+   "topic": "Follow-up investor Q&A after the Q2 2026 results",
+   "channel": "Strategy Software",
+   "title": "Q2 2026 Earnings: Investor Q&A",
+   "venue": "Strategy Q2 2026 Investor Q&A",
+   "url": "https://www.youtube.com/watch?v=z5ky5nc4eEA",
+   "date_basis": "live",
+   "verified": "2026-10-04",
+   "time_et": "11:59 AM ET"
+  },
+  {
+   "id": "1aGpJQ8BMLI",
+   "date": "2026-08-06",
+   "kind": "podcast",
+   "show": "The Diary Of A CEO",
+   "topic": "Long-form conversation on money, inflation and building Strategy",
+   "channel": "The Diary Of A CEO",
+   "title": "The Man Who Owns 4% Of All Bitcoin: \"I Made $15 Billion By Using ChatGPT!\" | Michael Saylor",
+   "venue": "The Diary Of A CEO",
+   "url": "https://www.youtube.com/watch?v=1aGpJQ8BMLI",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "JxBf7Ez14kA",
+   "date": "2026-07-30",
+   "kind": "strategy",
+   "show": "Strategy Q2 2026 earnings webinar",
+   "topic": "Second quarter 2026 results, live with management",
+   "channel": "Strategy Software",
+   "title": "Strategy Announces Second Quarter 2026 Financial Results",
+   "venue": "Strategy Q2 2026 earnings webinar",
+   "url": "https://www.youtube.com/watch?v=JxBf7Ez14kA",
+   "date_basis": "live",
+   "verified": "2026-10-04",
+   "time_et": "5:00 PM ET"
+  },
+  {
+   "id": "lzWDbmYQ38Y",
+   "date": "2026-06-17",
+   "kind": "interview",
+   "show": "BTC Prague 2026, VIP stage (with Julian Liniger)",
+   "topic": "Interview on the year so far for Bitcoin",
+   "channel": "BTCPrague",
+   "title": "EXCLUSIVE INTERVIEW: Michael Saylor Reveals What Went Wrong For Bitcoin...",
+   "venue": "BTC Prague 2026, VIP stage (with Julian Liniger)",
+   "url": "https://www.youtube.com/watch?v=lzWDbmYQ38Y",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "r2X04I6yGdY",
+   "date": "2026-06-15",
+   "kind": "keynote",
+   "show": "BTC Prague 2026 keynote",
+   "topic": "Keynote on Bitcoin’s long-term adoption path",
+   "channel": "BTCPrague",
+   "title": "This Michael Saylor Speech is Your Last Wake up Call!",
+   "venue": "BTC Prague 2026 keynote",
+   "url": "https://www.youtube.com/watch?v=r2X04I6yGdY",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "GrX7MoCuZFo",
+   "date": "2026-06-13",
+   "kind": "keynote",
+   "show": "Consensus 2026 mainstage (CoinDesk)",
+   "topic": "Digital credit as Bitcoin’s “killer app” and how STRC works",
+   "channel": "CoinDesk",
+   "title": "Michael Saylor: 'We Tripped Over' the World's Most Efficient Tax-Deferred Income",
+   "venue": "Consensus 2026 mainstage (CoinDesk)",
+   "url": "https://www.youtube.com/watch?v=GrX7MoCuZFo",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "2aDq7GZdzbY",
+   "date": "2026-06-12",
+   "kind": "keynote",
+   "show": "Bitcoin Corporate Day 2026",
+   "topic": "On-stage walk-through of the capital-markets math behind Strategy",
+   "channel": "BTCPrague",
+   "title": "$1.5M Bitcoin Is Coming (Saylor's $300T Plan)",
+   "venue": "Bitcoin Corporate Day 2026",
+   "url": "https://www.youtube.com/watch?v=2aDq7GZdzbY",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "IZ9_xK1peIs",
+   "date": "2026-05-26",
+   "kind": "tv",
+   "show": "Schwab Network, Market Overtime",
+   "topic": "STRC as the “passenger jet,” and crypto inside big banks",
+   "channel": "Schwab Network",
+   "title": "Michael Saylor on STRC \"Passenger Jet\" & Crypto's Growth in Big Banks",
+   "venue": "Schwab Network, Market Overtime",
+   "url": "https://www.youtube.com/watch?v=IZ9_xK1peIs",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "s3A_gnN3qEs",
+   "date": "2026-05-21",
+   "kind": "tv",
+   "show": "CNBC",
+   "topic": "Bitcoin versus the S&P 500 over the long run",
+   "channel": "CNBC Television",
+   "title": "Strategy's Michael Saylor: We expect bitcoin to go up more than the S&P 500 over time",
+   "venue": "CNBC",
+   "url": "https://www.youtube.com/watch?v=s3A_gnN3qEs",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "y9ESbX3btZE",
+   "date": "2026-05-11",
+   "kind": "interview",
+   "show": "CoinDesk",
+   "topic": "Strategy as the largest buyer of bitcoin, and the long-term vision",
+   "channel": "CoinDesk",
+   "title": "\"We're The Biggest Buyer of Bitcoin in the World\": Michael Saylor's Infinite Vision",
+   "venue": "CoinDesk",
+   "url": "https://www.youtube.com/watch?v=y9ESbX3btZE",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "sANENbo3iCI",
+   "date": "2026-05-05",
+   "kind": "strategy",
+   "show": "Strategy Q1 2026 earnings call",
+   "topic": "First quarter 2026 results, live with management",
+   "channel": "Bitcoin For Corporations",
+   "title": "LIVE: Strategy Q1 2026 Earnings Call",
+   "venue": "Strategy Q1 2026 earnings call",
+   "url": "https://www.youtube.com/watch?v=sANENbo3iCI",
+   "date_basis": "live",
+   "verified": "2026-10-04",
+   "time_et": "5:01 PM ET"
+  },
+  {
+   "id": "cDr8Ssi6gM0",
+   "date": "2026-04-30",
+   "kind": "podcast",
+   "show": "The Peter McCormack Show",
+   "topic": "Bitcoin and AI as the two technologies shaping the next decade",
+   "channel": "The Peter McCormack Show",
+   "title": "Bitcoin and AI - The Two Technologies That Will Decide The Future | Michael Saylor",
+   "venue": "The Peter McCormack Show",
+   "url": "https://www.youtube.com/watch?v=cDr8Ssi6gM0",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "_Y8HAqAYMhE",
+   "date": "2026-04-28",
+   "kind": "keynote",
+   "show": "Bitcoin 2026 keynote, Las Vegas",
+   "topic": "Bitcoin-backed digital credit and the structure of STRC",
+   "channel": "Bitcoin Magazine",
+   "title": "Keynote: Michael Saylor | Bitcoin 2026",
+   "venue": "Bitcoin 2026 keynote, Las Vegas",
+   "url": "https://www.youtube.com/watch?v=_Y8HAqAYMhE",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "t0mhU6umAuI",
+   "date": "2026-04-13",
+   "kind": "podcast",
+   "show": "Bankless",
+   "topic": "“Fix the money, fix the world”: his long-range Bitcoin thesis",
+   "channel": "Bankless",
+   "title": "Michael Saylor’s Master Plan: \"Fix the Money, Fix the World\"",
+   "venue": "Bankless",
+   "url": "https://www.youtube.com/watch?v=t0mhU6umAuI",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "s5DEGQQqemM",
+   "date": "2026-03-26",
+   "kind": "keynote",
+   "show": "DAS NYC 2026 keynote (Blockworks)",
+   "topic": "Main-stage keynote on Bitcoin and digital credit",
+   "channel": "Blockworks",
+   "title": "Keynote: Michael Saylor | DAS NYC 2026 | Day 3 | Main",
+   "venue": "DAS NYC 2026 keynote (Blockworks)",
+   "url": "https://www.youtube.com/watch?v=s5DEGQQqemM",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "MqXRG9c9vV0",
+   "date": "2026-03-26",
+   "kind": "tv",
+   "show": "CNBC",
+   "topic": "STRC as an on-ramp for Bitcoin believers who want less volatility",
+   "channel": "CNBC Television",
+   "title": "Michael Saylor on new STRC stock: Creates an on-ramp for bitcoin believers without the volatility",
+   "venue": "CNBC",
+   "url": "https://www.youtube.com/watch?v=MqXRG9c9vV0",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "PIVWyjihxnA",
+   "date": "2026-03-19",
+   "kind": "interview",
+   "show": "Presidio Bitcoin, 21 in 21",
+   "topic": "Rapid-fire questions on Bitcoin, AI and advice for builders",
+   "channel": "Presidio Bitcoin",
+   "title": "21 in 21: Michael Saylor on Bitcoin, AI, and Advice for Builders",
+   "venue": "Presidio Bitcoin, 21 in 21",
+   "url": "https://www.youtube.com/watch?v=PIVWyjihxnA",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "GocJIgAY-WI",
+   "date": "2026-02-27",
+   "kind": "strategy",
+   "show": "Strategy World 2026 Q&A (with Phong Le)",
+   "topic": "Interactive Q&A with the audience at Strategy’s own conference",
+   "channel": "Bitcoin For Corporations",
+   "title": "Interactive Q&A with Michael Saylor & Phong Le | Strategy World 2026",
+   "venue": "Strategy World 2026 Q&A (with Phong Le)",
+   "url": "https://www.youtube.com/watch?v=GocJIgAY-WI",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "yQL9yua9Yq0",
+   "date": "2026-02-25",
+   "kind": "strategy",
+   "show": "Strategy World 2026 keynote",
+   "topic": "“Digital Credit” keynote at Strategy’s annual conference",
+   "channel": "Bitcoin Magazine",
+   "title": "Michael Saylor's Strategy World 2026 Keynote: Digital Credit",
+   "venue": "Strategy World 2026 keynote",
+   "url": "https://www.youtube.com/watch?v=yQL9yua9Yq0",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "8eaJ3VuzhmY",
+   "date": "2026-02-23",
+   "kind": "podcast",
+   "show": "Coin Stories with Natalie Brunell",
+   "topic": "Responding to Bitcoin critics",
+   "channel": "Natalie Brunell",
+   "title": "Michael Saylor Responds to Bitcoin Critics",
+   "venue": "Coin Stories with Natalie Brunell",
+   "url": "https://www.youtube.com/watch?v=8eaJ3VuzhmY",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "H-LEbgIojgA",
+   "date": "2026-02-18",
+   "kind": "tv",
+   "show": "Fox Business, The Claman Countdown",
+   "topic": "The “crypto winter” and financial stability",
+   "channel": "Fox Business",
+   "title": "Bitcoin is in a ‘crypto winter,’ says Strategy founder",
+   "venue": "Fox Business, The Claman Countdown",
+   "url": "https://www.youtube.com/watch?v=H-LEbgIojgA",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "l1tGOvg288k",
+   "date": "2026-02-13",
+   "kind": "tv",
+   "show": "Fox Business, Making Money",
+   "topic": "Bitcoin’s volatility and why he calls it the most useful capital asset",
+   "channel": "Fox Business",
+   "title": "Bitcoin is ‘the most useful capital asset in the world,’ Michael Saylor emphasizes",
+   "venue": "Fox Business, Making Money",
+   "url": "https://www.youtube.com/watch?v=l1tGOvg288k",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "GOK-BJAknIU",
+   "date": "2026-02-05",
+   "kind": "strategy",
+   "show": "Strategy Q4 2025 earnings call",
+   "topic": "Fourth quarter and full-year 2025 results, live with management",
+   "channel": "Strategy Software",
+   "title": "Strategy Q4 2025 Earnings Call",
+   "venue": "Strategy Q4 2025 earnings call",
+   "url": "https://www.youtube.com/watch?v=GOK-BJAknIU",
+   "date_basis": "live",
+   "verified": "2026-10-04",
+   "time_et": "5:01 PM ET"
+  },
+  {
+   "id": "J85O-ckNxCw",
+   "date": "2026-01-12",
+   "kind": "podcast",
+   "show": "What Bitcoin Did",
+   "topic": "The Bitcoin treasury company debate",
+   "channel": "What Bitcoin Did",
+   "title": "Michael Saylor | The Bitcoin Treasury Debate Gets Heated",
+   "venue": "What Bitcoin Did",
+   "url": "https://www.youtube.com/watch?v=J85O-ckNxCw",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "ykvjtK30HiA",
+   "date": "2025-12-18",
+   "kind": "interview",
+   "show": "Galaxy, with Alex Thorn",
+   "topic": "Strategy’s evolution into a digital credit issuer, recorded at his Miami home",
+   "channel": "Galaxy",
+   "title": "Michael Saylor & The Ultimate Bitcoin Strategy",
+   "venue": "Galaxy, with Alex Thorn",
+   "url": "https://www.youtube.com/watch?v=ykvjtK30HiA",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "rQMFrpUFcNM",
+   "date": "2025-12-09",
+   "kind": "keynote",
+   "show": "Bitcoin MENA 2025 keynote, Abu Dhabi",
+   "topic": "Keynote at Bitcoin MENA",
+   "channel": "Bitcoin Magazine",
+   "title": "Michael Saylor Keynote | Bitcoin MENA 2025",
+   "venue": "Bitcoin MENA 2025 keynote, Abu Dhabi",
+   "url": "https://www.youtube.com/watch?v=rQMFrpUFcNM",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "VeFTC_DzqS8",
+   "date": "2025-12-08",
+   "kind": "keynote",
+   "show": "Bitcoin MENA 2025 fireside (with Simon Gerovich)",
+   "topic": "Perpetual preferreds and digital credit in Japan",
+   "channel": "Bitcoin For Corporations",
+   "title": "Michael Saylor & Simon Gerovich Fireside Chat | Bitcoin MENA 2025",
+   "venue": "Bitcoin MENA 2025 fireside (with Simon Gerovich)",
+   "url": "https://www.youtube.com/watch?v=VeFTC_DzqS8",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "iCZqVszBUdk",
+   "date": "2025-11-28",
+   "kind": "tv",
+   "show": "CNBC Crypto World",
+   "topic": "His 2026 outlook and whether the four-year cycle is over",
+   "channel": "CNBC Television",
+   "title": "Strategy's Michael Saylor weighs in on whether bitcoin's four-year cycle is dead: CNBC Crypto World",
+   "venue": "CNBC Crypto World",
+   "url": "https://www.youtube.com/watch?v=iCZqVszBUdk",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "DEB2hjOr9ng",
+   "date": "2025-11-25",
+   "kind": "keynote",
+   "show": "Clear Street Disruptive Technology Conference",
+   "topic": "Keynote address",
+   "channel": "Clear Street",
+   "title": "Michael Saylor Keynote Address | Clear Street Disruptive Technology Conference",
+   "venue": "Clear Street Disruptive Technology Conference",
+   "url": "https://www.youtube.com/watch?v=DEB2hjOr9ng",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "fxSOcpYRlLg",
+   "date": "2025-11-19",
+   "kind": "podcast",
+   "show": "10X Money Talks with Grant Cardone",
+   "topic": "How and why he moved Strategy’s treasury into bitcoin",
+   "channel": "Grant Cardone",
+   "title": "Michael Saylor Bitcoin Predictions | 10X Money Talks",
+   "venue": "10X Money Talks with Grant Cardone",
+   "url": "https://www.youtube.com/watch?v=fxSOcpYRlLg",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "nEeVgtDn3Bw",
+   "date": "2025-11-14",
+   "kind": "tv",
+   "show": "CNBC Squawk Box",
+   "topic": "Recent volatility and Strategy’s bitcoin holdings",
+   "channel": "CNBC Television",
+   "title": "Strategy's Michael Saylor on bitcoin: The volatility comes with the territory",
+   "venue": "CNBC Squawk Box",
+   "url": "https://www.youtube.com/watch?v=nEeVgtDn3Bw",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  },
+  {
+   "id": "tdjNY0QQmsM",
+   "date": "2025-10-30",
+   "kind": "strategy",
+   "show": "Strategy Q3 2025 earnings call",
+   "topic": "Third quarter 2025 results, live with management",
+   "channel": "Strategy Software",
+   "title": "Strategy Q3 2025 Earnings Call",
+   "venue": "Strategy Q3 2025 earnings call",
+   "url": "https://www.youtube.com/watch?v=tdjNY0QQmsM",
+   "date_basis": "live",
+   "verified": "2026-10-04",
+   "time_et": "4:59 PM ET"
+  },
+  {
+   "id": "LWiYDjScyeI",
+   "date": "2025-10-29",
+   "kind": "tv",
+   "show": "CNBC Crypto World, at Money20/20 Las Vegas",
+   "topic": "The digital asset treasury trend",
+   "channel": "CNBC Television",
+   "title": "Strategy's Michael Saylor predicts bitcoin could reach $150,000 by year end",
+   "venue": "CNBC Crypto World, at Money20/20 Las Vegas",
+   "url": "https://www.youtube.com/watch?v=LWiYDjScyeI",
+   "date_basis": "published",
+   "verified": "2026-10-04"
+  }
+ ],
+ "upcoming": [
+  {
+   "when": "Date TBA",
+   "sort": "2026-10-31",
+   "kind": "strategy",
+   "event": "Strategy Q3 2026 earnings call",
+   "place": "Live video webinar (Zoom, X and YouTube)",
+   "topic": "Third quarter 2026 results. Strategy has not announced the date yet; recent Q3 calls were in late October.",
+   "status": "Date not yet announced",
+   "url": "https://www.strategy.com/investor-relations",
+   "link_label": "Strategy investor relations",
+   "source_note": "Format per Strategy’s Q2 2026 date announcement (Business Wire, Jul 9, 2026)"
+  },
+  {
+   "when": "Nov 20–22, 2026",
+   "sort": "2026-11-20",
+   "kind": "keynote",
+   "event": "ITC Conference (Benjamin Cowen)",
+   "place": "JW Marriott Marquis, Miami",
+   "topic": "Listed as a headliner. Session title and time not yet published.",
+   "status": "Confirmed speaker",
+   "url": "https://benjamincowen.com/conference",
+   "link_label": "Official conference page"
+  },
+  {
+   "when": "Mar 29 – Apr 1, 2027",
+   "sort": "2027-03-29",
+   "kind": "strategy",
+   "event": "Strategy World 2027 + Bitcoin for Corporations",
+   "place": "Signia by Hilton & Waldorf Astoria Bonnet Creek, Orlando",
+   "topic": "Strategy’s annual conference. The 2027 agenda and speakers are not published yet.",
+   "status": "Strategy event, agenda TBA",
+   "url": "https://software.strategy.com/world27",
+   "link_label": "Official event page"
+  }
+ ],
+ "upcoming_note": "Only items confirmed on an official page are listed. Third-party listings we could not confirm on the organizer’s own site (for example DC Fintech Week, Money20/20 USA and Schwab IMPACT in October 2026) are left out until they are.",
+ "news_as_of": "2026-10-04",
+ "news_source": "Google News search for \"Michael Saylor\" (last 30 days); headlines link to the publisher via Google News",
+ "news": [
+  {
+   "title": "Michael Saylor’s Strategy hints at another big Bitcoin buy",
+   "source": "Crypto News",
+   "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBUYzhhb0ZXZ1pPeDhrOXdWV2djZVBTemlldVVob1RmRGF5ZGZOOWUxaGxDQ2RPa25GX18yc25KcHNFSTZlSW9tVl80TkMyNy0xQ1lXYl96emUxNDhHRUo3eTVtNlRydGhKV2cyTXdPYw?oc=5",
+   "date": "2026-10-04"
+  },
+  {
+   "title": "Michael Saylor hints at a major new Bitcoin pur...",
+   "source": "Pluang",
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQMzhYbm5pV1B3cjM3V09sUTM5VmsxOVVsYzNFclZ3SzVPTXkxampicEROcFZ4akVnNUJydDVtcmhJVURVTGJvc0pydUt2R0k0ZWNydlFwRFEwMGFlOEpTdXIwTndoTElVMTVFbnZqeWZFWkdhY2RuQmNfT2JhM0xCak13Y1ZlOHFv?oc=5",
+   "date": "2026-10-04"
+  },
+  {
+   "title": "Michael Saylor hints at new Bitcoin purchase by Strategy but no official confirmation yet.",
+   "source": "Pluang",
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQNm1IdkhUaUpQZHdNUW41YVhvRlNtN21FWHEtZ3RscEhyRFAzUXN0cmVVblNrczBtS2hZZ2JZaW5qYzhXR1ZZVHM4Znd2MEViWHRKc25zd0xxZWtXZDhIMnJoYXJQc2haVU5WX194Mi1vbzhQbU9COG52NGNfcDNEVlFYRERxUjBfZExoRg?oc=5",
+   "date": "2026-10-04"
+  },
+  {
+   "title": "Michael Saylor Sparks Fresh Bitcoin Purchase Speculation",
+   "source": "Cointribune",
+   "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQWHFLVWhjdl9xVmZ6dnlVWmU0VWltNmt3TmJmU0lneXUtWUZvQzlFVUM5TURIUnYwMGtleGhDZ1pXSlBKbE52bGwyelpYRUtBS082b25DN3o0UENucHZDbjJ2c0NrZ3RYTEVZcXJLRDJucjY2ZlktckkzdHljY2dNNXQ2US0zclFUcGs3Y0Jxa2w2QQ?oc=5",
+   "date": "2026-10-04"
+  },
+  {
+   "title": "Michael Saylor Advocates for Digital Credit Built on Bitcoin",
+   "source": "Cryptonews.net",
+   "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFByMHpKYUZlWXk4c0l2eUdPQWlvM04zTnl6QnlmZkRoX2JYY1RwNkd6SjNPd2dpWmJWUkEzYk1xalFWd2Zod1dUcEFDaklhV3ZhVXZSUTdBazY?oc=5",
+   "date": "2026-10-04"
+  },
+  {
+   "title": "Michael Saylor Rejects Musk's Vision of a Moneyless Future",
+   "source": "Yahoo Finance",
+   "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQQVJjbko1U0ZnV2NFdUZXWk9hQzU5SV9nS0FJaTVhS0VXSGdxYlFvRVBqZ184X01uYXF6TDZzRmJaM2E3MU84RnJmbFdzVEpuVEFhSFp4R0lqY1ROYnJCdVNjR3FLUGxTZUJLczNPVFJ0S2prNjJHeGE4MXRKbDI5V194d3p1bkNtUkcxQlJ0VDdCS3AyYWVMM3ZYQzR2OENPZWc?oc=5",
+   "date": "2026-10-03"
+  },
+  {
+   "title": "Michael Saylor Says Strategy's STRC Is Now Steadier Than The S&P 500's Biggest Tracker: ‘A Milestone For Digital Credit’",
+   "source": "stocktwits.com",
+   "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNMjZGa3RialVlamxyNU1tblIyb3c2WEhVNkF2ZTdYQlQ3T3QwTjJ6bXVmRWJsc212empma0VvdmZ1c0x4ZW5IOVd4ek5YVjZEOS14V1lXMERRV3dDX1FBTW04MFR5UV9WSGs1aERuRmE0TlNVcGVONWdabnotb2FtSDB2THlwNXFfdVprRkM4OXVraFd1S00xT0dVNzhtblZ6ZlJrQVpOMzRCNFZNMVlVbG9mYXUwVDFDa0pKQzdfUmgtYXM?oc=5",
+   "date": "2026-10-03"
+  },
+  {
+   "title": "Musk says AI may make money irrelevant, Bitcoin billionaire Michael Saylor disagrees",
+   "source": "thestreet.com",
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQSG5MLTNoejVGeURoVkQ5TVJTdGY5UlNVN2pfUHJweFlSVTNINERIbGxCWlp5NEhvR09BT2NuQ3ZOQ0ROVkJ3QjlDZG56a204NTdKSlBMZjlnakVWS3pLN2NLVHRsT3NiV1o2WE5Tcl9uempjcWo5eE5vNm5sOEtpN0ZVc1UwanVnakx3Q1hzcDVqcGkzcjJhc0FoWE1LZEhVNzI4RWVpUGs4ZUp5VWthWUNmSkdqOFJjZVdtNEd1SzU0QQ?oc=5",
+   "date": "2026-10-03"
+  },
+  {
+   "title": "Bitcoin (BTC) Generates No Yield, Michael Saylor Explains How Strategy ($MSTR) Sources the Cash for Dividends",
+   "source": "Crowdfund Insider",
+   "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOTEpIdzRiQXlUTUZIaHFoWDJ2Y1BsZW5mM3VuUWlqeXU3RWhzcG01SEhLT25nLVRTS0dqMVZ5RFFEU2VqN0V0VjF5LThZWDVwbzlSZ0dwb0xEMTV1U2RBYjNMbDNPdnJBX2J0WW94anNZRTRCSUtBZ1Nrd2VvVExqazRvZ0RzWWtQYWkxLTZEMzV6QnZMakxIRG9UdEpZOGNrS002Q19pU1I1eU5oMWdZOWJVNWpjOTA4SUc4U1MzN2llZDA1ZmYxc1JEQTEwdE94dVVZUVVxRmVlNjlEdzdlOWFxejdnSU0?oc=5",
+   "date": "2026-10-03"
+  },
+  {
+   "title": "A Father Told Michael Saylor His $219,000 MicroStrategy Investment For His Three Kids Had Fallen To $60,000. Saylor Said Shareholders Should Be Ready To \"Ride Through\" A Year Or Two Of Pain. MSTR Is Up 35.67% In The Past Month.",
+   "source": "24/7 Wall St.",
+   "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxQZXVPTDczaG5wWEl3OHpQSnNSU3dNYy1uNDV2VzMtcGtZTTRCTzRsYUtZMnBwbXdWN2lhaWVlbHBJc1l4ejdGb3hmZm1jcmVoZHRsX21BTDk3TTZuZ0JnWUpsTlEtQk9IX29JUGd4RVVlOENkbDIxUkhpSlFoRkVwTlpGYXNxU21iSHNDQXl4UW5ZRlptMm44UGJZVjNlTTVsOHVJOHBvNVlhMjdxVzFieGRLalFNSVBkRFVZaldTMGtBUnl4N2RJQUg5aWxzWC0xWjRkWFo2dlYyekNrVmttWHFFUWU0WjVaeTR4VlY4c2hrZVF1N0pfbDlNR19jbElKZkw3TUp3M09HUklyaGRuQkU2WU4?oc=5",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "MSTR’s Michael Saylor Rips BIP-110 As 'Alien' To Bitcoin's Soul, Calls It Monetary Purity By Fiat",
+   "source": "stocktwits.com",
+   "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNZ29sdEU1bnhLMjNkYld2eE45M3VtX0p4cHEwVW8zaDRXakx5cDZDY3JnZGxrdEZGYmNuckFwZ2RoTEFULVZRQmN6bnJyRWoxWUhtWkRuVDYwNkJZM1NhazAzYjR0MEROamZBMGc1V0NBR0dqLXpPWEFlZFY5cWhLa0JvalA0SS1BOXRWUk1ibHV0djlaT0IyOFFYdnRYNXo4Qm9kS3ZVc0tuMGdGMDJyTUFyTjFXWFpTZDk2ZU84aDByQVkyS2RHQVNrMUlnN0JQQ3ZGdTU1cDRUekQ4WTVHdm1OTkphSTFaTXp1dXNJTQ?oc=5",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "MSTR Stock Drops On Q2 Miss – Michael Saylor Says $1 Trillion AI 'Capital Suction' Is One Of Five Bitcoin Headwinds",
+   "source": "stocktwits.com",
+   "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOQ3hMRUhFdW1ha3hPcnBKZzgyRFdLZVg1NHd0WmRjWkMyRF9sVnZjX2VreHpSNlI3SXVVbHFiWk9hNHZhTHdaNzNuVUJPUUh2eEVsMmtUeEl3Z2ZzZ3AxYW1vX3lZdzdzbU1WTlVZRUc0NWNyNzczUS0xdTQ4akpSRFJKQjdfRkxvOXZ2cFJpS0JTdTZmdGRETUFzczRxVTZHLXlPdllTRVRDOWZWaHRxWjgydHQ5TFlHM0dzejBEOXQzOGZfZE95Q3BlV0xmVkNL?oc=5",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "Strategy Is Up 30% in a Month and Citigroup Just Doubled Its Price Target to $240. Is It Time to Buy MSTR Stock Now?",
+   "source": "24/7 Wall St.",
+   "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxNUVBYdUZybTRERmlub2ZscmJwWGxLMnc4TS1ybE5jdjQxcHJMazNoMHRITW0zNUltNFk5dHIzSWdmSWZjVnFubXZveWxpTHh0UFdlTUxyMEZrbW1DVVRYbnRrMEpOOGY0NkstY1d3SDZlWmNoZk5sQ2VXZDctUXg4dkNZRkctbnJuMFlCR2JMdFE2YUNHbzQ1MS1MemRELTNZTzl6V19GWTBzOU11Ylp0UGp0UEVreEJpRHRDMzIya2xJUE13MXFqVWdHSjU2QWVUN3U4RGM5anhod2cwZXd0aEJwVHZXSm5xZTRzSw?oc=5",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "Bitcoin Analyst: 'Only Michael Saylor' Can Do Strategy's Treasury Model",
+   "source": "Benzinga",
+   "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQbGxBTzZSWno0LS1kRDJHNmpVdVVuUlBxQ0FZOHlnSkpYNnJ5N0RhaFVjVHlMVnpLV1FGQ0RhUkd2VWZZTk5ZaEZIYnVXVFBVWGFjQVIzXzhzUTNrSFVNc3VzaFh5MkJ3aVY3eHBON29RekJ0REQ3b2ZhMk9JM0hvajFLSmFsQnlZNXRwTmYxbXpuNlZmRGhyQkxFcVlaZThacFhrYl9TRURpcElpRS01MWY5aG9IRFFON1lLNkFfRmVSbjhvWDhYOQ?oc=5",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Michael Saylor Eyes $160B Bitcoin Credit Opportunity Beyond Strategy and Strive",
+   "source": "CryptoNinjas",
+   "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNam05YUk3LWY3QmdVTUdmX0JDT3RxMnFyQ3ZTOTFXRXlvUEpzbmQzOU1XeGUwWDZFdnl0OEZORnoxd0p5WWpNZ1M2cnZZRF9NNU5xVXNTS2hDQkRUNFBScGlub3lBQlp6b3p3YlhsUEhfem00aWRCNkJSb0RranRUUGJmaGJGbWdqcDNpLW5uMXdZdEtSMXVyVU0wNm9LTkt6TE16QzV3Y1JxcWxhLUwwcURQRdIBuAFBVV95cUxOMUwxSW1icHV5aFVXOFVZYTVnNzlWbUVuVTl6Q1VPekJVeUxwWUhtNmpwSndicWI4WXR3eTQ5T2I3aThDVmNqSC1UN0NWd1hyc1FESUdqUmc5djlKcW91dWJiWC05YllzeU9mLU0wWGpWTG9WeU1qREJIMkRQM040eUYzV1J4UGlvUFhJOF8wbHJDR05ienQzaTNyaGNmV1JYY3IzWEVhRWk2d21wWlVpV3VzLU91YnRq?oc=5",
+   "date": "2026-10-01"
+  }
+ ],
+ "speeches": [
+  {
+   "date": "2026-09-29",
+   "date_label": "Sep 29, 2026",
+   "event": "Essay, michael.com",
+   "title": "“How Strategy Engineers Digital Credit”",
+   "summary": "His explainer on how Strategy turns Bitcoin into two products: MSTR equity and STRC credit.",
+   "quote": "Bitcoin is Digital Capital. MSTR is Digital Equity. STRC is Digital Credit.",
+   "quote_src": "Essay",
+   "links": [
+    [
+     "Read the essay",
+     "https://www.michael.com/articles/how-strategy-engineers-digital-credit"
+    ]
+   ]
+  },
+  {
+   "date": "2026-04-28",
+   "date_label": "Apr 28, 2026",
+   "event": "Bitcoin 2026, Las Vegas",
+   "title": "Keynote: digital credit",
+   "summary": "Makes the case that Bitcoin-backed digital credit is Bitcoin’s next big application, walks through how STRC is built, and where banks and funds could plug in.",
+   "quote": "We are really excited to provide a stable platform for everyone else to build on top of it.",
+   "quote_src": "Official session page transcript",
+   "links": [
+    [
+     "Video",
+     "https://www.youtube.com/watch?v=_Y8HAqAYMhE"
+    ],
+    [
+     "Official session page",
+     "https://conference-2026.b.tc/agenda/saylor-time"
+    ]
+   ]
+  },
+  {
+   "date": "2025-06",
+   "date_label": "Jun 2025",
+   "event": "BTC Prague 2025",
+   "title": "“The Power of 21”",
+   "summary": "Revisits his 21-year model a year on and argues that time plus Bitcoin is the engine of generational wealth.",
+   "quote": "You possess the most valuable information in the world — and a rare opportunity to commercialize that insight over the next 21 years.",
+   "quote_src": "Official slides",
+   "links": [
+    [
+     "Video",
+     "https://www.youtube.com/watch?v=hqoagNBtIps"
+    ],
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt32a376ef7e228b72/68597f38cbfa9d7c860d952d/Bitcoin_Prague_25_Saylor_Presentation.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2025-05",
+   "date_label": "May 2025",
+   "event": "Bitcoin 2025, Las Vegas",
+   "title": "“21 Ways to Wealth”",
+   "summary": "Twenty-one short principles for building wealth around Bitcoin, from conviction and courage to corporate structure and communication.",
+   "quote": "Bitcoin is capital, perfected, programmable, and incorruptible.",
+   "quote_src": "Official slides",
+   "links": [
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/bltd2a7ce171dc4625e/683da09d73466c590b9f1181/Bitcoin_Vegas_25.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2025-05",
+   "date_label": "May 2025",
+   "event": "Bitcoin for Corporations 2025",
+   "title": "“The Case for Corporate Bitcoin Adoption”",
+   "summary": "His pitch for why public companies should capitalize on Bitcoin, with Strategy’s record since August 2020 as the case study.",
+   "quote": "If a company can’t grow organically 15% per year, institutional investors lose interest and liquidity in the firm’s equity & options dissipates.",
+   "quote_src": "Official slides",
+   "links": [
+    [
+     "Video",
+     "https://www.youtube.com/watch?v=3-vBBYEXv6M"
+    ],
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/bltd6c8077cbfa4732f/683da3e7954d3bc67c940891/The_Case_For_Corporate_Adoption_Of_Bitcoin.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2025-03",
+   "date_label": "Mar 2025",
+   "event": "Presentation",
+   "title": "“Strategic Bitcoin Reserve: A Strategy for U.S. Digital Supremacy”",
+   "summary": "His proposal for how a U.S. Strategic Bitcoin Reserve could be built and why he thinks it matters for national power.",
+   "quote": "The Strategic Bitcoin Reserve (SBR) should add between $3 trillion and $106 trillion to the U.S. Treasury by 2045.",
+   "quote_src": "Official slides",
+   "prediction": true,
+   "links": [
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blta9b50de298b5b1e8/67d1afd61aa7750387b1a16a/Strategic_Bitcoin_Reserve_Final.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2025-03",
+   "date_label": "Mar 2025",
+   "event": "Presentation",
+   "title": "“21 Truths of Bitcoin”",
+   "summary": "Twenty-one one-line definitions of Bitcoin, building from ideology and protocol up to digital energy and defense.",
+   "quote": "Bitcoin is Immortal.",
+   "quote_src": "Official slides",
+   "links": [
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/bltc220da119bbf3c34/67dc7adb37e25aa78d1e3ca5/Digital_Assets_25_Final.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2024-07",
+   "date_label": "Jul 2024",
+   "event": "Bitcoin 2024, Nashville",
+   "title": "“The Bitcoin Revolution”",
+   "summary": "Introduced his 21-year model of global assets and Bitcoin, with playbooks for individuals, companies and nations.",
+   "quote": "If you wish to understand the universe, think in terms of energy, frequency, and vibration.",
+   "quote_src": "Official slides",
+   "links": [
+    [
+     "Video",
+     "https://www.youtube.com/watch?v=O9KnBcWMkpw"
+    ],
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt8053254ac26aa0a4/66a7a137cfbd232be87d6bbc/Bitcoin_Nashville_24_Saylor_Presentation.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2024-06",
+   "date_label": "Jun 2024",
+   "event": "BTC Prague 2024",
+   "title": "“21 Rules of Bitcoin”",
+   "summary": "Twenty-one rules, part aphorism and part philosophy. One of his most-shared talks.",
+   "quote": "Bitcoin is the singularity where science collides with economics.",
+   "quote_src": "Official slides",
+   "links": [
+    [
+     "Video",
+     "https://www.youtube.com/watch?v=1PkMFIa7rmQ"
+    ],
+    [
+     "Slides (michael.com)",
+     "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt77d9df2edc26b074/667189d151f656cc5eb74283/Bitcoin_Prague_24.pdf"
+    ]
+   ]
+  },
+  {
+   "date": "2022-04-14",
+   "date_label": "Apr 14, 2022",
+   "event": "Lex Fridman Podcast #276",
+   "title": "Bitcoin, Inflation, and the Future of Money",
+   "summary": "A four-hour conversation on inflation, energy, property and Bitcoin. His most-watched long-form interview.",
+   "quote": "So, the bigger trick is not to move a billion dollars from here to Tokyo. The big trick is to move a billion dollars from here to the year 2140.",
+   "quote_src": "Official transcript",
+   "links": [
+    [
+     "Video",
+     "https://www.youtube.com/watch?v=mC43pZkpTec"
+    ],
+    [
+     "Transcript",
+     "https://lexfridman.com/michael-saylor-transcript/"
+    ]
+   ]
+  },
+  {
+   "date": "2020-08-11",
+   "date_label": "Aug 11, 2020",
+   "event": "MicroStrategy press release (SEC Form 8-K)",
+   "title": "The first bitcoin purchase",
+   "summary": "The announcement of MicroStrategy’s first bitcoin purchase, which started the Bitcoin treasury era.",
+   "quote": "Bitcoin is digital gold – harder, stronger, faster, and smarter than any money that has preceded it.",
+   "quote_src": "SEC filing",
+   "links": [
+    [
+     "Filing (SEC)",
+     "https://www.sec.gov/Archives/edgar/data/1050446/000119312520215604/d921849dex991.htm"
+    ]
+   ]
+  }
+ ],
+ "speeches_note": "Official videos (organizer uploads), official slides and essays on michael.com, the official Lex Fridman transcript and SEC filings. Summaries are ours; quotes are verbatim."
+}

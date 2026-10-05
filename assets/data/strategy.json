@@ -1,0 +1,1106 @@
+{
+ "company": "Strategy Inc",
+ "ticker": "MSTR",
+ "as_of": "2026-09-28",
+ "retrieved": "2026-10-04",
+ "source_name": "Strategy — Bitcoin ledger (strategy.com/purchases)",
+ "source_url": "https://www.strategy.com/purchases",
+ "btc_held": 847666.0,
+ "total_cost_usd": 63945000000.0,
+ "avg_cost_usd": 75437.0,
+ "adso": 451577000.0,
+ "adso_note": "Assumed diluted shares outstanding (ADSO) as reported in Strategy's ledger for the latest row.",
+ "cost_note": "Totals row on strategy.com: aggregate cost and average price inclusive of fees; per Strategy, figures for BTC sold are removed from the totals.",
+ "confirming_filing": null,
+ "purchases": [
+  {
+   "n": 1,
+   "date": "2020-08-10",
+   "btc": 21454.0,
+   "avg_price": 11652.0,
+   "cost_musd": 250.0,
+   "holdings": 21454.0,
+   "adso_k": null
+  },
+  {
+   "n": 2,
+   "date": "2020-09-14",
+   "btc": 16796.0,
+   "avg_price": 10419.0,
+   "cost_musd": 175.0,
+   "holdings": 38250.0,
+   "adso_k": null
+  },
+  {
+   "n": 3,
+   "date": "2020-12-04",
+   "btc": 2574.0,
+   "avg_price": 19427.0,
+   "cost_musd": 50.0,
+   "holdings": 40824.0,
+   "adso_k": null
+  },
+  {
+   "n": 4,
+   "date": "2020-12-21",
+   "btc": 29646.0,
+   "avg_price": 21925.0,
+   "cost_musd": 650.0,
+   "holdings": 70470.0,
+   "adso_k": null
+  },
+  {
+   "n": 5,
+   "date": "2021-01-22",
+   "btc": 314.0,
+   "avg_price": 31808.0,
+   "cost_musd": 10.0,
+   "holdings": 70784.0,
+   "adso_k": null
+  },
+  {
+   "n": 6,
+   "date": "2021-02-02",
+   "btc": 295.0,
+   "avg_price": 33810.0,
+   "cost_musd": 10.0,
+   "holdings": 71079.0,
+   "adso_k": null
+  },
+  {
+   "n": 7,
+   "date": "2021-02-19",
+   "btc": 19452.0,
+   "avg_price": 52765.0,
+   "cost_musd": 1023.0,
+   "holdings": 90531.0,
+   "adso_k": null
+  },
+  {
+   "n": 8,
+   "date": "2021-03-01",
+   "btc": 328.0,
+   "avg_price": 45710.0,
+   "cost_musd": 15.0,
+   "holdings": 90859.0,
+   "adso_k": null
+  },
+  {
+   "n": 9,
+   "date": "2021-03-05",
+   "btc": 205.0,
+   "avg_price": 48888.0,
+   "cost_musd": 10.0,
+   "holdings": 91064.0,
+   "adso_k": null
+  },
+  {
+   "n": 10,
+   "date": "2021-03-12",
+   "btc": 262.0,
+   "avg_price": 57146.0,
+   "cost_musd": 15.0,
+   "holdings": 91326.0,
+   "adso_k": null
+  },
+  {
+   "n": 11,
+   "date": "2021-04-05",
+   "btc": 253.0,
+   "avg_price": 59339.0,
+   "cost_musd": 15.0,
+   "holdings": 91579.0,
+   "adso_k": null
+  },
+  {
+   "n": 12,
+   "date": "2021-05-13",
+   "btc": 271.0,
+   "avg_price": 55387.0,
+   "cost_musd": 15.0,
+   "holdings": 91850.0,
+   "adso_k": null
+  },
+  {
+   "n": 13,
+   "date": "2021-05-18",
+   "btc": 229.0,
+   "avg_price": 43663.0,
+   "cost_musd": 10.0,
+   "holdings": 92079.0,
+   "adso_k": null
+  },
+  {
+   "n": 14,
+   "date": "2021-06-21",
+   "btc": 13005.0,
+   "avg_price": 37617.0,
+   "cost_musd": 489.0,
+   "holdings": 105084.0,
+   "adso_k": null
+  },
+  {
+   "n": 15,
+   "date": "2021-08-24",
+   "btc": 3907.0,
+   "avg_price": 45294.0,
+   "cost_musd": 177.0,
+   "holdings": 108991.0,
+   "adso_k": null
+  },
+  {
+   "n": 16,
+   "date": "2021-09-13",
+   "btc": 5050.0,
+   "avg_price": 48099.0,
+   "cost_musd": 242.0,
+   "holdings": 114041.0,
+   "adso_k": null
+  },
+  {
+   "n": 17,
+   "date": "2021-11-29",
+   "btc": 7002.0,
+   "avg_price": 59187.0,
+   "cost_musd": 414.0,
+   "holdings": 121043.0,
+   "adso_k": null
+  },
+  {
+   "n": 18,
+   "date": "2021-12-09",
+   "btc": 1434.0,
+   "avg_price": 57477.0,
+   "cost_musd": 82.0,
+   "holdings": 122477.0,
+   "adso_k": null
+  },
+  {
+   "n": 19,
+   "date": "2021-12-30",
+   "btc": 1914.0,
+   "avg_price": 49229.0,
+   "cost_musd": 94.0,
+   "holdings": 124391.0,
+   "adso_k": null
+  },
+  {
+   "n": 20,
+   "date": "2022-02-01",
+   "btc": 660.0,
+   "avg_price": 37865.0,
+   "cost_musd": 25.0,
+   "holdings": 125051.0,
+   "adso_k": null
+  },
+  {
+   "n": 21,
+   "date": "2022-04-05",
+   "btc": 4167.0,
+   "avg_price": 45714.0,
+   "cost_musd": 190.0,
+   "holdings": 129218.0,
+   "adso_k": null
+  },
+  {
+   "n": 22,
+   "date": "2022-06-29",
+   "btc": 480.0,
+   "avg_price": 20817.0,
+   "cost_musd": 10.0,
+   "holdings": 129698.0,
+   "adso_k": null
+  },
+  {
+   "n": 23,
+   "date": "2022-09-20",
+   "btc": 301.0,
+   "avg_price": 19851.0,
+   "cost_musd": 6.0,
+   "holdings": 129999.0,
+   "adso_k": null
+  },
+  {
+   "n": 24,
+   "date": "2022-12-28",
+   "btc": 2501.0,
+   "avg_price": 17847.0,
+   "cost_musd": 45.0,
+   "holdings": 132500.0,
+   "adso_k": null
+  },
+  {
+   "n": 25,
+   "date": "2023-03-23",
+   "btc": 6455.0,
+   "avg_price": 23238.0,
+   "cost_musd": 150.0,
+   "holdings": 138955.0,
+   "adso_k": null
+  },
+  {
+   "n": 26,
+   "date": "2023-04-05",
+   "btc": 1045.0,
+   "avg_price": 28016.0,
+   "cost_musd": 29.0,
+   "holdings": 140000.0,
+   "adso_k": null
+  },
+  {
+   "n": 27,
+   "date": "2023-06-28",
+   "btc": 12333.0,
+   "avg_price": 28136.0,
+   "cost_musd": 347.0,
+   "holdings": 152333.0,
+   "adso_k": null
+  },
+  {
+   "n": 28,
+   "date": "2023-08-01",
+   "btc": 467.0,
+   "avg_price": 30788.0,
+   "cost_musd": 14.0,
+   "holdings": 152800.0,
+   "adso_k": null
+  },
+  {
+   "n": 29,
+   "date": "2023-09-25",
+   "btc": 5445.0,
+   "avg_price": 27053.0,
+   "cost_musd": 147.0,
+   "holdings": 158245.0,
+   "adso_k": null
+  },
+  {
+   "n": 30,
+   "date": "2023-11-01",
+   "btc": 155.0,
+   "avg_price": 34495.0,
+   "cost_musd": 5.0,
+   "holdings": 158400.0,
+   "adso_k": null
+  },
+  {
+   "n": 31,
+   "date": "2023-11-30",
+   "btc": 16130.0,
+   "avg_price": 36785.0,
+   "cost_musd": 593.0,
+   "holdings": 174530.0,
+   "adso_k": null
+  },
+  {
+   "n": 32,
+   "date": "2023-12-27",
+   "btc": 14620.0,
+   "avg_price": 42110.0,
+   "cost_musd": 616.0,
+   "holdings": 189150.0,
+   "adso_k": null
+  },
+  {
+   "n": 33,
+   "date": "2024-02-06",
+   "btc": 850.0,
+   "avg_price": 43723.0,
+   "cost_musd": 37.0,
+   "holdings": 190000.0,
+   "adso_k": null
+  },
+  {
+   "n": 34,
+   "date": "2024-02-26",
+   "btc": 3000.0,
+   "avg_price": 51813.0,
+   "cost_musd": 155.0,
+   "holdings": 193000.0,
+   "adso_k": null
+  },
+  {
+   "n": 35,
+   "date": "2024-03-11",
+   "btc": 12000.0,
+   "avg_price": 68477.0,
+   "cost_musd": 822.0,
+   "holdings": 205000.0,
+   "adso_k": null
+  },
+  {
+   "n": 36,
+   "date": "2024-03-19",
+   "btc": 9245.0,
+   "avg_price": 67382.0,
+   "cost_musd": 623.0,
+   "holdings": 214245.0,
+   "adso_k": null
+  },
+  {
+   "n": 37,
+   "date": "2024-04-29",
+   "btc": 155.0,
+   "avg_price": 63397.0,
+   "cost_musd": 10.0,
+   "holdings": 214400.0,
+   "adso_k": null
+  },
+  {
+   "n": 38,
+   "date": "2024-06-20",
+   "btc": 11931.0,
+   "avg_price": 65883.0,
+   "cost_musd": 786.0,
+   "holdings": 226331.0,
+   "adso_k": null
+  },
+  {
+   "n": 39,
+   "date": "2024-08-01",
+   "btc": 169.0,
+   "avg_price": 67455.0,
+   "cost_musd": 11.0,
+   "holdings": 226500.0,
+   "adso_k": null
+  },
+  {
+   "n": 40,
+   "date": "2024-09-13",
+   "btc": 18300.0,
+   "avg_price": 60408.0,
+   "cost_musd": 1110.0,
+   "holdings": 244800.0,
+   "adso_k": null
+  },
+  {
+   "n": 41,
+   "date": "2024-09-20",
+   "btc": 7420.0,
+   "avg_price": 61750.0,
+   "cost_musd": 458.0,
+   "holdings": 252220.0,
+   "adso_k": null
+  },
+  {
+   "n": 42,
+   "date": "2024-11-11",
+   "btc": 27200.0,
+   "avg_price": 74463.0,
+   "cost_musd": 2025.0,
+   "holdings": 279420.0,
+   "adso_k": null
+  },
+  {
+   "n": 43,
+   "date": "2024-11-18",
+   "btc": 51780.0,
+   "avg_price": 88627.0,
+   "cost_musd": 4600.0,
+   "holdings": 331200.0,
+   "adso_k": null
+  },
+  {
+   "n": 44,
+   "date": "2024-11-25",
+   "btc": 55500.0,
+   "avg_price": 97862.0,
+   "cost_musd": 5400.0,
+   "holdings": 386700.0,
+   "adso_k": null
+  },
+  {
+   "n": 45,
+   "date": "2024-12-02",
+   "btc": 15400.0,
+   "avg_price": 95976.0,
+   "cost_musd": 1500.0,
+   "holdings": 402100.0,
+   "adso_k": null
+  },
+  {
+   "n": 46,
+   "date": "2024-12-09",
+   "btc": 21550.0,
+   "avg_price": 98783.0,
+   "cost_musd": 2100.0,
+   "holdings": 423650.0,
+   "adso_k": null
+  },
+  {
+   "n": 47,
+   "date": "2024-12-16",
+   "btc": 15350.0,
+   "avg_price": 100386.0,
+   "cost_musd": 1500.0,
+   "holdings": 439000.0,
+   "adso_k": null
+  },
+  {
+   "n": 48,
+   "date": "2024-12-23",
+   "btc": 5262.0,
+   "avg_price": 106662.0,
+   "cost_musd": 561.0,
+   "holdings": 444262.0,
+   "adso_k": null
+  },
+  {
+   "n": 49,
+   "date": "2024-12-30",
+   "btc": 2138.0,
+   "avg_price": 97837.0,
+   "cost_musd": 209.0,
+   "holdings": 446400.0,
+   "adso_k": null
+  },
+  {
+   "n": 50,
+   "date": "2025-01-06",
+   "btc": 1070.0,
+   "avg_price": 94004.0,
+   "cost_musd": 101.0,
+   "holdings": 447470.0,
+   "adso_k": 281735.0
+  },
+  {
+   "n": 51,
+   "date": "2025-01-13",
+   "btc": 2530.0,
+   "avg_price": 95972.0,
+   "cost_musd": 243.0,
+   "holdings": 450000.0,
+   "adso_k": 282418.0
+  },
+  {
+   "n": 52,
+   "date": "2025-01-21",
+   "btc": 11000.0,
+   "avg_price": 101191.0,
+   "cost_musd": 1100.0,
+   "holdings": 461000.0,
+   "adso_k": 285425.0
+  },
+  {
+   "n": 53,
+   "date": "2025-01-27",
+   "btc": 10107.0,
+   "avg_price": 105596.0,
+   "cost_musd": 1100.0,
+   "holdings": 471107.0,
+   "adso_k": 288254.0
+  },
+  {
+   "n": 54,
+   "date": "2025-02-10",
+   "btc": 7633.0,
+   "avg_price": 97255.0,
+   "cost_musd": 742.0,
+   "holdings": 478740.0,
+   "adso_k": 289439.0
+  },
+  {
+   "n": 55,
+   "date": "2025-02-24",
+   "btc": 20356.0,
+   "avg_price": 97514.0,
+   "cost_musd": 1985.0,
+   "holdings": 499096.0,
+   "adso_k": 294063.0
+  },
+  {
+   "n": 56,
+   "date": "2025-03-17",
+   "btc": 130.0,
+   "avg_price": 82981.0,
+   "cost_musd": 11.0,
+   "holdings": 499226.0,
+   "adso_k": 294038.0
+  },
+  {
+   "n": 57,
+   "date": "2025-03-24",
+   "btc": 6911.0,
+   "avg_price": 84529.0,
+   "cost_musd": 584.0,
+   "holdings": 506137.0,
+   "adso_k": 296002.0
+  },
+  {
+   "n": 58,
+   "date": "2025-03-31",
+   "btc": 22048.0,
+   "avg_price": 86969.0,
+   "cost_musd": 1918.0,
+   "holdings": 528185.0,
+   "adso_k": 299674.0
+  },
+  {
+   "n": 59,
+   "date": "2025-04-14",
+   "btc": 3459.0,
+   "avg_price": 82618.0,
+   "cost_musd": 286.0,
+   "holdings": 531644.0,
+   "adso_k": 300590.0
+  },
+  {
+   "n": 60,
+   "date": "2025-04-21",
+   "btc": 6556.0,
+   "avg_price": 84785.0,
+   "cost_musd": 556.0,
+   "holdings": 538200.0,
+   "adso_k": 302353.0
+  },
+  {
+   "n": 61,
+   "date": "2025-04-28",
+   "btc": 15355.0,
+   "avg_price": 92737.0,
+   "cost_musd": 1424.0,
+   "holdings": 553555.0,
+   "adso_k": 306417.0
+  },
+  {
+   "n": 62,
+   "date": "2025-05-05",
+   "btc": 1895.0,
+   "avg_price": 95167.0,
+   "cost_musd": 180.0,
+   "holdings": 555450.0,
+   "adso_k": 306828.0
+  },
+  {
+   "n": 63,
+   "date": "2025-05-12",
+   "btc": 13390.0,
+   "avg_price": 99856.0,
+   "cost_musd": 1337.0,
+   "holdings": 568840.0,
+   "adso_k": 310078.0
+  },
+  {
+   "n": 64,
+   "date": "2025-05-19",
+   "btc": 7390.0,
+   "avg_price": 103498.0,
+   "cost_musd": 765.0,
+   "holdings": 576230.0,
+   "adso_k": 311846.0
+  },
+  {
+   "n": 65,
+   "date": "2025-05-26",
+   "btc": 4020.0,
+   "avg_price": 106237.0,
+   "cost_musd": 427.0,
+   "holdings": 580250.0,
+   "adso_k": 312737.0
+  },
+  {
+   "n": 66,
+   "date": "2025-06-02",
+   "btc": 705.0,
+   "avg_price": 106495.0,
+   "cost_musd": 75.0,
+   "holdings": 580955.0,
+   "adso_k": 312778.0
+  },
+  {
+   "n": 67,
+   "date": "2025-06-09",
+   "btc": 1045.0,
+   "avg_price": 105426.0,
+   "cost_musd": 110.0,
+   "holdings": 582000.0,
+   "adso_k": 312840.0
+  },
+  {
+   "n": 68,
+   "date": "2025-06-16",
+   "btc": 10100.0,
+   "avg_price": 104080.0,
+   "cost_musd": 1051.0,
+   "holdings": 592100.0,
+   "adso_k": 312883.0
+  },
+  {
+   "n": 69,
+   "date": "2025-06-23",
+   "btc": 245.0,
+   "avg_price": 105856.0,
+   "cost_musd": 26.0,
+   "holdings": 592345.0,
+   "adso_k": 312903.0
+  },
+  {
+   "n": 70,
+   "date": "2025-06-30",
+   "btc": 4980.0,
+   "avg_price": 106801.0,
+   "cost_musd": 532.0,
+   "holdings": 597325.0,
+   "adso_k": 314216.0
+  },
+  {
+   "n": 71,
+   "date": "2025-07-14",
+   "btc": 4225.0,
+   "avg_price": 111827.0,
+   "cost_musd": 472.0,
+   "holdings": 601550.0,
+   "adso_k": 314242.0
+  },
+  {
+   "n": 72,
+   "date": "2025-07-21",
+   "btc": 6220.0,
+   "avg_price": 118940.0,
+   "cost_musd": 740.0,
+   "holdings": 607770.0,
+   "adso_k": 316705.0
+  },
+  {
+   "n": 73,
+   "date": "2025-07-29",
+   "btc": 21021.0,
+   "avg_price": 117256.0,
+   "cost_musd": 2465.0,
+   "holdings": 628791.0,
+   "adso_k": 316703.0
+  },
+  {
+   "n": 74,
+   "date": "2025-08-11",
+   "btc": 155.0,
+   "avg_price": 116401.0,
+   "cost_musd": 18.0,
+   "holdings": 628946.0,
+   "adso_k": 316710.0
+  },
+  {
+   "n": 75,
+   "date": "2025-08-18",
+   "btc": 430.0,
+   "avg_price": 119666.0,
+   "cost_musd": 51.0,
+   "holdings": 629376.0,
+   "adso_k": 316727.0
+  },
+  {
+   "n": 76,
+   "date": "2025-08-25",
+   "btc": 3081.0,
+   "avg_price": 115829.0,
+   "cost_musd": 357.0,
+   "holdings": 632457.0,
+   "adso_k": 317624.0
+  },
+  {
+   "n": 77,
+   "date": "2025-09-02",
+   "btc": 4048.0,
+   "avg_price": 110981.0,
+   "cost_musd": 449.0,
+   "holdings": 636505.0,
+   "adso_k": 318877.0
+  },
+  {
+   "n": 78,
+   "date": "2025-09-08",
+   "btc": 1955.0,
+   "avg_price": 111196.0,
+   "cost_musd": 217.0,
+   "holdings": 638460.0,
+   "adso_k": 319486.0
+  },
+  {
+   "n": 79,
+   "date": "2025-09-15",
+   "btc": 525.0,
+   "avg_price": 114562.0,
+   "cost_musd": 60.0,
+   "holdings": 638985.0,
+   "adso_k": 319500.0
+  },
+  {
+   "n": 80,
+   "date": "2025-09-22",
+   "btc": 850.0,
+   "avg_price": 117344.0,
+   "cost_musd": 100.0,
+   "holdings": 639835.0,
+   "adso_k": 319727.0
+  },
+  {
+   "n": 81,
+   "date": "2025-09-29",
+   "btc": 196.0,
+   "avg_price": 113048.0,
+   "cost_musd": 22.0,
+   "holdings": 640031.0,
+   "adso_k": 320094.0
+  },
+  {
+   "n": 82,
+   "date": "2025-10-13",
+   "btc": 220.0,
+   "avg_price": 123561.0,
+   "cost_musd": 27.0,
+   "holdings": 640250.0,
+   "adso_k": 320067.0
+  },
+  {
+   "n": 83,
+   "date": "2025-10-20",
+   "btc": 168.0,
+   "avg_price": 112051.0,
+   "cost_musd": 19.0,
+   "holdings": 640418.0,
+   "adso_k": 320071.0
+  },
+  {
+   "n": 84,
+   "date": "2025-10-27",
+   "btc": 390.0,
+   "avg_price": 111053.0,
+   "cost_musd": 43.0,
+   "holdings": 640808.0,
+   "adso_k": 320089.0
+  },
+  {
+   "n": 85,
+   "date": "2025-11-03",
+   "btc": 397.0,
+   "avg_price": 114771.0,
+   "cost_musd": 46.0,
+   "holdings": 641205.0,
+   "adso_k": 320277.0
+  },
+  {
+   "n": 86,
+   "date": "2025-11-10",
+   "btc": 487.0,
+   "avg_price": 102557.0,
+   "cost_musd": 50.0,
+   "holdings": 641692.0,
+   "adso_k": 320282.0
+  },
+  {
+   "n": 87,
+   "date": "2025-11-17",
+   "btc": 8178.0,
+   "avg_price": 102171.0,
+   "cost_musd": 836.0,
+   "holdings": 649870.0,
+   "adso_k": 320283.0
+  },
+  {
+   "n": 88,
+   "date": "2025-12-01",
+   "btc": 130.0,
+   "avg_price": 89959.0,
+   "cost_musd": 12.0,
+   "holdings": 650000.0,
+   "adso_k": 328510.0
+  },
+  {
+   "n": 89,
+   "date": "2025-12-08",
+   "btc": 10624.0,
+   "avg_price": 90615.0,
+   "cost_musd": 963.0,
+   "holdings": 660624.0,
+   "adso_k": 333631.0
+  },
+  {
+   "n": 90,
+   "date": "2025-12-15",
+   "btc": 10645.0,
+   "avg_price": 92098.0,
+   "cost_musd": 980.0,
+   "holdings": 671268.0,
+   "adso_k": 338444.0
+  },
+  {
+   "n": 91,
+   "date": "2025-12-29",
+   "btc": 1229.0,
+   "avg_price": 88568.0,
+   "cost_musd": 109.0,
+   "holdings": 672497.0,
+   "adso_k": 343641.0
+  },
+  {
+   "n": 92,
+   "date": "2025-12-31",
+   "btc": 3.0,
+   "avg_price": 88210.0,
+   "cost_musd": 0.0,
+   "holdings": 672500.0,
+   "adso_k": 344897.0
+  },
+  {
+   "n": 93,
+   "date": "2026-01-05",
+   "btc": 1283.0,
+   "avg_price": 90391.0,
+   "cost_musd": 116.0,
+   "holdings": 673783.0,
+   "adso_k": 345632.0
+  },
+  {
+   "n": 94,
+   "date": "2026-01-12",
+   "btc": 13627.0,
+   "avg_price": 91519.0,
+   "cost_musd": 1247.0,
+   "holdings": 687410.0,
+   "adso_k": 352204.0
+  },
+  {
+   "n": 95,
+   "date": "2026-01-20",
+   "btc": 22305.0,
+   "avg_price": 95284.0,
+   "cost_musd": 2125.0,
+   "holdings": 709715.0,
+   "adso_k": 362606.0
+  },
+  {
+   "n": 96,
+   "date": "2026-01-26",
+   "btc": 2932.0,
+   "avg_price": 90061.0,
+   "cost_musd": 264.0,
+   "holdings": 712647.0,
+   "adso_k": 364173.0
+  },
+  {
+   "n": 97,
+   "date": "2026-02-02",
+   "btc": 855.0,
+   "avg_price": 87974.0,
+   "cost_musd": 75.0,
+   "holdings": 713502.0,
+   "adso_k": 364845.0
+  },
+  {
+   "n": 98,
+   "date": "2026-02-09",
+   "btc": 1142.0,
+   "avg_price": 78815.0,
+   "cost_musd": 90.0,
+   "holdings": 714644.0,
+   "adso_k": 365461.0
+  },
+  {
+   "n": 99,
+   "date": "2026-02-17",
+   "btc": 2486.0,
+   "avg_price": 67710.0,
+   "cost_musd": 168.0,
+   "holdings": 717131.0,
+   "adso_k": 366114.0
+  },
+  {
+   "n": 100,
+   "date": "2026-02-23",
+   "btc": 592.0,
+   "avg_price": 67286.0,
+   "cost_musd": 40.0,
+   "holdings": 717722.0,
+   "adso_k": 366419.0
+  },
+  {
+   "n": 101,
+   "date": "2026-03-02",
+   "btc": 3015.0,
+   "avg_price": 67700.0,
+   "cost_musd": 204.0,
+   "holdings": 720737.0,
+   "adso_k": 368154.0
+  },
+  {
+   "n": 102,
+   "date": "2026-03-09",
+   "btc": 17994.0,
+   "avg_price": 70946.0,
+   "cost_musd": 1277.0,
+   "holdings": 738731.0,
+   "adso_k": 374506.0
+  },
+  {
+   "n": 103,
+   "date": "2026-03-16",
+   "btc": 22337.0,
+   "avg_price": 70194.0,
+   "cost_musd": 1568.0,
+   "holdings": 761068.0,
+   "adso_k": 377340.0
+  },
+  {
+   "n": 104,
+   "date": "2026-03-23",
+   "btc": 1031.0,
+   "avg_price": 74326.0,
+   "cost_musd": 77.0,
+   "holdings": 762099.0,
+   "adso_k": 377847.0
+  },
+  {
+   "n": 105,
+   "date": "2026-04-06",
+   "btc": 4871.0,
+   "avg_price": 67718.0,
+   "cost_musd": 330.0,
+   "holdings": 766970.0,
+   "adso_k": 379425.0
+  },
+  {
+   "n": 106,
+   "date": "2026-04-13",
+   "btc": 13927.0,
+   "avg_price": 71902.0,
+   "cost_musd": 1001.0,
+   "holdings": 780897.0,
+   "adso_k": 379423.0
+  },
+  {
+   "n": 107,
+   "date": "2026-04-20",
+   "btc": 34164.0,
+   "avg_price": 74395.0,
+   "cost_musd": 2542.0,
+   "holdings": 815061.0,
+   "adso_k": 381588.0
+  },
+  {
+   "n": 108,
+   "date": "2026-04-27",
+   "btc": 3273.0,
+   "avg_price": 77906.0,
+   "cost_musd": 255.0,
+   "holdings": 818334.0,
+   "adso_k": 383036.0
+  },
+  {
+   "n": 109,
+   "date": "2026-05-11",
+   "btc": 535.0,
+   "avg_price": 80340.0,
+   "cost_musd": 43.0,
+   "holdings": 818869.0,
+   "adso_k": 383741.0
+  },
+  {
+   "n": 110,
+   "date": "2026-05-18",
+   "btc": 24869.0,
+   "avg_price": 80985.0,
+   "cost_musd": 2014.0,
+   "holdings": 843738.0,
+   "adso_k": 384169.0
+  },
+  {
+   "n": 111,
+   "date": "2026-06-01",
+   "btc": -32.0,
+   "avg_price": 77135.0,
+   "cost_musd": -2.0,
+   "holdings": 843706.0,
+   "adso_k": 382756.0
+  },
+  {
+   "n": 112,
+   "date": "2026-06-08",
+   "btc": 1550.0,
+   "avg_price": 65332.0,
+   "cost_musd": 101.0,
+   "holdings": 845256.0,
+   "adso_k": 384180.0
+  },
+  {
+   "n": 113,
+   "date": "2026-06-15",
+   "btc": 1587.0,
+   "avg_price": 63024.0,
+   "cost_musd": 100.0,
+   "holdings": 846842.0,
+   "adso_k": 386052.0
+  },
+  {
+   "n": 114,
+   "date": "2026-06-22",
+   "btc": 520.0,
+   "avg_price": 67068.0,
+   "cost_musd": 35.0,
+   "holdings": 847363.0,
+   "adso_k": 388617.0
+  },
+  {
+   "n": 115,
+   "date": "2026-06-30",
+   "btc": -1363.0,
+   "avg_price": 59256.0,
+   "cost_musd": -81.0,
+   "holdings": 846000.0,
+   "adso_k": 401283.0
+  },
+  {
+   "n": 116,
+   "date": "2026-07-06",
+   "btc": -2225.0,
+   "avg_price": 60773.0,
+   "cost_musd": -135.0,
+   "holdings": 843775.0,
+   "adso_k": 401294.0
+  },
+  {
+   "n": 117,
+   "date": "2026-08-03",
+   "btc": -1638.0,
+   "avg_price": 63957.0,
+   "cost_musd": -105.0,
+   "holdings": 842138.0,
+   "adso_k": 417268.0
+  },
+  {
+   "n": 118,
+   "date": "2026-08-10",
+   "btc": -1690.0,
+   "avg_price": 64262.0,
+   "cost_musd": -109.0,
+   "holdings": 840447.0,
+   "adso_k": 423850.0
+  },
+  {
+   "n": 119,
+   "date": "2026-08-31",
+   "btc": 4603.0,
+   "avg_price": 80318.0,
+   "cost_musd": 370.0,
+   "holdings": 845050.0,
+   "adso_k": 450090.0
+  },
+  {
+   "n": 120,
+   "date": "2026-09-21",
+   "btc": 950.0,
+   "avg_price": 79670.0,
+   "cost_musd": 76.0,
+   "holdings": 846000.0,
+   "adso_k": 450108.0
+  },
+  {
+   "n": 121,
+   "date": "2026-09-28",
+   "btc": 1665.0,
+   "avg_price": 85681.0,
+   "cost_musd": 143.0,
+   "holdings": 847666.0,
+   "adso_k": 451577.0
+  }
+ ]
+}

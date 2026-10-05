@@ -1,0 +1,104 @@
+{
+ "profile": [
+  {
+   "text": "Michael J. Saylor founded the company now called Strategy in November 1989 and served as its Chairman and CEO until August 2022.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526186895/d944734ddef14a.htm",
+   "source": "Strategy 2026 proxy statement"
+  },
+  {
+   "text": "Since August 2022 he has been Chairman of the Board and Executive Chairman. Before founding the company, he worked at DuPont as a venture manager (1988–89) and at Federal Group as a consultant (1987–88).",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526186895/d944734ddef14a.htm",
+   "source": "Strategy 2026 proxy statement"
+  },
+  {
+   "text": "In August 2020, as CEO, he led the decision to make bitcoin the company’s primary treasury reserve asset, starting with a $250 million purchase.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312520215604/d921849dex991.htm",
+   "source": "MicroStrategy press release, Aug 11, 2020"
+  },
+  {
+   "text": "Under his leadership, Strategy funds bitcoin purchases by issuing common stock, convertible notes and preferred stock, which the company calls “digital credit.”",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+   "source": "Strategy 10-Q for Q2 2026"
+  }
+ ],
+ "timeline": [
+  {
+   "date": "1989-11",
+   "title": "Saylor founds the company (then MicroStrategy)",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526186895/d944734ddef14a.htm",
+   "source": "Strategy 2026 proxy"
+  },
+  {
+   "date": "2020-08-11",
+   "title": "First bitcoin purchase: 21,454 BTC for $250 million",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312520215604/d921849dex991.htm",
+   "source": "8-K press release"
+  },
+  {
+   "date": "2020-12-21",
+   "title": "29,646 BTC for $650 million reported; holdings reach 70,470 BTC",
+   "url": "https://www.strategy.com/purchases",
+   "source": "strategy.com ledger"
+  },
+  {
+   "date": "2022-08",
+   "title": "Saylor becomes Executive Chairman; remains Chairman of the Board",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526186895/d944734ddef14a.htm",
+   "source": "Strategy 2026 proxy"
+  },
+  {
+   "date": "2024-11-25",
+   "title": "Largest single report on the ledger: 55,500 BTC for $5.4 billion",
+   "url": "https://www.strategy.com/purchases",
+   "source": "strategy.com ledger"
+  },
+  {
+   "date": "2025-02-05",
+   "title": "MicroStrategy begins doing business as Strategy",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000095017025014455/mstr-ex99_1.htm",
+   "source": "Q4 2024 results press release"
+  },
+  {
+   "date": "2025-07",
+   "title": "STRC (Stretch) IPO, described by Saylor as the world’s first “Treasury Preferred Stock”",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000095017025100916/mstr-ex99_1.htm",
+   "source": "Q2 2025 results press release"
+  },
+  {
+   "date": "2025-12-01",
+   "title": "USD Reserve established; holdings at 650,000 BTC",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312525303157/d69948dex991.htm",
+   "source": "8-K press release"
+  },
+  {
+   "date": "2026-01-20",
+   "title": "Holdings pass 700,000 BTC (709,715 after a 22,305 BTC report)",
+   "url": "https://www.strategy.com/purchases",
+   "source": "strategy.com ledger"
+  },
+  {
+   "date": "2026-06-30",
+   "title": "STRC switches from monthly to semi-monthly dividends",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+   "source": "10-Q for Q2 2026"
+  },
+  {
+   "date": "2026-06-30",
+   "title": "Ledger shows net BTC reductions reported between Jun 30 and Aug 10, 2026",
+   "url": "https://www.strategy.com/purchases",
+   "source": "strategy.com ledger"
+  },
+  {
+   "date": "2026-09-28",
+   "title": "Record holdings: 847,666 BTC after buying 1,665 BTC",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526403417/mstr-20260914.htm",
+   "source": "8-K"
+  },
+  {
+   "date": "2026-10-28",
+   "title": "Upcoming: stockholder vote on daily dividend record dates for the preferreds",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+   "source": "8-K, Oct 1, 2026"
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "as_of": "2026-10-04",
+ "items": [
+  {
+   "text": "Strategy’s first bitcoin purchase was 21,454 BTC for $250 million, announced Aug 11, 2020.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312520215604/d921849dex991.htm",
+   "source": "MicroStrategy 8-K"
+  },
+  {
+   "text": "As of Sep 27, 2026, Strategy held 847,666 BTC bought for about $63.95 billion, an average of $75,437 per bitcoin including fees.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526403417/mstr-20260914.htm",
+   "source": "Strategy 8-K, Sep 28, 2026"
+  },
+  {
+   "text": "Strategy’s USD Reserve, held to support preferred dividends and interest, was $5.02 billion as of Sep 27, 2026.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526403417/mstr-20260914.htm",
+   "source": "Strategy 8-K, Sep 28, 2026"
+  },
+  {
+   "text": "STRD is the only Strategy preferred with non-cumulative dividends: a skipped STRD dividend never has to be made up.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+   "source": "Strategy 10-Q for Q2 2026"
+  },
+  {
+   "text": "Each STRK share can be converted into 0.1 share of MSTR class A common stock.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+   "source": "Strategy 10-Q for Q2 2026"
+  },
+  {
+   "text": "STRC moved from monthly to semi-monthly dividend payments on June 30, 2026.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+   "source": "Strategy 10-Q for Q2 2026"
+  },
+  {
+   "text": "For October 2026, Strive pays SATA dividends every business day: $0.0516 per share, a 13.00% annual rate.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm",
+   "source": "Strive 8-K, Sep 15, 2026"
+  },
+  {
+   "text": "Strive held 27,462 BTC as of Sep 25, 2026, plus 505,000 shares of Strategy’s STRC.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026063653/asst-20260928.htm",
+   "source": "Strive 8-K, Sep 28, 2026"
+  },
+  {
+   "text": "The bitcoin block subsidy halves every 210,000 blocks; the next halving is at block 1,050,000.",
+   "url": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
+   "source": "Bitcoin Core source (nSubsidyHalvingInterval = 210000)"
+  },
+  {
+   "text": "Michael Saylor founded the company now called Strategy in November 1989.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526186895/d944734ddef14a.htm",
+   "source": "Strategy 2026 proxy statement"
+  }
+ ]
+}

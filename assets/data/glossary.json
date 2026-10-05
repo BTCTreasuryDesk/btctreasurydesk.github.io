@@ -1,0 +1,235 @@
+{
+ "as_of": "2026-10-04",
+ "note": "Plain-English definitions written by BTC Treasury Desk. Education only.",
+ "terms": [
+  {
+   "id": "treasury-company",
+   "term": "Bitcoin treasury company",
+   "definition": "A public company that holds bitcoin as a main reserve asset on its balance sheet and often raises money specifically to buy more. Strategy is the largest; Strive, Metaplanet and others follow versions of the same idea.",
+   "episodes": []
+  },
+  {
+   "id": "mnav",
+   "term": "mNAV",
+   "definition": "Short for “multiple of net asset value.” It compares what the market pays for a company with the value of the bitcoin it holds. Above 1x, the stock trades at a premium to its bitcoin; below 1x, at a discount. Strategy publishes its own mNAV on strategy.com, and the exact formula has changed over time, so always check which definition is being used.",
+   "episodes": [
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=104s"
+    },
+    {
+     "label": "Ep. 10",
+     "url": "https://www.youtube.com/watch?v=wdOFGq2waQk"
+    }
+   ]
+  },
+  {
+   "id": "btc-yield",
+   "term": "BTC Yield",
+   "definition": "A Strategy metric: the percentage change in bitcoin held per assumed diluted share over a period. It rises when the company adds bitcoin faster than it adds shares. It is not income, and it can be negative.",
+   "episodes": [
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=104s"
+    },
+    {
+     "label": "Ep. 10",
+     "url": "https://www.youtube.com/watch?v=wdOFGq2waQk"
+    }
+   ]
+  },
+  {
+   "id": "btc-gain",
+   "term": "BTC Gain",
+   "definition": "A Strategy metric that turns BTC Yield into a number of bitcoin: roughly, how many coins the change in bitcoin per share is worth to existing shareholders. BTC $ Gain expresses the same idea in dollars.",
+   "episodes": [
+    {
+     "label": "Ep. 10",
+     "url": "https://www.youtube.com/watch?v=wdOFGq2waQk"
+    }
+   ]
+  },
+  {
+   "id": "btc-per-share",
+   "term": "BTC per share",
+   "definition": "Bitcoin held divided by the share count, showing how much bitcoin backs each share. Companies define the share count differently (Strategy uses assumed diluted shares outstanding; Strive uses assumed fully diluted shares), so compare with care.",
+   "episodes": [
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=104s"
+    }
+   ]
+  },
+  {
+   "id": "preferred-stock",
+   "term": "Preferred stock",
+   "definition": "A class of shares that ranks ahead of common stock for dividends and in a liquidation, but usually has no vote and limited upside. Strategy’s STRF, STRC, STRK, STRD and STRE, and Strive’s SATA, are perpetual preferreds: they never mature.",
+   "episodes": [
+    {
+     "label": "Ep. 6",
+     "url": "https://www.youtube.com/watch?v=8-Htk6HvdqA"
+    },
+    {
+     "label": "Ep. 4",
+     "url": "https://www.youtube.com/watch?v=050XrJv0wus"
+    }
+   ]
+  },
+  {
+   "id": "digital-credit",
+   "term": "Digital credit",
+   "definition": "Strategy’s name for its preferred stock and similar income-style securities, which are ultimately supported by its bitcoin holdings.",
+   "episodes": []
+  },
+  {
+   "id": "strc",
+   "term": "STRC (Stretch)",
+   "definition": "Strategy’s variable-rate perpetual preferred. The company adjusts the dividend rate to encourage the shares to trade close to their $100 stated amount. Dividends are cumulative and currently paid twice a month.",
+   "episodes": [
+    {
+     "label": "Ep. 6",
+     "url": "https://www.youtube.com/watch?v=8-Htk6HvdqA"
+    },
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=169s"
+    }
+   ]
+  },
+  {
+   "id": "sata",
+   "term": "SATA",
+   "definition": "Strive’s variable-rate perpetual preferred, also built around a $100 stated amount. For October 2026, Strive pays the dividend every business day.",
+   "episodes": []
+  },
+  {
+   "id": "stated-amount",
+   "term": "Stated amount (par)",
+   "definition": "The reference value per preferred share, usually $100, that dividends are calculated on. A 12% rate on a $100 stated amount means $12 a year per share, whatever the share price.",
+   "episodes": []
+  },
+  {
+   "id": "liquidation-preference",
+   "term": "Liquidation preference",
+   "definition": "What a preferred holder is entitled to receive, ahead of common shareholders, if the company is wound up. For several Strategy and Strive preferreds, this amount can float above $100 based on recent trading prices.",
+   "episodes": []
+  },
+  {
+   "id": "cumulative",
+   "term": "Cumulative vs non-cumulative",
+   "definition": "If a cumulative dividend is skipped, it builds up and must be paid before common shareholders receive anything. A skipped non-cumulative dividend is simply gone. STRD is non-cumulative; Strategy’s other preferreds are cumulative.",
+   "episodes": []
+  },
+  {
+   "id": "effective-yield",
+   "term": "Effective yield",
+   "definition": "The annual dividend divided by the current market price. A preferred trading below $100 has an effective yield above its stated rate, and vice versa.",
+   "episodes": []
+  },
+  {
+   "id": "atm",
+   "term": "ATM offering",
+   "definition": "An at-the-market program lets a company sell new shares gradually into the open market at prevailing prices, instead of in one large deal. Strategy funds many bitcoin purchases this way.",
+   "episodes": [
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=135s"
+    }
+   ]
+  },
+  {
+   "id": "convertible-notes",
+   "term": "Convertible notes",
+   "definition": "Bonds that pay interest (sometimes 0%) and can be swapped for common shares at a set conversion price. Investors accept a lower rate in exchange for the option to share in stock gains.",
+   "episodes": []
+  },
+  {
+   "id": "usd-reserve",
+   "term": "USD Reserve",
+   "definition": "Cash Strategy sets aside to cover future preferred dividends and interest, so it does not have to sell bitcoin or issue stock at a bad moment to meet those payments.",
+   "episodes": [
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=169s"
+    }
+   ]
+  },
+  {
+   "id": "daily-dividends",
+   "term": "Daily dividends",
+   "definition": "A proposal for Strategy’s preferreds to have a dividend record date every calendar day, with payment on the next business day. Stockholders vote on it on October 28, 2026.",
+   "episodes": [
+    {
+     "label": "Ep. 10",
+     "url": "https://www.youtube.com/watch?v=wdOFGq2waQk"
+    },
+    {
+     "label": "Ep. 11",
+     "url": "https://www.youtube.com/watch?v=mFA0C9Jupgc&t=169s"
+    }
+   ]
+  },
+  {
+   "id": "buyback",
+   "term": "Buyback (repurchase)",
+   "definition": "When a company buys its own securities back from the market. Strategy has repurchased STRC shares, for example, when they traded below $100.",
+   "episodes": [
+    {
+     "label": "Ep. 7",
+     "url": "https://www.youtube.com/watch?v=GTQsXh7_jIo"
+    },
+    {
+     "label": "Ep. 4",
+     "url": "https://www.youtube.com/watch?v=050XrJv0wus"
+    }
+   ]
+  },
+  {
+   "id": "adso",
+   "term": "ADSO",
+   "definition": "Assumed diluted shares outstanding: Strategy’s share count including shares that could be created from convertible notes, options and similar instruments. It is the denominator in Strategy’s per-share bitcoin metrics.",
+   "episodes": []
+  },
+  {
+   "id": "sats",
+   "term": "Sats",
+   "definition": "Short for satoshis, the smallest unit of bitcoin. One bitcoin is 100,000,000 sats.",
+   "episodes": []
+  },
+  {
+   "id": "halving",
+   "term": "Halving",
+   "definition": "Every 210,000 blocks (roughly four years), the new bitcoin paid to miners per block is cut in half, slowing new supply toward the 21 million cap.",
+   "episodes": []
+  },
+  {
+   "id": "block-height",
+   "term": "Block height",
+   "definition": "The number of blocks in the bitcoin blockchain so far. A new block arrives about every ten minutes on average.",
+   "episodes": []
+  },
+  {
+   "id": "mempool-fees",
+   "term": "Mempool fees",
+   "definition": "The mempool is the waiting room for unconfirmed bitcoin transactions. Fees are quoted in sats per virtual byte (sat/vB); higher fees confirm sooner when the network is busy.",
+   "episodes": []
+  },
+  {
+   "id": "market-cap",
+   "term": "Market cap",
+   "definition": "Share price multiplied by the number of shares. For a treasury company, comparing market cap with the value of its bitcoin is the starting point for mNAV.",
+   "episodes": []
+  },
+  {
+   "id": "capital-stack",
+   "term": "Capital stack",
+   "definition": "The layers of a company’s funding, from most senior (debt) through preferred stock to common stock. Senior layers get paid first if things go wrong.",
+   "episodes": [
+    {
+     "label": "Ep. 6",
+     "url": "https://www.youtube.com/watch?v=8-Htk6HvdqA"
+    }
+   ]
+  }
+ ]
+}

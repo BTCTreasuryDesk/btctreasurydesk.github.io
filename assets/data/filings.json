@@ -1,0 +1,135 @@
+{
+ "as_of": "2026-10-04",
+ "source_name": "SEC EDGAR",
+ "source_url": "https://www.sec.gov/edgar/search/",
+ "companies": [
+  {
+   "name": "Strategy Inc",
+   "ticker": "MSTR",
+   "cik": 1050446,
+   "edgar_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001050446&type=&dateb=&owner=include&count=40",
+   "filings": [
+    {
+     "date": "2026-10-01",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/0001193125-26-409863-index.htm"
+    },
+    {
+     "date": "2026-09-28",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526403417/mstr-20260914.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526403417/0001193125-26-403417-index.htm"
+    },
+    {
+     "date": "2026-09-25",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526401636/mstr-20260924.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526401636/0001193125-26-401636-index.htm"
+    },
+    {
+     "date": "2026-09-25",
+     "form": "PRE 14A",
+     "title": "Preliminary proxy statement",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526401630/d503578dpre14a.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526401630/0001193125-26-401630-index.htm"
+    },
+    {
+     "date": "2026-09-21",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526396093/mstr-20260914.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526396093/0001193125-26-396093-index.htm"
+    },
+    {
+     "date": "2026-09-14",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526389858/mstr-20260914.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526389858/0001193125-26-389858-index.htm"
+    },
+    {
+     "date": "2026-09-08",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526384402/mstr-20260831.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526384402/0001193125-26-384402-index.htm"
+    },
+    {
+     "date": "2026-09-01",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526377583/mstr-20260831.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526377583/0001193125-26-377583-index.htm"
+    }
+   ]
+  },
+  {
+   "name": "Strive, Inc.",
+   "ticker": "ASST",
+   "cik": 1920406,
+   "edgar_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001920406&type=&dateb=&owner=include&count=40",
+   "filings": [
+    {
+     "date": "2026-09-28",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026063653/asst-20260928.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026063653/0001628280-26-063653-index.htm"
+    },
+    {
+     "date": "2026-09-21",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026062806/asst-20260921.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026062806/0001628280-26-062806-index.htm"
+    },
+    {
+     "date": "2026-09-15",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/0001628280-26-061949-index.htm"
+    },
+    {
+     "date": "2026-09-14",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061682/asst-20260914.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061682/0001628280-26-061682-index.htm"
+    },
+    {
+     "date": "2026-09-08",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026060809/asst-20260908.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026060809/0001628280-26-060809-index.htm"
+    },
+    {
+     "date": "2026-08-31",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026059468/asst-20260831.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026059468/0001628280-26-059468-index.htm"
+    },
+    {
+     "date": "2026-08-24",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026058518/asst-20260824.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026058518/0001628280-26-058518-index.htm"
+    },
+    {
+     "date": "2026-08-17",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026057224/asst-20260817.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026057224/0001628280-26-057224-index.htm"
+    }
+   ]
+  }
+ ]
+}

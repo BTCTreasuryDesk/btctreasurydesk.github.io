@@ -1,0 +1,92 @@
+{
+ "as_of": "2026-10-04",
+ "items": [
+  {
+   "date": "2026-10-05",
+   "end": "2026-10-30",
+   "title": "SATA daily dividends continue ($0.0516/share each business day)",
+   "company": "Strive",
+   "kind": "dividend",
+   "detail": "Record date is the prior business day. Next payments: every business day through Oct 30, 2026.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm",
+   "source": "Strive 8-K, Sep 15, 2026",
+   "daily_dates": [
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-26",
+    "2026-10-27",
+    "2026-10-28",
+    "2026-10-29",
+    "2026-10-30"
+   ]
+  },
+  {
+   "date": "2026-10-15",
+   "title": "STRC record date for the Oct 31 dividend ($0.50/share)",
+   "company": "Strategy",
+   "kind": "record",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+   "source": "Strategy 8-K, Oct 1, 2026"
+  },
+  {
+   "date": "2026-10-28",
+   "title": "Strategy special meeting: vote on daily dividend record dates for its preferreds (10:00 a.m. ET)",
+   "company": "Strategy",
+   "kind": "meeting",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+   "source": "Strategy 8-K, Oct 1, 2026"
+  },
+  {
+   "date": "2026-10-31",
+   "title": "STRC dividend payable ($0.50/share, 12.00% annual rate)",
+   "company": "Strategy",
+   "kind": "payment",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+   "source": "Strategy 8-K, Oct 1, 2026"
+  },
+  {
+   "date": "2026-11-15",
+   "title": "STRC dividend payable ($0.50/share; record Oct 31) — only if the daily-dividend amendments do not take effect by Nov 1",
+   "company": "Strategy",
+   "kind": "payment",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+   "source": "Strategy 8-K, Oct 1, 2026"
+  },
+  {
+   "date": "2026-12-31",
+   "title": "Scheduled quarterly dividend date for STRF, STRK, STRD and STRE (when, as and if declared)",
+   "company": "Strategy",
+   "kind": "payment",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+   "source": "Strategy 10-Q for Q2 2026"
+  }
+ ],
+ "not_announced": [
+  {
+   "company": "Strategy",
+   "item": "Q3 2026 earnings date",
+   "note": "Not confirmed in a Strategy filing or release we could verify as of Oct 4, 2026.",
+   "url": "https://www.strategy.com/"
+  },
+  {
+   "company": "Strive",
+   "item": "Q3 2026 earnings date",
+   "note": "Not confirmed by Strive as of Oct 4, 2026.",
+   "url": "https://investors.strive.com/"
+  }
+ ]
+}

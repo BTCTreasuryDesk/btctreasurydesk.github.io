@@ -1,0 +1,114 @@
+{
+ "questions": [
+  {
+   "q": "What does an mNAV above 1x usually mean?",
+   "options": [
+    "The stock trades at a premium to the value of its bitcoin",
+    "The company has no debt",
+    "The company sold bitcoin",
+    "The dividend is guaranteed"
+   ],
+   "answer": 0,
+   "why": "Above 1x, the market values the company at more than its bitcoin holdings."
+  },
+  {
+   "q": "Strategy’s “BTC Yield” measures…",
+   "options": [
+    "Interest earned by lending bitcoin",
+    "The change in bitcoin held per assumed diluted share",
+    "The dividend on STRC",
+    "Bitcoin’s price return"
+   ],
+   "answer": 1,
+   "why": "It tracks bitcoin per share, not income."
+  },
+  {
+   "q": "A 12% rate on a preferred with a $100 stated amount pays how much per share per year?",
+   "options": [
+    "$1.20",
+    "$12",
+    "$120",
+    "It depends on the share price"
+   ],
+   "answer": 1,
+   "why": "The rate applies to the $100 stated amount: $12 a year."
+  },
+  {
+   "q": "If that preferred trades at $96, its effective yield is…",
+   "options": [
+    "Exactly 12%",
+    "Below 12%",
+    "Above 12%",
+    "Zero"
+   ],
+   "answer": 2,
+   "why": "$12 ÷ $96 ≈ 12.5%. Buying below par lifts the effective yield."
+  },
+  {
+   "q": "Which Strategy preferred has non-cumulative dividends?",
+   "options": [
+    "STRC",
+    "STRF",
+    "STRK",
+    "STRD"
+   ],
+   "answer": 3,
+   "why": "Skipped STRD dividends do not build up."
+  },
+  {
+   "q": "What is an ATM offering?",
+   "options": [
+    "A cash machine",
+    "Selling new shares gradually into the market at current prices",
+    "A one-day bond auction",
+    "A bitcoin mining pool"
+   ],
+   "answer": 1,
+   "why": "At-the-market sales let a company raise money a little at a time."
+  },
+  {
+   "q": "How many sats are in one bitcoin?",
+   "options": [
+    "1,000",
+    "1,000,000",
+    "21,000,000",
+    "100,000,000"
+   ],
+   "answer": 3,
+   "why": "1 BTC = 100 million satoshis."
+  },
+  {
+   "q": "How often does the bitcoin halving happen?",
+   "options": [
+    "Every year",
+    "Every 210,000 blocks (about four years)",
+    "Every 21,000 blocks",
+    "When miners vote"
+   ],
+   "answer": 1,
+   "why": "The subsidy halves every 210,000 blocks."
+  },
+  {
+   "q": "Convertible notes give investors…",
+   "options": [
+    "Voting control",
+    "Interest plus the option to swap into shares",
+    "A direct claim on bitcoin",
+    "Daily dividends"
+   ],
+   "answer": 1,
+   "why": "Holders can convert into common stock at a set price."
+  },
+  {
+   "q": "What is Strategy’s USD Reserve for?",
+   "options": [
+    "Buying more bitcoin",
+    "Covering preferred dividends and interest",
+    "Paying salaries",
+    "Only share buybacks"
+   ],
+   "answer": 1,
+   "why": "It supports dividend and interest payments."
+  }
+ ]
+}

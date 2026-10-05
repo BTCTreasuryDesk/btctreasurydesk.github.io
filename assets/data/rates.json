@@ -1,0 +1,186 @@
+{
+ "as_of": "2026-10-04",
+ "source_name": "Issuer 8-K filings on SEC EDGAR (full-text search)",
+ "series": {
+  "STRC": [
+   {
+    "effective": "2025-09-01",
+    "rate": 10.0,
+    "prior_rate": 9.0,
+    "filed": "2025-09-02",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312525193487/d80677d8k.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On August 31, 2025, Strategy Inc (the “Company”) increased the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock from 9.00% to 10.00% effective for monthly periods commencing on or after September 1, 2025."
+   },
+   {
+    "effective": "2025-10-01",
+    "rate": 10.25,
+    "prior_rate": 10.0,
+    "filed": "2025-09-30",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312525225038/d939712d8k.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On September 30, 2025, Strategy Inc (the “Company”) increased the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock from 10.00% to 10.25% effective for monthly periods commencing on or after October 1, 2025."
+   },
+   {
+    "effective": "2025-12-01",
+    "rate": 10.75,
+    "prior_rate": 10.5,
+    "filed": "2025-12-01",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312525303157/d69948d8k.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On November 30, 2025, Strategy increased the regular dividend rate per annum on the STRC Stock effective for monthly periods commencing on or after December 1, 2025 from 10.50% to 10.75%."
+   },
+   {
+    "effective": "2026-01-01",
+    "rate": 11.0,
+    "prior_rate": 10.75,
+    "filed": "2026-01-02",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526000264/mstr-20251117.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On December 31, 2025, Strategy Inc (the “Company”) increased the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock effective for monthly periods commencing on or after January 1, 2026 from 10.75% to 11.00%."
+   },
+   {
+    "effective": "2026-02-01",
+    "rate": 11.25,
+    "prior_rate": 11.0,
+    "filed": "2026-02-02",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526032731/mstr-20260131.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On January 31, 2026, Strategy increased the regular dividend rate per annum on its Variable Rate Series A Perpetual Stretch Preferred Stock effective for monthly periods commencing on or after February 1, 2026 from 11.00% to 11.25%."
+   },
+   {
+    "effective": "2026-03-01",
+    "rate": 11.5,
+    "prior_rate": 11.25,
+    "filed": "2026-03-02",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526084264/mstr-20260228.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On February 28, 2026, Strategy increased the regular dividend rate per annum on its Variable Rate Series A Perpetual Stretch Preferred Stock effective for monthly periods commencing on or after March 1, 2026 from 11.25% to 11.50%."
+   },
+   {
+    "effective": "2026-04-01",
+    "rate": 11.5,
+    "prior_rate": null,
+    "filed": "2026-04-01",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526135765/mstr-20250902.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On March 31, 2026, Strategy Inc (the “Company”) announced that it will maintain the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock effective for monthly periods commencing on or after April 1, 2026 at 11.50%."
+   },
+   {
+    "effective": "2026-05-01",
+    "rate": 11.5,
+    "prior_rate": null,
+    "filed": "2026-05-01",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526199155/mstr-20250902.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On April 30, 2026, Strategy Inc (the “Company”) announced that it will maintain the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock effective for monthly periods commencing on or after May 1, 2026 at 11.50%."
+   },
+   {
+    "effective": "2026-06-01",
+    "rate": 11.5,
+    "prior_rate": null,
+    "filed": "2026-06-01",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526249768/mstr-20260530.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On May 31, 2026, Strategy announced that it will maintain the regular dividend rate per annum on its Variable Rate Series A Perpetual Stretch Preferred Stock effective for monthly periods commencing on or after June 1, 2026 at 11.50%."
+   },
+   {
+    "effective": "2026-07-01",
+    "rate": 12.0,
+    "prior_rate": null,
+    "filed": "2026-06-29",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526286871/mstr-20260629.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On June 29, 2026, Strategy announced that it will increase the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock (“STRC”) effective for semi-monthly periods with record dates on or after July 1, 2026, to 12.00%."
+   },
+   {
+    "effective": "2026-08-16",
+    "rate": 12.0,
+    "prior_rate": null,
+    "filed": "2026-08-03",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526329565/mstr-20260803.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On July 31, 2026, Strategy announced that it will maintain the regular dividend rate per annum on STRC Stock effective for semi-monthly periods commencing on or after August 16, 2026 at 12.00%."
+   },
+   {
+    "effective": "2026-09-16",
+    "rate": 12.0,
+    "prior_rate": null,
+    "filed": "2026-09-01",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526377583/mstr-20260831.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On August 31, 2026, Strategy Inc (the “Company”) announced that it will maintain the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock (“STRC”) effective for semi-monthly periods commencing on or after September 16, 2026 at 12.00%."
+   },
+   {
+    "effective": "2026-10-16",
+    "rate": 12.0,
+    "prior_rate": null,
+    "filed": "2026-10-01",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
+    "statement": "Dividend Rate on Variable Rate Series A Perpetual Stretch Preferred Stock On September 30, 2026, Strategy Inc (the “Company”) announced that it will maintain the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Stretch Preferred Stock (“STRC”) effective for semi-monthly periods commencing on or after October 16, 2026 at 12.00%."
+   }
+  ],
+  "SATA": [
+   {
+    "effective": "2025-12-16",
+    "rate": 12.25,
+    "prior_rate": 12.0,
+    "filed": "2025-12-15",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828025056878/asst-20251215.htm",
+    "statement": "(the \"Company\") released a press release announcing that its board of directors increased the regular dividend rate per annum on the Company’s Variable Rate Series A Perpetual Preferred Stock (the “SATA Stock”) from 12.00% to 12.25% effective for monthly periods commencing on or after December 16, 2025."
+   },
+   {
+    "effective": "2026-02-16",
+    "rate": 12.5,
+    "prior_rate": 12.25,
+    "filed": "2026-02-13",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026007897/asst-20260213.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Preferred Stock On February 13, 2026, the Company announced that its board of directors increased the regular dividend rate per annum on the Company’s SATA Stock from 12.25% to 12.50% effective for monthly periods commencing on or after February 16, 2026."
+   },
+   {
+    "effective": "2026-03-16",
+    "rate": 12.75,
+    "prior_rate": 12.5,
+    "filed": "2026-03-11",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026016664/asst-20260311.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Preferred Stock Strive's board of directors increased the regular dividend rate per annum on the SATA Stock from 12.50% to 12.75% effective for monthly periods commencing on or after March 16, 2026."
+   },
+   {
+    "effective": "2026-04-15",
+    "rate": 13.0,
+    "prior_rate": 12.75,
+    "filed": "2026-04-15",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026025154/asst-20260415.htm",
+    "statement": "Adjustment to Dividend Rate on Variable Rate Series A Perpetual Preferred Stock Strive's board of directors increased the regular dividend rate per annum on the SATA Stock from 12.75% to 13.00% effective for monthly periods commencing on or after April 15, 2026."
+   },
+   {
+    "effective": "2026-05-16",
+    "rate": 13.0,
+    "prior_rate": null,
+    "filed": "2026-05-14",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026034804/asst-20260514.htm",
+    "statement": "Dividend Rate on SATA Stock Strive announced that its board of directors maintained the regular dividend rate per annum on the Company’s SATA Stock at 13.00%, effective for monthly periods commencing on or after May 16, 2026."
+   },
+   {
+    "effective": "2026-07-01",
+    "rate": 13.0,
+    "prior_rate": null,
+    "filed": "2026-06-15",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026043013/asst-20260615.htm",
+    "statement": "(\"Strive\" or the \"Company\") announced that its board of directors maintained the regular dividend rate per annum on the Company’s SATA Stock at 13.00%, effective for periods commencing on or after July 1, 2026."
+   },
+   {
+    "effective": "2026-08-01",
+    "rate": 13.0,
+    "prior_rate": null,
+    "filed": "2026-07-15",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026048231/asst-20260714.htm",
+    "statement": "(\"Strive\" or the \"Company\") announced that its board of directors maintained the regular dividend rate per annum on the Company’s SATA Stock at 13.00%, effective for periods commencing on or after August 1, 2026."
+   },
+   {
+    "effective": "2026-09-01",
+    "rate": 13.0,
+    "prior_rate": null,
+    "filed": "2026-08-14",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026056908/asst-20260813.htm",
+    "statement": "(\"Strive\" or the \"Company\") announced that its board of directors maintained the regular dividend rate per annum on the Company’s SATA Stock at 13.00%, effective for periods commencing on or after September 1, 2026."
+   },
+   {
+    "effective": "2026-10-01",
+    "rate": 13.0,
+    "prior_rate": null,
+    "filed": "2026-09-15",
+    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm",
+    "statement": "(\"Strive\" or the \"Company\") announced that its board of directors maintained the regular dividend rate per annum on the Company’s SATA Stock at 13.00%, effective for periods commencing on or after October 1, 2026."
+   }
+  ]
+ }
+}

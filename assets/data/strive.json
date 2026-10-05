@@ -1,0 +1,81 @@
+{
+ "company": "Strive, Inc.",
+ "ticker": "ASST",
+ "as_of": "2026-09-25",
+ "retrieved": "2026-10-04",
+ "source_name": "Strive weekly 8-K filings (SEC EDGAR): \"Bitcoin held\" and \"Assumed Fully Diluted Shares\"",
+ "source_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001920406&type=8-K",
+ "shares_note": "Assumed Fully Diluted Shares as defined by Strive (common shares plus options and unvested RSUs; excludes traditional warrants).",
+ "points": [
+  {
+   "date": "2026-07-24",
+   "btc": 20000,
+   "shares": 86694972,
+   "filed": "2026-07-27",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026049666/asst-20260727.htm"
+  },
+  {
+   "date": "2026-07-31",
+   "btc": 20020,
+   "shares": 86804205,
+   "filed": "2026-08-03",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026051539/asst-20260803.htm"
+  },
+  {
+   "date": "2026-08-07",
+   "btc": 20167,
+   "shares": 88705776,
+   "filed": "2026-08-10",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026054983/asst-20260810.htm"
+  },
+  {
+   "date": "2026-08-14",
+   "btc": 20246,
+   "shares": 89302926,
+   "filed": "2026-08-17",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026057224/asst-20260817.htm"
+  },
+  {
+   "date": "2026-08-21",
+   "btc": 21356,
+   "shares": 92949226,
+   "filed": "2026-08-24",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026058518/asst-20260824.htm"
+  },
+  {
+   "date": "2026-08-28",
+   "btc": 23156,
+   "shares": 96523351,
+   "filed": "2026-08-31",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026059468/asst-20260831.htm"
+  },
+  {
+   "date": "2026-09-04",
+   "btc": 24531,
+   "shares": 98148551,
+   "filed": "2026-09-08",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026060809/asst-20260908.htm"
+  },
+  {
+   "date": "2026-09-11",
+   "btc": 25000,
+   "shares": 98139091,
+   "filed": "2026-09-14",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061682/asst-20260914.htm"
+  },
+  {
+   "date": "2026-09-18",
+   "btc": 26355,
+   "shares": 100144713,
+   "filed": "2026-09-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026062806/asst-20260921.htm"
+  },
+  {
+   "date": "2026-09-25",
+   "btc": 27462,
+   "shares": 100776795,
+   "filed": "2026-09-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026063653/asst-20260928.htm"
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+  "note": "Hand-edited config for /companies/. Badge thresholds are tunable here; re-run generate.py after editing.",
+  "top_n": 20,
+  "badges": {
+    "holdings_window_days": 90,
+    "fast_growing_pct": 25,
+    "reducing_pct": -10,
+    "price_window_days": 30,
+    "price_window_tolerance_days": 5,
+    "price_move_pct": 30
+  },
+  "companies": {
+    "strategy": {"tv": "NASDAQ:MSTR", "ir": "https://www.strategy.com/", "ir_label": "strategy.com (official dashboard)", "x": "Strategy", "desc": "The original corporate bitcoin treasury. It buys bitcoin with money raised from common stock, convertible notes and preferred shares (STRC, STRF, STRK, STRD, STRE)."},
+    "strive": {"tv": "NASDAQ:ASST", "ir": "https://investors.strive.com/", "ir_label": "Strive investor relations", "x": "strive", "desc": "Bitcoin treasury company that funds purchases partly through SATA, its variable-rate preferred stock paid daily."},
+    "twenty-one-capital": {"tv": "XXI", "ir": "https://xxi.money/", "desc": "Bitcoin-focused company led by Jack Mallers that went public holding a large bitcoin balance."},
+    "metaplanet": {"tv": "TSE:3350", "ticker": "3350.T", "ir": "https://metaplanet.jp/en/shareholders", "desc": "Tokyo-listed company that made bitcoin its main treasury asset in 2024."},
+    "mara": {"tv": "NASDAQ:MARA", "ir": "https://ir.mara.com/", "desc": "One of the largest US bitcoin miners; keeps mined and purchased bitcoin on its balance sheet."},
+    "bullish": {"tv": "NYSE:BLSH", "ir": "https://investors.bullish.com/", "desc": "Institutional digital-asset exchange operator that holds bitcoin on its balance sheet."},
+    "spacex": {"tv": "SPCX", "desc": "Space launch and Starlink satellite-internet company with bitcoin on its balance sheet."},
+    "coinbase": {"tv": "NASDAQ:COIN", "ir": "https://investor.coinbase.com/", "desc": "Largest US crypto exchange; holds bitcoin as a corporate investment, separate from customer assets."},
+    "cleanspark": {"tv": "NASDAQ:CLSK", "ir": "https://investors.cleanspark.com/", "desc": "US bitcoin miner that keeps part of the bitcoin it mines."},
+    "trump-media": {"tv": "NASDAQ:DJT", "ir": "https://ir.tmtgcorp.com/", "desc": "Parent of Truth Social; added bitcoin to its treasury in 2025."},
+    "tesla": {"tv": "NASDAQ:TSLA", "ir": "https://ir.tesla.com/", "desc": "Electric-vehicle maker that bought bitcoin in 2021 and still holds part of it."},
+    "riot": {"tv": "NASDAQ:RIOT", "ir": "https://www.riotplatforms.com/investors", "desc": "US bitcoin miner with large operations in Texas."},
+    "hut-8-mining-corp": {"tv": "NASDAQ:HUT", "ir": "https://hut8.com/investors/", "desc": "North American bitcoin miner and energy-infrastructure company."},
+    "block": {"tv": "NYSE:XYZ", "ir": "https://investors.block.xyz/", "desc": "Payments company behind Square and Cash App; has held bitcoin since 2020."},
+    "american-bitcoin-corp": {"tv": "NASDAQ:ABTC", "desc": "Bitcoin mining and accumulation company affiliated with Hut 8."},
+    "gd-culture-group": {"tv": "NASDAQ:GDC", "desc": "Small-cap company that moved to a bitcoin treasury strategy in 2025."},
+    "galaxy-digital-holdings": {"tv": "NASDAQ:GLXY", "desc": "Crypto financial-services and data-center company led by Mike Novogratz."},
+    "next-technology-holding-inc": {"tv": "NASDAQ:NXTT", "desc": "Small-cap technology company holding bitcoin as its main treasury asset."},
+    "gemini-space-station-inc": {"tv": "NASDAQ:GEMI", "desc": "Crypto exchange founded by Cameron and Tyler Winklevoss; listed in 2025."},
+    "procap-financial": {"tv": "SVIA", "desc": "Bitcoin-focused financial company listed as SVIA."}
+  }
+}

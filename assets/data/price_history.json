@@ -1,0 +1,145 @@
+{
+ "note": "Daily stock-price snapshots from BitcoinTreasuries.NET, saved by update_data.py",
+ "prices": {
+  "strategy": [
+   [
+    "2026-10-04",
+    160.215,
+    "USD"
+   ]
+  ],
+  "twenty-one-capital": [
+   [
+    "2026-10-04",
+    6.605,
+    "USD"
+   ]
+  ],
+  "metaplanet": [
+   [
+    "2026-10-04",
+    1.82,
+    "USD"
+   ]
+  ],
+  "mara": [
+   [
+    "2026-10-04",
+    11.245,
+    "USD"
+   ]
+  ],
+  "strive": [
+   [
+    "2026-10-04",
+    30.095,
+    "USD"
+   ]
+  ],
+  "bullish": [
+   [
+    "2026-10-04",
+    34.025,
+    "USD"
+   ]
+  ],
+  "spacex": [
+   [
+    "2026-10-04",
+    159.135,
+    "USD"
+   ]
+  ],
+  "coinbase": [
+   [
+    "2026-10-04",
+    183.155,
+    "USD"
+   ]
+  ],
+  "cleanspark": [
+   [
+    "2026-10-04",
+    12.73,
+    "USD"
+   ]
+  ],
+  "trump-media": [
+   [
+    "2026-10-04",
+    8.94,
+    "USD"
+   ]
+  ],
+  "tesla": [
+   [
+    "2026-10-04",
+    371.46,
+    "USD"
+   ]
+  ],
+  "riot": [
+   [
+    "2026-10-04",
+    19.715,
+    "USD"
+   ]
+  ],
+  "hut-8-mining-corp": [
+   [
+    "2026-10-04",
+    89.425,
+    "USD"
+   ]
+  ],
+  "block": [
+   [
+    "2026-10-04",
+    74.71,
+    "USD"
+   ]
+  ],
+  "american-bitcoin-corp": [
+   [
+    "2026-10-04",
+    8.53,
+    "USD"
+   ]
+  ],
+  "gd-culture-group": [
+   [
+    "2026-10-04",
+    1.415,
+    "USD"
+   ]
+  ],
+  "galaxy-digital-holdings": [
+   [
+    "2026-10-04",
+    23.205,
+    "USD"
+   ]
+  ],
+  "next-technology-holding-inc": [
+   [
+    "2026-10-04",
+    5.545,
+    "USD"
+   ]
+  ],
+  "gemini-space-station-inc": [
+   [
+    "2026-10-04",
+    4.69,
+    "USD"
+   ]
+  ],
+  "procap-financial": [
+   [
+    "2026-10-04",
+    4.185,
+    "USD"
+   ]
+  ]
+ }
+}

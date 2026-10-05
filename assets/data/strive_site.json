@@ -1,0 +1,24 @@
+{
+ "retrieved": "2026-10-04",
+ "source_name": "strive.com (Strive's official site)",
+ "source_url": "https://strive.com/",
+ "btc_held": 27462,
+ "btc_as_of": "2026-09-25",
+ "last_purchase": {
+  "btc": 1107,
+  "avg_price": 85396,
+  "as_of": "2026-09-25"
+ },
+ "sata_current_yield": "13.00%",
+ "sata_close": "$100.00",
+ "sata_yield_as_of": "market close, October 2, 2026",
+ "sata_annual_dividend": "$13.00 per share, paid each business day",
+ "sata_consecutive_dividends": 83,
+ "sata_dividends_since": "December 2025",
+ "outstanding_debt": "Zero (per Strive)",
+ "balance_sheet_assets": "$2.7B (bitcoin at market price; cash and marketable securities as of Sep 25, 2026, per Strive)",
+ "x": "https://x.com/strive",
+ "note": "Snapshot of figures shown on strive.com. Semler Scientific merger referenced on the site as completed.",
+ "asst_price": "$30.02",
+ "asst_price_note": "strive.com, as reported by Nasdaq; may be delayed"
+}

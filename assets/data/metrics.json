@@ -1,0 +1,46 @@
+{
+ "retrieved": "2026-10-05T00:41+00:00",
+ "source_name": "strategy.com (Strategy's official dashboard)",
+ "securities": {
+  "MSTR": {
+   "url": "https://www.strategy.com/",
+   "price": "$160.01",
+   "mnav": "1.20x",
+   "amplification": "1.24x",
+   "usd_reserve_musd": "$5,020"
+  },
+  "STRC": {
+   "url": "https://www.strategy.com/strc",
+   "price": "$99.41",
+   "dividend": "12.00%",
+   "effective_yield": "12.07%",
+   "record_date": "10/15/2026",
+   "payout_date": "10/31/2026"
+  },
+  "STRF": {
+   "url": "https://www.strategy.com/strf",
+   "price": "$103.40",
+   "dividend": "10.00%",
+   "effective_yield": "9.67%",
+   "record_date": "12/15/2026",
+   "payout_date": "12/31/2026"
+  },
+  "STRK": {
+   "url": "https://www.strategy.com/strk",
+   "price": "$76.25",
+   "dividend": "8.00%",
+   "effective_yield": "10.49%",
+   "record_date": "12/15/2026",
+   "payout_date": "12/31/2026"
+  },
+  "STRD": {
+   "url": "https://www.strategy.com/strd",
+   "price": "$73.38",
+   "dividend": "10.00%",
+   "effective_yield": "13.63%",
+   "record_date": "12/15/2026",
+   "payout_date": "12/31/2026"
+  }
+ },
+ "market_data_as_of": "10/02/2026 04:00 PM ET"
+}
