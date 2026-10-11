@@ -176,3 +176,21 @@ body.dm .q-cell{height:70px;padding-top:2px}body.dm .tv-slot{height:68px}body.dm
 @media (max-width:720px){.mc-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.mc-chips::-webkit-scrollbar{display:none}}
 .q-ed{right:30px;top:3px}
 @media (max-width:720px){.q-cell{height:62px}.q-cell:first-child{height:66px}.q-cell:not(:first-child) .tv-slot{width:138%;height:84px;transform:scale(.725);transform-origin:0 0}.q-cell:not(:first-child) .tv-slot iframe{margin-top:-4px}.q-ed{right:22px;top:2px}}
+
+/* MSTR featured tile (always the dominant tile; BTC and the rest equal and smaller) */
+.q-feat{background:linear-gradient(90deg,#160f05,#0d0f12 70%);box-shadow:inset 0 0 0 1px #F7931A99}
+.q-feat::after{content:"FEATURED";position:absolute;left:10px;bottom:4px;font:700 8.5px var(--mono);letter-spacing:.1em;color:#F7931Acc;z-index:2;pointer-events:none}
+@media(min-width:1101px){.strip{grid-template-columns:repeat(6,minmax(0,1fr))}.strip .q-feat{grid-column:span 2}}
+@media (max-width:1100px) and (min-width:721px){.strip{grid-template-columns:repeat(4,minmax(0,1fr))}.strip .q-cell,.strip .q-cell:nth-child(n+4){grid-column:span 1;border-top:1px solid var(--ln);border-right:1px solid var(--ln)}.strip .q-feat{grid-column:1/-1!important;border-top:0}}
+@media (max-width:720px){.q-feat::after{left:6px;bottom:2px}}
+body.dm .q-feat::after{display:none}
+.votw-more{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font:10.5px var(--mono)}.votw-more:empty{display:none}
+/* Strategy Spotlight (shared look with /members/) */
+.p-spot{grid-column:1/-1}.spot{border-left:3px solid var(--o)}
+.spot-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 2fr;gap:6px;align-items:stretch}.spot-k{background:var(--p2);border:1px solid var(--ln);border-radius:3px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.spot-k small{color:var(--mu);font:600 10px var(--mono);text-transform:uppercase}.spot-k b{font:700 16px var(--mono);color:#fff}
+.spot-q{margin:0;padding:4px 10px;border-left:2px solid var(--o);font:italic 12px/1.45 var(--sans);color:var(--tx)}.spot-q cite{display:block;font:600 10px var(--mono);color:var(--mu);font-style:normal;margin-top:3px}
+@media(max-width:900px){.spot-g{grid-template-columns:repeat(2,minmax(0,1fr))}.spot-q{grid-column:1/-1}}
+body.dm .p-spot{display:none}
+/* price scroll: slow and thin */
+.ticker{height:20px;font-size:10.5px;line-height:20px}

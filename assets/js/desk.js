@@ -55,7 +55,7 @@
   }
   /* ---------- Top strip: 5 customizable quote tiles (saved in localStorage 'btd_strip') ---------- */
   var STRIP_DEF = [
-    { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }, { tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'ASST', tv: 'NASDAQ:ASST' },
+    { tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }, { tk: 'ASST', tv: 'NASDAQ:ASST' },
     { tk: 'MPJPY', tv: 'OTC:MPJPY' }, { tk: 'XXI', tv: 'NYSE:XXI' }
   ];
   var STRIP_EXTRA = [
@@ -77,19 +77,21 @@
   var STRIP = stripLoad();
   function stripIsDefault() { return STRIP.every(function (x, i) { return x.tv === STRIP_DEF[i].tv; }); }
   function stripSave() { if (stripIsDefault()) { try { localStorage.removeItem('btd_strip'); } catch (e) {} } else LS.set('btd_strip', JSON.stringify(STRIP)); }
+  function stripFeat() { for (var j = 0; j < STRIP.length; j++) if (STRIP[j].tv === 'NASDAQ:MSTR') return j; return 0; }
   function stripCell(i) {
     var c = STRIP[i];
-    return '<div class="q-cell" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div>' +
+    return '<div class="q-cell' + (i === stripFeat() ? ' q-feat' : '') + '" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div>' +
       '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + (i + 1) + ' (' + esc(c.tk) + ')" title="Change this tile">' +
       '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button></div>';
   }
   function stripQuote(el) { tv(el, 'single-quote', { symbol: el.dataset.tvq, width: '100%', colorTheme: 'dark', isTransparent: true, locale: 'en' }); }
   function stripRender(only) {
     var s = $('[data-strip]'); if (!s) return;
-    if (only != null) {
+    if (only != null && ($('.q-feat', s) || {}).getAttribute && +$('.q-feat', s).dataset.qi === stripFeat()) {
       var old = $('[data-qi="' + only + '"]', s); if (old) { var tmp = document.createElement('div'); tmp.innerHTML = stripCell(only); var n = tmp.firstChild; s.replaceChild(n, old); stripQuote($('[data-tvq]', n)); return; }
     }
-    s.innerHTML = STRIP.map(function (x, i) { return stripCell(i); }).join('');
+    var f = stripFeat(), ord = [f].concat(STRIP.map(function (x, i) { return i; }).filter(function (i) { return i !== f; }));
+    s.innerHTML = ord.map(function (i) { return stripCell(i); }).join('');
     $$('[data-tvq]', s).forEach(stripQuote);
   }
   stripRender();
@@ -211,6 +213,8 @@
     $('[data-shorts]').innerHTML = (ep.shorts || []).map(function (x) { return '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">Short: ' + esc(x.t) + '</a>'; }).join('');
     $('[data-votw]').href = v.url; $('[data-votw-img]').src = 'https://i.ytimg.com/vi/' + v.id + '/mqdefault.jpg';
     $('[data-votw-title]').textContent = v.title; $('[data-votw-meta]').textContent = v.channel + ' · ' + dateLbl(v.date) + ' · official upload';
+    var vm = $('[data-votw-more]'); if (vm) vm.innerHTML = (v.more || []).concat(v.strategy_link ? [v.strategy_link] : []).slice(0, 2).map(function (l) { return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + ' &#8599;</a>'; }).join('');
+    spotlight(d);
     board(d.treasuries);
     $('[data-week]').innerHTML = d.week_ahead.map(function (w) { return '<li><b>' + esc(w.d) + '</b><span>' + esc(w.e) + '</span></li>'; }).join('');
     paintStrategyLive(); models();
@@ -568,6 +572,20 @@
   }
   clock(); setInterval(clock, 1000);
 
+  /* ---------- Strategy Spotlight (same panel as /members/; strategy.com first) ---------- */
+  function spotlight(D) {
+    var box = $('[data-spot]'); if (!box) return; var set = function (k, h) { var e = $('[data-sp="' + k + '"]', box); if (e) e.innerHTML = h; }, s = D.strategy;
+    set('mnav', s.mnav.toFixed(2) + 'x'); set('mnav-s', 'MSTR mNAV · ' + esc(s.kpi_as_of));
+    var p = D.preferreds.filter(function (x) { return x.t === 'STRC'; })[0]; if (p) { set('strc', p.rate.toFixed(2) + '%'); set('strc-s', 'rate · $' + p.price.toFixed(2) + ' (' + dateLbl(p.price_as_of) + ')'); }
+    set('btc', fmt(s.btc_held) + ' ₿'); set('btc-s', 'as of ' + dateLbl(s.btc_as_of) + ' · ' + fmt(s.sats_per_share) + ' sats/share');
+    fetch('/assets/data/strategy.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (S) {
+      var rows = S.purchases.filter(function (x) { return x.adso_k; }), last = rows[rows.length - 1], yr = last.date.slice(0, 4), base = null; rows.forEach(function (x) { if (x.date < yr) base = x; });
+      if (base) { set('yield', pct((last.holdings / last.adso_k / (base.holdings / base.adso_k) - 1) * 100, 1)); set('yield-s', dateLbl(base.date) + ' → ' + dateLbl(last.date) + ' · strategy.com ledger'); } }).catch(function () {});
+    fetch('/assets/data/quotes.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (Q) {
+      var q = Q.items.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; })[0]; if (!q) return;
+      set('quote', '&ldquo;' + esc(q.text.length > 200 ? q.text.slice(0, 197) + '…' : q.text) + '&rdquo;<cite>Michael Saylor · ' + esc(q.date_label || q.date) + (q.url ? ' · <a href="' + esc(q.url) + '" target="_blank" rel="noopener">source</a>' : '') + '</cite>'); }).catch(function () {});
+  }
+
   /* ---------- optional thin ticker (off by default) ---------- */
   var tk = $('[data-ticker]'), tkBtn = $('[data-ticker-toggle]');
   function ticker() {
@@ -577,8 +595,10 @@
       DESK.preferreds.forEach(function (p) { items.push([p.t, (p.rate * 100 / p.price).toFixed(2) + '% yld']); }); }
     inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + esc(x[1]); }).join('');
   }
-  function setTicker(on) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); tkBtn.textContent = 'Ticker: ' + (on ? 'On' : 'Off'); LS.set('btd_ticker', on ? '1' : '0'); ticker(); }
-  if (tk && tkBtn) { setTicker(LS.get('btd_ticker') === '1'); tkBtn.addEventListener('click', function () { setTicker(tk.hidden); }); }
+  // Off by default; a visitor's On/Off click is saved as their default. Reduced-motion visitors always start Off (and it never animates for them).
+  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setTicker(on, save) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); tkBtn.textContent = 'Price scroll: ' + (on ? 'On' : 'Off'); if (save) LS.set('btd_ticker', on ? '1' : '0'); ticker(); }
+  if (tk && tkBtn) { setTicker(!RM && LS.get('btd_ticker') === '1', false); tkBtn.addEventListener('click', function () { setTicker(tk.hidden, true); }); }
 
   /* ---------- Desk Mode ---------- */
   var mmT = null, cycT = null;

@@ -40,7 +40,7 @@
     <nav class="t-nav" aria-label="Main"><a href="/" aria-current="page">Desk</a><a href="/companies/">Companies</a><a href="/preferreds/">Yield Desk</a><a href="/saylor/">Saylor</a><a href="/dashboard/">Dashboard</a><a href="/lab/">Math Lab</a><a href="/episodes/">Episodes</a><a href="/members/">Members</a><a href="/start/">Start here</a><a href="/glossary/">Glossary</a><a href="/resources/">Resources</a></nav>
     <div class="t-tools">
       <div class="clock mono" data-clock><span class="dot"></span><b data-mkt>…</b><span data-mkt-cd></span><span class="ny" data-ny></span></div>
-      <button class="tbtn" type="button" data-ticker-toggle aria-pressed="false" title="Thin slow ticker (off by default)">Ticker: Off</button>
+      <button class="tbtn" type="button" data-ticker-toggle aria-pressed="false" title="Slow, thin price scroll (off by default; your choice is remembered)">Price scroll: Off</button>
       <button class="tbtn tbtn-o" type="button" data-deskmode title="Full-screen Desk Mode (Esc to exit)">&#9635; Desk Mode</button>
       <a class="tbtn tbtn-yt" href="https://www.youtube.com/@btctreasurydesk" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a>
     </div>
@@ -48,8 +48,15 @@
   <div class="ticker" data-ticker hidden aria-hidden="true"><div class="ticker-in" data-ticker-in></div></div>
   <main id="main" class="grid">
     <section class="strip" aria-label="Prices (customizable)" data-strip>
-      <div class="q-cell"><div class="tv-slot" data-tvq="BITSTAMP:BTCUSD"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NASDAQ:MSTR"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NASDAQ:ASST"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="OTC:MPJPY"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NYSE:XXI"></div></div>
+      <div class="q-cell q-feat"><div class="tv-slot" data-tvq="NASDAQ:MSTR"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="BITSTAMP:BTCUSD"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NASDAQ:ASST"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="OTC:MPJPY"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NYSE:XXI"></div></div>
     </section>
+
+    <section class="p p-spot spot" data-spot aria-label="Strategy Spotlight"><div class="p-h"><span class="p-t">Strategy Spotlight</span><a class="more" href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com &#8599;</a></div>
+      <div class="spot-g"><div class="spot-k"><small>MSTR mNAV</small><b data-sp="mnav">…</b><small data-sp="mnav-s"></small></div><div class="spot-k"><small>STRC <span class="tag" style="margin:0">preferred</span></small><b data-sp="strc">…</b><small data-sp="strc-s"></small></div>
+        <div class="spot-k"><small>Strategy BTC</small><b data-sp="btc">…</b><small data-sp="btc-s"></small></div><div class="spot-k"><small>BTC/share YTD</small><b data-sp="yield">…</b><small data-sp="yield-s"></small></div>
+        <blockquote class="spot-q" data-sp="quote">…</blockquote></div>
+      <p class="p-f">From <a href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com</a> (primary source) and SEC filings · <a href="https://x.com/Strategy" target="_blank" rel="noopener">@Strategy</a> · <a href="https://x.com/saylor" target="_blank" rel="noopener">@saylor</a> · <a href="https://www.michael.com/" target="_blank" rel="noopener">michael.com</a>. Education only, not investment advice.</p></section>
+
 
     <section class="p p-tboard" id="board" aria-label="Treasury Board: top public Bitcoin treasury companies">
       <div class="p-h tb-h"><span class="p-t">Treasury Board</span>
@@ -88,7 +95,7 @@
       <a class="ep" data-ep-link href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><img data-ep-img src="https://i.ytimg.com/vi/uS2i-UBoMO4/hqdefault.jpg" alt="Episode thumbnail" width="480" height="360"><span class="play">&#9654;</span></a>
       <h2 class="ep-t" data-ep-title>Ep. 12</h2>
       <div class="ep-row"><a class="tbtn tbtn-yt" data-ep-watch href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a><span class="shorts" data-shorts></span></div>
-      <div class="votw"><span class="p-t">Video of the Week</span><a data-votw href="#" target="_blank" rel="noopener"><img data-votw-img alt="" width="120" height="68"><span><b data-votw-title></b><small data-votw-meta></small></span></a></div>
+      <div class="votw"><span class="p-t">Video of the Week</span><a data-votw href="#" target="_blank" rel="noopener"><img data-votw-img alt="" width="120" height="68"><span><b data-votw-title></b><small data-votw-meta></small></span></a><div class="votw-more" data-votw-more></div></div>
     </section>
 
     <section class="p p-strat" aria-label="Strategy and Strive">
