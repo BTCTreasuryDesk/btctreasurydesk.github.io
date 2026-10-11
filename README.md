@@ -6,13 +6,13 @@ Plain HTML/CSS/JS, no framework, no build step needed to host. Pages are pre-ren
 ## Pages
 | Path | What it is |
 |---|---|
-| `/` | Ticker tape, latest episode player (auto-updates from the long-form uploads playlist) + 2 recent episodes, Desk at a glance tiles, network bar, TA gauge, news, takeaways, Saylor card, newsletter, Yield Desk teaser, tools, calendar, leaderboard, Start here, Coming soon, Follow |
+| `/` | Ticker tape, latest episode player (auto-updates from the long-form uploads playlist) + 2 recent episodes, Desk at a glance tiles, network bar, Model Zones panel, news, takeaways, Saylor card, newsletter, Yield Desk teaser, tools, calendar, leaderboard, Start here, Coming soon, Follow |
 | `/dashboard/` | Live BTC price, network stats, sats converter, local stack tracker, Strategy tracker, purchase timeline + what-if, BTC per share (MSTR, ASST), leaderboard top 10, mini charts, TA panel, calendar |
 | `/preferreds/` | Preferred Yield Desk: STRC vs SATA, rate history, effective yield / par at your price, dividend estimator, all preferreds table |
 | `/companies/` | Strategy (featured #1), Strive (#2), top-10 stats table with callouts and compare mode, share-of-holdings view (tiers, donut, sortable/filterable table), top-20 company cards with badges |
 | `/lab/` | Treasury Math Lab: mNAV calculator (equity-only, auto-fills BTC price), months to cover premium, BTC-at-X scenario sliders for MSTR and ASST, STRC/SATA effective yield and par distance. Formulas under each tool. Education only, no price targets. |
 | `/saylor/` | The Saylor Desk (unofficial fan resource): quote of the day, verified quote library, Saylor in the news, appearances & interviews, @saylor X embed, timeline, profile |
-| `/glossary/`, `/start/`, `/episodes/`, `/resources/` | Glossary, 5-minute guide, episode archive, filings + news + Treasury Quiz + data sources |
+| `/glossary/`, `/start/`, `/episodes/`, `/resources/` | Glossary, 5-minute guide, episode archive, filings + news + data sources |
 | `/about/`, `/subscribe/`, `/privacy/`, `404.html` | Static pages |
 
 Files: `assets/css/style.css`, `assets/js/app.js` (all interactivity), `assets/data/*.json` (all data), `assets/img/`.
@@ -34,7 +34,7 @@ The tools live outside the site folder in `/workspace/btctreasurydesk-tools/`:
 `update_data.py` steps: leaderboard (bitcointreasuries.net), SEC filings (EDGAR, user agent `BTCTreasuryDesk admin@btctreasurydesk.com`),
 news (publisher RSS), episodes (YouTube RSS, Shorts filtered out), Strive holdings (weekly 8-Ks), STRC/SATA rate history (EDGAR full-text search),
 Strategy ledger and strategy.com metrics (Playwright). Hand-curated files: `episodes.json` takeaways, `preferreds.json`, `calendar.json`,
-`quotes.json`, `saylor.json`, `facts.json`; `glossary.json` and `quiz.json` come from `curated_learn.py`.
+`quotes.json`, `saylor.json`, `facts.json`; `glossary.json` come from `curated_learn.py`.
 Add a new Saylor quote only if it is verbatim from a primary source **and the source attributes it to Saylor** (press releases often quote Phong Le or Andrew Kang in the same paragraph block). Non-Saylor lines go in `other_speakers` in `quotes.json`.
 More steps: `company details` (BitcoinTreasuries.NET company pages: website, dated holdings changes, 90-day change; Strategy from its own ledger; appends `price_history.json`), `saylor news` (Google News RSS, last 30 days), `strive site` (strive.com holdings line and SATA figures; Playwright).
 Hand-curated: `companies_config.json` (TradingView symbols, IR links, one-line descriptions, badge thresholds), `saylor_media.json` appearances/upcoming (news is refreshed automatically), `strive_site.json` (refreshed by the strive site step).
@@ -61,7 +61,7 @@ One footer line on every page: "The host owns MSTR and ASST. Education only, not
 ## Live data in the browser
 - BTC price: CoinGecko simple/price → fallback Coinbase Exchange 24h stats → Coinbase spot. Refreshes every 60 s, cached per tab for 60 s, shows "Data unavailable" if all fail.
 - Network: mempool.space (block height, fees, difficulty adjustment; halving countdown to block 1,050,000).
-- Stock quotes, charts, ticker tape and TA gauges: TradingView widgets (lazy-loaded; attribution kept). Stocks have no free CORS JSON quote, so the site doesn't compute from live MSTR/ASST prices.
+- Stock quotes, charts, ticker tape: TradingView widgets (lazy-loaded; attribution kept). Stocks have no free CORS JSON quote, so the site doesn't compute from live MSTR/ASST prices.
 
 ## Company badges (tunable)
 Thresholds live in `assets/data/companies_config.json` → `badges`; re-run `generate.py` after editing:

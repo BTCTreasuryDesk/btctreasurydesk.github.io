@@ -2,3 +2,7 @@ preview/
 .DS_Store
 # Desk Library files: deliver via the email provider, never publish
 downloads/
+
+# local-only artifacts
+screens/
+tools/old-home.html.bak

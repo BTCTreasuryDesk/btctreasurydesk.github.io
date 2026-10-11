@@ -199,8 +199,6 @@ a.tile:hover,.mega:hover{transform:translateY(-2px);text-decoration:none}
 .tradingview-widget-copyright .blue-text{color:var(--muted)}
 .tape .tradingview-widget-copyright{display:none}
 .tv-sq{min-height:126px}
-.ta-box{max-width:520px}
-.ta-box .tv{height:100%}
 /* hero2 + latest */
 .hero2{padding:36px 0 40px;border-bottom:1px solid var(--line);background:radial-gradient(900px 400px at 85% -10%,rgba(247,147,26,.10),transparent 60%)}
 .hero2.slim{padding:36px 0 28px}
@@ -625,3 +623,14 @@ footer .disclaimer,.site-footer .disclaimer{background:none;border-left:2px soli
 .signup-top .nl-row{margin:0}
 .signup-top .nl-msg{margin:4px 0 0;font-size:12px;min-height:0}
 @media (max-width:640px){.signup-top-inner{align-items:stretch}.signup-top .nl-bar{max-width:none}}
+/* Model Zones (dashboard) */
+.mz-card{max-width:560px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.mz-overall{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}.mz-overall small{color:var(--muted);font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.mz-v{font:700 24px var(--mono)}.mz-sub{font-size:12px;color:var(--muted)}
+.mz-meter{position:relative;height:6px;border-radius:3px;background:linear-gradient(90deg,#2fd17c,#c9ced6 50%,#ff5a5f);margin:4px 0}
+.mz-meter i{position:absolute;top:-4px;left:50%;width:3px;height:14px;background:#fff;transform:translateX(-50%)}
+.mz-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px}
+.mz-list{list-style:none;margin:0;padding:0}.mz-list li{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mz-list small{font-size:12px;color:var(--muted)}
+.zone{font:600 11px var(--mono);padding:2px 6px;border-radius:3px;border:1px solid}.z-cool{color:#2fd17c;border-color:#2fd17c55}.z-neu{color:#c9ced6;border-color:#c9ced655}.z-hot{color:#ff5a5f;border-color:#ff5a5f55}.z-na{color:var(--muted);border-color:var(--line)}
+.mz-note{margin:10px 0 0;font-size:12px;color:var(--muted)}

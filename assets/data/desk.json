@@ -1,0 +1,63 @@
+{
+  "updated": "2026-10-11",
+  "refresh": "Weekly (Sunday). Live prices load in your browser; everything here is a dated snapshot.",
+  "episode": {
+    "n": 12, "id": "uS2i-UBoMO4",
+    "title": "Strategy Hits 848,000 BTC, $21B Q3 Gain & STRC Daily Dividends Vote | MSTR Weekend Edition Ep. 12",
+    "date": "2026-10-11", "length": "10:14",
+    "url": "https://youtu.be/uS2i-UBoMO4",
+    "shorts": [
+      {"t": "848,000", "url": "https://youtube.com/shorts/Qc9QbEHfroA"},
+      {"t": "3 cents a day", "url": "https://youtube.com/shorts/bUofOYCH__w"},
+      {"t": "10,000 sold, 11,000 bought", "url": "https://youtube.com/shorts/KrgXvSHMqtM"}
+    ]
+  },
+  "video_of_week": {
+    "id": "9sSKZelY0Yc", "title": "Michael Saylor: What Money Will AI Agents Use?",
+    "channel": "Bitcoin Policy Institute", "date": "2026-10-02",
+    "url": "https://www.youtube.com/watch?v=9sSKZelY0Yc"
+  },
+  "strategy": {
+    "btc_held": 848000, "btc_as_of": "2026-10-04", "last_buy_reported": "2026-10-05", "last_buy_btc": 334,
+    "avg_cost": 75440.70, "total_cost_usd": 63970000000,
+    "btc_src": {"name": "Strategy 8-K, Oct 5, 2026", "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm"},
+    "mnav": 1.1975, "sats_per_share": 187748, "net_sats_per_share": 157322,
+    "kpi_as_of": "2026-10-11 17:00 ET",
+    "kpi_src": {"name": "strategy.com dashboard", "url": "https://www.strategy.com/"}
+  },
+  "strive": {
+    "btc_held": 29462, "btc_as_of": "2026-10-02", "last_buy_reported": "2026-10-05", "last_buy_btc": 2000,
+    "btc_src": {"name": "Strive 8-K, Oct 5, 2026", "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026064753/asst-20261005.htm"}
+  },
+  "preferreds": [
+    {"t": "STRC", "issuer": "Strategy", "rate": 12.00, "price": 99.65, "price_as_of": "2026-10-09", "pay": "Semi-monthly (daily proposed, vote Oct 28)", "src": {"name": "Strategy 8-K, Oct 1, 2026", "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm"}},
+    {"t": "SATA", "issuer": "Strive", "rate": 13.00, "price": 99.10, "price_as_of": "2026-10-09", "pay": "Each business day", "src": {"name": "Strive 8-K, Sep 15, 2026", "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm"}}
+  ],
+  "onchain": {
+    "realized_price": 49269, "as_of": "2026-10-11",
+    "src": {"name": "strategy.com KPI feed (realized price)", "url": "https://www.strategy.com/"}
+  },
+  "treasuries": {
+    "as_of": "2026-10-05",
+    "src": {"name": "BitcoinTreasuries.NET (Oct 4) + Oct 5 filings for Strategy, Strive and Metaplanet", "url": "https://bitcointreasuries.net/"},
+    "rows": [
+      {"name": "Strategy", "tk": "MSTR", "tv": "NASDAQ:MSTR", "btc": 848000, "flag": "US"},
+      {"name": "Metaplanet", "tk": "3350 / MTPLF", "tv": "OTC:MTPLF", "btc": 44000, "flag": "JP"},
+      {"name": "Twenty One Capital", "tk": "XXI", "tv": "NYSE:XXI", "btc": 43514, "flag": "US"},
+      {"name": "MARA Holdings", "tk": "MARA", "tv": "NASDAQ:MARA", "btc": 35577, "flag": "US"},
+      {"name": "Strive", "tk": "ASST", "tv": "NASDAQ:ASST", "btc": 29462, "flag": "US"},
+      {"name": "Bullish", "tk": "BLSH", "tv": "NYSE:BLSH", "btc": 22000, "flag": "US"},
+      {"name": "SpaceX", "tk": "SPCX", "tv": "NASDAQ:SPCX", "btc": 18712, "flag": "US"},
+      {"name": "Coinbase", "tk": "COIN", "tv": "NASDAQ:COIN", "btc": 17311, "flag": "US"},
+      {"name": "CleanSpark", "tk": "CLSK", "tv": "NASDAQ:CLSK", "btc": 13703, "flag": "US"},
+      {"name": "Trump Media", "tk": "DJT", "tv": "NASDAQ:DJT", "btc": 12062, "flag": "US"}
+    ]
+  },
+  "week_ahead": [
+    {"d": "Mon Oct 12", "e": "Columbus Day: SEC closed, US stocks open. Strategy's weekly filing likely Tue."},
+    {"d": "Wed Oct 14", "e": "US September CPI, 8:30 AM ET"},
+    {"d": "Thu Oct 15", "e": "STRC record date (Oct 31, $0.50/share)"},
+    {"d": "Fri Oct 16", "e": "MSCI decision on non-operating companies (on or before)"},
+    {"d": "Wed Oct 28", "e": "Strategy special meeting: daily preferred dividends vote, 10:00 AM ET"}
+  ]
+}

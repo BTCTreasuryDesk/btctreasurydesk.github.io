@@ -60,18 +60,6 @@ var DESK_CONFIG = {
     var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); loadTV(x.target); } }); }, { rootMargin: '400px' });
     tvs.forEach(function (el) { if (el.hasAttribute('data-tv-eager')) loadTV(el); else io.observe(el); });
   } else tvs.forEach(loadTV);
-  $$('[data-ta]').forEach(function (panel) {
-    $$('[data-ta-symbol]', panel).forEach(function (b) {
-      b.addEventListener('click', function () {
-        $$('[data-ta-symbol]', panel).forEach(function (x) { x.classList.toggle('on', x === b); });
-        var old = $('.tv', panel), cfg = JSON.parse(old.dataset.tvConfig); cfg.symbol = b.dataset.taSymbol;
-        var n = document.createElement('div'); n.className = old.className; n.dataset.tv = old.dataset.tv; n.dataset.tvConfig = JSON.stringify(cfg);
-        n.innerHTML = '<div class="tradingview-widget-container__widget"></div><div class="tv-ph">Loading TradingView…</div>' + ($('.tradingview-widget-copyright', old) || { outerHTML: '' }).outerHTML;
-        old.parentNode.replaceChild(n, old); loadTV(n);
-      });
-    });
-  });
-
   /* ---- Count-up ---- */
   function countUp(el) {
     var target = parseFloat(el.dataset.count), dec = parseInt(el.dataset.dec || '0', 10), suf = el.dataset.suffix || '';
@@ -345,37 +333,6 @@ var DESK_CONFIG = {
     if (sx) sx.href = tweetUrl(line, location.origin + '/saylor/' + (b.id ? '#' + b.id : ''));
     if (sx) { sx.target = '_blank'; sx.rel = 'noopener'; }
   });
-
-  /* ---- Treasury Quiz ---- */
-  $$('[data-quiz]').forEach(function (box) {
-    getData('quiz').then(function (d) {
-      var qs = d.questions, i = 0, score = 0;
-      function show() {
-        if (i >= qs.length) return finish();
-        var q = qs[i];
-        box.innerHTML = '<p class="mono muted">Question ' + (i + 1) + ' of ' + qs.length + ' · Score ' + score + '</p><h3>' + esc(q.q) + '</h3><div class="quiz-opts">' +
-          q.options.map(function (o, k) { return '<button type="button" class="btn btn-ghost" data-k="' + k + '">' + esc(o) + '</button>'; }).join('') + '</div><p class="quiz-why" aria-live="polite"></p>';
-        $$('[data-k]', box).forEach(function (b) { b.addEventListener('click', function () {
-          var k = +b.dataset.k, ok = k === q.answer; if (ok) score++;
-          $$('[data-k]', box).forEach(function (x) { x.disabled = true; if (+x.dataset.k === q.answer) x.classList.add('right'); });
-          if (!ok) b.classList.add('wrong');
-          $('.quiz-why', box).innerHTML = '<b>' + (ok ? 'Correct.' : 'Not quite.') + '</b> ' + esc(q.why) + ' <button type="button" class="btn btn-primary btn-sm" data-next>' + (i + 1 < qs.length ? 'Next' : 'See score') + '</button>';
-          $('[data-next]', box).addEventListener('click', function () { i++; show(); });
-        }); });
-      }
-      function finish() {
-        var msg = score >= 9 ? 'Desk pro.' : score >= 6 ? 'Solid. A couple of episodes and you are there.' : 'Good start. The Start here guide will help.';
-        var share = 'I scored ' + score + '/' + qs.length + ' on the BTC Treasury Desk Treasury Quiz.';
-        box.innerHTML = '<p class="label"><span class="n">' + score + '/' + qs.length + '</span> | Your score</p><h3>' + msg + '</h3><div class="cta-row">' +
-          '<a class="btn btn-primary" target="_blank" rel="noopener" href="https://x.com/intent/tweet?text=' + encodeURIComponent(share) + '&url=' + encodeURIComponent(location.origin + '/resources/#quiz') + '&via=BTCTreasuryDesk">Share on X</a>' +
-          '<button type="button" class="btn btn-ghost" data-copyres>Copy result</button><button type="button" class="btn btn-ghost" data-again>Try again</button><a class="btn btn-ghost" href="/start/">Start here</a></div>';
-        $('[data-again]', box).addEventListener('click', function () { i = 0; score = 0; show(); });
-        $('[data-copyres]', box).addEventListener('click', function (ev) { if (navigator.clipboard) navigator.clipboard.writeText(share + ' ' + location.origin + '/resources/#quiz'); ev.target.textContent = 'Copied'; });
-      }
-      show();
-    }).catch(function () { box.innerHTML = '<p class="muted">Quiz unavailable right now.</p>'; });
-  });
-
 
   /* ---- X (Twitter) timeline embeds, lazy ---- */
   var xs = $$('.x-embed');
