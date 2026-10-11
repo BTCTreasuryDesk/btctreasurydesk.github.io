@@ -24,11 +24,22 @@
     ]
   },
   "video_of_week": {
-    "id": "9sSKZelY0Yc",
-    "title": "Michael Saylor: What Money Will AI Agents Use?",
-    "channel": "Bitcoin Policy Institute",
-    "date": "2026-10-02",
-    "url": "https://www.youtube.com/watch?v=9sSKZelY0Yc"
+    "id": "kerfDFUdFXk",
+    "title": "Are We Still Early to Bitcoin? Michael Saylor's “Gold Rush” Through 2035",
+    "channel": "Binance",
+    "date": "2026-09-28",
+    "url": "https://www.youtube.com/watch?v=kerfDFUdFXk",
+    "more": [
+      {
+        "label": "More Saylor interviews on michael.com",
+        "url": "https://www.michael.com/interviews"
+      }
+    ],
+    "strategy_link": {
+      "label": "Strategy data: strategy.com",
+      "url": "https://www.strategy.com/"
+    },
+    "note": "No new official Saylor interview found for Oct 4-11, 2026; newest unfeatured Saylor interview from a reputable channel used (rule in REFRESH.md)."
   },
   "strategy": {
     "btc_held": 848000,
@@ -104,7 +115,7 @@
     "mnav_note": "mNAV: Strategy from strategy.com; Metaplanet, Twenty One and Strive as shown on BitcoinTreasuries.NET (Oct 11). Methods differ by source. '—' where no reliable figure.",
     "last_add_note": "Last add = latest reported increase in BTC held (a buy, or mined BTC for miners), from filings or BitcoinTreasuries.NET holdings history.",
     "excluded": "Bitcoin Standard Treasury Co. (BSTR, 30,021 BTC) is listed unranked on BitcoinTreasuries.NET and is not included.",
-    "prices": "Live price and day % via TradingView (delayed per exchange rules; non-US listings quote in local currency). Metaplanet via US OTC ticker MTPLF. No verified TradingView symbol for Treasury (TRSR) and Ming Shing (MSW), so no live quote for those.",
+    "prices": "Live price and day % via TradingView (delayed per exchange rules; non-US listings quote in local currency). Metaplanet via its US ADR ticker MPJPY (OTC). No verified TradingView symbol for Treasury (TRSR) and Ming Shing (MSW), so no live quote for those.",
     "rows": [
       {
         "rank": 1,
@@ -122,8 +133,8 @@
       {
         "rank": 2,
         "name": "Metaplanet",
-        "tk": "MTPLF",
-        "tv": "OTC:MTPLF",
+        "tk": "MPJPY",
+        "tv": "OTC:MPJPY",
         "btc": 44000,
         "flag": "JP",
         "type": "treasury",
@@ -779,6 +790,18 @@
     {
       "d": "Wed Oct 28",
       "e": "Strategy special meeting: daily preferred dividends vote, 10:00 AM ET"
+    }
+  ],
+  "featured_history": [
+    {
+      "id": "9sSKZelY0Yc",
+      "title": "Michael Saylor: What Money Will AI Agents Use?",
+      "week": "2026-10-04"
+    },
+    {
+      "id": "kerfDFUdFXk",
+      "title": "Are We Still Early to Bitcoin? Michael Saylor's “Gold Rush” Through 2035",
+      "week": "2026-10-11"
     }
   ]
 }

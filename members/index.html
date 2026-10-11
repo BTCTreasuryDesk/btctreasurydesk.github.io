@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Members (free) | BTC Treasury Desk</title>
-  <meta name="description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), STRC and SATA preferreds, live dashboard and sourced data. Education only.">
+  <title>Members (free for now) | BTC Treasury Desk</title>
+  <meta name="description" content="Members toolkit for long-term bitcoin and treasury-company holders: Signal Zones, Model Builder, Entry &amp; Exit Planner, Strategy Lab, momentum grid and the Desk Library. Free with your email. Education only.">
   <link rel="canonical" href="https://btctreasurydesk.com/members/">
   <meta name="theme-color" content="#0b0c0d">
   <meta name="color-scheme" content="dark">
@@ -34,23 +34,9 @@
   <link rel="preconnect" href="https://s3.tradingview.com">
   <link rel="stylesheet" href="/assets/css/desk.css?v=v2a">
 
-<style>
-.mem{max-width:1100px;margin:0 auto;padding:14px}.mem h1{font:700 20px var(--mono);margin:6px 0}.mem .lede{color:var(--mu);max-width:720px}
-.badge{display:inline-block;font:700 10px var(--mono);color:#000;background:var(--o);padding:3px 6px;border-radius:2px;margin-right:6px}
-.unlock{border:1px solid var(--o);background:#120d05;padding:14px;border-radius:3px;margin:12px 0;display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
-.unlock ul{margin:6px 0 0;padding-left:18px;color:var(--tx)}.unlock form{display:flex;flex-direction:column;gap:8px}
-.unlock input[type=email]{background:#000;border:1px solid var(--ln);color:var(--tx);padding:9px;font:13px var(--mono);border-radius:3px}
-.unlock .go{background:var(--o);color:#000;border:0;padding:10px;font:700 12px var(--mono);text-transform:uppercase;cursor:pointer;border-radius:3px}
-.unlock small,.unlock label{color:var(--mu);font-size:11px}
-.locked{position:relative}.locked .vault{filter:blur(6px);pointer-events:none;user-select:none;opacity:.6}
-body.member .locked .vault{filter:none;pointer-events:auto;user-select:auto;opacity:1}body.member .unlock{display:none}.welcome{display:none}body.member .welcome{display:block}
-.sec{margin-top:14px}.dls{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
-.dl{display:flex;gap:10px;background:var(--p);border:1px solid var(--ln);padding:8px;color:var(--tx);border-radius:3px}.dl:hover{border-color:var(--o);text-decoration:none}.dl img{width:60px;height:78px;object-fit:cover;border:1px solid var(--ln)}.qcov{width:60px;height:78px;flex:none;display:grid;place-items:center;border:1px solid var(--ln);background:#1a1206;color:var(--o);font:700 28px serif;font-style:normal}.dl b{display:block;font-size:13px}.dl small{color:var(--mu);font:10.5px var(--mono)}
-.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.plan div{background:var(--p);border:1px solid var(--ln);padding:10px;border-radius:3px}.plan b{color:var(--o);font:700 12px var(--mono)}.plan p{margin:6px 0 0;color:var(--mu);font-size:12px}
-@media(max-width:720px){.unlock,.plan{grid-template-columns:1fr}}
-</style>
+  <link rel="stylesheet" href="/members/members.css?v=m1">
 </head><body class="desk">
-  <header class="t-head">
+<header class="t-head">
     <a class="brand" href="/" aria-label="BTC Treasury Desk home"><img src="/assets/img/emblem-96.png" alt="" width="28" height="28"><span><span class="o">BTC</span> TREASURY DESK</span></a>
     <nav class="t-nav" aria-label="Main"><a href="/">Desk</a><a href="/companies/">Companies</a><a href="/preferreds/">Yield Desk</a><a href="/saylor/">Saylor</a><a href="/dashboard/">Dashboard</a><a href="/lab/">Math Lab</a><a href="/episodes/">Episodes</a><a href="/members/" aria-current="page">Members</a><a href="/start/">Start here</a><a href="/glossary/">Glossary</a><a href="/resources/">Resources</a></nav>
     <div class="t-tools">
@@ -58,22 +44,155 @@ body.member .locked .vault{filter:none;pointer-events:auto;user-select:auto;opac
     </div>
   </header>
 
+
 <main id="main" class="mem">
-  <p class="p-t"><span class="badge">FREE</span>Members area · structure preview (v1)</p>
-  <h1>The Desk Members area</h1>
-  <p class="lede">Free for everyone for now: enter your email once and this area opens instantly in this browser. Inside: the Desk Library download center and early tools. New items are added at the Sunday refresh.</p>
-  <div class="welcome p"><b class="o">Unlocked.</b> Welcome to the Desk. Pick any download below; this browser remembers you, so there is no repeat signup. <button class="tbtn" type="button" data-relock>Lock again (this browser)</button></div>
-  <section class="unlock" aria-label="Unlock with email">
-    <div><b class="o">Unlock free with your email</b><ul><li>All 7 Desk Library downloads, pick what you want</li><li>Bonus: Greatest Saylor Quotes</li><li>Allocation Planner (preview, education only)</li><li>&ldquo;New this week&rdquo; extras at each Sunday refresh</li></ul></div>
-    <form data-unlock novalidate><label for="m-email">Email address</label><input id="m-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+  <div class="m-top"><span class="pill">Members</span><span class="pill ghost">Free for now</span><span class="muted mono" style="font-size:11px" data-asof>Loading live models…</span></div>
+  <h1>The Desk Members toolkit</h1>
+  <p class="lede">Model-driven tools for medium- to long-term bitcoin and treasury-company holders: see where the cycle sits, build your own composite, write your own entry and exit plan, and test it against history.</p>
+  <p class="lt"><b>Built for long-term holders. No leverage.</b> HODL, macro entries and exits, or a hybrid of both.</p>
+  <div class="bdg-row" data-badges aria-label="Live model status"><span class="bdg"><i></i>Loading badges…</span></div>
+
+  <section class="spot" data-spot aria-label="Strategy Spotlight"><div class="p-h"><span class="p-t">Strategy Spotlight</span><a class="more" href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com &#8599;</a></div>
+    <div class="spot-g"><div class="spot-k"><small>MSTR</small><b data-sp="mstr">…</b><small data-sp="mstr-s"></small></div><div class="spot-k"><small>STRC <span class="tag" style="margin:0">preferred</span></small><b data-sp="strc">…</b><small data-sp="strc-s"></small></div>
+      <div class="spot-k"><small>Strategy BTC</small><b data-sp="btc">…</b><small data-sp="btc-s"></small></div><div class="spot-k"><small>BTC/share YTD</small><b data-sp="yield">…</b><small data-sp="yield-s"></small></div>
+      <blockquote class="spot-q" data-sp="quote">…</blockquote></div>
+    <p class="p-f">Strategy figures from <a href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com</a> (primary source) and SEC filings. Official channels: <a href="https://x.com/Strategy" target="_blank" rel="noopener">@Strategy</a> · <a href="https://x.com/saylor" target="_blank" rel="noopener">@saylor</a> · <a href="https://www.michael.com/" target="_blank" rel="noopener">michael.com</a>. Education only, not investment advice.</p></section>
+
+  <section class="gate" aria-label="Unlock with email">
+    <div><h2>Unlock the Members desk <span class="o">free</span> with your email</h2>
+      <p class="muted" style="margin:0 0 4px">One email, instant access, remembered in this browser. No password, no repeat signup.</p>
+      <ul><li>Signal Zones: the whole cycle in color</li><li>Model Builder: your own composite</li><li>Entry &amp; Exit Planner, your rules</li><li>Strategy Lab: DCA vs zones vs lump sum</li><li>Freedom Plan: when could you reach your goal?</li><li>Momentum &amp; Trend grid (W / M / Q)</li><li>mNAV Radar &amp; BTC Yield tracker</li><li>Cycle Clock &amp; halving countdown</li><li>All 7 Desk Library PDFs + Saylor Quotes bonus</li></ul></div>
+    <div><form data-unlock novalidate><label for="m-email">Email address</label><input id="m-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
       <label><input type="checkbox" name="products_optin" value="yes"> Also send me news about products and services (optional)</label>
-      <button class="go" type="submit">Unlock the Members area</button><small>Joins the Desk list (Kit). No spam, unsubscribe anytime. <a href="/privacy/">Privacy</a>.</small><small class="msg" role="status" aria-live="polite"></small></form>
+      <button class="go" type="submit">Unlock free with your email</button><small>Joins the Desk list (Kit): a weekly email with the episode recap and one subscriber-only extra. Unsubscribe anytime. <a href="/privacy/">Privacy</a>.</small><small class="msg" role="status" aria-live="polite"></small></form>
+      <div class="paid"><b class="o">Members tools are part of the paid membership.</b><p class="muted">Already a member? Sign in. New here? See the plans.</p><a class="go" style="display:block;text-align:center" data-paid-link href="/subscribe/">See membership</a></div></div>
   </section>
-  <div class="locked"><div class="vault">
-    <section class="sec"><div class="p-h"><span class="p-t">Download center</span><span class="tag">7 PDFs</span></div><div class="dls"><a class="dl" href="/library-files/f31a01ec624a/bitcoin-treasury-cheat-sheet-6e605f.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/cheat-sheet.webp" alt="" width="80" height="104" loading="lazy"><span><b>Bitcoin Treasury Cheat Sheet</b><small>Two-page PDF · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/preferred-stock-playbook-46b9b7.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/preferred-playbook.webp" alt="" width="80" height="104" loading="lazy"><span><b>Preferred Stock Playbook</b><small>STRC, STRF, STRK, STRD, SATA · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/greatest-saylor-quotes-83c9d8.pdf" target="_blank" rel="noopener"><i class="qcov">&ldquo;&rdquo;</i><span><b>Greatest Saylor Quotes</b><small>Bonus · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/bitcoin-treasury-glossary-b1be26.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/glossary.webp" alt="" width="80" height="104" loading="lazy"><span><b>Glossary</b><small>Every term, one page · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/where-to-find-the-real-data-7317af.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/data-sources.webp" alt="" width="80" height="104" loading="lazy"><span><b>Where to Find the Real Data</b><small>Data sources sheet · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/bitcoin-whitepaper-in-2-pages-9849b6.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/whitepaper.webp" alt="" width="80" height="104" loading="lazy"><span><b>Bitcoin Whitepaper in 2 Pages</b><small>The original, condensed · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/mstr-asst-by-the-numbers-ff665f.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/by-the-numbers.webp" alt="" width="80" height="104" loading="lazy"><span><b>MSTR &amp; ASST by the Numbers</b><small>Holdings, shares and preferreds · PDF</small></span></a></div></section>
-    <section class="sec"><div class="p-h"><span class="p-t">Allocation Planner</span><span class="tag">coming next pass</span></div>
-      <p class="muted">Pick a strategy style, set your own mix of bitcoin and treasury-company exposure, and see how it would have behaved historically: return, worst drawdown, BTC exposure and income. Education only, not investment advice.</p>
-      <div class="plan"><div><b>Core Stack</b><p>BTC plus MSTR. The simple conviction mix.</p></div><div><b>Income Desk</b><p>Preferreds (STRC, SATA, STRF, STRD) with a monthly income estimate.</p></div><div><b>Build-Your-Own</b><p>Sliders for any mix, DCA amount and time horizon.</p></div></div></section>
+  <div class="welcome"><b class="o">Unlocked.</b> <span>Welcome to the Members desk. This browser remembers you.</span> <button class="tbtn" type="button" data-relock>Lock again (this browser)</button></div>
+
+  <div class="vault-wrap"><div class="vault-cta"><a href="#m-email" data-goto-gate>Unlock free with your email</a></div><div class="vault">
+  <section class="wk" data-weekly><div class="p-h"><span class="p-t">This week in the Members desk</span><span class="tag" data-wk-date>…</span></div><ul data-wk-list><li class="muted">Loading…</li></ul></section>
+
+  <nav class="tabs" role="tablist" aria-label="Members tools">
+    <button data-tab="zones">Signal Zones</button><button data-tab="builder">Model Builder</button><button data-tab="planner">Entry &amp; Exit Planner</button><button data-tab="lab">Strategy Lab</button><button data-tab="freedom">Freedom Plan</button><button data-tab="momentum">Momentum &amp; Trend</button><button data-tab="ta">TA Overlays</button><button data-tab="radar">mNAV Radar</button><button data-tab="yield">BTC Yield</button><button data-tab="clock">Cycle Clock</button><button data-tab="downloads">Downloads</button>
+  </nav>
+
+  <section class="pane" data-pane="zones"><div class="mgrid">
+    <div class="p c12"><div class="p-h"><span class="p-t">Signal Zones <small>BTC, log scale, since 2015</small></span><span class="tag" data-z-read>…</span></div>
+      <div class="cvwrap"><canvas class="cv" data-z-cv aria-label="BTC price on a log scale with background zones from the composite model score"></canvas><div class="tip" data-z-tip></div></div>
+      <div class="legend"><span style="--c:#2fd17c55">Historically cool (accumulation zone)</span><span style="--c:#ff5a5f55">Historically hot (caution zone)</span><span style="--c:#2fd17c">&#9650; entered / left cool</span><span style="--c:#ff5a5f">&#9660; entered / left hot</span><span style="--c:#F7931A">Power Law trend</span><span style="--c:#7aa7ff">200-week MA</span></div>
+      <p class="p-f">Composite of Power Law position, MVRV proxy, Mayer Multiple, 200-week MA and Pi Cycle, equal weights, 7-day smoothed. Each day is ranked only against the days before it, so past zones use no hindsight. Zone markers use a small buffer so they don't flicker.</p>
+      <div class="stat" data-z-stats></div><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="builder"><div class="mgrid">
+    <div class="p c5"><div class="p-h"><span class="p-t">Model Builder</span><span class="tag">your weights</span></div>
+      <div data-b-rows></div>
+      <div class="ctl" style="margin-top:8px"><span class="fld">Presets<span class="chips" data-b-presets></span></span></div>
+      <div class="ctl"><label class="fld">Save this setup as<input type="text" data-b-name maxlength="40" placeholder="My composite"></label><button class="tbtn" type="button" data-b-save>Save</button></div>
+      <div class="chips" data-b-saved></div><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+    <div class="p c7"><div class="p-h"><span class="p-t">Your composite today</span><span class="tag" data-b-asof></span></div>
+      <div class="read" data-b-read>…</div><div class="mz-meter"><i data-b-dot></i></div><div class="mz-scale"><span>Historically cool</span><span>Mid-range</span><span>Historically hot</span></div>
+      <div class="cvwrap"><canvas class="cv" data-b-cv aria-label="History of your composite score"></canvas><div class="tip" data-b-tip></div></div>
+      <div class="sub-h">Historical study: BTC one year later, by band</div>
+      <table class="tbl" data-b-study><thead><tr><th>Band</th><th class="r">Days</th><th class="r">Avg 1Y fwd</th><th class="r">Median</th><th class="r">% positive</th></tr></thead><tbody></tbody></table>
+      <p class="p-f">Past performance, not a forecast. Overlapping 1-year windows from {start} on, so days are not independent; one cycle can dominate a band.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="planner"><div class="mgrid">
+    <div class="p c5"><div class="p-h"><span class="p-t">Entry &amp; Exit Planner</span><span class="tag">your rules</span></div>
+      <div class="ctl"><label class="fld">Asset<select data-p-asset><option>BTC</option><option>MSTR</option><option>ASST</option><option>MPJPY</option><option>XXI</option></select></label>
+        <label class="fld">Style<select data-p-style><option value="hodl">1 · HODL (permanent core)</option><option value="macro">2 · Macro entries &amp; exits</option><option value="hybrid">3 · Hybrid (core + tactical sleeve)</option></select></label>
+        <label class="fld" data-p-corewrap>Core %<input type="number" data-p-core min="0" max="100" step="5" value="70" style="width:70px"></label></div>
+      <p class="p-f" data-p-stylenote></p>
+      <div class="side-h e">Entry plan · long-term conditions</div><div data-p-rules="entry"></div><button class="mini" type="button" data-p-add="entry">+ entry condition</button>
+      <div class="side-h x" data-p-exith>Exit plan · long-term conditions</div><div data-p-rules="exit"></div><button class="mini" type="button" data-p-add="exit">+ exit condition</button>
+      <details class="sub-h" style="text-transform:none;letter-spacing:0" data-p-timing><summary style="cursor:pointer;color:var(--o);font:700 10.5px var(--mono);text-transform:uppercase;letter-spacing:.08em">Timing layer (optional, daily)</summary>
+        <p class="p-f">A timing aid only, used inside the long-term plan above: it never fires on its own.</p><div data-p-rules="timing"></div><button class="mini" type="button" data-p-add="timing">+ timing check</button></details>
+      <div class="sub-h">Plans</div>
+      <div class="ctl"><label class="fld">Plan name<input type="text" data-p-name maxlength="40" value="My plan"></label><button class="tbtn" type="button" data-p-save>Save</button><button class="tbtn" type="button" data-p-new>New</button></div>
+      <div class="chips" data-p-saved></div>
+      <div class="ctl" style="margin-top:8px"><button class="tbtn" type="button" data-p-export>Export JSON</button><label class="tbtn" style="cursor:pointer">Import JSON<input type="file" accept="application/json,.json" data-p-import hidden></label></div>
+      <p class="disc"><b>Your plan, your rules.</b> Model read. Education only, not investment advice.</p></div>
+    <div class="p c7"><div class="p-h"><span class="p-t">Live checklist <small data-p-asset-l>BTC</small></span><span class="tag" data-p-asof></span></div>
+      <div class="stat" data-p-sum></div>
+      <ul class="ck" data-p-check></ul>
+      <div class="sub-h">When your rules would have triggered</div>
+      <div class="cvwrap"><canvas class="cv" data-p-cv aria-label="Asset price history with markers where your plan's conditions would have triggered"></canvas><div class="tip" data-p-tip></div></div>
+      <div class="legend"><span style="--c:#2fd17c">&#9650; entry step</span><span style="--c:#ff5a5f">&#9660; exit step</span><span style="--c:#2fd17c33">accumulation zone</span><span style="--c:#ff5a5f33">caution zone</span></div>
+      <p class="p-f" data-p-note>Markers show the first day a condition became true, then at most once per 90 days per condition (long-term pacing). mNAV conditions are checked live only: there is no verified mNAV history here.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="lab"><div class="mgrid">
+    <div class="p c4"><div class="p-h"><span class="p-t">Strategy Lab</span><span class="tag">backtest-lite</span></div>
+      <div class="ctl"><label class="fld">Asset<select data-l-asset><option>BTC</option><option>MSTR</option><option>ASST</option></select></label><label class="fld">Start<input type="date" data-l-start value="2020-01-01"></label></div>
+      <div class="ctl"><label class="fld">Monthly amount ($)<input type="number" data-l-amt value="500" min="10" step="50" style="width:110px"></label></div>
+      <div class="ctl"><span class="fld">Your style<span class="chips" data-l-style><button class="chip on" data-v="hodl" type="button">1 · HODL</button><button class="chip" data-v="macro" type="button">2 · Macro</button><button class="chip" data-v="hybrid" type="button">3 · Hybrid</button></span></span></div>
+      <div class="ctl"><label class="fld">Cool-zone multiple<input type="number" data-l-cool value="2" min="0" max="5" step="0.25" style="width:80px"></label><label class="fld">Hot-zone multiple<input type="number" data-l-hot value="0.25" min="0" max="2" step="0.25" style="width:80px"></label></div>
+      <div class="ctl" data-l-macro><label class="fld">Trim on entering hot (%)<input type="number" data-l-trim value="25" min="0" max="100" step="5" style="width:80px"></label><label class="fld">Core % (hybrid)<input type="number" data-l-core value="70" min="0" max="100" step="5" style="width:80px"></label></div>
+      <p class="p-f" data-l-note></p><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+    <div class="p c8"><div class="p-h"><span class="p-t">Results <small data-l-range></small></span><span class="tag">past performance</span></div>
+      <table class="tbl" data-l-tbl><thead><tr><th>Strategy</th><th class="r">Invested</th><th class="r">Final value</th><th class="r">Units held</th><th class="r">Cash</th><th class="r">Multiple</th><th class="r">Max drawdown</th></tr></thead><tbody></tbody></table>
+      <div class="cvwrap" style="margin-top:8px"><canvas class="cv" data-l-cv aria-label="Portfolio value over time for each strategy"></canvas><div class="tip" data-l-tip></div></div>
+      <div class="legend" data-l-legend></div>
+      <p class="p-f">Monthly contribution on the first trading day of each month, at that day's close. No fees, taxes or slippage. Zones come from the BTC composite (no hindsight). Max drawdown = worst fall in account value from a prior peak. Stocks: split-adjusted closes.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="freedom"><div class="mgrid">
+    <div class="p c5"><div class="p-h"><span class="p-t">Freedom Plan <small>long-term exit planner</small></span><span class="tag">saved in this browser</span></div>
+      <div class="sub-h" style="margin-top:0;border:0;padding-top:0">What you hold today</div>
+      <div class="ctl"><label class="fld">BTC<input type="number" data-f="btc" step="0.01" min="0" value="0.5" style="width:90px"></label><label class="fld">MSTR shares<input type="number" data-f="mstr" step="1" min="0" value="20" style="width:90px"></label><label class="fld">ASST shares<input type="number" data-f="asst" step="1" min="0" value="100" style="width:90px"></label></div>
+      <div class="ctl"><label class="fld">Preferreds ($ value)<input type="number" data-f="pref" step="100" min="0" value="5000" style="width:110px"></label><label class="fld">Avg preferred yield %<input type="number" data-f="pyield" step="0.25" min="0" max="25" value="12" style="width:80px"></label></div>
+      <div class="sub-h">Contributions</div>
+      <div class="ctl"><label class="fld">Monthly ($)<input type="number" data-f="monthly" step="50" min="0" value="500" style="width:90px"></label><label class="fld">% to BTC<input type="number" data-f="mixbtc" min="0" max="100" step="5" value="50" style="width:70px"></label><label class="fld">% to stocks<input type="number" data-f="mixstk" min="0" max="100" step="5" value="25" style="width:70px"></label><label class="fld">% to preferreds<input type="number" data-f="mixpref" min="0" max="100" step="5" value="25" style="width:70px"></label></div>
+      <div class="sub-h">Goal</div>
+      <div class="ctl"><label class="fld">Target amount ($)<input type="number" data-f="target" step="10000" min="0" value="1000000" style="width:120px"></label><label class="fld">Target date<input type="number" data-f="tyear" min="2027" max="2075" value="2040" style="width:80px"></label><label class="fld">Monthly expenses ($)<input type="number" data-f="expenses" step="100" min="0" value="4000" style="width:90px"></label></div>
+      <div class="sub-h">BTC growth scenarios (per year)</div>
+      <div class="ctl"><label class="fld">Bear %<input type="number" data-f="bear" step="1" value="8" style="width:70px"></label><label class="fld">Base %<input type="number" data-f="base" step="1" value="20" style="width:70px"></label><label class="fld">Bull %<input type="number" data-f="bull" step="1" value="35" style="width:70px"></label><label class="fld" style="flex-direction:row;align-items:center;gap:6px;margin-top:14px"><input type="checkbox" data-f="plaw" checked> Power Law path</label></div>
+      <p class="p-f">Assumes treasury stocks move with BTC at today's mNAV (no change in mNAV or BTC per share), preferreds hold their price and pay the yield you set, dividends are reinvested into preferreds until the target year. No taxes, fees or inflation.</p>
+      <p class="disc"><b>Scenarios, not predictions.</b> Education only, not investment advice.</p></div>
+    <div class="p c7"><div class="p-h"><span class="p-t">Your projection</span><span class="tag" data-f-asof></span></div>
+      <table class="tbl" data-f-tbl><thead><tr><th>Scenario</th><th class="r">Goal reached</th><th class="r">Value at target date</th><th class="r">Pref. income / mo at target</th><th class="r">Income covers expenses</th></tr></thead><tbody></tbody></table>
+      <div class="cvwrap" style="margin-top:8px"><canvas class="cv" data-f-cv aria-label="Projected portfolio value by scenario"></canvas><div class="tip" data-f-tip></div></div>
+      <div class="legend" data-f-legend></div>
+      <div class="stat" data-f-now style="margin-top:8px"></div></div>
+  </div></section>
+
+  <section class="pane" data-pane="momentum"><div class="mgrid">
+    <div class="p c12"><div class="p-h"><span class="p-t">Momentum &amp; Trend <small>weekly · monthly · quarterly</small></span><span class="tag" data-m-asof></span></div>
+      <div style="overflow-x:auto"><table class="grid3" data-m-grid></table></div>
+      <p class="p-f">Each cell counts four checks for that timeframe: RSI(14) above 50, MACD(12,26,9) histogram above zero, 12-period rate of change above zero, close above its 10-period average. Green = 3 to 4 positive (trend up), amber = 2 (mixed), red = 0 to 1 (trend down). Cross status uses the daily 50 and 200-day averages.</p>
+      <div style="overflow-x:auto;margin-top:8px"><table class="tbl" data-m-detail></table></div><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="ta"><div class="mgrid">
+    <div class="p c12"><div class="p-h"><span class="p-t">TA Overlays</span><span class="seg" data-ta-sym><button class="on" data-v="BITSTAMP:BTCUSD">BTC</button><button data-v="NASDAQ:MSTR">MSTR</button><button data-v="NASDAQ:ASST">ASST</button><button data-v="OTC:MPJPY">MPJPY</button><button data-v="NYSE:XXI">XXI</button><button data-v="NASDAQ:SLE" title="Super League (SLE): Metaplanet-related. Metaplanet plans to contribute 2,100 BTC and rename it Superplanet (SUPA); pending, expected Q4 2026.">SLE <small style="opacity:.7">Metaplanet-related</small></button></span><span class="seg" data-ta-iv><button data-v="240">4H</button><button data-v="D">1D</button><button class="on" data-v="W">1W</button><button data-v="M">1M</button></span><span class="tag">RSI · MACD · SMA · Bollinger</span></div>
+      <div class="tvbox" data-ta-box><p class="muted" style="padding:14px">The chart loads after you unlock.</p></div>
+      <p class="p-f">TradingView chart with RSI(14), MACD(12,26,9), Bollinger Bands(20,2) and a simple moving average preloaded (set its length to 50 or 200 in the chart; the free widget can't preset it, and the 50/200 cross is in Momentum &amp; Trend). Weekly by default; daily and 4H are for timing inside a long-term plan.</p><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="radar"><div class="mgrid">
+    <div class="p c8"><div class="p-h"><span class="p-t">Treasury mNAV Radar</span><span class="tag" data-r-asof></span></div>
+      <div class="cvwrap"><canvas class="cv" data-r-cv aria-label="Scatter of treasury companies: mNAV versus BTC per share growth"></canvas><div class="tip" data-r-tip></div></div>
+      <p class="p-f" data-r-note></p><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+    <div class="p c4"><div class="p-h"><span class="p-t">The data behind it</span></div><table class="tbl" data-r-tbl><thead><tr><th>Company</th><th class="r">mNAV</th><th class="r">BTC/share growth</th></tr></thead><tbody></tbody></table>
+      <p class="p-f">mNAV = market value vs the bitcoin it holds; methods differ by source. BTC per share growth only where filings give both BTC held and share count.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="yield"><div class="mgrid">
+    <div class="p c8"><div class="p-h"><span class="p-t">BTC Yield tracker <small>sats per share, from filings</small></span><span class="seg" data-y-co><button class="on" data-v="mstr">Strategy</button><button data-v="asst">Strive</button></span></div>
+      <div class="cvwrap"><canvas class="cv" data-y-cv aria-label="Sats per share over time"></canvas><div class="tip" data-y-tip></div></div>
+      <p class="p-f" data-y-src></p><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+    <div class="p c4"><div class="p-h"><span class="p-t">BTC Yield</span><span class="tag" data-y-asof></span></div><div class="stat" data-y-stats></div>
+      <p class="p-f">BTC Yield = % change in BTC per (assumed diluted) share over the period. It is a company KPI, not a return on the stock.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="clock"><div class="mgrid">
+    <div class="p c6"><div class="p-h"><span class="p-t">Cycle Clock</span><span class="tag" data-c-asof></span></div><canvas class="cv" data-c-dial style="border:0;background:transparent" aria-label="Dial showing the composite model position"></canvas><p class="disc"><b>Model read.</b> Education only, not investment advice.</p></div>
+    <div class="p c6"><div class="p-h"><span class="p-t">Halving cycle</span><span class="tag" data-c-height></span></div><canvas class="cv" data-c-halv style="border:0;background:transparent" aria-label="Progress through the current halving cycle"></canvas><div class="stat" data-c-stats></div>
+      <p class="p-f">Next halving at block 1,050,000. Date estimated from the current block height at 10 minutes per block, so it drifts by days. Past cycles are only four data points.</p></div>
+  </div></section>
+
+  <section class="pane" data-pane="downloads"><div class="p"><div class="p-h"><span class="p-t">Download center</span><span class="tag">7 PDFs</span></div><div class="dls"><a class="dl" href="/library-files/f31a01ec624a/bitcoin-treasury-cheat-sheet-6e605f.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/cheat-sheet.webp" alt="" width="80" height="104" loading="lazy"><span><b>Bitcoin Treasury Cheat Sheet</b><small>Two-page PDF · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/preferred-stock-playbook-46b9b7.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/preferred-playbook.webp" alt="" width="80" height="104" loading="lazy"><span><b>Preferred Stock Playbook</b><small>STRC, STRF, STRK, STRD, SATA · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/greatest-saylor-quotes-83c9d8.pdf" target="_blank" rel="noopener"><i class="qcov">&ldquo;&rdquo;</i><span><b>Greatest Saylor Quotes</b><small>Bonus · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/bitcoin-treasury-glossary-b1be26.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/glossary.webp" alt="" width="80" height="104" loading="lazy"><span><b>Glossary</b><small>Every term, one page · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/where-to-find-the-real-data-7317af.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/data-sources.webp" alt="" width="80" height="104" loading="lazy"><span><b>Where to Find the Real Data</b><small>Data sources sheet · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/bitcoin-whitepaper-in-2-pages-9849b6.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/whitepaper.webp" alt="" width="80" height="104" loading="lazy"><span><b>Bitcoin Whitepaper in 2 Pages</b><small>The original, condensed · PDF</small></span></a><a class="dl" href="/library-files/f31a01ec624a/mstr-asst-by-the-numbers-ff665f.pdf" target="_blank" rel="noopener"><img src="/assets/img/library/by-the-numbers.webp" alt="" width="80" height="104" loading="lazy"><span><b>MSTR &amp; ASST by the Numbers</b><small>Holdings, shares and preferreds · PDF</small></span></a></div></div></section>
   </div></div>
 </main>
   <footer class="t-foot">
@@ -82,22 +201,11 @@ body.member .locked .vault{filter:none;pointer-events:auto;user-select:auto;opac
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-<script>
-(function(){
-  var KIT='https://app.kit.com/forms/10006069/subscriptions'; /* Kit form uid 39d40fa61e */
-  var KEY='btd_member';
-  function get(){try{return localStorage.getItem(KEY)==='1'}catch(e){return false}}
-  function set(v){try{v?localStorage.setItem(KEY,'1'):localStorage.removeItem(KEY)}catch(e){}document.body.classList.toggle('member',v)}
-  set(get());
-  var f=document.querySelector('[data-unlock]'),msg=f.querySelector('.msg');
-  f.addEventListener('submit',function(ev){ev.preventDefault();var em=f.querySelector('input[type=email]');
-    if(!em.value||!em.checkValidity()){msg.textContent='Please enter a valid email address.';em.focus();return}
-    var fd=new FormData();fd.append('email_address',em.value);if(f.products_optin.checked)fd.append('products_optin','yes');
-    msg.textContent='Unlocking…';
-    fetch(KIT,{method:'POST',body:fd,mode:'no-cors'}).then(function(){set(true);window.scrollTo(0,0)}).catch(function(){msg.textContent='Could not reach the signup service. Please try again.'});
-  });
-  document.querySelector('[data-relock]').addEventListener('click',function(){set(false)});
-})();
-</script>
+<script src="/members/members-config.js?v=m1"></script>
+<script src="/members/members-models.js?v=m1"></script>
+<script src="/members/members-core.js?v=m1"></script>
+<script src="/members/tools-models.js?v=m1"></script>
+<script src="/members/tools-plans.js?v=m1"></script>
+<script src="/members/tools-market.js?v=m1"></script>
 </body>
 </html>
