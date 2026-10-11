@@ -56,16 +56,17 @@
   /* ---------- Top strip: 5 customizable quote tiles (saved in localStorage 'btd_strip') ---------- */
   var STRIP_DEF = [
     { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }, { tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'ASST', tv: 'NASDAQ:ASST' },
-    { tk: 'MTPLF', tv: 'OTC:MTPLF' }, { tk: 'XXI', tv: 'NYSE:XXI' }
+    { tk: 'MPJPY', tv: 'OTC:MPJPY' }, { tk: 'XXI', tv: 'NYSE:XXI' }
   ];
   var STRIP_EXTRA = [
     { tk: 'BTC', tv: 'BITSTAMP:BTCUSD', name: 'Bitcoin', g: 'Crypto' }, { tk: 'ETH', tv: 'BITSTAMP:ETHUSD', name: 'Ether', g: 'Crypto' }, { tk: 'SOL', tv: 'COINBASE:SOLUSD', name: 'Solana', g: 'Crypto' },
     { tk: 'STRC', tv: 'NASDAQ:STRC', name: 'Strategy Stretch preferred', g: 'Preferreds' }, { tk: 'STRF', tv: 'NASDAQ:STRF', name: 'Strategy Strife preferred', g: 'Preferreds' },
     { tk: 'STRK', tv: 'NASDAQ:STRK', name: 'Strategy Strike preferred', g: 'Preferreds' }, { tk: 'STRD', tv: 'NASDAQ:STRD', name: 'Strategy Stride preferred', g: 'Preferreds' },
-    { tk: 'SATA', tv: 'NASDAQ:SATA', name: 'Strive SATA preferred', g: 'Preferreds' }
+    { tk: 'SATA', tv: 'NASDAQ:SATA', name: 'Strive SATA preferred', g: 'Preferreds' },
+    { tk: 'SLE', tv: 'NASDAQ:SLE', name: 'Super League (Metaplanet-related; pending Superplanet deal)', g: 'Metaplanet-related' }
   ];
   var STRIP_FALLBACK = [ // used until desk.json's board pool loads
-    { tk: 'MSTR', tv: 'NASDAQ:MSTR', name: 'Strategy' }, { tk: 'MTPLF', tv: 'OTC:MTPLF', name: 'Metaplanet' }, { tk: 'XXI', tv: 'NYSE:XXI', name: 'Twenty One Capital' },
+    { tk: 'MSTR', tv: 'NASDAQ:MSTR', name: 'Strategy' }, { tk: 'MPJPY', tv: 'OTC:MPJPY', name: 'Metaplanet (ADR)' }, { tk: 'XXI', tv: 'NYSE:XXI', name: 'Twenty One Capital' },
     { tk: 'MARA', tv: 'NASDAQ:MARA', name: 'MARA Holdings' }, { tk: 'ASST', tv: 'NASDAQ:ASST', name: 'Strive' }, { tk: 'COIN', tv: 'NASDAQ:COIN', name: 'Coinbase' }
   ];
   function stripLoad() {
