@@ -8,7 +8,7 @@ Once a week (Sunday, ET), refresh the two data files the live desk reads. Everyt
    - `strategy` and `strive`: BTC held, as-of date, last reported purchase (date, BTC), avg cost, mNAV, sats per share, with source names and URLs (strategy.com, SEC 8-Ks, Strive filings).
    - `preferreds`: Friday close price and stated rate for each preferred, with sources.
    - `onchain.realized_price`: latest realized price (feeds MVRV) with its as-of date and source.
-   - `treasuries`: top-10 holdings table, as-of date and source.
+   - `treasuries`: Treasury Board pool, the top 50 ranked public companies by BTC held from BitcoinTreasuries.NET (name, ticker, TradingView symbol, BTC, country, type, mNAV only where a source shows it, last add date), with as-of date and notes. Never fill in a number without a source; use null for unknown.
    - `week_ahead`: dated events for the coming week (ET).
    Check the JSON is valid: `python3 -m json.tool assets/data/desk.json > /dev/null`.
 2. **Update BTC history:** `python3 tools/update_btc_history.py`. This rewrites `assets/data/btc_daily.json` with Coinbase daily closes (used for Power Law, 200WMA, Mayer Multiple, Pi Cycle, S2F and Model Zones).

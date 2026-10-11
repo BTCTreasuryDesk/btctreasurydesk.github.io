@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="preconnect" href="https://api.coingecko.com">
   <link rel="preconnect" href="https://s3.tradingview.com">
-  <link rel="stylesheet" href="/assets/css/desk.css?v=v2b">
+  <link rel="stylesheet" href="/assets/css/desk.css?v=v2c">
 </head><body class="desk">
   <a class="skip" href="#main">Skip to content</a>
   <header class="t-head">
@@ -49,6 +49,26 @@
   <main id="main" class="grid">
     <section class="strip" aria-label="Prices">
       <div class="q-cell" data-sym="BTC"><div class="tv-slot" data-tvq="BITSTAMP:BTCUSD"></div></div><div class="q-cell" data-sym="MSTR"><div class="tv-slot" data-tvq="NASDAQ:MSTR"></div></div><div class="q-cell" data-sym="ASST"><div class="tv-slot" data-tvq="NASDAQ:ASST"></div></div>
+    </section>
+
+    <section class="p p-tboard" id="board" aria-label="Treasury Board: top public Bitcoin treasury companies">
+      <div class="p-h tb-h"><span class="p-t">Treasury Board</span>
+        <div class="seg" role="group" aria-label="Board size"><button type="button" data-tb-n="10">Top 10</button><button type="button" data-tb-n="20">Top 20</button><button type="button" data-tb-n="50">All 50</button></div>
+        <button type="button" class="chip tb-ftog" data-tb-ftog aria-expanded="false">Filters</button>
+        <div class="tb-f" data-tb-filters>
+          <span class="tb-fl">Region</span><span class="chips" data-tb-g="reg"><button type="button" data-v="all">All</button><button type="button" data-v="US">US</button><button type="button" data-v="JP">Japan</button><button type="button" data-v="EU">UK/Europe</button><button type="button" data-v="OT">Other</button></span>
+          <span class="tb-fl">Type</span><span class="chips" data-tb-g="type"><button type="button" data-v="all">All</button><button type="button" data-v="treasury">Pure-play</button><button type="button" data-v="miner">Miner</button><button type="button" data-v="operating">Operating co.</button></span>
+          <span class="tb-fl">Sort</span><span class="chips" data-tb-g="sort"><button type="button" data-v="btc">BTC held</button><button type="button" data-v="mnav">mNAV</button></span>
+        </div>
+        <span class="tag" data-tb-asof></span>
+      </div>
+      <div class="tb">
+        <div class="tb-tbl" data-tb-scroll>
+          <table class="tbl tb-t" data-tb><thead><tr><th class="c-star" aria-label="Pin"></th><th>#</th><th class="c-co">Company</th><th>Ticker</th><th class="r">BTC held</th><th class="r c-sec"><span data-tip="Market value / value of BTC held. Sources differ; see Notes.">mNAV</span></th><th class="c-sec"><span data-tip="Latest reported increase in BTC held (a buy, or mined BTC for miners).">Last add</span></th></tr></thead><tbody><tr><td colspan="7" class="muted">Loading…</td></tr></tbody></table>
+        </div>
+        <div class="tb-q"><div class="tb-qh mono">Live price · day %<small> TradingView</small></div><div class="tb-qw" data-tb-quotes></div></div>
+      </div>
+      <div class="tb-foot"><button type="button" class="chip tb-more" data-tb-more aria-expanded="false">Expand</button><button type="button" class="chip tb-live" data-tb-live aria-expanded="false">Live prices</button><span class="tb-src" data-tb-src></span></div>
     </section>
 
     <section class="p p-chart" aria-label="Main chart">
@@ -76,8 +96,8 @@
       <div class="kv big"><span>BTC held</span><b class="mono" data-k="mstr-btc">848,000</b></div>
       <div class="kv"><span>Live value</span><b class="mono" data-live="mstr-val">…</b></div>
       <div class="kv"><span>vs. avg cost <small data-k="mstr-cost"></small></span><b class="mono" data-live="mstr-pl">…</b></div>
-      <div class="kv"><span>mNAV</span><b class="mono" data-k="mnav">…</b></div>
-      <div class="kv"><span>BTC per share</span><b class="mono" data-k="bps">…</b></div>
+      <div class="kv"><span data-tip="Market value divided by the value of the bitcoin held. 1.0x means the stock trades at its BTC value.">mNAV</span><b class="mono" data-k="mnav">…</b></div>
+      <div class="kv"><span data-tip="Bitcoin held per share of stock, in sats (1 BTC = 100M sats).">BTC per share</span><b class="mono" data-k="bps">…</b></div>
       <div class="kv"><span>Days since last buy</span><b class="mono" data-k="mstr-days">…</b></div>
       <div class="sub-h">Strive <small>ASST</small></div>
       <div class="kv"><span>BTC held</span><b class="mono" data-k="asst-btc">…</b></div>
@@ -91,16 +111,25 @@
       <div class="p-h"><span class="p-t">Bitcoin vs the field</span><span class="tag" data-field-asof>live</span></div>
       <div class="kv big"><span>BTC price</span><b class="mono" data-live="btc">…</b></div>
       <div class="kv"><span>24h</span><b class="mono" data-live="btc-24h">…</b></div>
-      <div class="kv"><span>BTC dominance</span><b class="mono" data-live="dom">…</b></div>
+      <div class="kv"><span data-tip="Bitcoin's share of the total crypto market value.">BTC dominance</span><b class="mono" data-live="dom">…</b></div>
       <div class="bar"><i data-live-bar="dom"></i></div>
-      <div class="kv"><span>BTC / ETH</span><b class="mono" data-live="btceth">…</b></div>
-      <div class="kv"><span>BTC / SOL</span><b class="mono" data-live="btcsol">…</b></div>
-      <div class="kv"><span>Sats per $1</span><b class="mono" data-live="sats">…</b></div>
-      <p class="p-f">CoinGecko (fallback Coinbase). Cached in your browser.</p>
+      <div class="sub-h rt-h"><span>Ratios vs 1-year history</span><span class="seg" role="group" aria-label="Sparkline window"><button type="button" data-rtw="30">1M</button><button type="button" data-rtw="365">1Y</button></span></div>
+      <div class="rt" data-rt="eth">
+        <div class="kv"><span data-tip="How many ETH one bitcoin buys. Rising means BTC is outperforming ETH.">BTC / ETH</span><b class="mono" data-live="btceth">…</b></div>
+        <div class="rt-r"><canvas data-spark="eth" width="240" height="40" aria-label="BTC/ETH history sparkline"></canvas><span class="rt-c mono" data-rt-c="eth">…</span></div>
+        <div class="rt-s" data-rt-s="eth"></div>
+      </div>
+      <div class="rt" data-rt="sol">
+        <div class="kv"><span data-tip="How many SOL one bitcoin buys. Rising means BTC is outperforming SOL.">BTC / SOL</span><b class="mono" data-live="btcsol">…</b></div>
+        <div class="rt-r"><canvas data-spark="sol" width="240" height="40" aria-label="BTC/SOL history sparkline"></canvas><span class="rt-c mono" data-rt-c="sol">…</span></div>
+        <div class="rt-s" data-rt-s="sol"></div>
+      </div>
+      <div class="kv"><span data-tip="How many sats (0.00000001 BTC) one US dollar buys right now.">Sats per $1</span><b class="mono" data-live="sats">…</b></div>
+      <p class="p-f">CoinGecko (fallback Coinbase); ratio history: CoinGecko daily closes, past 365 days. Dominance history isn't available free, so it shows today only.</p>
       <div class="sub-h">Sentiment</div>
       <div class="fng"><b class="mono" data-live="fng">…</b><span data-live="fng-cls"></span></div>
       <div class="bar fng-bar"><i data-live-bar="fng"></i></div>
-      <div class="kv sm"><span>Yesterday · 1W · 1M</span><b class="mono" data-live="fng-hist">…</b></div>
+      <div class="kv sm"><span>Yesterday · 1 week · 1 month ago</span><b class="mono" data-live="fng-hist">…</b></div>
       <p class="p-f">Crypto Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a></p>
     </section>
 
@@ -132,14 +161,6 @@
       <a class="mem-cta" href="/members/"><b>Members area &rarr;</b><small>Free with your email: the Desk Library downloads and the Allocation Planner preview.</small></a>
     </section>
 
-    <section class="p p-board" aria-label="Top 10 treasury companies">
-      <div class="p-h"><span class="p-t">Top 10 public BTC treasuries</span><a class="more" href="/companies/">All companies &rarr;</a></div>
-      <div class="board">
-        <table class="tbl" data-board><thead><tr><th>#</th><th>Company</th><th class="r">BTC held</th><th>Share</th></tr></thead><tbody></tbody></table>
-        <div class="board-q"><div class="sub-h">Live price &amp; day change</div><div data-tv-quotes></div></div>
-      </div>
-      <p class="p-f" data-board-src></p>
-    </section>
 
     <section class="p p-links" aria-label="On-chain and research links">
       <div class="p-h"><span class="p-t">Research desk</span><span class="tag">trusted free sources</span></div>
@@ -175,6 +196,6 @@
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-  <script src="/assets/js/desk.js?v=v2b" defer></script>
+  <script src="/assets/js/desk.js?v=v2c" defer></script>
 </body>
 </html>

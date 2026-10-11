@@ -34,7 +34,7 @@ a{color:var(--o);text-decoration:none}a:hover{text-decoration:underline}
 .p-chart{grid-column:span 8}.p-ep{grid-column:span 4}
 .p-strat{grid-column:span 4}.p-field{grid-column:span 4}.p-zones{grid-column:span 4}
 .p-models{grid-column:span 7}.p-week{grid-column:span 5}
-.p-board{grid-column:1/-1}.p-links{grid-column:1/-1}.p-alts{grid-column:1/-1}
+.p-tboard{grid-column:1/-1}.p-links{grid-column:1/-1}.p-alts{grid-column:1/-1}
 .seg{display:inline-flex;border:1px solid var(--ln);border-radius:3px;overflow:hidden}
 .seg button{background:transparent;color:var(--mu);border:0;border-right:1px solid var(--ln);padding:4px 8px;font:600 10.5px/1 var(--mono);cursor:pointer}.seg button:last-child{border-right:0}
 .seg button.on{background:var(--o);color:#000}.seg button:hover:not(.on){color:var(--tx)}
@@ -81,7 +81,7 @@ body.dm .dm-yt,body.dm .dm-ctl{display:flex;position:fixed;z-index:50;opacity:0;
 body.dm .dm-yt{right:16px;bottom:16px}body.dm .dm-ctl{left:16px;bottom:16px;gap:10px;align-items:center;font:11px var(--mono);background:#050607e6;border:1px solid var(--ln);padding:6px 8px;border-radius:3px}
 body.dm.mm .dm-yt,body.dm.mm .dm-ctl{opacity:1;pointer-events:auto}
 @media (max-width:1400px){.links{grid-template-columns:repeat(5,1fr)}}
-@media (max-width:1100px){.p-chart,.p-ep,.p-models,.p-board,.p-links,.p-week{grid-column:1/-1}.p-strat,.p-field{grid-column:span 6}.p-zones{grid-column:1/-1}.links{grid-template-columns:repeat(3,1fr)}body.dm .p-chart,body.dm .p-field{grid-column:1/-1}}
+@media (max-width:1100px){.p-chart,.p-ep,.p-models,.p-links,.p-week{grid-column:1/-1}.p-strat,.p-field{grid-column:span 6}.p-zones{grid-column:1/-1}.links{grid-template-columns:repeat(3,1fr)}body.dm .p-chart,body.dm .p-field{grid-column:1/-1}}
 @media (max-width:720px){.t-head{flex-wrap:wrap;gap:8px}.t-nav{order:3;flex-basis:100%}.t-tools{flex-wrap:wrap}.clock .ny{display:none}
 .grid>*{grid-column:1/-1!important}.strip{grid-template-columns:1fr}.q-cell{border-right:0;border-bottom:1px solid var(--ln)}.chart-box{height:360px}.board{grid-template-columns:1fr}.links{grid-template-columns:repeat(2,1fr)}}
 /* TradingView iframes: keep transparent on a dark page */
@@ -101,3 +101,46 @@ body.dm .chart-box{height:calc(100vh - 160px)}
 .mz-list{list-style:none;margin:0;padding:0}.mz-list li{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid #15191f;font-size:12.5px}
 .mz-list small{font-size:10.5px}.z-na{color:var(--mu);border-color:#5d667255}
 .mz-note{margin:8px 0 0;font-size:10.5px;color:var(--mu)}
+
+/* Treasury Board (compact, under the top strip) */
+.p-tboard{padding:6px 10px 6px}.tb-h{margin-bottom:6px}
+.chip,.chips button{background:transparent;color:var(--mu);border:1px solid var(--ln);border-radius:10px;padding:2px 8px;font:600 10px/1.4 var(--mono);cursor:pointer;white-space:nowrap}
+.chip:hover,.chips button:hover{color:var(--tx);border-color:#39414c}.chips button.on{color:#000;background:var(--o);border-color:var(--o)}
+.chips{display:inline-flex;gap:3px;flex-wrap:wrap}.tb-f{display:flex;align-items:center;gap:5px 6px;flex-wrap:wrap}.tb-fl{font:600 9.5px var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-left:6px}
+.tb-ftog{display:none}
+.tb{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);gap:10px}
+.tb-tbl{max-height:172px;overflow:auto;scrollbar-width:thin;scrollbar-color:#2a3039 transparent}
+.tb-t thead th{position:sticky;top:0;background:var(--p);z-index:1}.tb-t td{padding:2px 4px;height:23px}
+.tb-t tr.pin td{background:#1a1206}.tb-t td.tk{color:var(--o);font-weight:700}.tb-t td .fl{color:var(--mu);font-size:9.5px;margin-left:4px}
+.tb-t .ty{font-size:9px;color:var(--mu);border:1px solid var(--ln);border-radius:2px;padding:0 3px;margin-left:5px}
+.star{background:none;border:0;color:#4a525d;cursor:pointer;font-size:12px;padding:0 2px;line-height:1}.star.on{color:var(--o)}.star:hover{color:var(--o)}
+.tb-t td.c-star,.tb-t th.c-star{width:18px;padding-right:0}
+.tb-t td b{font-weight:600;transition:background-color 1.6s ease}
+.tb-q{display:flex;flex-direction:column;min-width:0;border-left:1px solid var(--ln);padding-left:10px}.tb-qh{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}.tb-qh small{text-transform:none;margin-left:4px;opacity:.7}
+.tb-qw{height:156px}
+.tb-more{display:none}
+.tb-foot{display:flex;align-items:center;gap:10px;margin-top:5px}.tb-src{font-size:10px;color:var(--mu)}.tb-src a{color:var(--mu);text-decoration:underline}
+.tb-empty{color:var(--mu);font-size:11px;padding:6px 0}
+.tb-live{display:none}
+@media (max-width:720px){
+ .tb{grid-template-columns:1fr}.tb-ftog{display:inline-block}.tb-f{display:none;flex-basis:100%}.p-tboard.fopen .tb-f{display:flex}.tb-fl{margin-left:0}
+ .tb-t .c-sec,.tb-t .c-co{display:none}.tb-more{display:inline-block}.tb-tbl{max-height:none;overflow:visible}.tb-t tbody tr.x5{display:none}.p-tboard.open .tb-tbl{max-height:250px;overflow:auto}.p-tboard.open .tb-t tbody tr.x5{display:table-row}
+ .tb-q{display:none;border-left:0;padding-left:0}.p-tboard.qopen .tb-q{display:flex}.tb-qw{height:250px}.tb-live{display:inline-block}.tb-foot{flex-wrap:wrap}
+}
+/* Desk Mode: compact board under the chart */
+body.dm .p-tboard{grid-column:1/9!important;grid-row:4!important}body.dm .p-field{grid-row:3/5!important}body.dm .p-tboard .tb-h .tag{display:none}body.dm .chart-box{height:calc(100vh - 362px);min-height:320px}
+body.dm .p-tboard .tb-f,body.dm .p-tboard .tb-foot{display:none}body.dm .p-tboard .tb-tbl{max-height:150px}body.dm .p-tboard .tb-qw{height:132px}
+@media (max-width:1100px){body.dm .p-tboard{grid-row:auto!important;grid-column:1/-1!important}body.dm .p-field{grid-row:auto!important}body.dm .chart-box{height:60vh}}
+.tb-notes{display:inline}.tb-notes summary{display:inline;cursor:pointer;color:var(--o)}.tb-notes summary::before{content:none}.tb-notes[open]{display:block;margin-top:3px}
+/* Ratio history (BTC/ETH, BTC/SOL) */
+.rt-h{display:flex;align-items:center;justify-content:space-between}.rt-h .seg button{padding:2px 6px;font-size:9.5px}
+.rt{padding:2px 0 4px;border-bottom:1px solid #15191f}.rt .kv{border-bottom:0;padding-bottom:0}
+.rt-r{display:flex;align-items:center;gap:8px}.rt-r canvas{flex:1;min-width:0;height:26px;display:block}
+.rt-c{font-size:10px;color:var(--mu);white-space:nowrap}.rt-c b{font-weight:600;margin-right:3px}
+.rt-s{font-size:11px;color:var(--tx);line-height:1.35}.rt-s .muted{font-size:9.5px;white-space:nowrap}
+/* jargon tooltips + stale dot */
+[data-tip]{text-decoration:underline dotted #59616c;text-underline-offset:3px;cursor:help}
+.tipbox{position:fixed;z-index:200;background:#15191f;color:var(--tx);border:1px solid #39414c;border-left:2px solid var(--o);padding:6px 8px;font:11.5px/1.4 var(--sans);border-radius:3px;box-shadow:0 6px 18px #000a;pointer-events:none}
+.tipbox[hidden]{display:none}
+.stale{width:7px;height:7px;border-radius:50%;background:#e8b04a;display:inline-block;opacity:.8;margin-left:4px;cursor:help}.stale[hidden]{display:none}
+@media (max-width:720px){.models{overflow-x:auto}.mtbl td,.mtbl th{white-space:normal}.mtbl td:nth-child(2){font-size:11px}.p-tboard .tb-h .tag{display:none}.rt-c{font-size:9.5px}}

@@ -33,12 +33,14 @@
   function setBar(k, w) { $$('[data-live-bar="' + k + '"]').forEach(function (el) { el.style.width = Math.max(0, Math.min(100, w)) + '%'; }); }
 
   /* fetch JSON with localStorage cache + graceful fallback */
+  var STALE = {};
+  function fieldStale() { var k = ['px', 'global', 'fng'].filter(function (x) { return STALE[x]; }); stale('.p-field', k.length > 0, k.length ? 'Showing saved values: live fetch failed (' + k.join(', ') + ').' : ''); }
   function getJSON(url, key, maxAgeMs) {
     var c = null; try { c = JSON.parse(LS.get('btd:' + key) || 'null'); } catch (e) {}
     if (c && Date.now() - c.t < (maxAgeMs || 0)) return Promise.resolve(c.d);
     return fetch(url, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (d) { LS.set('btd:' + key, JSON.stringify({ t: Date.now(), d: d })); return d; })
-      .catch(function (e) { if (c) return c.d; throw e; });
+      .then(function (d) { delete STALE[key]; LS.set('btd:' + key, JSON.stringify({ t: Date.now(), d: d })); return d; })
+      .catch(function (e) { if (c) { STALE[key] = 1; return c.d; } throw e; });
   }
 
   /* ---------- TradingView embeds ---------- */
@@ -115,17 +117,143 @@
     $('[data-shorts]').innerHTML = (ep.shorts || []).map(function (x) { return '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">Short: ' + esc(x.t) + '</a>'; }).join('');
     $('[data-votw]').href = v.url; $('[data-votw-img]').src = 'https://i.ytimg.com/vi/' + v.id + '/mqdefault.jpg';
     $('[data-votw-title]').textContent = v.title; $('[data-votw-meta]').textContent = v.channel + ' · ' + dateLbl(v.date) + ' · official upload';
-    // board
-    var tot = d.treasuries.rows.reduce(function (a, r) { return a + r.btc; }, 0), mx = d.treasuries.rows[0].btc;
-    $('[data-board] tbody').innerHTML = d.treasuries.rows.map(function (r, i) {
-      return '<tr><td>' + (i + 1) + '</td><td>' + esc(r.name) + ' <span class="muted">' + esc(r.tk) + '</span></td><td class="r">' + fmt(r.btc) + '</td><td><span class="sbar" style="width:' + Math.max(1, Math.round(40 * r.btc / mx)) + 'px"></span>' + (100 * r.btc / tot).toFixed(1) + '%</td></tr>';
-    }).join('');
-    $('[data-board-src]').innerHTML = 'Holdings: <a href="' + esc(d.treasuries.src.url) + '" target="_blank" rel="noopener">' + esc(d.treasuries.src.name) + '</a>, as of ' + dateLbl(d.treasuries.as_of) + '. Share = of the top-10 total. Prices: TradingView.';
-    var q = $('[data-tv-quotes]'); if (q) tv(q, 'market-quotes', { width: '100%', height: '100%', isTransparent: true, colorTheme: 'dark', locale: 'en', showSymbolLogo: true,
-      symbolsGroups: [{ name: 'Top 10', symbols: d.treasuries.rows.map(function (r) { return { name: r.tv, displayName: r.name }; }) }] });
+    board(d.treasuries);
     $('[data-week]').innerHTML = d.week_ahead.map(function (w) { return '<li><b>' + esc(w.d) + '</b><span>' + esc(w.e) + '</span></li>'; }).join('');
     paintStrategyLive(); models();
   }).catch(function (e) { console.warn('desk.json unavailable', e); });
+
+  /* ---------- Treasury Board (compact; filters + pins saved locally) ---------- */
+  var TB = null, tbSyms = '', tbT = null;
+  var REG = { US: 'US', JP: 'JP', GB: 'EU', DE: 'EU', FR: 'EU', SE: 'EU', NL: 'EU' };
+  var TYL = { treasury: 'pure-play', miner: 'miner', operating: 'operating' };
+  function tbState() {
+    var st = {}; try { st = JSON.parse(LS.get('btd_tb') || '{}') || {}; } catch (e) {}
+    return { n: [10, 20, 50].indexOf(+st.n) >= 0 ? +st.n : 10, reg: st.reg || 'all', type: st.type || 'all', sort: st.sort || 'btc',
+             open: !!st.open, live: !!st.live, fopen: !!st.fopen, pins: Array.isArray(st.pins) ? st.pins : [] };
+  }
+  var TBS = tbState();
+  function tbSave() { LS.set('btd_tb', JSON.stringify(TBS)); }
+  function shortDate(iso) { if (!iso) return '—'; var p = iso.split('-'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1] - 1] + ' ' + (+p[2]) + " '" + p[0].slice(2); }
+  function board(t) {
+    TB = t; var el = $('#board'); if (!el || !t) return;
+    $('[data-tb-asof]').textContent = 'as of ' + dateLbl(t.as_of);
+    $('[data-tb-src]').innerHTML = 'Source: <a href="' + esc(t.src.url) + '" target="_blank" rel="noopener">' + esc(t.src.name) + '</a>. Education only, not investment advice. <details class="tb-notes"><summary>Notes</summary>' + esc(t.holdings_note) + ' ' + esc(t.pool_note) + ' ' + esc(t.mnav_note) + ' ' + esc(t.last_add_note) + ' ' + esc(t.prices) + ' ' + esc(t.excluded) + '</details>';
+    tbPaint();
+  }
+  function tbList() {
+    var rows = TB.rows.filter(function (r) {
+      return (TBS.reg === 'all' || (REG[r.flag] || 'OT') === TBS.reg) && (TBS.type === 'all' || r.type === TBS.type);
+    }).slice();
+    rows.sort(function (a, b) {
+      var pa = TBS.pins.indexOf(a.tk) >= 0, pb = TBS.pins.indexOf(b.tk) >= 0; if (pa !== pb) return pa ? -1 : 1;
+      if (TBS.sort === 'mnav') { if ((a.mnav == null) !== (b.mnav == null)) return a.mnav == null ? 1 : -1; if (a.mnav != null && a.mnav !== b.mnav) return b.mnav - a.mnav; }
+      return b.btc - a.btc;
+    });
+    return rows.slice(0, TBS.n);
+  }
+  function tbPaint() {
+    if (!TB) return; var el = $('#board');
+    $$('[data-tb-n]').forEach(function (b) { b.classList.toggle('on', +b.dataset.tbN === TBS.n); b.setAttribute('aria-pressed', +b.dataset.tbN === TBS.n ? 'true' : 'false'); });
+    $$('[data-tb-g]').forEach(function (g) { $$('button', g).forEach(function (b) { var on = TBS[g.dataset.tbG] === b.dataset.v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); }); });
+    el.classList.toggle('open', TBS.open); el.classList.toggle('qopen', TBS.live); el.classList.toggle('fopen', TBS.fopen);
+    var mb = $('[data-tb-more]'); mb.textContent = TBS.open ? 'Collapse' : 'Expand (' + (TBS.n === 50 ? 'all 50' : 'top ' + TBS.n) + ')'; mb.setAttribute('aria-expanded', TBS.open ? 'true' : 'false');
+    var lb = $('[data-tb-live]'); lb.textContent = TBS.live ? 'Hide live prices' : 'Live prices'; lb.setAttribute('aria-expanded', TBS.live ? 'true' : 'false');
+    $('[data-tb-ftog]').setAttribute('aria-expanded', TBS.fopen ? 'true' : 'false');
+    var rows = tbList(), mx = TB.rows[0].btc;
+    $('[data-tb] tbody').innerHTML = rows.length ? rows.map(function (r, i) {
+      var pin = TBS.pins.indexOf(r.tk) >= 0;
+      return '<tr class="' + (pin ? 'pin ' : '') + (i >= 5 ? 'x5' : '') + '"><td class="c-star"><button type="button" class="star' + (pin ? ' on' : '') + '" data-pin="' + esc(r.tk) + '" aria-pressed="' + pin + '" aria-label="' + (pin ? 'Unpin ' : 'Pin ') + esc(r.name) + '">' + (pin ? '&#9733;' : '&#9734;') + '</button></td>' +
+        '<td class="muted">' + r.rank + '</td><td class="c-co">' + esc(r.name) + '<span class="fl">' + esc(r.flag) + '</span><span class="ty">' + TYL[r.type] + '</span></td>' +
+        '<td class="tk">' + esc(r.tk) + '</td><td class="r"><span class="sbar" style="width:' + Math.max(1, Math.round(36 * Math.sqrt(r.btc / mx))) + 'px"></span>' + fmt(r.btc) + '</td>' +
+        '<td class="r c-sec"' + (r.mnav_src ? ' title="' + esc(r.mnav_src) + '"' : '') + '>' + (r.mnav != null ? r.mnav.toFixed(2) + 'x' : '<span class="muted">—</span>') + '</td>' +
+        '<td class="c-sec" title="' + esc(r.last_add_src || '') + '">' + (r.last_add ? shortDate(r.last_add) : '<span class="muted">—</span>') + '</td></tr>';
+    }).join('') : '<tr><td colspan="7" class="tb-empty">No companies match these filters in the top 50.</td></tr>';
+    var syms = rows.filter(function (r) { return r.tv; }).map(function (r) { return r.tv + '|' + r.tk; }).join(',');
+    var q = $('[data-tb-quotes]'), wide = window.matchMedia('(min-width:721px)').matches;
+    if (q && (wide || TBS.live || document.body.classList.contains('dm')) && syms !== tbSyms) {
+      tbSyms = syms; clearTimeout(tbT);
+      tbT = setTimeout(function () {
+        if (!syms) { q.innerHTML = '<p class="tb-empty">No live quotes for this selection.</p>'; return; }
+        tv(q, 'market-quotes', { width: '100%', height: '100%', isTransparent: true, colorTheme: 'dark', locale: 'en', showSymbolLogo: false, backgroundColor: 'rgba(0,0,0,0)',
+          symbolsGroups: [{ name: 'Treasury Board', symbols: syms.split(',').map(function (x) { var p = x.split('|'); return { name: p[0], displayName: p[1] }; }) }] });
+      }, 250);
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('#board button'); if (!b) return;
+    if (b.dataset.tbN) TBS.n = +b.dataset.tbN;
+    else if (b.dataset.pin) { var k = b.dataset.pin, i = TBS.pins.indexOf(k); if (i >= 0) TBS.pins.splice(i, 1); else TBS.pins.push(k); }
+    else if (b.dataset.v && b.parentNode.dataset.tbG) TBS[b.parentNode.dataset.tbG] = b.dataset.v;
+    else if (b.hasAttribute('data-tb-more')) TBS.open = !TBS.open;
+    else if (b.hasAttribute('data-tb-live')) TBS.live = !TBS.live;
+    else if (b.hasAttribute('data-tb-ftog')) TBS.fopen = !TBS.fopen;
+    else return;
+    tbSave(); tbPaint();
+  });
+  window.addEventListener('resize', function () { clearTimeout(tbT); tbT = setTimeout(tbPaint, 300); });
+
+  /* ---------- stale-data dot + jargon tooltips ---------- */
+  function tipN(n, t) { return '<span data-tip="' + esc(t) + '">' + esc(n) + '</span>'; }
+  function stale(sel, bad, msg) {
+    var h = $(sel + ' .p-h'); if (!h) return; var d = $('.stale', h);
+    if (bad && !d) { d = document.createElement('span'); d.className = 'stale'; h.appendChild(d); }
+    if (d) { d.hidden = !bad; d.title = msg || 'Some live data failed to load; showing the last saved values.'; d.setAttribute('aria-label', d.title); }
+  }
+  var tipEl = document.createElement('div'); tipEl.className = 'tipbox'; tipEl.setAttribute('role', 'tooltip'); tipEl.hidden = true; document.body.appendChild(tipEl);
+  var tipFor = null;
+  function showTip(el) { tipFor = el; tipEl.textContent = el.dataset.tip; tipEl.hidden = false;
+    var r = el.getBoundingClientRect(), w = Math.min(260, window.innerWidth - 16); tipEl.style.maxWidth = w + 'px';
+    var x = Math.max(8, Math.min(r.left, window.innerWidth - tipEl.offsetWidth - 8)), y = r.bottom + 6;
+    if (y + tipEl.offsetHeight > window.innerHeight - 8) y = r.top - tipEl.offsetHeight - 6;
+    tipEl.style.left = x + 'px'; tipEl.style.top = y + 'px'; }
+  function hideTip() { tipEl.hidden = true; tipFor = null; }
+  document.addEventListener('mouseover', function (e) { var t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t); else if (tipFor) hideTip(); });
+  document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('[data-tip]'); if (t) { if (tipFor === t && !tipEl.hidden && e.pointerType !== 'mouse') hideTip(); else showTip(t); } else hideTip(); });
+  document.addEventListener('focusin', function (e) { if (e.target.dataset && e.target.dataset.tip) showTip(e.target); });
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  /* ---------- BTC/ETH and BTC/SOL history (CoinGecko daily, 365 days, cached 6h) ---------- */
+  var RT = { eth: null, sol: null, btc: null }, RTW = +LS.get('btd_rtw') === 30 ? 30 : 365;
+  function hist(id) {
+    var k = 'btd:h_' + id, c = null; try { c = JSON.parse(LS.get(k)); } catch (e) {}
+    if (c && Date.now() - c.t < 6 * 3600e3) return Promise.resolve(c.d);
+    return fetch('https://api.coingecko.com/api/v3/coins/' + id + '/market_chart?vs_currency=usd&days=365&interval=daily').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (j) { var d = j.prices.map(function (p) { return [new Date(p[0]).toISOString().slice(0, 10), p[1]]; }); LS.set(k, JSON.stringify({ t: Date.now(), d: d })); return d; })
+      .catch(function (e) { if (c) { c.stale = true; return c.d; } throw e; });
+  }
+  function ratioSeries(a, b) { var m = {}; b.forEach(function (x) { m[x[0]] = x[1]; }); var out = [], seen = {};
+    a.forEach(function (x) { if (m[x[0]] && !seen[x[0]]) { seen[x[0]] = 1; out.push(x[1] / m[x[0]]); } }); return out; }
+  function spark(cv, v) {
+    var g = cv.getContext('2d'), dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 240, H = cv.clientHeight || 30;
+    cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+    var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), X = function (i) { return 1 + (W - 2) * i / (v.length - 1); }, Y = function (x) { return 2 + (H - 4) * (1 - (x - lo) / ((hi - lo) || 1)); };
+    g.beginPath(); v.forEach(function (x, i) { i ? g.lineTo(X(i), Y(x)) : g.moveTo(X(i), Y(x)); });
+    g.strokeStyle = '#F7931A'; g.lineWidth = 1.4; g.stroke();
+    g.lineTo(X(v.length - 1), H); g.lineTo(X(0), H); g.closePath(); g.fillStyle = 'rgba(247,147,26,.08)'; g.fill();
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(X(v.length - 1), Y(v[v.length - 1]), 2, 0, 7); g.fill();
+  }
+  function paintRatios() {
+    $$('[data-rtw]').forEach(function (b) { b.classList.toggle('on', +b.dataset.rtw === RTW); });
+    ['eth', 'sol'].forEach(function (k) {
+      var s = RT[k]; if (!s || s.length < 40) return; s = s.slice();
+      if (live.btc && live[k]) s[s.length - 1] = live.btc / live[k];
+      var cur = s[s.length - 1], ago = function (n) { var x = s[s.length - 1 - n]; return x ? (cur / x - 1) * 100 : null; };
+      var c = function (n, l) { var v = ago(n); return l + ' <b class="' + (v > 0 ? 'up' : v < 0 ? 'dn' : '') + '">' + pct(v, 1) + '</b>'; };
+      $('[data-rt-c="' + k + '"]').innerHTML = c(7, '1W') + ' ' + c(30, '1M') + ' ' + c(s.length - 1, '1Y');
+      spark($('[data-spark="' + k + '"]'), s.slice(-RTW));
+      var lo = Math.min.apply(null, s), hi = Math.max.apply(null, s), p = pctile(s, cur), U = k.toUpperCase(), line;
+      if (cur >= hi * 0.995) line = 'BTC is at its 1-year high vs ' + U + '.';
+      else if (cur <= lo * 1.005) line = 'BTC is at its 1-year low vs ' + U + '.';
+      else if (p >= 80) line = 'BTC is near its 1-year high vs ' + U + '.';
+      else if (p <= 20) line = 'BTC is near its 1-year low vs ' + U + '.';
+      else line = 'BTC is mid-range vs ' + U + ' over the past year.';
+      $('[data-rt-s="' + k + '"]').innerHTML = esc(line) + ' <span class="muted mono">1Y range ' + (k === 'eth' ? lo.toFixed(1) + '–' + hi.toFixed(1) : fmt(lo) + '–' + fmt(hi)) + ' · ' + Math.round(p) + 'th pctile</span>';
+    });
+  }
+  Promise.all([hist('bitcoin'), hist('ethereum'), hist('solana')]).then(function (h) {
+    RT.eth = ratioSeries(h[0], h[1]); RT.sol = ratioSeries(h[0], h[2]); paintRatios();
+  }).catch(function () { stale('.p-field', true, 'Ratio history failed to load. Try again in a minute.'); $$('[data-rt-c]').forEach(function (e) { e.textContent = 'History unavailable'; }); });
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-rtw]'); if (!b) return; RTW = +b.dataset.rtw; LS.set('btd_rtw', String(RTW)); paintRatios(); });
 
   function paintStrategyLive() {
     if (!DESK || !live.btc) return; var s = DESK.strategy;
@@ -143,26 +271,26 @@
   }
   function refreshMarket() {
     pullPrices().then(function (p) {
-      live.btc = p.btc;
+      live.btc = p.btc; live.eth = p.eth; live.sol = p.sol; fieldStale(); paintRatios();
       setLive('btc', usd(p.btc), p.btc); setLive('btc-24h', p.btc24 == null ? '—' : pct(p.btc24), p.btc24, true);
       setLive('btceth', (p.btc / p.eth).toFixed(2) + ' ETH', p.btc / p.eth); setLive('btcsol', fmt(p.btc / p.sol, 1) + ' SOL', p.btc / p.sol);
       setLive('sats', fmt(1e8 / p.btc) + ' sats', 1e8 / p.btc);
       var a = $('[data-field-asof]'); if (a) a.textContent = p.src + ' · ' + new Date().toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }) + ' ET';
       paintStrategyLive(); models(); ticker();
-    }).catch(function () { setLive('btc', 'unavailable', null); });
+    }).catch(function () { setLive('btc', 'unavailable', null); stale('.p-field', true, 'Live prices failed to load. Retrying every minute.'); });
     getJSON(CG + '/global', 'global', 5 * 60e3).then(function (g) {
-      var dom = g.data.market_cap_percentage.btc; setLive('dom', dom.toFixed(1) + '%', +dom.toFixed(2)); setBar('dom', dom); live.dom = dom; ticker();
-    }).catch(function () { setLive('dom', '—', null); });
+      var dom = g.data.market_cap_percentage.btc; setLive('dom', dom.toFixed(1) + '%', +dom.toFixed(2)); setBar('dom', dom); live.dom = dom; ticker(); fieldStale();
+    }).catch(function () { setLive('dom', '—', null); stale('.p-field', true, 'BTC dominance failed to load.'); });
     getJSON('https://api.alternative.me/fng/?limit=31', 'fng', 30 * 60e3).then(function (f) {
       var d = f.data, v = +d[0].value; setLive('fng', String(v), v); setLive('fng-cls', d[0].value_classification, null); setBar('fng', v);
       setLive('fng-hist', [d[1], d[7], d[30]].map(function (x) { return x ? x.value : '—'; }).join(' · '), null); live.fng = v + ' ' + d[0].value_classification; ticker();
-    }).catch(function () { setLive('fng', '—', null); });
+    }).catch(function () { setLive('fng', '—', null); stale('.p-field', true, 'Fear & Greed failed to load.'); });
   }
   refreshMarket(); setInterval(refreshMarket, REFRESH_MS);
 
   /* ---------- Bitcoin models (client-side) ---------- */
   var HIST = null;
-  fetch('/assets/data/btc_daily.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (h) { HIST = h; models(); }).catch(function (e) { console.warn('btc_daily.json unavailable', e); });
+  fetch('/assets/data/btc_daily.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (h) { HIST = h; models(); }).catch(function (e) { console.warn('btc_daily.json unavailable', e); stale('.p-models', true, 'Daily history failed to load.'); stale('.p-zones', true, 'Daily history failed to load.'); });
   var GEN = Date.UTC(2009, 0, 3);
   var HALV = [[Date.UTC(2012, 10, 28), 10.5e6, 25], [Date.UTC(2016, 6, 9), 15.75e6, 12.5], [Date.UTC(2020, 4, 11), 18.375e6, 6.25], [Date.UTC(2024, 3, 20), 19.6875e6, 3.125]];
   function s2f(t) { var h = HALV[0]; for (var i = 0; i < HALV.length; i++) if (t >= HALV[i][0]) h = HALV[i];
@@ -190,12 +318,12 @@
         rS2f = c.map(function (v, i) { return v / s2f(T(i)); });
     var realized = DESK && DESK.onchain ? DESK.onchain.realized_price : null, mvrv = realized ? px / realized : null;
     var rows = [
-      ['Power Law trend', usd(pl[last]), rPl[last].toFixed(2) + 'x', pctile(rPl, rPl[last]), 'https://charts.bitbo.io/long-term-power-law/'],
-      ['200-week MA', usd(wma[last]), rWma[last].toFixed(2) + 'x', pctile(rWma, rWma[last]), 'https://charts.blockhorizon.io/charts/pb-200wma'],
-      ['Mayer Multiple (200D)', usd(m200[last]), rMay[last].toFixed(2) + 'x', pctile(rMay, rMay[last]), 'https://charts.checkonchain.com/'],
-      ['Pi Cycle Top (111D / 2×350D)', usd(m111[last]) + ' / ' + usd(m350[last]), '111D at ' + (rPi[last] * 100).toFixed(0) + '% of 2×350D', null, 'https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/'],
-      ['MVRV (price / realized)', realized ? usd(realized) : '—', mvrv ? mvrv.toFixed(2) + 'x' : '—', null, 'https://www.lookintobitcoin.com/charts/mvrv-zscore/'],
-      ['Stock-to-Flow (PlanB)', usd(s2f(T(last))), rS2f[last].toFixed(2) + 'x', pctile(rS2f, rS2f[last]), 'https://charts.blockhorizon.io/charts/pb-s2f']
+      [tipN('Power Law trend', 'Long-run trend line fitted to BTC\'s price over time (log-log).'), usd(pl[last]), rPl[last].toFixed(2) + 'x', pctile(rPl, rPl[last]), 'https://charts.bitbo.io/long-term-power-law/'],
+      [tipN('200-week MA', 'Average BTC price over the last 200 weeks (about 4 years).'), usd(wma[last]), rWma[last].toFixed(2) + 'x', pctile(rWma, rWma[last]), 'https://charts.blockhorizon.io/charts/pb-200wma'],
+      [tipN('Mayer Multiple (200D)', 'BTC price divided by its 200-day average. Above 1 means above trend.'), usd(m200[last]), rMay[last].toFixed(2) + 'x', pctile(rMay, rMay[last]), 'https://charts.checkonchain.com/'],
+      [tipN('Pi Cycle Top (111D / 2×350D)', 'Compares the 111-day average with 2× the 350-day average; a cross has marked past cycle peaks.'), usd(m111[last]) + ' / ' + usd(m350[last]), '111D at ' + (rPi[last] * 100).toFixed(0) + '% of 2×350D', null, 'https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/'],
+      [tipN('MVRV (price / realized)', 'Market price vs realized price (average price each coin last moved at).'), realized ? usd(realized) : '—', mvrv ? mvrv.toFixed(2) + 'x' : '—', null, 'https://www.lookintobitcoin.com/charts/mvrv-zscore/'],
+      [tipN('Stock-to-Flow (PlanB)', 'PlanB\'s model valuing BTC by its scarcity: existing supply vs new supply.'), usd(s2f(T(last))), rS2f[last].toFixed(2) + 'x', pctile(rS2f, rS2f[last]), 'https://charts.blockhorizon.io/charts/pb-s2f']
     ];
     var piZone = rPi[last] >= 1 ? '<span class="zone z-hot">Crossed: historic top signal</span>' : rPi[last] > 0.9 ? '<span class="zone z-hot">Nearing cross</span>' : '<span class="zone z-neu">No cross</span>';
     var mvZone = mvrv == null ? '' : mvrv < 1 ? '<span class="zone z-cool">Below realized</span>' : mvrv > 3 ? '<span class="zone z-hot">Overheated range</span>' : '<span class="zone z-neu">Mid-range</span>';
