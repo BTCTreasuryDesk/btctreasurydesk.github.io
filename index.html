@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="preconnect" href="https://api.coingecko.com">
   <link rel="preconnect" href="https://s3.tradingview.com">
-  <link rel="stylesheet" href="/assets/css/desk.css?v=v2c">
+  <link rel="stylesheet" href="/assets/css/desk.css?v=v2d">
 </head><body class="desk">
   <a class="skip" href="#main">Skip to content</a>
   <header class="t-head">
@@ -47,8 +47,8 @@
   </header>
   <div class="ticker" data-ticker hidden aria-hidden="true"><div class="ticker-in" data-ticker-in></div></div>
   <main id="main" class="grid">
-    <section class="strip" aria-label="Prices">
-      <div class="q-cell" data-sym="BTC"><div class="tv-slot" data-tvq="BITSTAMP:BTCUSD"></div></div><div class="q-cell" data-sym="MSTR"><div class="tv-slot" data-tvq="NASDAQ:MSTR"></div></div><div class="q-cell" data-sym="ASST"><div class="tv-slot" data-tvq="NASDAQ:ASST"></div></div>
+    <section class="strip" aria-label="Prices (customizable)" data-strip>
+      <div class="q-cell"><div class="tv-slot" data-tvq="BITSTAMP:BTCUSD"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NASDAQ:MSTR"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NASDAQ:ASST"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="OTC:MTPLF"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NYSE:XXI"></div></div>
     </section>
 
     <section class="p p-tboard" id="board" aria-label="Treasury Board: top public Bitcoin treasury companies">
@@ -147,8 +147,9 @@
     <section class="p p-models" id="models" aria-label="Bitcoin models and cycle">
       <div class="p-h"><span class="p-t">Bitcoin Models &amp; Cycle</span><span class="tag" data-models-asof></span></div>
       <div class="models">
-        <canvas data-model-chart width="900" height="300" aria-label="BTC price, log scale, with 200-week moving average and Power Law trend"></canvas>
-        <div class="legend mono"><span class="l1">BTC</span><span class="l2">200W MA</span><span class="l3">Power Law trend</span><span class="l4">Pi Cycle (111D / 2&times;350D)</span></div>
+        <div class="mc-chips mono" data-mc-chips role="group" aria-label="Show models on the chart"></div>
+        <canvas data-model-chart width="900" height="300" role="img" aria-label="BTC price, log scale, with model overlays"></canvas>
+        
         <table class="tbl mtbl" data-models><thead><tr><th>Model</th><th>Level</th><th>Price vs model</th><th>Zone</th><th></th></tr></thead><tbody></tbody></table>
         <div class="yr" data-yearly></div>
       </div>
@@ -196,6 +197,6 @@
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-  <script src="/assets/js/desk.js?v=v2c" defer></script>
+  <script src="/assets/js/desk.js?v=v2d" defer></script>
 </body>
 </html>

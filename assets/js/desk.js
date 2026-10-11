@@ -53,9 +53,102 @@
     s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-' + widget + '.js';
     s.textContent = JSON.stringify(cfg); box.appendChild(s); el.appendChild(box);
   }
-  $$('[data-tvq]').forEach(function (el) {
-    tv(el, 'single-quote', { symbol: el.dataset.tvq, width: '100%', colorTheme: 'dark', isTransparent: true, locale: 'en' });
-  });
+  /* ---------- Top strip: 5 customizable quote tiles (saved in localStorage 'btd_strip') ---------- */
+  var STRIP_DEF = [
+    { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }, { tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'ASST', tv: 'NASDAQ:ASST' },
+    { tk: 'MTPLF', tv: 'OTC:MTPLF' }, { tk: 'XXI', tv: 'NYSE:XXI' }
+  ];
+  var STRIP_EXTRA = [
+    { tk: 'BTC', tv: 'BITSTAMP:BTCUSD', name: 'Bitcoin', g: 'Crypto' }, { tk: 'ETH', tv: 'BITSTAMP:ETHUSD', name: 'Ether', g: 'Crypto' }, { tk: 'SOL', tv: 'COINBASE:SOLUSD', name: 'Solana', g: 'Crypto' },
+    { tk: 'STRC', tv: 'NASDAQ:STRC', name: 'Strategy Stretch preferred', g: 'Preferreds' }, { tk: 'STRF', tv: 'NASDAQ:STRF', name: 'Strategy Strife preferred', g: 'Preferreds' },
+    { tk: 'STRK', tv: 'NASDAQ:STRK', name: 'Strategy Strike preferred', g: 'Preferreds' }, { tk: 'STRD', tv: 'NASDAQ:STRD', name: 'Strategy Stride preferred', g: 'Preferreds' },
+    { tk: 'SATA', tv: 'NASDAQ:SATA', name: 'Strive SATA preferred', g: 'Preferreds' }
+  ];
+  var STRIP_FALLBACK = [ // used until desk.json's board pool loads
+    { tk: 'MSTR', tv: 'NASDAQ:MSTR', name: 'Strategy' }, { tk: 'MTPLF', tv: 'OTC:MTPLF', name: 'Metaplanet' }, { tk: 'XXI', tv: 'NYSE:XXI', name: 'Twenty One Capital' },
+    { tk: 'MARA', tv: 'NASDAQ:MARA', name: 'MARA Holdings' }, { tk: 'ASST', tv: 'NASDAQ:ASST', name: 'Strive' }, { tk: 'COIN', tv: 'NASDAQ:COIN', name: 'Coinbase' }
+  ];
+  function stripLoad() {
+    var a = null; try { a = JSON.parse(LS.get('btd_strip') || 'null'); } catch (e) {}
+    var ok = Array.isArray(a) && a.length === 5 && a.every(function (x) { return x && typeof x.tv === 'string' && /^[A-Z0-9:._!\-]{1,32}$/.test(x.tv); });
+    return ok ? a.map(function (x) { return { tk: String(x.tk || x.tv).slice(0, 12), tv: x.tv }; }) : STRIP_DEF.map(function (x) { return { tk: x.tk, tv: x.tv }; });
+  }
+  var STRIP = stripLoad();
+  function stripIsDefault() { return STRIP.every(function (x, i) { return x.tv === STRIP_DEF[i].tv; }); }
+  function stripSave() { if (stripIsDefault()) { try { localStorage.removeItem('btd_strip'); } catch (e) {} } else LS.set('btd_strip', JSON.stringify(STRIP)); }
+  function stripCell(i) {
+    var c = STRIP[i];
+    return '<div class="q-cell" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div>' +
+      '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + (i + 1) + ' (' + esc(c.tk) + ')" title="Change this tile">' +
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button></div>';
+  }
+  function stripQuote(el) { tv(el, 'single-quote', { symbol: el.dataset.tvq, width: '100%', colorTheme: 'dark', isTransparent: true, locale: 'en' }); }
+  function stripRender(only) {
+    var s = $('[data-strip]'); if (!s) return;
+    if (only != null) {
+      var old = $('[data-qi="' + only + '"]', s); if (old) { var tmp = document.createElement('div'); tmp.innerHTML = stripCell(only); var n = tmp.firstChild; s.replaceChild(n, old); stripQuote($('[data-tvq]', n)); return; }
+    }
+    s.innerHTML = STRIP.map(function (x, i) { return stripCell(i); }).join('');
+    $$('[data-tvq]', s).forEach(stripQuote);
+  }
+  stripRender();
+  function stripPool() {
+    var seen = {}, out = [], rows = (TB && TB.rows) ? TB.rows.filter(function (r) { return r.tv; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury companies (board top 50)' }; }) : STRIP_FALLBACK.map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury companies' }; });
+    STRIP_EXTRA.slice(0, 3).concat(rows, STRIP_EXTRA.slice(3)).forEach(function (r) { if (!seen[r.tv]) { seen[r.tv] = 1; out.push(r); } });
+    return out;
+  }
+  var pk = null, pkI = -1, pkBtn = null;
+  function pkClose(refocus) { if (!pk) return; pk.remove(); pk = null; if (refocus && pkBtn) pkBtn.focus(); pkBtn = null; pkI = -1; }
+  function pkList(q) {
+    var list = $('[data-pk-list]', pk), pool = stripPool(), qq = q.trim().toUpperCase(), g = '', html = '';
+    pool.filter(function (r) { return !qq || r.tk.toUpperCase().indexOf(qq) >= 0 || r.name.toUpperCase().indexOf(qq) >= 0 || r.tv.indexOf(qq) >= 0; }).forEach(function (r) {
+      if (r.g !== g) { g = r.g; html += '<li class="pk-g" role="presentation">' + esc(g) + '</li>'; }
+      var cur = STRIP[pkI] && STRIP[pkI].tv === r.tv;
+      html += '<li><button type="button" class="pk-o' + (cur ? ' on' : '') + '" data-pk-tv="' + esc(r.tv) + '" data-pk-tk="' + esc(r.tk) + '"><b>' + esc(r.tk) + '</b><span>' + esc(r.name) + '</span></button></li>';
+    });
+    list.innerHTML = html || '<li class="pk-none">No match in the list. Press Enter to try “' + esc(qq) + '” as a TradingView symbol.</li>';
+  }
+  function pkPick(tv0, tk0) {
+    var t = String(tv0 || '').trim().toUpperCase().replace(/\s+/g, '');
+    if (!/^[A-Z0-9:._!\-]{1,32}$/.test(t)) { var m = $('[data-pk-msg]', pk); if (m) m.textContent = 'Use letters, numbers and an optional exchange prefix, e.g. NASDAQ:COIN.'; return; }
+    var hit = stripPool().filter(function (r) { return r.tv === t || r.tk.toUpperCase() === t; })[0];
+    STRIP[pkI] = hit ? { tk: hit.tk, tv: hit.tv } : { tk: (tk0 || t.split(':').pop()).slice(0, 12), tv: t };
+    var i = pkI; stripSave(); pkClose(false); stripRender(i);
+    var b = $('[data-q-edit="' + i + '"]'); if (b) b.focus();
+  }
+  function pkOpen(i, btn) {
+    pkClose(false); pkI = i; pkBtn = btn;
+    pk = document.createElement('div'); pk.className = 'pk'; pk.setAttribute('role', 'dialog'); pk.setAttribute('aria-label', 'Choose a ticker for tile ' + (i + 1));
+    pk.innerHTML = '<div class="pk-h"><b>Tile ' + (i + 1) + '</b><span class="muted">now ' + esc(STRIP[i].tk) + '</span><button type="button" class="pk-x" data-pk-close aria-label="Close">&times;</button></div>' +
+      '<input type="text" class="pk-in" data-pk-in placeholder="Search or type a ticker (e.g. NASDAQ:COIN)" autocomplete="off" spellcheck="false" aria-label="Search or type a ticker">' +
+      '<ul class="pk-l" data-pk-list role="list"></ul><p class="pk-msg" data-pk-msg></p>' +
+      '<div class="pk-f"><button type="button" class="chip" data-pk-reset1>Reset this tile</button><button type="button" class="chip" data-pk-reset>Reset to default</button></div>';
+    document.body.appendChild(pk); pkList('');
+    var r = btn.getBoundingClientRect(), w = Math.min(300, window.innerWidth - 16);
+    pk.style.width = w + 'px';
+    pk.style.left = Math.max(8, Math.min(r.right - w, window.innerWidth - w - 8)) + 'px';
+    var top = r.bottom + 4; if (top + 340 > window.innerHeight) top = Math.max(8, window.innerHeight - 348);
+    pk.style.top = top + 'px';
+    var inp = $('[data-pk-in]', pk); inp.focus();
+    inp.addEventListener('input', function () { $('[data-pk-msg]', pk).textContent = ''; pkList(inp.value); });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); var first = $('[data-pk-tv]', pk); var v = inp.value.trim();
+        if (first && v && $$('[data-pk-tv]', pk).length === 1) pkPick(first.dataset.pkTv, first.dataset.pkTk); else if (v) pkPick(v); }
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('button');
+    if (b && b.dataset.qEdit != null) { e.stopPropagation(); var i = +b.dataset.qEdit; if (pk && pkI === i) pkClose(true); else pkOpen(i, b); return; }
+    if (!pk) return;
+    if (!pk.contains(e.target)) { pkClose(false); return; }
+    if (!b) return;
+    if (b.dataset.pkTv) pkPick(b.dataset.pkTv, b.dataset.pkTk);
+    else if (b.hasAttribute('data-pk-close')) pkClose(true);
+    else if (b.hasAttribute('data-pk-reset1')) pkPick(STRIP_DEF[pkI].tv, STRIP_DEF[pkI].tk);
+    else if (b.hasAttribute('data-pk-reset')) { STRIP = STRIP_DEF.map(function (x) { return { tk: x.tk, tv: x.tv }; }); var i2 = pkI; stripSave(); pkClose(false); stripRender(); var fb = $('[data-q-edit="' + i2 + '"]'); if (fb) fb.focus(); }
+  }, true);
+  document.addEventListener('keydown', function (e) { if (pk && e.key === 'Escape') { e.stopPropagation(); pkClose(true); } }, true);
+  window.addEventListener('resize', function () { pkClose(false); });
 
   var CHARTS = [
     { n: 'BTC', s: 'BITSTAMP:BTCUSD' },
@@ -361,21 +454,76 @@
     $('[data-yearly]').innerHTML = Object.keys(yr).filter(function (y) { return +y > firstYear; }).map(function (y) {
       var r = (yr[y].c / yr[y].o - 1) * 100; return '<div><small>' + y + (+y === new Date(today).getUTCFullYear() ? ' YTD' : '') + '</small><span class="' + (r >= 0 ? 'up' : 'dn') + '">' + pct(r, 0) + '</span></div>';
     }).join('');
-    drawModelChart(c, wma, pl, m350, m111, T);
+    drawModelChart(c, wma, pl, m350, m111, T, m200, realized);
   }
-  function drawModelChart(c, wma, pl, m350, m111, T) {
-    var cv = $('[data-model-chart]'); if (!cv) return; var dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 900, H = Math.round(W / 3);
+  /* Models chart: toggleable overlays on log-scale BTC (saved in localStorage 'btd_mchart') */
+  var MC_DEF = { pl: 1, s2f: 0, wma: 1, pi: 1, may: 0, rp: 0 };
+  var MC = (function () { var s = {}; try { s = JSON.parse(LS.get('btd_mchart') || '{}') || {}; } catch (e) {} var o = {}; Object.keys(MC_DEF).forEach(function (k) { o[k] = s[k] == null ? MC_DEF[k] : s[k] ? 1 : 0; }); return o; })();
+  var MC_LBL = { pl: 'Power Law band', s2f: 'Stock-to-Flow', wma: '200W MA', pi: 'Pi Cycle', may: 'Mayer bands', rp: 'Realized / MVRV' };
+  var MC_TIP = {
+    pl: 'Power Law trend (dashed) with a shaded band: the 5th to 95th percentile of BTC\u2019s own price vs that trend since 2015.',
+    s2f: 'PlanB stock-to-flow model value, computed here from the halving-schedule supply (same formula as the table).',
+    wma: 'Average BTC price over the last 200 weeks.',
+    pi: '111-day average and 2\u00d7 the 350-day average. Dots mark past days the 111D crossed above.',
+    may: '200-day average (Mayer 1.0) with 0.8\u00d7 and 2.4\u00d7 bands, levels often cited for the Mayer Multiple.',
+    rp: 'Current realized price and 3\u00d7 realized (MVRV 3). Only today\u2019s value is published in our weekly data, so these are flat reference lines, not history.'
+  };
+  var mcLast = null;
+  (function () {
+    var box = $('[data-mc-chips]'); if (!box) return;
+    box.innerHTML = '<span class="mc-btc" aria-hidden="true">BTC</span>' + Object.keys(MC_DEF).map(function (k) {
+      return '<button type="button" class="mc-c mc-' + k + '" data-mc="' + k + '" aria-pressed="' + (MC[k] ? 'true' : 'false') + '" title="' + esc(MC_TIP[k]) + '">' + esc(MC_LBL[k]) + '</button>';
+    }).join('');
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-mc]'); if (!b) return; var k = b.dataset.mc; MC[k] = MC[k] ? 0 : 1;
+      b.setAttribute('aria-pressed', MC[k] ? 'true' : 'false'); LS.set('btd_mchart', JSON.stringify(MC));
+      if (mcLast) drawModelChart.apply(null, mcLast);
+    });
+  })();
+  function drawModelChart(c, wma, pl, m350, m111, T, m200, realized) {
+    mcLast = [c, wma, pl, m350, m111, T, m200, realized];
+    var cv = $('[data-model-chart]'); if (!cv) return; var dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 900, H = Math.round(W < 640 ? W * 0.62 : W / 3);
     cv.width = W * dpr; cv.height = H * dpr; var g = cv.getContext('2d'); g.scale(dpr, dpr); g.clearRect(0, 0, W, H);
-    var n = c.length, lo = Math.log10(150), hi = Math.log10(Math.max.apply(null, c) * 3.2), pad = { l: 44, r: 8, t: 8, b: 18 };
-    var X = function (i) { return pad.l + (W - pad.l - pad.r) * i / (n - 1); }, Y = function (v) { return pad.t + (H - pad.t - pad.b) * (1 - (Math.log10(v) - lo) / (hi - lo)); };
+    var n = c.length, i;
+    // series for overlays
+    var r = c.map(function (v, j) { return v / pl[j]; }).filter(function (x) { return isFinite(x); }).sort(function (a, b) { return a - b; });
+    var q05 = r[Math.floor(r.length * 0.05)], q95 = r[Math.floor(r.length * 0.95)];
+    var plLo = pl.map(function (v) { return v * q05; }), plHi = pl.map(function (v) { return v * q95; });
+    var sf = new Array(n); for (i = 0; i < n; i++) sf[i] = s2f(T(i));
+    var mLo = m200.map(function (v) { return v == null ? null : v * 0.8; }), mHi = m200.map(function (v) { return v == null ? null : v * 2.4; });
+    var rpOn = MC.rp && realized;
+    var vis = [c]; if (MC.pl) vis.push(plLo, plHi); if (MC.s2f) vis.push(sf); if (MC.wma) vis.push(wma); if (MC.pi) vis.push(m350, m111); if (MC.may) vis.push(mLo, mHi);
+    var mn = Infinity, mx = 0; vis.forEach(function (a) { a.forEach(function (v) { if (v != null && v > 0) { if (v < mn) mn = v; if (v > mx) mx = v; } }); });
+    if (rpOn) { mx = Math.max(mx, realized * 3); mn = Math.min(mn, realized); }
+    var lo = Math.log10(Math.max(50, mn / 1.4)), hi = Math.log10(mx * 1.4), pad = { l: 44, r: 8, t: 8, b: 18 };
+    var X = function (j) { return pad.l + (W - pad.l - pad.r) * j / (n - 1); }, Y = function (v) { return pad.t + (H - pad.t - pad.b) * (1 - (Math.log10(v) - lo) / (hi - lo)); };
     g.font = '10px ui-monospace,monospace'; g.fillStyle = '#5d6672'; g.strokeStyle = '#161a20'; g.lineWidth = 1;
-    [1e3, 1e4, 1e5, 1e6].forEach(function (v) { if (Math.log10(v) > hi) return; var y = Y(v); g.beginPath(); g.moveTo(pad.l, y); g.lineTo(W - pad.r, y); g.stroke(); g.fillText(v >= 1e6 ? '$1M' : '$' + v / 1e3 + 'k', 4, y + 3); });
-    for (var y0 = 2016; y0 <= 2026; y0 += 2) { var i0 = Math.round((Date.UTC(y0, 0, 1) - T(0)) / 864e5); g.fillText(String(y0), X(i0) - 12, H - 4); }
+    [1e2, 1e3, 1e4, 1e5, 1e6, 1e7].forEach(function (v) { var lv = Math.log10(v); if (lv > hi || lv < lo) return; var y = Y(v); g.beginPath(); g.moveTo(pad.l, y); g.lineTo(W - pad.r, y); g.stroke(); g.fillText(v >= 1e6 ? '$' + v / 1e6 + 'M' : v >= 1e3 ? '$' + v / 1e3 + 'k' : '$' + v, 4, y + 3); });
+    var y1 = new Date(T(0)).getUTCFullYear() + 1, y2 = new Date(T(n - 1)).getUTCFullYear(), stepY = W < 640 ? 4 : 2;
+    for (var y0 = y1 + (y1 % 2); y0 <= y2; y0 += stepY) { var i0 = Math.round((Date.UTC(y0, 0, 1) - T(0)) / 864e5); g.fillText(String(y0), X(i0) - 12, H - 4); }
+    g.save(); g.beginPath(); g.rect(pad.l, pad.t, W - pad.l - pad.r, H - pad.t - pad.b); g.clip();
+    var st2 = n > 1200 && W < 640 ? 3 : 2;
     function line(a, col, w, dash) { g.beginPath(); g.strokeStyle = col; g.lineWidth = w; g.setLineDash(dash || []); var st = false;
-      for (var i = 0; i < n; i += 2) { var v = a[i]; if (v == null || v <= 0) { st = false; continue; } var x = X(i), y = Y(v); if (!st) { g.moveTo(x, y); st = true; } else g.lineTo(x, y); }
+      for (var j = 0; j < n; j += st2) { var v = a[j]; if (v == null || v <= 0) { st = false; continue; } var x = X(j), y = Y(v); if (!st) { g.moveTo(x, y); st = true; } else g.lineTo(x, y); }
+      if (a[n - 1] != null && a[n - 1] > 0 && st) g.lineTo(X(n - 1), Y(a[n - 1]));
       g.stroke(); g.setLineDash([]); }
-    line(pl, '#F7931A', 1.2, [4, 3]); line(m350, '#ff5a5f', 1, [2, 3]); line(m111, 'rgba(255,90,95,.45)', 1); line(wma, '#2fd17c', 1.4); line(c, '#e6e9ee', 1.1);
+    function band(a, b, fill) { g.beginPath(); var j, started = false;
+      for (j = 0; j < n; j += st2) { if (a[j] == null) continue; if (!started) { g.moveTo(X(j), Y(a[j])); started = true; } else g.lineTo(X(j), Y(a[j])); }
+      for (j = n - 1; j >= 0; j -= st2) { if (b[j] == null) continue; g.lineTo(X(j), Y(b[j])); }
+      g.closePath(); g.fillStyle = fill; g.fill(); }
+    function hline(v, col, dash, lbl) { var y = Y(v); g.beginPath(); g.strokeStyle = col; g.lineWidth = 1; g.setLineDash(dash || []); g.moveTo(pad.l, y); g.lineTo(W - pad.r, y); g.stroke(); g.setLineDash([]);
+      g.fillStyle = col; g.fillText(lbl, pad.l + 4, y - 3); }
+    if (MC.pl) { band(plLo, plHi, 'rgba(247,147,26,.09)'); line(plLo, 'rgba(247,147,26,.35)', 0.8); line(plHi, 'rgba(247,147,26,.35)', 0.8); line(pl, '#F7931A', 1.2, [4, 3]); }
+    if (MC.may) { line(mLo, 'rgba(74,168,255,.55)', 0.9, [3, 3]); line(mHi, 'rgba(74,168,255,.55)', 0.9, [3, 3]); line(m200, '#4aa8ff', 1); }
+    if (MC.s2f) line(sf, '#b18cff', 1.3);
+    if (MC.pi) { line(m350, '#ff5a5f', 1, [2, 3]); line(m111, 'rgba(255,90,95,.55)', 1);
+      g.fillStyle = '#ff5a5f'; for (i = 1; i < n; i++) if (m350[i] && m350[i - 1] && m111[i] >= m350[i] && m111[i - 1] < m350[i - 1]) { g.beginPath(); g.arc(X(i), Y(m111[i]), 3.5, 0, 7); g.fill(); } }
+    if (MC.wma) line(wma, '#2fd17c', 1.4);
+    if (rpOn) { hline(realized, '#e8b04a', [5, 3], 'Realized ' + usd(realized) + ' (today)'); hline(realized * 3, 'rgba(232,176,74,.6)', [2, 3], 'MVRV 3\u00d7 ' + usd(realized * 3)); }
+    line(c, '#e6e9ee', 1.1);
+    g.restore();
     var lx = X(n - 1), ly = Y(c[n - 1]); g.fillStyle = '#F7931A'; g.beginPath(); g.arc(lx, ly, 3, 0, 7); g.fill();
+    cv.setAttribute('aria-label', 'BTC price since ' + new Date(T(0)).getUTCFullYear() + ', log scale' + (Object.keys(MC).filter(function (k) { return MC[k]; }).length ? ', with ' + Object.keys(MC).filter(function (k) { return MC[k]; }).map(function (k) { return MC_LBL[k]; }).join(', ') : ''));
   }
   window.addEventListener('resize', function () { modelsKey = ''; models(); });
 
