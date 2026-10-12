@@ -1,5 +1,5 @@
 {
- "as_of": "2026-10-04",
+ "as_of": "2026-10-11",
  "source_name": "SEC EDGAR",
  "source_url": "https://www.sec.gov/edgar/search/",
  "companies": [
@@ -9,6 +9,20 @@
    "cik": 1050446,
    "edgar_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001050446&type=&dateb=&owner=include&count=40",
    "filings": [
+    {
+     "date": "2026-10-05",
+     "form": "8-K",
+     "title": "Current report (items 7.01,8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/0001193125-26-413164-index.htm"
+    },
+    {
+     "date": "2026-10-05",
+     "form": "DEF 14A",
+     "title": "Definitive proxy statement",
+     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413159/d503578ddef14a.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413159/0001193125-26-413159-index.htm"
+    },
     {
      "date": "2026-10-01",
      "form": "8-K",
@@ -50,20 +64,6 @@
      "title": "Current report (items 7.01,8.01)",
      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526389858/mstr-20260914.htm",
      "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526389858/0001193125-26-389858-index.htm"
-    },
-    {
-     "date": "2026-09-08",
-     "form": "8-K",
-     "title": "Current report (items 7.01,8.01)",
-     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526384402/mstr-20260831.htm",
-     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526384402/0001193125-26-384402-index.htm"
-    },
-    {
-     "date": "2026-09-01",
-     "form": "8-K",
-     "title": "Current report (items 7.01,8.01)",
-     "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526377583/mstr-20260831.htm",
-     "index_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526377583/0001193125-26-377583-index.htm"
     }
    ]
   },
@@ -73,6 +73,13 @@
    "cik": 1920406,
    "edgar_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001920406&type=&dateb=&owner=include&count=40",
    "filings": [
+    {
+     "date": "2026-10-05",
+     "form": "8-K",
+     "title": "Current report (items 8.01)",
+     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026064753/asst-20261005.htm",
+     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026064753/0001628280-26-064753-index.htm"
+    },
     {
      "date": "2026-09-28",
      "form": "8-K",
@@ -121,13 +128,6 @@
      "title": "Current report (items 8.01)",
      "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026058518/asst-20260824.htm",
      "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026058518/0001628280-26-058518-index.htm"
-    },
-    {
-     "date": "2026-08-17",
-     "form": "8-K",
-     "title": "Current report (items 8.01)",
-     "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026057224/asst-20260817.htm",
-     "index_url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026057224/0001628280-26-057224-index.htm"
     }
    ]
   }

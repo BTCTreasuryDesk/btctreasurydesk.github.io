@@ -1,6 +1,6 @@
 {
- "appearances_as_of": "2026-10-04",
- "appearances_note": "Each item was opened on its official upload (organizer, broadcaster, podcast or Strategy channel) on Oct 4, 2026. Dates are ET: live-stream start for streamed events, otherwise the YouTube publish date (the event itself may be a few days earlier). Topics are our own one-line summaries.",
+ "appearances_as_of": "2026-10-11",
+ "appearances_note": "Each item was opened on its official upload (organizer, broadcaster, podcast or Strategy channel). Dates are ET. Rechecked Oct 11, 2026: no new official Saylor interview since the Oct 2 BPI podcast; Q3 2026 earnings date filled from Strategy's Oct 8 press release.",
  "appearances": [
   {
    "id": "9sSKZelY0Yc",
@@ -478,16 +478,17 @@
  ],
  "upcoming": [
   {
-   "when": "Date TBA",
-   "sort": "2026-10-31",
+   "when": "Thu Oct 29, 2026 · 5:00 PM ET",
+   "sort": "2026-10-29",
    "kind": "strategy",
    "event": "Strategy Q3 2026 earnings call",
    "place": "Live video webinar (Zoom, X and YouTube)",
-   "topic": "Third quarter 2026 results. Strategy has not announced the date yet; recent Q3 calls were in late October.",
-   "status": "Date not yet announced",
-   "url": "https://www.strategy.com/investor-relations",
-   "link_label": "Strategy investor relations",
-   "source_note": "Format per Strategy’s Q2 2026 date announcement (Business Wire, Jul 9, 2026)"
+   "topic": "Third quarter 2026 results. Results after U.S. market close; live Video Webinar at 5:00 p.m. ET.",
+   "status": "Confirmed",
+   "url": "https://www.strategy.com/press/strategy-announces-earnings-release-date-and-live-video-webinar-for-third-quarter-2026-financial-results_10-08-2026",
+   "link_label": "Official announcement (Oct 8, 2026)",
+   "source_note": "Strategy press release, Oct 8, 2026 (strategy.com/press)",
+   "time_et": "5:00 PM ET"
   },
   {
    "when": "Nov 20–22, 2026",

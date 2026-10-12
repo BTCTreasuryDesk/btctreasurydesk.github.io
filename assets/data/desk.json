@@ -43,7 +43,7 @@
   },
   "strategy": {
     "btc_held": 848000,
-    "btc_as_of": "2026-10-04",
+    "btc_as_of": "2026-10-05",
     "last_buy_reported": "2026-10-05",
     "last_buy_btc": 334,
     "avg_cost": 75440.7,
@@ -76,7 +76,7 @@
       "t": "STRC",
       "issuer": "Strategy",
       "rate": 12.0,
-      "price": 99.65,
+      "price": 99.66,
       "price_as_of": "2026-10-09",
       "pay": "Semi-monthly (daily proposed, vote Oct 28)",
       "src": {
@@ -790,6 +790,10 @@
     {
       "d": "Wed Oct 28",
       "e": "Strategy special meeting: daily preferred dividends vote, 10:00 AM ET"
+    },
+    {
+      "d": "Thu Oct 29",
+      "e": "Strategy Q3 2026 earnings after close; live Video Webinar 5:00 PM ET"
     }
   ],
   "featured_history": [

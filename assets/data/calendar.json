@@ -1,5 +1,5 @@
 {
- "as_of": "2026-10-04",
+ "as_of": "2026-10-11",
  "items": [
   {
    "date": "2026-10-05",
@@ -51,6 +51,15 @@
    "source": "Strategy 8-K, Oct 1, 2026"
   },
   {
+   "date": "2026-10-29",
+   "title": "Strategy Q3 2026 earnings (after close) + live Video Webinar 5:00 PM ET",
+   "company": "Strategy",
+   "kind": "earnings",
+   "detail": "Results after U.S. market close; Zoom/X/YouTube webinar at 5:00 p.m. ET.",
+   "url": "https://www.strategy.com/press/strategy-announces-earnings-release-date-and-live-video-webinar-for-third-quarter-2026-financial-results_10-08-2026",
+   "source": "Strategy press release, Oct 8, 2026"
+  },
+  {
    "date": "2026-10-31",
    "title": "STRC dividend payable ($0.50/share, 12.00% annual rate)",
    "company": "Strategy",
@@ -77,15 +86,9 @@
  ],
  "not_announced": [
   {
-   "company": "Strategy",
-   "item": "Q3 2026 earnings date",
-   "note": "Not confirmed in a Strategy filing or release we could verify as of Oct 4, 2026.",
-   "url": "https://www.strategy.com/"
-  },
-  {
    "company": "Strive",
    "item": "Q3 2026 earnings date",
-   "note": "Not confirmed by Strive as of Oct 4, 2026.",
+   "note": "Not confirmed by Strive as of Oct 11, 2026.",
    "url": "https://investors.strive.com/"
   }
  ]
