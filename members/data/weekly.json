@@ -24,7 +24,11 @@
    "yield",
    "clock"
   ],
-  "library": [],
-  "_note": "Sunday refresh: list tab ids and Library keys (cheat, prefs, numbers, data, glossary, whitepaper, quotes) that are new or materially updated this week; clear them the next week."
+  "library": [
+   "tcs",
+   "pguide",
+   "cycle"
+  ],
+  "_note": "Sunday refresh: list tab ids and Library keys (tcs, pguide, cycle, numbers, cheat, data, quotes, whitepaper, glossary) that are new or materially updated this week; clear them the next week."
  }
 }

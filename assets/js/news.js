@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
-  var CATS = [['strategy', 'Strategy & Saylor'], ['treasury', 'Treasury companies'], ['industry', 'Industry'], ['bitcoin', 'Bitcoin']];
+  var CATS = [['strategy', 'Strategy & Saylor'], ['treasury', 'Other treasury companies'], ['industry', 'Industry'], ['bitcoin', 'Bitcoin']];
   var CL = {}; CATS.forEach(function (c) { CL[c[0]] = c[1]; });
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function dl(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); }

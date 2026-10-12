@@ -78,3 +78,5 @@ body:not(.member) .vault-cta{display:flex;position:absolute;inset:120px 0 auto 0
 .spot-k small{color:var(--mu);font:600 10px var(--mono);text-transform:uppercase}.spot-k b{font:700 17px var(--mono);color:#fff}.spot-k:first-child{border-color:var(--o)}.spot-k:first-child b{font-size:20px;color:var(--o)}
 .spot-q{margin:0;padding:6px 10px;border-left:2px solid var(--o);font:italic 12.5px/1.45 var(--sans);color:var(--tx)}.spot-q cite{display:block;font:600 10px var(--mono);color:var(--mu);font-style:normal;margin-top:4px}
 @media(max-width:900px){.spot-g{grid-template-columns:repeat(2,minmax(0,1fr))}.spot-q{grid-column:1/-1}}
+.dl small{display:block;line-height:1.4;margin-top:2px}.dl small:not(.mono){font:12px/1.4 inherit;color:var(--mu)}
+.dl-new{border-color:rgba(247,147,26,.6);position:relative}

@@ -1033,7 +1033,11 @@
   "week_ahead": [
     {
       "d": "Mon Oct 12",
-      "e": "Columbus Day: SEC closed, US stocks open. Strategy's weekly filing likely Tue."
+      "e": "Columbus Day: SEC closed, US stocks open. Strategy's weekly filing likely Tue. Smarter Web: results of its \"MORE\" preferred IPO expected."
+    },
+    {
+      "d": "Wed Oct 14",
+      "e": "Smarter Web \"MORE\" preferred expected to list on the LSE Main Market, 8:00 AM UK (12% initial rate, paid weekly)"
     },
     {
       "d": "Wed Oct 14",
@@ -1187,6 +1191,17 @@
     ],
     "upcoming": [
       {
+        "date": "2026-10-14",
+        "company": "The Smarter Web Company (SWC)",
+        "item": "\"MORE\" preferred shares IPO, London Stock Exchange Main Market",
+        "detail": "Up to 277,777 shares at £90 (target £15–25M gross). Cumulative variable-rate dividend paid weekly, initially 12% a year on £100; £100 liquidation preference; redeemable by SWC; non-voting. Applications closed Oct 9; results expected around Oct 12; admission expected 8:00 AM UK on Oct 14, if conditions are met (≥£10M raised, 3 market makers, ≥50% in public hands). An ATM facility is planned.",
+        "status": "Offer closed, listing pending",
+        "src": {
+          "name": "SWC RNS + retail summary document, Sep 29, 2026",
+          "url": "https://www.investegate.co.uk/index.php/announcement/rns/the-smarter-web-company-plc--swc/publication-of-prospectus-and-intention-to-float/9796685"
+        }
+      },
+      {
         "date": "2026-10-28",
         "company": "Strategy",
         "item": "Daily dividends for STRF, STRC, STRK and STRD",
@@ -1195,6 +1210,17 @@
         "src": {
           "name": "Strategy DEF 14A, Oct 5, 2026",
           "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413159/d503578ddef14a.htm"
+        }
+      },
+      {
+        "date": "2026-08-13",
+        "company": "Metaplanet (3350)",
+        "item": "MERCURY (Class B) and MARS (Class A) preferreds",
+        "detail": "MERCURY is issued but not listed, with no public trading market; it pays ¥12.25 per share quarterly (record dates Jun 30, Sep 30, Dec 31). MARS is shelf-registered but not issued. The planned Tokyo listing is delayed: no date set.",
+        "status": "Listing delayed",
+        "src": {
+          "name": "Metaplanet Q2 2026 earnings presentation",
+          "url": "https://metaplanet.jp/media-resources/en/0ae08287-fa09-447e-9fe6-4ffb90ffb4ee/140120260813519780.pdf"
         }
       },
       {

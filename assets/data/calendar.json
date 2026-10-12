@@ -35,6 +35,23 @@
    ]
   },
   {
+   "date": "2026-10-12",
+   "title": "Smarter Web: results of the \"MORE\" preferred IPO (expected)",
+   "company": "The Smarter Web Company",
+   "kind": "offering",
+   "url": "https://www.smarterwebcompany.co.uk/smarterweb-co-uk/_img/pdf/more-prospectus/MORE-retail-investor-summary-document.pdf",
+   "source": "SWC retail summary document, Sep 29, 2026"
+  },
+  {
+   "date": "2026-10-14",
+   "title": "Smarter Web \"MORE\" preferred: expected LSE Main Market admission, 8:00 AM UK",
+   "company": "The Smarter Web Company",
+   "kind": "listing",
+   "detail": "Subject to offer conditions. Initial rate 12% a year on £100, paid weekly, cumulative.",
+   "url": "https://www.investegate.co.uk/index.php/announcement/rns/the-smarter-web-company-plc--swc/publication-of-prospectus-and-intention-to-float/9796685",
+   "source": "SWC RNS, Sep 29, 2026"
+  },
+  {
    "date": "2026-10-15",
    "title": "STRC record date for the Oct 31 dividend ($0.50/share)",
    "company": "Strategy",
@@ -82,6 +99,14 @@
    "kind": "payment",
    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
    "source": "Strategy 10-Q for Q2 2026"
+  },
+  {
+   "date": "2026-12-31",
+   "title": "Metaplanet MERCURY (Class B preferred) dividend record date (¥12.25/share)",
+   "company": "Metaplanet",
+   "kind": "record",
+   "url": "https://japanir.jp/en/company/company-3350/ir/3350-20260608-01_wp_dividend/",
+   "source": "Metaplanet board resolution, Jun 6, 2026 (via Japan IR)"
   }
  ],
  "not_announced": [
