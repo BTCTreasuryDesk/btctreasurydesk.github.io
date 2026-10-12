@@ -34,8 +34,9 @@
   <link rel="preconnect" href="https://s3.tradingview.com">
   <link rel="stylesheet" href="/assets/css/desk.css?v=v2m">
   <link rel="stylesheet" href="/assets/css/optin.css?v=o1">
-<link rel="stylesheet" href="/assets/css/news.css?v=n3">
-  <link rel="stylesheet" href="/assets/css/extras.css?v=x4">
+<link rel="stylesheet" href="/assets/css/layout.css?v=l2">
+  <link rel="stylesheet" href="/assets/css/news.css?v=n3">
+  <link rel="stylesheet" href="/assets/css/extras.css?v=x7">
 </head><body class="desk">
   <a class="skip" href="#main">Skip to content</a>
   <header class="t-head">
@@ -44,7 +45,7 @@
     <div class="t-tools">
       <div class="clock mono" data-clock><span class="dot"></span><b data-mkt>…</b><span data-mkt-cd></span><span class="ny" data-ny></span></div>
       <button class="tbtn" type="button" data-ticker-toggle aria-pressed="false" title="Slow, thin price scroll (off by default; your choice is remembered)">Price scroll: Off</button><button class="tbtn tbtn-ed" type="button" data-tk-edit aria-haspopup="dialog" aria-label="Customize the price scroll" title="Customize the price scroll: add, remove, reorder">&#9998;</button>
-      <button class="tbtn tbtn-o" type="button" data-deskmode title="Full-screen Desk Mode (Esc to exit)">&#9635; Desk Mode</button>
+      <button class="tbtn tbtn-cz" type="button" data-customize aria-haspopup="dialog" title="Show, hide and reorder sections; export or import your settings">&#9881; Customize</button><button class="tbtn tbtn-o" type="button" data-deskmode title="Full-screen Desk Mode (Esc to exit)">&#9635; Desk Mode</button>
       <a class="tbtn tbtn-yt" href="https://www.youtube.com/@btctreasurydesk" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a>
     </div>
   </header>
@@ -57,7 +58,9 @@
 
     <section class="p p-kpi" data-x-kpi aria-label="Strategy (MSTR) KPIs, source strategy.com"><p class="x-mu">Loading Strategy KPIs…</p></section>
 
-    <section class="p p-mnav" aria-label="MSTR mNAV: live and history"><div class="p-h"><span class="p-t">MSTR mNAV</span><span class="tag">live · history · education only</span><a class="more" href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com &#8599;</a></div><div data-x-mnav><p class="x-mu">Loading…</p></div></section>
+    <section class="p p-charts" id="charts" data-charts aria-label="Main chart and chart library"></section>
+
+    <section class="p p-mnav p-mnavc" aria-label="MSTR mNAV: live, percentile, sparkline"><div class="p-h"><span class="p-t">MSTR mNAV</span><span class="tag">live</span><a class="more" href="#charts" data-mnav-full>Full chart &rarr;</a></div><div data-x-mnav><p class="x-mu">Loading…</p></div></section>
 
     <section class="p p-wcw" aria-label="What changed this week"><div class="p-h"><span class="p-t">What changed this week</span><span class="tag">weekly</span></div><div data-x-wcw><p class="x-mu">Loading…</p></div></section>
 
@@ -88,7 +91,6 @@
       <p class="p-f" data-pd-src></p>
     </section>
 
-    <section class="p p-charts" data-charts aria-label="Charts"></section>
 
     <section class="p p-chart" aria-label="Main chart">
       <div class="p-h"><span class="p-t">Chart <b data-chart-name>BTC</b></span>
@@ -207,12 +209,6 @@
       <p class="p-f">Models by PlanB · charts via BlockHorizon / planbtc.com. Links open the source; we never rehost their charts.</p>
     </section>
 
-    <section class="p p-alts" aria-label="Major altcoins (reference)">
-      <details data-alts><summary><span class="p-t">Major altcoins (reference)</span> <small class="muted">tap to open · for context only</small></summary>
-        <table class="tbl" data-alts-tbl><thead><tr><th>#</th><th>Coin</th><th class="r">Price</th><th class="r">24h</th><th class="r">Mkt cap</th><th class="r">vs BTC 30d</th></tr></thead><tbody><tr><td colspan="6" class="muted">Loading…</td></tr></tbody></table>
-        <p class="p-f">CoinGecko. Shown for reference; the Desk is Bitcoin-first.</p>
-      </details>
-    </section>
   </main>
 
   <a class="dm-yt tbtn tbtn-yt" href="https://youtu.be/uS2i-UBoMO4" data-dm-yt target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch Ep. 12 on YouTube</a>
@@ -227,8 +223,10 @@
   <script src="/assets/js/desk.js?v=v2m" defer></script>
   <script src="/members/members-config.js?v=m2" defer></script>
   <script src="/assets/js/optin.js?v=o1" defer></script>
-<script src="/assets/js/extras.js?v=x4" defer></script>
-<script src="/assets/js/charts.js?v=c1" defer></script>
+<script src="/assets/js/extras.js?v=x6" defer></script>
+<script src="/assets/js/price.js?v=p3"></script>
+<script src="/assets/js/charts.js?v=c4" defer></script>
+<script src="/assets/js/layout.js?v=l2"></script>
 <script src="/assets/js/news.js?v=n3" defer></script>
 </body>
 </html>

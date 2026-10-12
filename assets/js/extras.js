@@ -17,7 +17,7 @@
   var SRC = '<a href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com</a>';
 
   var home = $('[data-x-kpi]') || $('[data-x-mnav]') || $('[data-x-wcw]'), cmp = $('[data-x-compare]'), full = $('[data-kpi-full]');
-  window.BTDX = { mnavSeries: function () { return mnavSeries.apply(null, arguments); }, drawMnav: function () { return drawMnav.apply(null, arguments); }, q: function () { return q.apply(null, arguments); } };
+  window.BTDX = { perFrom: function (p, e) { return perFrom(p, e); }, PERS: ['3M', '6M', 'YTD', '1Y', 'All'], mnavSeries: function () { return mnavSeries.apply(null, arguments); }, drawMnav: function () { return drawMnav.apply(null, arguments); }, q: function () { return q.apply(null, arguments); } };
   if (!home && !cmp && !full) return;
 
   /* ---------- live quotes (same public feeds as the top strip) ---------- */
@@ -90,6 +90,11 @@
       out.push({ d: d, v: M.c[i] * rows[k].adso_k * 1e3 / (rows[k].holdings * bp) }); }
     return out;
   }
+  var PERS = ['3M', '6M', 'YTD', '1Y', 'All'];
+  function perFrom(p, endIso) { var e = new Date(endIso + 'T00:00:00Z'), y = e.getUTCFullYear(), m = e.getUTCMonth(), d = e.getUTCDate();
+    return p === '3M' ? new Date(Date.UTC(y, m - 3, d)).toISOString().slice(0, 10) : p === '6M' ? new Date(Date.UTC(y, m - 6, d)).toISOString().slice(0, 10) : p === 'YTD' ? y + '-01-01' : p === '1Y' ? new Date(Date.UTC(y - 1, m, d)).toISOString().slice(0, 10) : '0000'; }
+  function perLbl(p) { return p === 'All' ? 'full history' : p === 'YTD' ? 'year to date' : 'past ' + p.replace('M', ' months').replace('1Y', 'year'); }
+  function seg(cur, attr) { return '<span class="x-seg" role="group" aria-label="Period">' + PERS.map(function (k) { return '<button type="button" ' + attr + '="' + k + '" aria-pressed="' + (k === cur) + '"' + (k === cur ? ' class="on"' : '') + '>' + k + '</button>'; }).join('') + '</span>'; }
   function q(sorted, p) { var i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
   function drawMnav(cv, ser, P, now) {
     var w = cv.clientWidth || 600, h = cv.clientHeight || 220, r = window.devicePixelRatio || 1; cv.width = w * r; cv.height = h * r; var c = cv.getContext('2d'); c.scale(r, r);
@@ -104,30 +109,31 @@
     c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillText('p10–p90', pl + 4, Y(P[0]) - 3);
     c.strokeStyle = '#F7931A'; c.lineWidth = 1.5; c.beginPath(); ser.forEach(function (x, i) { i ? c.lineTo(X(i), Y(x.v)) : c.moveTo(X(i), Y(x.v)); }); c.stroke();
     c.textAlign = 'center'; c.fillStyle = '#7d8794'; var lastM = '';
-    ser.forEach(function (x, i) { var m = x.d.slice(0, 7); if (m !== lastM && /-(01|04|07|10)$/.test(m) && X(i) > pl + 20 && X(i) < w - 30) { c.fillText(new Date(x.d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', year: '2-digit', timeZone: 'UTC' }), X(i), h - 4); } lastM = m; });
+    ser.forEach(function (x, i) { var m = x.d.slice(0, 7); if (m !== lastM && i > 0 && (ser.length < 300 || /-(01|04|07|10)$/.test(m)) && X(i) > pl + 20 && X(i) < w - 30) { c.fillText(new Date(x.d + 'T12:00:00Z').toLocaleDateString('en-US', ser.length < 300 ? { month: 'short', timeZone: 'UTC' } : { month: 'short', year: '2-digit', timeZone: 'UTC' }), X(i), h - 4); } lastM = m; });
     if (now) { c.fillStyle = '#fff'; c.beginPath(); c.arc(w - pr - 2, Y(now), 3.5, 0, 7); c.fill(); }
   }
-  function mnavPanel(box, D, S, M, B) {
-    var K = D.strategy.kpis || {}, ser = mnavSeries(S, M, B); if (ser.length < 60) { box.innerHTML = '<p class="x-mu">mNAV history unavailable.</p>'; return; }
-    var srt = ser.map(function (x) { return x.v; }).sort(function (a, b) { return a - b; }), P = [0.1, 0.25, 0.5, 0.75, 0.9].map(function (p) { return q(srt, p); });
+  function mnavPanel(box, D, S, M, B) { // compact card: live mNAV, official, percentile vs past year, small sparkline; full history lives in the Charts slot
+    var K = D.strategy.kpis || {}, full = mnavSeries(S, M, B); if (full.length < 60) { box.innerHTML = '<p class="x-mu">mNAV history unavailable.</p>'; return; }
+    var f = perFrom('1Y', full[full.length - 1].d), ser = full.filter(function (x) { return x.d >= f; }), srt = ser.map(function (x) { return x.v; }).sort(function (a, b) { return a - b; }), P = [0.1, 0.25, 0.5, 0.75, 0.9].map(function (p) { return q(srt, p); });
     var rows = S.purchases.filter(function (p) { return p.adso_k; }), lr = rows[rows.length - 1];
-    box.innerHTML = '<div class="x-mn"><div class="x-mn-l">' +
+    box.innerHTML = '<div class="x-mc">' +
       '<div class="x-k x-hero"><small>Live mNAV · strategy.com method</small><b data-x-live>…</b><small data-x-live-s>loading live MSTR and BTC…</small></div>' +
-      '<div class="x-k"><small>Official mNAV</small><b>' + (D.strategy.mnav ? D.strategy.mnav.toFixed(2) + 'x' : '—') + '</b><small>' + SRC + ' · ' + esc((K.live && K.live.as_of_securities) || D.strategy.kpi_as_of || '') + '</small></div>' +
-      '<div class="x-k"><small>Market-cap mNAV vs history</small><b data-x-mc>…</b><small data-x-mc-s>percentile since ' + dl(ser[0].d) + ' ' + ser[0].d.slice(0, 4) + '</small></div></div>' +
-      '<div class="x-mn-r"><canvas data-x-cv aria-label="MSTR market-cap mNAV history with percentile bands"></canvas>' +
-      '<p class="x-f">Line: MSTR close × assumed diluted shares (strategy.com ledger) ÷ (BTC held × BTC close), daily since ' + dly(ser[0].d) + ' (first ledger row with ADSO) to ' + dly(ser[ser.length - 1].d) + '. Bands: 10th–90th and 25th–75th percentile, dashed = median ' + P[2].toFixed(2) + 'x. White dot: today. The official figure uses enterprise value (adds debt and preferreds, subtracts cash), so it reads higher. <b>Education only, not investment advice.</b></p></div></div>';
+      '<div class="x-mc-2"><div class="x-k"><small>Official</small><b>' + (D.strategy.mnav ? D.strategy.mnav.toFixed(2) + 'x' : '—') + '</b><small>' + SRC + ' · ' + esc(((K.live && K.live.as_of_securities) || D.strategy.kpi_as_of || '').slice(0, 10)) + '</small></div>' +
+      '<div class="x-k"><small>Market-cap mNAV vs past year</small><b data-x-mc>…</b><small data-x-mc-s></small></div></div>' +
+      '<canvas class="x-mc-sp" data-x-cv aria-label="MSTR market-cap mNAV, past year, with 10th to 90th percentile band"></canvas>' +
+      '<p class="x-f">Past year, daily. Band: 10th–90th percentile of that year, dashed = median ' + P[2].toFixed(2) + 'x. Market-cap basis (MSTR price × diluted shares ÷ BTC value); the official figure adds debt and preferreds, less cash. <a href="#charts" data-mnav-full2>Full history, periods and bands →</a> <b>Education only.</b></p></div>';
     var cv = $('[data-x-cv]', box), now = null;
     function paint() {
       var mn = liveMnav(K), el = $('[data-x-live]', box), es = $('[data-x-live-s]', box);
-      if (mn) { el.textContent = mn.toFixed(2) + 'x'; es.textContent = 'MSTR $' + LV.mstr.toFixed(2) + ' (latest trade) · BTC $' + fmt(LV.btc) + ' · ' + nyTime(LV.t); } else { el.textContent = '—'; es.textContent = 'live quotes unavailable'; }
-      if (LV.mstr && LV.btc) { now = LV.mstr * lr.adso_k * 1e3 / (lr.holdings * LV.btc); var pc = srt.filter(function (v) { return v <= now; }).length / srt.length * 100;
-        $('[data-x-mc]', box).textContent = now.toFixed(2) + 'x'; $('[data-x-mc-s]', box).textContent = Math.round(pc) + 'th percentile since ' + dl(ser[0].d) + ' ' + ser[0].d.slice(0, 4) + ' · ' + (pc < 25 ? 'low end of its range' : pc > 75 ? 'high end of its range' : 'middle of its range'); }
+      if (mn) { el.textContent = mn.toFixed(2) + 'x'; es.textContent = 'MSTR $' + LV.mstr.toFixed(2) + ' · BTC $' + fmt(LV.btc) + ' · ' + nyTime(LV.t); } else { el.textContent = '—'; es.textContent = 'live quotes unavailable'; }
+      var v = (LV.mstr && LV.btc) ? (now = LV.mstr * lr.adso_k * 1e3 / (lr.holdings * LV.btc)) : ser[ser.length - 1].v, pc = srt.filter(function (x) { return x <= v; }).length / srt.length * 100;
+      $('[data-x-mc]', box).textContent = v.toFixed(2) + 'x'; $('[data-x-mc-s]', box).textContent = Math.round(pc) + 'th percentile · ' + (pc < 25 ? 'low end' : pc > 75 ? 'high end' : 'middle') + ' of its 1Y range';
       drawMnav(cv, ser, P, now);
     }
     paint(); pullLive(paint); setInterval(function () { if (!document.hidden) pullLive(paint); }, 60000);
     var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(paint, 150); });
   }
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-mnav-full],[data-mnav-full2]'); if (!a) return; e.preventDefault(); document.dispatchEvent(new CustomEvent('btd:chart', { detail: 'mnav' })); });
 
   /* ---------- What changed this week ---------- */
   function sma(a, i, n) { if (i < n - 1) return null; var s = 0; for (var k = i - n + 1; k <= i; k++) s += a[k]; return s / n; }
