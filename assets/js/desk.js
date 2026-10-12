@@ -139,7 +139,7 @@
     if (r.tk === 'BTC' && live.btc) return usd(live.btc); if (r.tk === 'ETH' && live.eth) return usd(live.eth); if (r.tk === 'SOL' && live.sol) return usd(live.sol); return ''; }
   /* Strip quotes: our own compact tiles (no per-tile widgets, so no logo or "D" overlays).
      Stocks: CNBC public quote feed (CORS-enabled; real-time last sale for US listings, flagged "delayed" when not).
-     BTC/ETH/SOL: CoinGecko (24h change), Coinbase spot as price fallback. Polled every 60s while the tab is visible.
+     BTC/ETH/SOL: Coinbase Exchange 24h stats, CoinGecko as fallback. Polled every 60s while the tab is visible.
      If a feed fails we fall back to members/data/last_closes.json and label it "last close". Tap a tile for the TradingView chart. */
   var QT = {}, QT_US = /^(NASDAQ|NYSE|AMEX|NYSEARCA|OTC|BATS|CBOE):/, QT_CG = { BTCUSD: 'bitcoin', ETHUSD: 'ethereum', SOLUSD: 'solana' };
   function qtCnbc(tv0) { if (tv0.indexOf(':') < 0) return /^[A-Z.]{1,6}$/.test(tv0) ? tv0 : null; return QT_US.test(tv0) ? tv0.split(':')[1] : null; }
@@ -172,9 +172,18 @@
           var q = { px: px, ch: parseFloat(String(x.change).replace(/[,+]/g, '')), chp: parseFloat(String(x.change_pct).replace(/[%+,]/g, '')), tag: String(x.realTime) === 'false' ? 'delayed' : '' };
           syms.forEach(function (v) { if (qtCnbc(v) === x.symbol) QT[v] = q; }); });
       }).catch(function () {}));
-    if (cg.length) jobs.push(fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + cg.join(',') + '&vs_currencies=usd&include_24hr_change=true').then(function (r) { return r.json(); }).then(function (j) {
-        syms.forEach(function (v) { var id = qtCg(v), x = id && j[id]; if (x && x.usd) { var chp = x.usd_24h_change; QT[v] = { px: x.usd, chp: chp, ch: chp != null ? x.usd - x.usd / (1 + chp / 100) : null, tag: '24h' }; } });
-      }).catch(function () { return coinbaseSpot('BTC').then(function (p) { syms.forEach(function (v) { if (qtCg(v) === 'bitcoin') QT[v] = { px: p, chp: null, ch: null, tag: 'spot' }; }); }).catch(function () {}); }));
+    var CBP = { bitcoin: 'BTC-USD', ethereum: 'ETH-USD', solana: 'SOL-USD' };
+    cg.forEach(function (id) { // Coinbase Exchange 24h stats (CORS, no key); CoinGecko as fallback
+      jobs.push(fetch('https://api.exchange.coinbase.com/products/' + CBP[id] + '/stats').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (x) {
+        var last = +x.last, open = +x.open; if (!last) throw new Error('no price');
+        syms.forEach(function (v) { if (qtCg(v) === id) QT[v] = { px: last, chp: open ? (last / open - 1) * 100 : null, ch: open ? last - open : null, tag: '24h' }; });
+      }).catch(function () {
+        return fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + id + '&vs_currencies=usd&include_24hr_change=true').then(function (r) { return r.json(); }).then(function (j) {
+          var x = j[id]; if (!x || !x.usd) return; var chp = x.usd_24h_change;
+          syms.forEach(function (v) { if (qtCg(v) === id) QT[v] = { px: x.usd, chp: chp, ch: chp != null ? x.usd - x.usd / (1 + chp / 100) : null, tag: '24h' }; });
+        }).catch(function () {});
+      }));
+    });
     Promise.all(jobs).then(qtPaint);
   }
   setInterval(qtFetch, 60000); document.addEventListener('visibilitychange', function () { if (!document.hidden) qtFetch(); });
