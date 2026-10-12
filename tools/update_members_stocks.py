@@ -3,7 +3,7 @@
 Writes members/data/stocks_daily.json. Source: Yahoo Finance chart API (split-adjusted daily closes, USD).
 Run:  python3 tools/update_members_stocks.py"""
 import json, time, urllib.request, datetime, pathlib
-SYMS = {'MSTR': 'MSTR', 'ASST': 'ASST', 'MPJPY': 'MPJPY', 'XXI': 'XXI'}
+SYMS = {'MSTR': 'MSTR', 'ASST': 'ASST', 'MPJPY': 'MPJPY', 'XXI': 'XXI', 'MARA': 'MARA', 'COIN': 'COIN'}
 NOTES = {
     'ASST': 'Before the Sep 2025 merger this ticker traded as Asset Entities; history before then is a different business.',
     'XXI': 'Before Twenty One Capital listed, this ticker history belongs to the SPAC (Cantor Equity Partners).',
@@ -24,3 +24,7 @@ for k, s in SYMS.items():
 p = pathlib.Path(__file__).resolve().parent.parent / 'members' / 'data' / 'stocks_daily.json'
 p.write_text(json.dumps(out, separators=(',', ':')))
 print('wrote', p, p.stat().st_size, 'bytes')
+# small file for the home price scroll and strip picker: last two closes per ticker
+last = {'source': out['source'], 'as_of': out['as_of'], 'q': {k: {'d': v['d'][-1], 'c': v['c'][-1], 'prev': v['c'][-2]} for k, v in out['series'].items()}}
+(p.parent / 'last_closes.json').write_text(json.dumps(last, separators=(',', ':')))
+print('wrote last_closes.json')

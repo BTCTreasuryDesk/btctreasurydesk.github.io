@@ -194,3 +194,7 @@ body.dm .q-feat::after{display:none}
 body.dm .p-spot{display:none}
 /* price scroll: slow and thin */
 .ticker{height:20px;font-size:10.5px;line-height:20px}
+.dtile{height:78px;display:flex;flex-direction:column;justify-content:center;gap:1px;padding-right:24px}.dtile small{font:600 9.5px var(--mono);color:var(--mu);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dtile b{font:700 20px var(--mono);color:#fff}
+@media (max-width:720px){.dtile{height:58px}.dtile b{font-size:16px}}
+.q-lock{position:absolute;top:4px;right:30px;z-index:3;color:#F7931A;font-size:11px;opacity:.8}
+.pk-px{margin-left:auto;font:10.5px var(--mono);color:var(--mu);font-style:normal;white-space:nowrap;padding-left:6px}

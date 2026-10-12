@@ -29,6 +29,6 @@ Rules: every number carries a source, no "buy"/"sell" signal wording, and the li
 - Holdings, BTC Yield, mNAV, sats per share and preferred data (STRC, STRF, STRK, STRD) come from strategy.com first (dashboard, /purchases ledger, preferred pages); SEC 8-Ks confirm. Link strategy.com from every Strategy/MSTR panel and the video section.
 
 ### Members toolkit (Sunday)
-- Run `python3 tools/update_members_stocks.py` (MSTR, ASST, MPJPY, XXI daily closes -> members/data/stocks_daily.json).
+- Run `python3 tools/update_members_stocks.py` (MSTR, ASST, MPJPY, XXI, MARA, COIN daily closes -> members/data/stocks_daily.json, plus members/data/last_closes.json for the home price scroll and strip picker).
 - Edit `members/data/weekly.json` ("This week in the Members desk"): 1-3 editorial items, `new: true` for fresh items. Zone/badge/momentum changes are computed automatically in the browser.
 - Metaplanet uses one ticker only: MPJPY (ADR, OTC). SLE (Super League) is a selectable "Metaplanet-related" option only, never ranked; it may become SUPA after the pending Superplanet deal closes.

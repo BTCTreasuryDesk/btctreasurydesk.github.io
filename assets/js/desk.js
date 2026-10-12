@@ -63,15 +63,20 @@
     { tk: 'STRC', tv: 'NASDAQ:STRC', name: 'Strategy Stretch preferred', g: 'Preferreds' }, { tk: 'STRF', tv: 'NASDAQ:STRF', name: 'Strategy Strife preferred', g: 'Preferreds' },
     { tk: 'STRK', tv: 'NASDAQ:STRK', name: 'Strategy Strike preferred', g: 'Preferreds' }, { tk: 'STRD', tv: 'NASDAQ:STRD', name: 'Strategy Stride preferred', g: 'Preferreds' },
     { tk: 'SATA', tv: 'NASDAQ:SATA', name: 'Strive SATA preferred', g: 'Preferreds' },
+    { tk: 'MTPLF', tv: 'OTC:MTPLF', name: 'Metaplanet, older OTC line (main ticker is MPJPY)', g: 'Metaplanet-related' },
     { tk: 'SLE', tv: 'NASDAQ:SLE', name: 'Super League (Metaplanet-related; pending Superplanet deal)', g: 'Metaplanet-related' }
   ];
   var STRIP_FALLBACK = [ // used until desk.json's board pool loads
     { tk: 'MSTR', tv: 'NASDAQ:MSTR', name: 'Strategy' }, { tk: 'MPJPY', tv: 'OTC:MPJPY', name: 'Metaplanet (ADR)' }, { tk: 'XXI', tv: 'NYSE:XXI', name: 'Twenty One Capital' },
     { tk: 'MARA', tv: 'NASDAQ:MARA', name: 'MARA Holdings' }, { tk: 'ASST', tv: 'NASDAQ:ASST', name: 'Strive' }, { tk: 'COIN', tv: 'NASDAQ:COIN', name: 'Coinbase' }
   ];
+  var LOCK = { 'NASDAQ:MSTR': 1, 'BITSTAMP:BTCUSD': 1 };
   function stripLoad() {
     var a = null; try { a = JSON.parse(LS.get('btd_strip') || 'null'); } catch (e) {}
     var ok = Array.isArray(a) && a.length === 5 && a.every(function (x) { return x && typeof x.tv === 'string' && /^[A-Z0-9:._!\-]{1,32}$/.test(x.tv); });
+    if (ok && LS.get('btd_strip_mig1') !== '1') { a = a.map(function (x) { return /MTPLF/.test(x.tv) ? { tk: 'MPJPY', tv: 'OTC:MPJPY' } : x; }); LS.set('btd_strip_mig1', '1'); } // one-time: old Metaplanet OTC default -> ADR
+    if (ok) { // MSTR and BTC are fixed tiles: put them back in slots 0 and 1 if a saved strip lacks them
+      a = a.filter(function (x) { return !LOCK[x.tv]; }); a = [{ tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }].concat(a).slice(0, 5); while (a.length < 5) a.push(STRIP_DEF[a.length]); }
     return ok ? a.map(function (x) { return { tk: String(x.tk || x.tv).slice(0, 12), tv: x.tv }; }) : STRIP_DEF.map(function (x) { return { tk: x.tk, tv: x.tv }; });
   }
   var STRIP = stripLoad();
@@ -81,10 +86,23 @@
   function stripCell(i) {
     var c = STRIP[i];
     return '<div class="q-cell' + (i === stripFeat() ? ' q-feat' : '') + '" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div>' +
-      '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + (i + 1) + ' (' + esc(c.tk) + ')" title="Change this tile">' +
-      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button></div>';
+      (LOCK[c.tv] ? '<span class="q-lock" title="' + (c.tv === 'NASDAQ:MSTR' ? 'MSTR is the fixed featured tile' : 'BTC is a fixed tile') + '">' + (c.tv === 'NASDAQ:MSTR' ? '&#9733;' : '&#128274;') + '</span></div>' : '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + (i + 1) + ' (' + esc(c.tk) + ')" title="Change this tile">' +
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button></div>');
   }
-  function stripQuote(el) { tv(el, 'single-quote', { symbol: el.dataset.tvq, width: '100%', colorTheme: 'dark', isTransparent: true, locale: 'en' }); }
+  var DATA_T = { MNAV: ['mNAV', 'MSTR mNAV (strategy.com)'], DOM: ['BTC.D', 'Bitcoin dominance'], BTCETH: ['BTC/ETH', 'BTC priced in ETH'], FNG: ['F&G', 'Crypto Fear & Greed'], ATH: ['ATH', 'BTC distance from all-time high'] };
+  function dataVal(k) { if (typeof live === 'undefined' || !live) return null; switch (k) {
+    case 'MNAV': return DESK ? [DESK.strategy.mnav.toFixed(2) + 'x', 'strategy.com'] : null; case 'DOM': return live.dom ? [live.dom.toFixed(1) + '%', 'CoinGecko'] : null;
+    case 'BTCETH': return live.btc && live.eth ? [(live.btc / live.eth).toFixed(1), 'ETH per BTC'] : null; case 'FNG': return live.fng ? [live.fng.split(' ')[0], live.fng.split(' ').slice(1).join(' ')] : null;
+    case 'ATH': var a = athOf(); return a && live.btc ? [pct((live.btc / a - 1) * 100, 1), 'vs ATH ' + usd(a)] : null; } return null; }
+  function athOf() { return HIST && live ? Math.max.apply(null, HIST.closes.concat(live.btc ? [live.btc] : [])) : null; }
+  function dataTiles() { $$('[data-dtile]').forEach(function (el) { var v = dataVal(el.dataset.dtile); el.innerHTML = '<small>' + esc(DATA_T[el.dataset.dtile][1]) + '</small><b>' + (v ? esc(v[0]) : '…') + '</b><small>' + (v ? esc(v[1]) : '') + '</small>'; }); }
+  var LAST = null; fetch('/members/data/last_closes.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { LAST = j; ticker(); }).catch(function () {});
+  function pxOf(r) { if (r.tv.indexOf('DATA:') === 0) { var v = dataVal(r.tv.slice(5)); return v ? v[0] : ''; }
+    if (LAST && LAST.q[r.tk]) return '$' + LAST.q[r.tk].c.toFixed(2);
+    if (DESK) { var p = DESK.preferreds.filter(function (x) { return x.t === r.tk; })[0]; if (p) return '$' + p.price.toFixed(2); }
+    if (MET && MET.securities[r.tk] && MET.securities[r.tk].price) return MET.securities[r.tk].price;
+    if (r.tk === 'BTC' && live.btc) return usd(live.btc); if (r.tk === 'ETH' && live.eth) return usd(live.eth); if (r.tk === 'SOL' && live.sol) return usd(live.sol); return ''; }
+  function stripQuote(el) { if (el.dataset.tvq.indexOf('DATA:') === 0) { el.innerHTML = '<div class="dtile" data-dtile="' + esc(el.dataset.tvq.slice(5)) + '"></div>'; dataTiles(); return; } tv(el, 'single-quote', { symbol: el.dataset.tvq, width: '100%', colorTheme: 'dark', isTransparent: true, locale: 'en' }); }
   function stripRender(only) {
     var s = $('[data-strip]'); if (!s) return;
     if (only != null && ($('.q-feat', s) || {}).getAttribute && +$('.q-feat', s).dataset.qi === stripFeat()) {
@@ -96,8 +114,10 @@
   }
   stripRender();
   function stripPool() {
-    var seen = {}, out = [], rows = (TB && TB.rows) ? TB.rows.filter(function (r) { return r.tv; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury companies (board top 50)' }; }) : STRIP_FALLBACK.map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury companies' }; });
-    STRIP_EXTRA.slice(0, 3).concat(rows, STRIP_EXTRA.slice(3)).forEach(function (r) { if (!seen[r.tv]) { seen[r.tv] = 1; out.push(r); } });
+    var seen = { 'NASDAQ:MSTR': 1, 'BITSTAMP:BTCUSD': 1 }, out = [], rows = (TB && TB.rows) ? TB.rows.filter(function (r) { return r.tv; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name + ' · ' + fmt(r.btc) + ' ₿', g: 'Treasury stocks (ranked by BTC held)' }; }) : STRIP_FALLBACK.map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury stocks (ranked by BTC held)' }; });
+    var pref = STRIP_EXTRA.filter(function (r) { return r.g === 'Preferreds'; }), crypto = STRIP_EXTRA.filter(function (r) { return r.g === 'Crypto'; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Crypto ref' }; }), other = STRIP_EXTRA.filter(function (r) { return r.g !== 'Preferreds' && r.g !== 'Crypto'; });
+    var data = Object.keys(DATA_T).map(function (k) { return { tk: DATA_T[k][0], tv: 'DATA:' + k, name: DATA_T[k][1], g: 'Data tiles' }; });
+    rows.concat(pref, data, crypto, other).forEach(function (r) { if (!seen[r.tv]) { seen[r.tv] = 1; out.push(r); } });
     return out;
   }
   var pk = null, pkI = -1, pkBtn = null;
@@ -107,7 +127,7 @@
     pool.filter(function (r) { return !qq || r.tk.toUpperCase().indexOf(qq) >= 0 || r.name.toUpperCase().indexOf(qq) >= 0 || r.tv.indexOf(qq) >= 0; }).forEach(function (r) {
       if (r.g !== g) { g = r.g; html += '<li class="pk-g" role="presentation">' + esc(g) + '</li>'; }
       var cur = STRIP[pkI] && STRIP[pkI].tv === r.tv;
-      html += '<li><button type="button" class="pk-o' + (cur ? ' on' : '') + '" data-pk-tv="' + esc(r.tv) + '" data-pk-tk="' + esc(r.tk) + '"><b>' + esc(r.tk) + '</b><span>' + esc(r.name) + '</span></button></li>';
+      html += '<li><button type="button" class="pk-o' + (cur ? ' on' : '') + '" data-pk-tv="' + esc(r.tv) + '" data-pk-tk="' + esc(r.tk) + '"><b>' + esc(r.tk) + '</b><span>' + esc(r.name) + '</span>' + (pxOf(r) ? '<i class="pk-px">' + esc(pxOf(r)) + '</i>' : '') + '</button></li>';
     });
     list.innerHTML = html || '<li class="pk-none">No match in the list. Press Enter to try “' + esc(qq) + '” as a TradingView symbol.</li>';
   }
@@ -588,12 +608,20 @@
 
   /* ---------- optional thin ticker (off by default) ---------- */
   var tk = $('[data-ticker]'), tkBtn = $('[data-ticker-toggle]');
-  function ticker() {
-    var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
-    var items = [['BTC', live.btc ? usd(live.btc) : '—'], ['BTC.D', live.dom ? live.dom.toFixed(1) + '%' : '—'], ['F&G', live.fng || '—']];
-    if (DESK) { items.push(['MSTR BTC', fmt(DESK.strategy.btc_held)], ['mNAV', DESK.strategy.mnav.toFixed(2) + 'x'], ['ASST BTC', fmt(DESK.strive.btc_held)]);
-      DESK.preferreds.forEach(function (p) { items.push([p.t, (p.rate * 100 / p.price).toFixed(2) + '% yld']); }); }
-    inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + esc(x[1]); }).join('');
+  var MET = null; fetch('/assets/data/metrics.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (m) { MET = m; ticker(); }).catch(function () {});
+  function ticker() { // order: treasury stock prices, preferreds, then the high-value data
+    dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return; var items = [];
+    if (LAST) ['MSTR', 'ASST', 'MPJPY', 'XXI', 'MARA', 'COIN'].forEach(function (t) { var q = LAST.q[t]; if (q) items.push([t, '$' + q.c.toFixed(2), (q.c / q.prev - 1) * 100]); });
+    if (DESK) DESK.preferreds.forEach(function (p) { items.push([p.t, '$' + p.price.toFixed(2) + ' · ' + p.rate.toFixed(2) + '%']); });
+    if (MET) ['STRF', 'STRK', 'STRD'].forEach(function (t) { var m = MET.securities[t]; if (m) items.push([t, m.price + ' · ' + m.dividend]); });
+    items.push(['BTC', live.btc ? usd(live.btc) : '—']);
+    if (DESK) { var s = DESK.strategy; items.push(['MSTR mNAV', s.mnav.toFixed(2) + 'x'], ['Strategy', fmt(s.btc_held) + ' ₿'], ['Last buy', '+' + fmt(s.last_buy_btc) + ' ₿ · ' + dateLbl(s.last_buy_reported)]); }
+    if (live.dom) items.push(['BTC.D', live.dom.toFixed(1) + '%']); if (live.btc && live.eth) items.push(['BTC/ETH', (live.btc / live.eth).toFixed(1)]); if (live.btc && live.sol) items.push(['BTC/SOL', (live.btc / live.sol).toFixed(0)]);
+    if (live.fng) items.push(['Fear & Greed', live.fng]);
+    var ath = athOf(); if (ath && live.btc) items.push(['From ATH', pct((live.btc / ath - 1) * 100, 1)]);
+    if (live.btc) items.push(['Power Law', (live.btc / plaw(Date.now())).toFixed(2) + 'x trend']);
+    var nh = Date.UTC(2024, 3, 20) + 210000 * 600e3; items.push(['Halving', '~' + Math.max(0, Math.ceil((nh - Date.now()) / 864e5)) + ' days']);
+    inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + esc(x[1]) + (x[2] != null ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : ''); }).join('') + '<b class="muted">Stocks: last close</b>';
   }
   // Off by default; a visitor's On/Off click is saved as their default. Reduced-motion visitors always start Off (and it never animates for them).
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
