@@ -91,3 +91,4 @@ body.dm .p-price{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (max-width:760px){.ch-view{display:none}.pc-cv{height:280px}.x-mc-sp{height:100px}}
 .p-charts .seg button.on,.p-charts .ch-sub .seg button.on{background:rgba(247,147,26,.16)!important;color:#F7931A!important;border-color:rgba(247,147,26,.5)}
+.ch-cell .ch-sub>.seg{display:none}

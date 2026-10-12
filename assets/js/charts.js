@@ -90,7 +90,8 @@
         var P = H.weekly.map(function (x) { return [t0(x[0]), x[1]]; }), f = fromT(P[P.length - 1][0]); P = P.filter(function (p) { return p[0] >= f; }); if (P.length < 2) P = H.weekly.slice(-2).map(function (x) { return [t0(x[0]), x[1]]; });
         var a = P[0][1], z = P[P.length - 1][1];
         body.innerHTML = '<div class="ch-sub">' + seg() + LEG([['#F7931A', 'BTC dominance ' + z.toFixed(1) + '% (' + (z - a >= 0 ? '+' : '−') + Math.abs(z - a).toFixed(1) + 'pp over the window)']]) + '</div><canvas class="ch-cv"></canvas>';
-        line($('canvas', body), [{ p: P, c: '#F7931A', w: 1.6 }], { yf: function (v) { return v.toFixed(0) + '%'; } });
+        var rgD = Math.max.apply(0, P.map(function (p) { return p[1]; })) - Math.min.apply(0, P.map(function (p) { return p[1]; }));
+        line($('canvas', body), [{ p: P, c: '#F7931A', w: 1.6 }], { yf: function (v) { return v.toFixed(rgD < 8 ? 1 : 0) + '%'; } });
         foot.innerHTML = 'Weekly (Sunday) samples, ' + esc(H.src.name) + ', to ' + esc(H.as_of) + '. Stored history covers about 1 year, so 5Y and All show that year. Rising = BTC gaining share of the crypto market.'; });
     },
     ratios: function (body, foot) {
