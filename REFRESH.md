@@ -41,3 +41,9 @@ Rules: every number carries a source, no "buy"/"sell" signal wording, and the li
 - Each Sunday edit `members/data/weekly.json` → `fresh`: `tools` (Members tab ids) and `library` (cheat, prefs, numbers, data, glossary, whitepaper, quotes) that are new or materially updated this week; clear last week's. These drive the "New this week" badges and the "You're in" box. Never mark something new that isn't.
 - NEVER run the old v1 generator (`/workspace/btctreasurydesk-tools/*.v1-disabled`). It overwrites the v2 pages. Pushes from the site checkout need `DESK_PUSH_OK=1` (pre-push hook).
 
+## Preferreds Desk (home, `desk.json` → `prefs_desk`; added Oct 11, 2026)
+- Each Sunday: update `close`/`prev` (last two daily closes) and `price_as_of` for STRC, STRF, STRK, STRD, SATA; rates (STRC and SATA are variable and change by 8-K); payment schedule; `next_ex` (record date = ex-date under T+1) only when declared in an issuer 8-K or press release, otherwise null with a note. Live price and day change come from TradingView in the browser.
+- Seniority (Strategy 10-Q liquidation order): STRF > STRC > STRE > STRK > STRD. Re-check after any new series.
+- `upcoming`: newly announced or pending preferred offerings and term changes from Strategy, Strive or other treasury companies. Official sources only (issuer press release, 8-K/6-K, proxy, prospectus), with date, status and link. Remove items once completed (move a new listed series into `rows`).
+- Weekly news check: search for new preferred series, ATM programs for preferreds, rate changes and dividend declarations (Strategy, Strive, Metaplanet, other treasury companies) and update `rows`/`upcoming` from the official filing.
+

@@ -807,5 +807,147 @@
       "title": "Are We Still Early to Bitcoin? Michael Saylor's “Gold Rush” Through 2035",
       "week": "2026-10-11"
     }
-  ]
+  ],
+  "prefs_desk": {
+    "as_of": "2026-10-11",
+    "price_as_of": "2026-10-09",
+    "price_src": "Yahoo Finance daily close (live price and day change in each row from TradingView)",
+    "note": "Effective yield = stated annual rate on $100 ÷ last close. Ex-dividend date equals the record date under T+1 settlement. Seniority is the issuer's liquidation order among its own preferreds.",
+    "rows": [
+      {
+        "t": "STRC",
+        "tv": "NASDAQ:STRC",
+        "issuer": "Strategy",
+        "name": "Stretch",
+        "rate": 12.0,
+        "rate_kind": "Variable",
+        "close": 99.65,
+        "prev": 99.45,
+        "pay": "Semi-monthly",
+        "pay_note": "Record dates the 15th and month-end; daily dividends proposed from Nov 2 (vote Oct 28)",
+        "par": 100,
+        "type": "Cumulative · variable rate",
+        "rank": "2nd of 5 (after STRF)",
+        "next_ex": "2026-10-15",
+        "next_ex_note": "Record date for the Oct 31 payment ($0.50/share)",
+        "explain": "Strategy's short-duration digital credit: the rate is adjusted so the price stays near $100.",
+        "src": {
+          "name": "Strategy 8-K, Oct 1, 2026; 10-Q Q2 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm"
+        }
+      },
+      {
+        "t": "STRF",
+        "tv": "NASDAQ:STRF",
+        "issuer": "Strategy",
+        "name": "Strife",
+        "rate": 10.0,
+        "rate_kind": "Fixed",
+        "close": 103.21,
+        "prev": 103.04,
+        "pay": "Quarterly",
+        "pay_note": "Mar 31 / Jun 30 / Sep 30 / Dec 31, when declared",
+        "par": 100,
+        "type": "Cumulative · fixed · non-convertible",
+        "rank": "Most senior (1st of 5)",
+        "next_ex": null,
+        "next_ex_note": "Q4 dividend not declared yet (scheduled pay date Dec 31)",
+        "explain": "First in line among Strategy's preferreds; a fixed 10%, and missed dividends accrue.",
+        "src": {
+          "name": "Strategy 10-Q Q2 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm"
+        }
+      },
+      {
+        "t": "STRK",
+        "tv": "NASDAQ:STRK",
+        "issuer": "Strategy",
+        "name": "Strike",
+        "rate": 8.0,
+        "rate_kind": "Fixed",
+        "close": 76.2,
+        "prev": 75.33,
+        "pay": "Quarterly",
+        "pay_note": "Mar 31 / Jun 30 / Sep 30 / Dec 31, when declared; cash, MSTR stock or both",
+        "par": 100,
+        "type": "Cumulative · convertible (0.1 MSTR per share)",
+        "rank": "4th of 5 (after STRF, STRC, STRE)",
+        "next_ex": null,
+        "next_ex_note": "Q4 dividend not declared yet (scheduled pay date Dec 31)",
+        "explain": "Lower coupon plus MSTR upside: each share converts into 0.1 MSTR share.",
+        "src": {
+          "name": "Strategy 10-Q Q2 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm"
+        }
+      },
+      {
+        "t": "STRD",
+        "tv": "NASDAQ:STRD",
+        "issuer": "Strategy",
+        "name": "Stride",
+        "rate": 10.0,
+        "rate_kind": "Fixed",
+        "close": 72.86,
+        "prev": 72.2,
+        "pay": "Quarterly",
+        "pay_note": "Mar 31 / Jun 30 / Sep 30 / Dec 31, when declared",
+        "par": 100,
+        "type": "Non-cumulative · fixed · non-convertible",
+        "rank": "Most junior (5th of 5)",
+        "next_ex": null,
+        "next_ex_note": "Q4 dividend not declared yet (scheduled pay date Dec 31)",
+        "explain": "Highest yield, most risk: dividends are discretionary and skipped ones do not accrue.",
+        "src": {
+          "name": "Strategy 10-Q Q2 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm"
+        }
+      },
+      {
+        "t": "SATA",
+        "tv": "NASDAQ:SATA",
+        "issuer": "Strive",
+        "name": "SATA",
+        "rate": 13.0,
+        "rate_kind": "Variable",
+        "close": 99.1,
+        "prev": 98.82,
+        "pay": "Daily",
+        "pay_note": "Each business day in October ($0.0516/share), record date the prior business day",
+        "par": 100,
+        "type": "Cumulative (unpaid amounts compound monthly) · variable rate",
+        "rank": "Ahead of Strive common stock",
+        "next_ex": "daily",
+        "next_ex_note": "Every business day in October",
+        "explain": "Strive's take on STRC: a variable rate paid every business day, aimed at trading near $100.",
+        "src": {
+          "name": "Strive 8-K, Sep 15, 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm"
+        }
+      }
+    ],
+    "upcoming": [
+      {
+        "date": "2026-10-28",
+        "company": "Strategy",
+        "item": "Daily dividends for STRF, STRC, STRK and STRD",
+        "detail": "Stockholder vote Oct 28. If approved: STRC pays each business day from Nov 2 (record dates from Nov 1); STRF, STRK and STRD from Jan 4, 2027. Rates and total dividends unchanged.",
+        "status": "Pending vote",
+        "src": {
+          "name": "Strategy DEF 14A, Oct 5, 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413159/d503578ddef14a.htm"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "company": "Genius Group (GNS)",
+        "item": "Proposed perpetual preferred",
+        "detail": "Initial $12.5M target; expected non-convertible with a variable rate paid monthly. Size, price, timing and listing not set yet.",
+        "status": "Proposed",
+        "src": {
+          "name": "Genius Group press release, Aug 27, 2026",
+          "url": "https://www.globenewswire.com/news-release/2026/08/27/3351965/0/en/genius-group-announces-1-2-billion-capital-plan-to-fund-ai-treasury-and-bitcoin-treasury.html"
+        }
+      }
+    ]
+  }
 }

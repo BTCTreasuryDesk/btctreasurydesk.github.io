@@ -289,9 +289,33 @@
     var vm = $('[data-votw-more]'); if (vm) vm.innerHTML = (v.more || []).concat(v.strategy_link ? [v.strategy_link] : []).slice(0, 2).map(function (l) { return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + ' &#8599;</a>'; }).join('');
     spotlight(d);
     board(d.treasuries);
+    pdesk(d.prefs_desk);
     $('[data-week]').innerHTML = d.week_ahead.map(function (w) { return '<li><b>' + esc(w.d) + '</b><span>' + esc(w.e) + '</span></li>'; }).join('');
     paintStrategyLive(); models();
   }).catch(function (e) { console.warn('desk.json unavailable', e); });
+
+  /* ---------- Preferreds Desk (desk.json prefs_desk, Sunday refresh; live price/day change from TradingView) ---------- */
+  function pdesk(P) {
+    var tb = $('[data-pd-rows]'); if (!tb || !P) return;
+    $('[data-pd-asof]').textContent = 'as of ' + dateLbl(P.as_of);
+    tb.innerHTML = P.rows.map(function (r) {
+      var ey = r.rate * r.par / r.close, nx = r.next_ex === 'daily' ? 'Daily' : r.next_ex ? dateLbl(r.next_ex) : '—';
+      return '<tr><td><details class="pd-x"><summary><b>' + esc(r.t) + '</b><small>' + esc(r.issuer + ' ' + r.name) + '</small></summary><p>' + esc(r.explain) + ' <a href="' + esc(r.src.url) + '" target="_blank" rel="noopener">' + esc(r.src.name) + '</a></p></details></td>' +
+        '<td class="pd-live"><div class="pd-tv" data-pd-tv="' + esc(r.tv) + '" data-tk="' + esc(r.t) + '"></div></td>' +
+        '<td class="mono">' + r.rate.toFixed(2) + '%<small>' + esc(r.rate_kind) + '</small></td>' +
+        '<td class="mono"><b>' + ey.toFixed(2) + '%</b><small>at $' + r.close.toFixed(2) + ' close</small></td>' +
+        '<td title="' + esc(r.pay_note) + '">' + esc(r.pay) + '<small>' + esc(r.pay_note) + '</small></td>' +
+        '<td class="mono">$' + r.par + '</td><td>' + esc(r.type) + '</td><td>' + esc(r.rank) + '</td>' +
+        '<td title="' + esc(r.next_ex_note) + '"><span class="mono">' + esc(nx) + '</span><small>' + esc(r.next_ex_note) + '</small></td></tr>';
+    }).join('');
+    var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; io.unobserve(e.target); var el = e.target;
+      tv(el, 'tickers', { symbols: [{ proName: el.dataset.pdTv, title: el.dataset.tk }], colorTheme: 'dark', isTransparent: true, showSymbolLogo: false, locale: 'en' }); }); }, { rootMargin: '200px' }) : null;
+    $$('[data-pd-tv]').forEach(function (el) { if (io) io.observe(el); else tv(el, 'tickers', { symbols: [{ proName: el.dataset.pdTv, title: el.dataset.tk }], colorTheme: 'dark', isTransparent: true, showSymbolLogo: false, locale: 'en' }); });
+    var up = $('[data-pd-up]');
+    if (up) up.innerHTML = (P.upcoming || []).length ? '<b class="pd-uh">Upcoming / announced</b>' + P.upcoming.map(function (u) {
+      return '<div class="pd-u"><span class="pd-st">' + esc(u.status) + '</span><span class="mono">' + esc(dateLbl(u.date)) + '</span><b>' + esc(u.company) + ': ' + esc(u.item) + '</b><span class="muted">' + esc(u.detail) + '</span><a href="' + esc(u.src.url) + '" target="_blank" rel="noopener">' + esc(u.src.name) + ' &#8599;</a></div>'; }).join('') : '';
+    $('[data-pd-src]').textContent = P.note + ' Last close: ' + P.price_src.split(' (')[0] + ', ' + dateLbl(P.price_as_of) + '. Official sources: issuer 8-Ks, 10-Q, proxy and press releases (linked per row). Tap a ticker for a plain-English line. Education only, not investment advice.';
+  }
 
   /* ---------- Treasury Board (compact; filters + pins saved locally) ---------- */
   var TB = null, tbSyms = '', tbT = null;
