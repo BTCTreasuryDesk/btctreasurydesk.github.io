@@ -183,7 +183,13 @@ body.dm .p-spot{display:none}
 .strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:86px;gap:1px;background:var(--ln);overflow:hidden}
 .q-rail{display:contents}
 .q-cell{position:relative;min-width:0;overflow:hidden;background:var(--p)}
-.q-slim{padding:4px 8px 0}.q-slim .tv-slot{height:66px;overflow:hidden}.q-slim .tv-slot iframe{height:72px!important}
+.q-slim{padding:0}.q-slim .tv-slot{height:66px;overflow:hidden}
+.qt{display:flex;flex-direction:column;justify-content:center;gap:3px;height:66px;padding:6px 10px 0;color:var(--tx);text-decoration:none}.qt:hover{text-decoration:none;background:#11141a}
+.qt-r1{display:flex;align-items:baseline;justify-content:space-between;gap:6px;min-width:0}.qt-tk{font:700 12.5px var(--mono);color:#e6e9ee;letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qt-px{font:600 13px var(--mono);color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums}
+.qt-r2{display:flex;align-items:baseline;gap:8px;min-width:0;font-variant-numeric:tabular-nums;color:var(--mu)}.qt-chp{font:700 17px var(--mono)}.qt-ch{font:600 11px var(--mono)}
+.qt-r2.up{color:var(--up)}.qt-r2.dn{color:var(--dn)}.qt-tag{margin-left:auto;font:600 8.5px var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.q-foot{left:10px}
 .q-all{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:8px 12px;text-decoration:none}.q-all b{font:700 13px var(--mono);color:var(--o)}.q-all small{color:var(--mu);font-size:10px}.q-all:hover{text-decoration:none;background:var(--p2)}
 .q-feat{background:linear-gradient(180deg,#1a1206,#0d0f12 80%);box-shadow:inset 0 0 0 1px #F7931Aaa,inset 0 2px 0 #F7931A}
 .q-foot{position:absolute;left:8px;right:6px;bottom:3px;display:flex;align-items:center;gap:6px;font:600 9.5px/16px var(--mono);color:var(--mu);white-space:nowrap;z-index:2}
@@ -199,10 +205,11 @@ body.dm .p-spot{display:none}
 /* tablet + phone: MSTR and BTC share the top row; the 9 slim tiles swipe sideways (first few visible) */
 @media (max-width:1179px){.strip{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto}
  .q-btc,.q-feat{height:86px}
- .q-rail{grid-column:1/-1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;gap:1px;background:var(--ln);mask-image:linear-gradient(90deg,#000 90%,transparent)}.q-rail::-webkit-scrollbar{display:none}
- .q-rail .q-slim{flex:0 0 176px;height:86px;scroll-snap-align:start}
+ .q-rail{grid-column:1/-1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;gap:1px;background:var(--ln)}.q-rail::-webkit-scrollbar{display:none}
+ .q-rail .q-slim{flex:0 0 calc((100% - 4px) / 4.3);height:86px;scroll-snap-align:start}
  .strip-cap .strip-swipe{display:inline}}
 @media (max-width:760px){.strip-cap span:not(.strip-swipe){display:none}.q-feat .q-n{display:none}}
+@media (max-width:600px){.q-rail .q-slim{flex-basis:calc((100% - 1px) / 2)}.qt{padding:6px 9px 0}.qt-chp{font-size:16px}}
 /* Desk Mode: same tiles, no edit control */
 body.dm .q-ed{display:none}
 

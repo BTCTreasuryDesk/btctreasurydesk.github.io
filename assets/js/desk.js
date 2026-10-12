@@ -131,19 +131,54 @@
     case 'ATH': var a = athOf(); return a && live.btc ? [pct((live.btc / a - 1) * 100, 1), 'vs ATH ' + usd(a)] : null; } return null; }
   function athOf() { return HIST && live ? Math.max.apply(null, HIST.closes.concat(live.btc ? [live.btc] : [])) : null; }
   function dataTiles() { $$('[data-dtile]').forEach(function (el) { var v = dataVal(el.dataset.dtile); el.innerHTML = '<small>' + esc(DATA_T[el.dataset.dtile][1]) + '</small><b>' + (v ? esc(v[0]) : '…') + '</b><small>' + (v ? esc(v[1]) : '') + '</small>'; }); }
-  var LAST = null; fetch('/members/data/last_closes.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { LAST = j; ticker(); }).catch(function () {});
+  var LAST = null; fetch('/members/data/last_closes.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { LAST = j; ticker(); if (typeof qtPaint === 'function') qtPaint(); }).catch(function () {});
   function pxOf(r) { if (r.tv.indexOf('DATA:') === 0) { var v = dataVal(r.tv.slice(5)); return v ? v[0] : ''; }
     if (LAST && LAST.q[r.tk]) return '$' + LAST.q[r.tk].c.toFixed(2);
     if (DESK) { var p = DESK.preferreds.filter(function (x) { return x.t === r.tk; })[0]; if (p) return '$' + p.price.toFixed(2); }
     if (MET && MET.securities[r.tk] && MET.securities[r.tk].price) return MET.securities[r.tk].price;
     if (r.tk === 'BTC' && live.btc) return usd(live.btc); if (r.tk === 'ETH' && live.eth) return usd(live.eth); if (r.tk === 'SOL' && live.sol) return usd(live.sol); return ''; }
-  var stripIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { stripIO.unobserve(e.target); stripLoadQuote(e.target); } }); }, { rootMargin: '0px 240px 0px 240px' }) : null;
+  /* Strip quotes: our own compact tiles (no per-tile widgets, so no logo or "D" overlays).
+     Stocks: CNBC public quote feed (CORS-enabled; real-time last sale for US listings, flagged "delayed" when not).
+     BTC/ETH/SOL: CoinGecko (24h change), Coinbase spot as price fallback. Polled every 60s while the tab is visible.
+     If a feed fails we fall back to members/data/last_closes.json and label it "last close". Tap a tile for the TradingView chart. */
+  var QT = {}, QT_US = /^(NASDAQ|NYSE|AMEX|NYSEARCA|OTC|BATS|CBOE):/, QT_CG = { BTCUSD: 'bitcoin', ETHUSD: 'ethereum', SOLUSD: 'solana' };
+  function qtCnbc(tv0) { if (tv0.indexOf(':') < 0) return /^[A-Z.]{1,6}$/.test(tv0) ? tv0 : null; return QT_US.test(tv0) ? tv0.split(':')[1] : null; }
+  function qtCg(tv0) { var k = tv0.split(':').pop(); return QT_CG[k] || null; }
+  function qtFmt(v) { return v >= 1000 ? '$' + fmt(v, 0) : v >= 1 ? '$' + v.toFixed(2) : '$' + v.toFixed(4); }
+  function qtChart(tv0) { return 'https://www.tradingview.com/symbols/' + encodeURIComponent(tv0.replace(':', '-')) + '/'; }
   function stripLoadQuote(el) {
     var v = el.dataset.tvq;
     if (v.indexOf('DATA:') === 0) { el.innerHTML = '<div class="dtile" data-dtile="' + esc(v.slice(5)) + '"></div>'; dataTiles(); return; }
-    tv(el, 'tickers', { symbols: [{ proName: v, title: el.dataset.tk || v.split(':').pop() }], colorTheme: 'dark', isTransparent: true, showSymbolLogo: false, locale: 'en' });
+    qtPaintOne(el);
   }
-  function stripQuote(el) { if (stripIO && el.closest('.q-rail')) stripIO.observe(el); else stripLoadQuote(el); }
+  function qtPaintOne(el) {
+    var v = el.dataset.tvq, tk = el.dataset.tk || v.split(':').pop(), q = QT[v], lc = !q && LAST && LAST.q[tk] ? LAST.q[tk] : null;
+    if (!q && lc) q = { px: lc.c, chp: (lc.c / lc.prev - 1) * 100, ch: lc.c - lc.prev, tag: 'last close ' + dateLbl(lc.d).replace(/, \d+$/, '') };
+    var dir = q && q.chp != null ? (q.chp > 0 ? 'up' : q.chp < 0 ? 'dn' : '') : '';
+    el.innerHTML = '<a class="qt" href="' + qtChart(v) + '" target="_blank" rel="noopener" title="Live chart on TradingView"><span class="qt-r1"><b class="qt-tk">' + esc(tk) + '</b><span class="qt-px">' + (q ? qtFmt(q.px) : '…') + '</span></span>' +
+      '<span class="qt-r2 ' + dir + '"><span class="qt-chp">' + (q && q.chp != null ? (q.chp > 0 ? '+' : '') + q.chp.toFixed(2) + '%' : (q ? '' : (qtCnbc(v) || qtCg(v) ? '' : 'Live chart ↗'))) + '</span><span class="qt-ch">' + (q && q.ch != null ? (q.ch > 0 ? '+' : '') + (Math.abs(q.ch) >= 100 ? fmt(q.ch, 0) : q.ch.toFixed(2)) : '') + '</span>' +
+      (q && q.tag ? '<span class="qt-tag">' + esc(q.tag) + '</span>' : '') + '</span></a>';
+  }
+  function qtPaint() { $$('[data-strip] [data-tvq]').forEach(function (el) { if (el.dataset.tvq.indexOf('DATA:') !== 0) qtPaintOne(el); }); }
+  function qtFetch() {
+    if (document.hidden) return;
+    var syms = STRIP.map(function (c) { return c.tv; }), cn = [], cg = [];
+    syms.forEach(function (v) { var a = qtCnbc(v), b = qtCg(v); if (a && cn.indexOf(a) < 0) cn.push(a); else if (b && cg.indexOf(b) < 0) cg.push(b); });
+    var jobs = [];
+    if (cn.length) jobs.push(fetch('https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols=' + encodeURIComponent(cn.join('|')) + '&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1')
+      .then(function (r) { return r.json(); }).then(function (j) {
+        var arr = (j.FormattedQuoteResult || {}).FormattedQuote || []; arr = Array.isArray(arr) ? arr : [arr];
+        arr.forEach(function (x) { var px = parseFloat(String(x.last).replace(/,/g, '')); if (!isFinite(px) || x.code !== 0 && x.code !== '0') return;
+          var q = { px: px, ch: parseFloat(String(x.change).replace(/[,+]/g, '')), chp: parseFloat(String(x.change_pct).replace(/[%+,]/g, '')), tag: String(x.realTime) === 'false' ? 'delayed' : '' };
+          syms.forEach(function (v) { if (qtCnbc(v) === x.symbol) QT[v] = q; }); });
+      }).catch(function () {}));
+    if (cg.length) jobs.push(fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + cg.join(',') + '&vs_currencies=usd&include_24hr_change=true').then(function (r) { return r.json(); }).then(function (j) {
+        syms.forEach(function (v) { var id = qtCg(v), x = id && j[id]; if (x && x.usd) { var chp = x.usd_24h_change; QT[v] = { px: x.usd, chp: chp, ch: chp != null ? x.usd - x.usd / (1 + chp / 100) : null, tag: '24h' }; } });
+      }).catch(function () { return coinbaseSpot('BTC').then(function (p) { syms.forEach(function (v) { if (qtCg(v) === 'bitcoin') QT[v] = { px: p, chp: null, ch: null, tag: 'spot' }; }); }).catch(function () {}); }));
+    Promise.all(jobs).then(qtPaint);
+  }
+  setInterval(qtFetch, 60000); document.addEventListener('visibilitychange', function () { if (!document.hidden) qtFetch(); });
+  function stripQuote(el) { stripLoadQuote(el); }
   function stripApply(focusI) { // recompute; re-render only tiles whose symbol (or label) changed
     var s = $('[data-strip]'); if (!s) return; var old = STRIP; STRIP = stripCompute(OV);
     var rail = $('.q-rail', s);
@@ -162,8 +197,8 @@
     stripCap();
     if (focusI != null) { var b = $('[data-q-edit="' + focusI + '"]'); if (b) b.focus(); }
   }
-  function stripAutoDefaults() { stripApply(); } // desk.json board loaded: real ranking + BTC-held labels
-  stripApply();
+  function stripAutoDefaults() { stripApply(); qtFetch(); } // desk.json board loaded: real ranking + BTC-held labels
+  stripApply(); setTimeout(qtFetch, 0);
   function stripPool() {
     var seen = { 'NASDAQ:MSTR': 1, 'BITSTAMP:BTCUSD': 1 }, out = [], rows = (TB && TB.rows) ? TB.rows.filter(function (r) { return r.tv; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name + ' · ' + fmt(r.btc) + ' ₿', g: 'Treasury stocks (ranked by BTC held)' }; }) : STRIP_FALLBACK.map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury stocks (ranked by BTC held)' }; });
     var pref = STRIP_EXTRA.filter(function (r) { return r.g === 'Preferreds'; }), crypto = STRIP_EXTRA.filter(function (r) { return r.g === 'Crypto'; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Crypto ref' }; }), other = STRIP_EXTRA.filter(function (r) { return r.g !== 'Preferreds' && r.g !== 'Crypto'; });
@@ -190,7 +225,7 @@
     var pick = hit ? { tk: hit.tk, tv: hit.tv } : { tk: (tk0 || t.split(':').pop()).slice(0, 12), tv: t }, i = pkI;
     Object.keys(OV).forEach(function (k) { if (+k !== i && OV[k].tv === pick.tv) delete OV[k]; }); // no duplicate picks
     delete OV[i]; if (stripCompute(OV)[i].tv !== pick.tv) OV[i] = pick; // picking the slot's own default = back to auto
-    stripSave(); pkClose(false); stripApply(i);
+    stripSave(); pkClose(false); stripApply(i); qtFetch();
   }
   function pkOpen(i, btn) {
     pkClose(false); pkI = i; pkBtn = btn;
@@ -220,8 +255,8 @@
     if (!b) return;
     if (b.dataset.pkTv) pkPick(b.dataset.pkTv, b.dataset.pkTk);
     else if (b.hasAttribute('data-pk-close')) pkClose(true);
-    else if (b.hasAttribute('data-pk-reset1')) { var i1 = pkI; delete OV[i1]; stripSave(); pkClose(false); stripApply(i1); }
-    else if (b.hasAttribute('data-pk-reset')) { var i2 = pkI; OV = {}; stripSave(); pkClose(false); stripApply(i2); }
+    else if (b.hasAttribute('data-pk-reset1')) { var i1 = pkI; delete OV[i1]; stripSave(); pkClose(false); stripApply(i1); qtFetch(); }
+    else if (b.hasAttribute('data-pk-reset')) { var i2 = pkI; OV = {}; stripSave(); pkClose(false); stripApply(i2); qtFetch(); }
   }, true);
   document.addEventListener('keydown', function (e) { if (pk && e.key === 'Escape') { e.stopPropagation(); pkClose(true); } }, true);
   window.addEventListener('resize', function () { pkClose(false); });
