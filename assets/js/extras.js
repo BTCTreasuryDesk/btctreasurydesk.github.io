@@ -39,12 +39,12 @@
   function kpiTiles(D, all) {
     var s = D.strategy, K = s.kpis || {}, G = K.ledger || {}, L = K.live || {}, T = K.totals || {}, t = [];
     var ld = G.as_of ? 'ledger · ' + dl(G.as_of) : '', lv = L.as_of_securities ? dl(L.as_of_securities.replace(/(\d+)\/(\d+)\/(\d+).*/, '$3-$1-$2')) + ' close' : '';
-    if (G.btc_gain_ytd != null) t.push(['BTC Gain YTD', sgn(G.btc_gain_ytd) + ' ₿', ld, G.btc_gain_ytd, 'hero', 'BTC Gain: Strategy KPI. BTC Yield YTD x BTC held at the start of the year.']);
-    if (G.usd_gain_ytd_musd != null) t.push(['BTC $ Gain YTD', musd(G.usd_gain_ytd_musd), ld, G.usd_gain_ytd_musd, 'hero', 'BTC $ Gain: Strategy KPI. BTC Gain x the bitcoin price.']);
-    if (G.btc_yield_ytd_pct != null) t.push(['BTC Yield YTD', pct(G.btc_yield_ytd_pct), ld, G.btc_yield_ytd_pct, '', 'BTC Yield: Strategy KPI. Change in BTC per assumed diluted share since Dec 31.']);
     t.push(['BTC holdings', fmt(s.btc_held) + ' ₿', 'as of ' + dl(s.btc_as_of) + ' · 8-K']);
     if (s.mnav) t.push(['mNAV', s.mnav.toFixed(2) + 'x', lv || 'strategy.com']);
     if (T.avg_cost || s.avg_cost) t.push(['Avg cost / BTC', '$' + fmt(T.avg_cost || s.avg_cost), 'ledger totals']);
+    if (G.btc_yield_ytd_pct != null) t.push(['BTC Yield YTD', pct(G.btc_yield_ytd_pct), ld, G.btc_yield_ytd_pct, '', 'BTC Yield: Strategy KPI. Change in BTC per assumed diluted share since Dec 31.']);
+    if (G.btc_gain_ytd != null) t.push(['BTC Gain YTD', sgn(G.btc_gain_ytd) + ' ₿', ld, G.btc_gain_ytd, 'hero', 'BTC Gain: Strategy KPI. BTC Yield YTD x BTC held at the start of the year.']);
+    if (G.usd_gain_ytd_musd != null) t.push(['BTC $ Gain YTD', musd(G.usd_gain_ytd_musd), ld, G.usd_gain_ytd_musd, 'hero', 'BTC $ Gain: Strategy KPI. BTC Gain x the bitcoin price.']);
     if (all) {
       if (G.btc_yield_qtd_pct != null) t.push(['BTC Yield QTD', pct(G.btc_yield_qtd_pct), ld, G.btc_yield_qtd_pct]);
       if (T.total_cost_musd) t.push(['Total cost', musd(T.total_cost_musd), 'ledger totals']);
