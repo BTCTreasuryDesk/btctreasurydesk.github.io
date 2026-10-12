@@ -27,6 +27,7 @@ Rules: every number carries a source, no "buy"/"sell" signal wording, and the li
 
 ### strategy.com is the primary source for Strategy numbers
 - Holdings, BTC Yield, mNAV, sats per share and preferred data (STRC, STRF, STRK, STRD) come from strategy.com first (dashboard, /purchases ledger, preferred pages); SEC 8-Ks confirm. Link strategy.com from every Strategy/MSTR panel and the video section.
+- BTC Yield: show Strategy's official BTC Yield KPI from strategy.com (add `strategy.btc_yield_ytd` with as-of date and source to desk.json each Sunday) instead of computed BTC-per-share math. The Spotlight's ledger-based figure is a fallback only until that field exists.
 
 ### Members toolkit (Sunday)
 - Run `python3 tools/update_members_stocks.py` (MSTR, ASST, MPJPY, XXI, MARA, COIN daily closes -> members/data/stocks_daily.json, plus members/data/last_closes.json for the home price scroll and strip picker).
