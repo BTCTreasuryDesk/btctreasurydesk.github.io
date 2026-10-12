@@ -241,3 +241,8 @@ body.dm .dm-yt,body.dm .dm-ctl{z-index:2147483000}
 .tke-row{display:flex;gap:6px}.tke-row .pk-in{flex:1;min-width:0}.tke .pk-l{max-height:170px}.pk .chip.on{color:var(--o);border-color:var(--o)}.pk .chip[disabled]{opacity:.35;cursor:default}
 @media (max-width:720px){.tke-l{max-height:160px}.tke .pk-l{max-height:150px}.tke-l button{width:32px;height:28px}}
 .pk-f{flex-wrap:wrap}
+/* Price scroll views + sort */
+.tbtn-vw{margin-left:-4px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--o)}
+.tke-views{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 6px}.tke-views .chip{font-size:11px;padding:4px 8px}
+.tke-sortr{align-items:center;gap:8px;margin:0 0 6px}.tke-sortr .tke-s{margin:0}.tke-sortr select{flex:1;background:var(--p);color:var(--tx);border:1px solid var(--ln);border-radius:3px;padding:4px 6px;font:12px var(--mono)}
+.tke-l li.tke-h b,.tke-l li.tke-h span{opacity:.45;text-decoration:line-through}.tke-l li button.off{color:var(--mu)}

@@ -99,3 +99,9 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 - Run `python3 tools/build_library.py`. It rebuilds the three data-driven PDFs from verified site data (Treasury Company Cheat Sheet from desk.json treasuries/strategy/strive + strive.json; Strategy Preferreds Guide from prefs_desk rows + upcoming; Long-Term Cycle Playbook from the site's own model math on btc_daily.json + mempool.space block height), regenerates their cover previews, and rewrites the Library lists in `optin.js` (opt-in picker), `resources/index.html`, `subscribe/index.html` and the Members download center, plus every "(N downloads)" count. File names are stable, so links never change.
 - The script's `LIBR` list is the single source for titles, 1-line benefit, file type and updated date. Order: the three data-driven downloads first, the glossary ("Speak Treasury") last as a minor extra. The old Preferred Stock Playbook is superseded by the Strategy Preferreds Guide and no longer listed (file kept so old links don't 404).
 - Check page counts in the output (Cheat Sheet must stay 1 page). Add any new or materially updated keys to `members/data/weekly.json → fresh.library`. Kit tags: `lib_<key>` in members-config.js KIT_TAGS.
+
+## Tip the Desk (standing rule)
+- Quiet only: one footer link ("Tip the Desk" → /tip/) and a small card in Members. No popups, no nags, no banners.
+- /tip/ shows "Tip on X" (X Money via https://x.com/BTCTreasuryDesk). Lightning and on-chain slots stay hidden until Phil fills `TIP.lightning` / `TIP.onchain` in `members/members-config.js`. Never invent or paste an example address.
+- YouTube: add ONE line to the standard description template (with the channel links block), not a separate push in every episode:
+  `Support the Desk (optional): https://btctreasurydesk.com/tip/`

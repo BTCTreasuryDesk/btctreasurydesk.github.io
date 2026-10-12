@@ -11,6 +11,8 @@ window.BTD_MEMBERS = {
   // Kit tag ids, one per choice (Kit > Subscribers > Tags; the id is in the tag's URL). null = not sent yet.
   // One form + tags = one subscriber per email; signing up again with the same email just adds tags.
   KIT_TAGS: { weekly: null, monthly: null, alerts: null, lib_tcs: null, lib_pguide: null, lib_cycle: null, lib_cheat: null, lib_prefs: null, lib_numbers: null, lib_data: null, lib_glossary: null, lib_whitepaper: null, lib_quotes: null },
+  // Tip the Desk. Shown on /tip/ and the Members card ONLY when filled in. Never put a placeholder or example address here.
+  TIP: { x: 'https://x.com/BTCTreasuryDesk', lightning: '', onchain: '' },
   STORAGE_KEY: 'btd_member',         // same key as the old Members page, so existing unlocks still count
   NEW_TOOLS: []  // NEW badges now come from members/data/weekly.json "fresh" (Sunday refresh)
 };

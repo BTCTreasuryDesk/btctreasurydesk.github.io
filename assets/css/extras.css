@@ -92,3 +92,14 @@ body.dm .p-price{display:none!important}
 @media (max-width:760px){.ch-view{display:none}.pc-cv{height:280px}.x-mc-sp{height:100px}}
 .p-charts .seg button.on,.p-charts .ch-sub .seg button.on{background:rgba(247,147,26,.16)!important;color:#F7931A!important;border-color:rgba(247,147,26,.5)}
 .ch-cell .ch-sub>.seg{display:none}
+/* main chart: overlay groups, Members chips, info line, sub-panels */
+.pc-ctl{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}.pc-gl{font:600 9px ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#59626e;align-self:center;margin-right:2px}
+.pc-chip sup{font-size:8px;color:#F7931A;margin-left:1px}.pc-chip.pc-lock{border-style:dashed}
+.pc-chip.on.pc-ma i{background:linear-gradient(90deg,#c77dff 50%,#5aa9ff 50%)}.pc-chip.on.pc-s2f i{background:#9aa3ad}.pc-chip.on.pc-zones i{background:linear-gradient(90deg,#50a0ff 50%,#ff5a5f 50%)}
+.pc-chip.on.pc-rsi i,.pc-chip.on.pc-mayer i,.pc-chip.on.pc-pi i,.pc-chip.on.pc-mnav i,.pc-chip.on.pc-mvrv i{background:#F7931A}.pc-chip.on.pc-bps i{background:#2fd17c}
+.pc-info{margin:4px 0 0;font-size:12px;color:#9aa3ad;min-height:0}.pc-info:empty{display:none}.pc-info a,.pc-more a{color:#F7931A}
+.pc-more{margin:4px 0 0;font-size:11px;color:#6b7480}
+.pc-subs{display:flex;flex-direction:column;gap:6px;margin-top:6px}.pc-sub{border-top:1px solid #161a20;padding-top:4px}
+.pc-sub-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:11px}.pc-sub-h b{font:700 11px ui-monospace,Menlo,monospace;color:#d8dde4}.pc-sub-h span{font:11px ui-monospace,Menlo,monospace;color:#9aa3ad}.pc-sub-h small{color:#59626e;font-size:10.5px;flex-basis:100%}
+.pc-sub canvas{display:block;width:100%;height:72px}
+@media (max-width:760px){.pc-sub-h small{display:none}.pc-sub canvas{height:64px}.pc-ctl{gap:6px}}

@@ -18,3 +18,4 @@ body.cz-open{overflow:hidden}
 @media (max-width:600px){.cz{padding:10px 6px}.cz-box{max-height:94vh}.cz-l button{width:36px;height:32px}}
 body.dm .tbtn-cz{display:none}
 body.dm .p-chart.sec-off{display:block!important}
+.cz-pre{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px}.cz-pre .chip{font-size:12px}

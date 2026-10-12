@@ -792,14 +792,41 @@
   var TKDL = { BTC: 'BTC', MNAV: 'MSTR mNAV', GAIN: 'Strategy BTC Gain YTD', DOM: 'BTC.D', BTCETH: 'BTC/ETH', BTCSOL: 'BTC/SOL', FNG: 'Fear & Greed', ATH: 'From ATH', PLAW: 'Power Law', HALV: 'Halving' };
   var TK_ID = /^[SPDC]:[A-Z0-9.\-]{1,15}$/, TK_CN = /^[A-Z0-9.\-]{1,15}$/;
   function tkPrefs() { var PT = TKP.slice(); (DESK && DESK.prefs_desk ? DESK.prefs_desk.rows : []).forEach(function (x) { if (PT.indexOf(x.t) < 0) PT.push(x.t); }); return PT; }
-  function tkDefault() { var L = [];
+  /* Views: one-tap presets, each its own editable list. 'desk' = the original default (custom list stays in 'btd_tk2');
+     the others + current view + sort live in 'btd_tk3' {v, sort, L:{view:[items]}}. Items may carry h:1 (hidden, kept in the list). */
+  var TKV = [['desk', 'Desk default'], ['stocks', 'Treasury stocks'], ['prefs', 'Preferreds'], ['keys', 'Key numbers'], ['alts', 'BTC vs Alts'], ['mine', 'My mix']];
+  var TKS = [['desk', 'Desk order'], ['movers', 'Biggest movers'], ['cat', 'By category'], ['az', 'A–Z']];
+  function tkV() { var o = null; try { o = JSON.parse(LS.get('btd_tk3') || 'null'); } catch (e) {} o = o && typeof o === 'object' ? o : {};
+    if (!TKV.some(function (x) { return x[0] === o.v; })) o.v = 'desk'; if (!TKS.some(function (x) { return x[0] === o.sort; })) o.sort = 'desk'; if (!o.L || typeof o.L !== 'object') o.L = {}; return o; }
+  function tkVSave(o) { if (o.v === 'desk' && o.sort === 'desk' && !Object.keys(o.L).length) { try { localStorage.removeItem('btd_tk3'); } catch (e) {} } else LS.set('btd_tk3', JSON.stringify(o)); }
+  function tkDefault(v) { v = v || tkV().v; var D0 = tkDesk();
+    if (v === 'stocks') return D0.filter(function (x) { return x.id[0] === 'S'; });
+    if (v === 'prefs') return D0.filter(function (x) { return x.id[0] === 'P'; });
+    if (v === 'keys') return ['BTC', 'MNAV', 'GAIN', 'ATH', 'PLAW', 'HALV', 'FNG', 'DOM'].map(function (k) { return { id: 'D:' + k, tk: TKDL[k] }; });
+    if (v === 'alts') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'D:DOM', tk: TKDL.DOM }, { id: 'D:BTCETH', tk: 'BTC/ETH' }, { id: 'D:BTCSOL', tk: 'BTC/SOL' }, { id: 'C:ETH', tk: 'ETH' }, { id: 'C:SOL', tk: 'SOL' }];
+    if (v === 'mine') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'S:MSTR', tk: 'MSTR' }, { id: 'D:MNAV', tk: TKDL.MNAV }, { id: 'S:ASST', tk: 'ASST' }, { id: 'P:STRC', tk: 'STRC' }, { id: 'D:GAIN', tk: TKDL.GAIN }];
+    return D0; }
+  function tkDesk() { var L = [];
     tkRows().forEach(function (r) { L.push({ id: 'S:' + r.tk.toUpperCase(), tk: r.tk }); }); tkPrefs().forEach(function (t) { L.push({ id: 'P:' + t, tk: t }); });
     Object.keys(TKD).forEach(function (k) { L.push({ id: 'D:' + k, tk: TKDL[k] }); }); ['ETH', 'SOL'].forEach(function (k) { L.push({ id: 'C:' + k, tk: k }); }); return L; }
-  function tkSaved() { var o = null; try { o = JSON.parse(LS.get('btd_tk2') || 'null'); } catch (e) {} if (!Array.isArray(o) || !o.length) return null;
-    var out = o.filter(function (x) { return x && typeof x.id === 'string' && TK_ID.test(x.id); }).slice(0, 80).map(function (x) { return { id: x.id, tk: String(x.tk || x.id.slice(2)).slice(0, 24), cn: x.cn && TK_CN.test(x.cn) ? x.cn : null }; });
+  function tkClean(o) { if (!Array.isArray(o) || !o.length) return null;
+    var out = o.filter(function (x) { return x && typeof x.id === 'string' && TK_ID.test(x.id); }).slice(0, 80).map(function (x) { var y = { id: x.id, tk: String(x.tk || x.id.slice(2)).slice(0, 24), cn: x.cn && TK_CN.test(x.cn) ? x.cn : null }; if (x.h) y.h = 1; return y; });
     return out.length ? out : null; }
-  function tkList() { return tkSaved() || tkDefault(); }
-  function tkSave(L) { var d = tkDefault().map(function (x) { return x.id; }).join(','); if (L.map(function (x) { return x.id; }).join(',') === d) { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else LS.set('btd_tk2', JSON.stringify(L)); }
+  function tkSaved(v) { v = v || tkV().v; if (v === 'desk') { var o = null; try { o = JSON.parse(LS.get('btd_tk2') || 'null'); } catch (e) {} return tkClean(o); } return tkClean(tkV().L[v]); }
+  function tkList(v) { return tkSaved(v) || tkDefault(v); }
+  function tkKey(L) { return L.map(function (x) { return x.id + (x.h ? '~' : ''); }).join(','); }
+  function tkSave(L, v) { var V = tkV(); v = v || V.v; var same = tkKey(L) === tkKey(tkDefault(v));
+    if (v === 'desk') { if (same) { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else LS.set('btd_tk2', JSON.stringify(L)); return; }
+    if (same) delete V.L[v]; else V.L[v] = L; tkVSave(V); }
+  function tkReset() { var V = tkV(); if (V.v === 'desk') { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else { delete V.L[V.v]; tkVSave(V); } }
+  function tkShown() { var V = tkV(), CO = { S: 0, P: 1, D: 2, C: 3 }, L = tkList().filter(function (x) { return !x.h; }), R = L.map(function (x, i) { return { x: x, it: tkItem(x), i: i }; }).filter(function (r) { return r.it; });
+    if (V.sort === 'movers') R.sort(function (a, b) { var A = a.it[2], B = b.it[2], ha = A != null && isFinite(A), hb = B != null && isFinite(B); return ha && hb ? Math.abs(B) - Math.abs(A) : ha ? -1 : hb ? 1 : a.i - b.i; });
+    else if (V.sort === 'cat') R.sort(function (a, b) { return (CO[a.x.id[0]] - CO[b.x.id[0]]) || a.i - b.i; });
+    else if (V.sort === 'az') R.sort(function (a, b) { return String(a.it[0]).localeCompare(String(b.it[0])); });
+    return R.map(function (r) { return r.it; }); }
+  function tkViewName() { var v = tkV().v; return TKV.filter(function (x) { return x[0] === v; })[0][1]; }
+  function tkViewBtn() { var b = $('[data-tk-view]'); if (b) { b.textContent = tkViewName() + ' ▸'; b.setAttribute('aria-label', 'Price scroll view: ' + tkViewName() + '. Tap for the next view'); } }
+  function tkSetView(v) { var V = tkV(); V.v = v; tkVSave(V); tkViewBtn(); if (tke) tkePaint(); ticker(); tkFetch(); }
   function tkBoard(tk0) { return DESK ? DESK.treasuries.rows.filter(function (r) { return r.tk.toUpperCase() === tk0; })[0] : null; }
   function tkCnOf(x) { if (x.cn) return x.cn; var r = tkBoard(x.id.slice(2)); return r ? tkCn(r) : null; }
   function tkItem(x) {
@@ -823,7 +850,7 @@
   }
   function ticker() {
     dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
-    var items = tkList().map(tkItem).filter(Boolean);
+    var items = tkShown(); tkViewBtn();
     inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : ''); }).join('') + '<b class="muted">Stocks via CNBC (some delayed); "close" = last close</b>';
     inn.style.animationDuration = Math.max(140, items.length * 6) + 's'; // keep it slow however long the list is
   }
@@ -837,13 +864,15 @@
     return out.filter(function (x) { return !have[x.id]; }); }
   function tkePaint() {
     if (!tke) return; var L = tkList(), q = ($('[data-tke-in]', tke).value || '').trim().toUpperCase(), g = '', h = '';
-    $('[data-tke-cur]', tke).innerHTML = L.map(function (x, i) { return '<li><b>' + esc(x.tk) + '</b><span>' + esc(x.id[0] === 'D' ? 'data' : x.id[0] === 'P' ? 'preferred' : x.id[0] === 'C' ? 'crypto' : x.cn ? 'your ticker' : 'stock') + '</span>' +
-      '<button type="button" data-tke-up="' + i + '"' + (i ? '' : ' disabled') + ' aria-label="Move ' + esc(x.tk) + ' up">&#9650;</button><button type="button" data-tke-dn="' + i + '"' + (i < L.length - 1 ? '' : ' disabled') + ' aria-label="Move ' + esc(x.tk) + ' down">&#9660;</button><button type="button" data-tke-rm="' + i + '" aria-label="Remove ' + esc(x.tk) + '">&times;</button></li>'; }).join('');
+    var V = tkV(); $('[data-tke-views]', tke).innerHTML = TKV.map(function (x) { return '<button type="button" class="chip' + (x[0] === V.v ? ' on' : '') + '" data-tke-v="' + x[0] + '" aria-pressed="' + (x[0] === V.v) + '">' + esc(x[1]) + (tkSaved(x[0]) ? ' ✎' : '') + '</button>'; }).join('');
+    $('[data-tke-sort]', tke).value = V.sort;
+    $('[data-tke-cur]', tke).innerHTML = L.map(function (x, i) { return '<li' + (x.h ? ' class="tke-h"' : '') + '><b>' + esc(x.tk) + '</b><span>' + esc(x.id[0] === 'D' ? 'data' : x.id[0] === 'P' ? 'preferred' : x.id[0] === 'C' ? 'crypto' : x.cn ? 'your ticker' : 'stock') + '</span>' +
+      '<button type="button" data-tke-hd="' + i + '" aria-pressed="' + (x.h ? 'true' : 'false') + '" class="' + (x.h ? 'off' : '') + '" aria-label="' + (x.h ? 'Show ' : 'Hide ') + esc(x.tk) + '" title="' + (x.h ? 'Hidden: tap to show' : 'Tap to hide (keeps it in the list)') + '">' + (x.h ? '&#9675;' : '&#9679;') + '</button><button type="button" data-tke-up="' + i + '"' + (i ? '' : ' disabled') + ' aria-label="Move ' + esc(x.tk) + ' up">&#9650;</button><button type="button" data-tke-dn="' + i + '"' + (i < L.length - 1 ? '' : ' disabled') + ' aria-label="Move ' + esc(x.tk) + ' down">&#9660;</button><button type="button" data-tke-rm="' + i + '" aria-label="Remove ' + esc(x.tk) + '">&times;</button></li>'; }).join('');
     tkePool().filter(function (r) { return !q || r.tk.toUpperCase().indexOf(q) >= 0 || r.name.toUpperCase().indexOf(q) >= 0; }).forEach(function (r) {
       if (r.g !== g) { g = r.g; h += '<li class="pk-g" role="presentation">' + esc(g) + '</li>'; }
       h += '<li><button type="button" class="pk-o" data-tke-add="' + esc(r.id) + '" data-tke-tk="' + esc(r.tk) + '"><b>' + esc(r.tk) + '</b><span>' + esc(r.name) + '</span></button></li>'; });
     $('[data-tke-pool]', tke).innerHTML = h || '<li class="pk-none">' + (q ? 'Not in the list. Press Enter (or Add) to look up “' + esc(q) + '” on the quote feed.' : 'Everything is already in your scroll.') + '</li>';
-    var cu = $('[data-tke-custom]', tke); if (cu) cu.textContent = tkSaved() ? 'Customized · saved in this browser' : 'Default list';
+    var cu = $('[data-tke-custom]', tke); if (cu) cu.textContent = tkViewName() + (tkSaved() ? ' · edited, saved in this browser' : ' · default');
   }
   function tkeMsg(t) { var m = $('[data-tke-msg]', tke); if (m) m.textContent = t || ''; }
   function tkeAddTyped() { var v = ($('[data-tke-in]', tke).value || '').trim().toUpperCase().replace(/\s+/g, ''); if (!v) return;
@@ -857,26 +886,33 @@
   function tkeOpen(btn) {
     tkeClose(false); pkClose(false); tkeBtn = btn; tke = document.createElement('div'); tke.className = 'pk tke'; tke.setAttribute('role', 'dialog'); tke.setAttribute('aria-label', 'Customize the price scroll');
     tke.innerHTML = '<div class="pk-h"><b>Price scroll</b><span class="muted" data-tke-custom></span><button type="button" class="pk-x" data-tke-close aria-label="Close">&times;</button></div>' +
-      '<p class="tke-s">Your scroll, in order</p><ol class="tke-l" data-tke-cur></ol>' +
+      '<p class="tke-s">View <span class="muted">(each one is editable)</span></p><div class="tke-views" data-tke-views role="group" aria-label="Price scroll views"></div>' +
+      '<div class="tke-row tke-sortr"><label for="tke-sort" class="tke-s">Sort by</label><select id="tke-sort" data-tke-sort>' + TKS.map(function (x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join('') + '</select></div>' +
+      '<p class="tke-s">This view, in order <span class="muted">(&#9679; shown · &#9675; hidden)</span></p><ol class="tke-l" data-tke-cur></ol>' +
       '<p class="tke-s">Add</p><div class="tke-row"><input type="text" class="pk-in" data-tke-in placeholder="Search or type any ticker (e.g. PLTR, LSE:SWC)" autocomplete="off" spellcheck="false" aria-label="Search or type a ticker"><button type="button" class="chip" data-tke-go>Add</button></div>' +
-      '<ul class="pk-l" data-tke-pool></ul><p class="pk-msg" data-tke-msg></p><div class="pk-f"><button type="button" class="chip" data-tke-reset>Reset to default</button><button type="button" class="chip on" data-tke-close>Done</button></div>';
+      '<ul class="pk-l" data-tke-pool></ul><p class="pk-msg" data-tke-msg></p><div class="pk-f"><button type="button" class="chip" data-tke-reset>Reset this view</button><button type="button" class="chip" data-tke-resetall>Reset all</button><button type="button" class="chip on" data-tke-close>Done</button></div>';
     document.body.appendChild(tke); var r = btn.getBoundingClientRect(), w = Math.min(380, window.innerWidth - 16);
     tke.style.width = w + 'px'; tke.style.left = Math.max(8, Math.min(r.right - w, window.innerWidth - w - 8)) + 'px'; tke.style.top = Math.min(r.bottom + 4, Math.max(8, window.innerHeight - 560)) + 'px';
     tkePaint(); var inp = $('[data-tke-in]', tke);
     inp.addEventListener('input', function () { tkeMsg(''); tkePaint(); });
+    $('[data-tke-sort]', tke).addEventListener('change', function (e) { var V = tkV(); V.sort = e.target.value; tkVSave(V); ticker(); tkeMsg(V.sort === 'desk' ? 'Shown in your list order.' : 'Sorted: ' + e.target.options[e.target.selectedIndex].text + ' (your list order is kept).'); });
     inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); var only = $$('[data-tke-add]', tke); if (only.length === 1) tkeAdd({ id: only[0].dataset.tkeAdd, tk: only[0].dataset.tkeTk }); else tkeAddTyped(); } });
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('button');
     if (b && b.hasAttribute('data-tk-edit')) { e.stopPropagation(); if (tke) tkeClose(true); else tkeOpen(b); return; }
+    if (b && b.hasAttribute('data-tk-view')) { e.stopPropagation(); var cv = tkV().v, ix = 0; TKV.forEach(function (x, j) { if (x[0] === cv) ix = j; }); tkSetView(TKV[(ix + 1) % TKV.length][0]); if (tk.hidden) setTicker(true, true); return; }
     if (!tke) return; if (!tke.contains(e.target)) { tkeClose(false); return; } if (!b) return;
     var L = tkList(), i;
     if (b.dataset.tkeUp != null) { i = +b.dataset.tkeUp; if (i > 0) { L.splice(i - 1, 0, L.splice(i, 1)[0]); tkSave(L); tkePaint(); ticker(); var f = $('[data-tke-up="' + (i - 1) + '"]', tke); if (f && !f.disabled) f.focus(); } }
     else if (b.dataset.tkeDn != null) { i = +b.dataset.tkeDn; if (i < L.length - 1) { L.splice(i + 1, 0, L.splice(i, 1)[0]); tkSave(L); tkePaint(); ticker(); var f2 = $('[data-tke-dn="' + (i + 1) + '"]', tke); if (f2 && !f2.disabled) f2.focus(); } }
+    else if (b.dataset.tkeV) { tkSetView(b.dataset.tkeV); tkeMsg('View: ' + tkViewName() + (tk.hidden ? '. Turn the Price scroll on to see it.' : '.')); }
+    else if (b.dataset.tkeHd != null) { i = +b.dataset.tkeHd; if (L[i].h) delete L[i].h; else { if (L.filter(function (y) { return !y.h; }).length < 2) { tkeMsg('Keep at least one item visible.'); return; } L[i].h = 1; } tkSave(L); tkePaint(); ticker(); var f3 = $('[data-tke-hd="' + i + '"]', tke); if (f3) f3.focus(); }
     else if (b.dataset.tkeRm != null) { i = +b.dataset.tkeRm; L.splice(i, 1); if (!L.length) { tkeMsg('Keep at least one item.'); return; } tkSave(L); tkePaint(); ticker(); }
     else if (b.dataset.tkeAdd) tkeAdd({ id: b.dataset.tkeAdd, tk: b.dataset.tkeTk });
     else if (b.hasAttribute('data-tke-go')) tkeAddTyped();
-    else if (b.hasAttribute('data-tke-reset')) { try { localStorage.removeItem('btd_tk2'); } catch (e2) {} tkeMsg('Back to the default list.'); tkePaint(); ticker(); tkFetch(); }
+    else if (b.hasAttribute('data-tke-reset')) { tkReset(); tkeMsg(tkViewName() + ' is back to its default list.'); tkePaint(); ticker(); tkFetch(); }
+    else if (b.hasAttribute('data-tke-resetall')) { try { localStorage.removeItem('btd_tk2'); localStorage.removeItem('btd_tk3'); } catch (e3) {} tkeMsg('All views, the sort and the Desk default are reset.'); tkViewBtn(); tkePaint(); ticker(); tkFetch(); }
     else if (b.hasAttribute('data-tke-close')) tkeClose(true);
   }, true);
   document.addEventListener('keydown', function (e) { if (tke && e.key === 'Escape') { e.stopPropagation(); tkeClose(true); } }, true);

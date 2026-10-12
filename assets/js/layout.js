@@ -34,7 +34,7 @@
   apply();
 
   /* settings that travel with Export / Import (never membership or email state) */
-  var KEYS = ['btd_layout', 'btd_strip2', 'btd_tk2', 'btd_ticker', 'btd_ctab', 'btd_cper', 'btd_mnav_p', 'btd_pmode', 'btd_pper', 'btd_cview', 'btd_cgrid', 'btd_news_open', 'btd_cmp', 'btd_mchart', 'btd_rtw', 'btd_tb', 'btd_mem_builder', 'btd_mem_plans', 'btd_mem_lab', 'btd_mem_freedom'];
+  var KEYS = ['btd_layout', 'btd_strip2', 'btd_tk2', 'btd_tk3', 'btd_ticker', 'btd_ctab', 'btd_cper', 'btd_mnav_p', 'btd_pmode', 'btd_pper', 'btd_cview', 'btd_cgrid', 'btd_news_open', 'btd_cmp', 'btd_mchart', 'btd_rtw', 'btd_tb', 'btd_mem_builder', 'btd_mem_plans', 'btd_mem_lab', 'btd_mem_freedom'];
   function snapshot() { var o = { app: 'btctreasurydesk', v: 1, saved: new Date().toISOString().slice(0, 10), s: {} }; KEYS.forEach(function (k) { var v = LS.get(k); if (v != null) o.s[k] = v; }); return o; }
   function toCode(o) { return 'BTD1-' + btoa(unescape(encodeURIComponent(JSON.stringify(o)))); }
   function parse(txt) { txt = String(txt || '').trim(); var o;
@@ -45,15 +45,26 @@
     KEYS.forEach(function (k) { if (k in s) LS.set(k, s[k]); }); msg.textContent = 'Imported ' + Object.keys(s).length + ' settings. Reloading…'; setTimeout(function () { location.reload(); }, 600); }
 
   var pnl = null, opener = null;
+  /* Preset layouts: one tap sets order + visibility (still fully editable afterwards). Full Desk = the default. */
+  var PRESETS = [['full', 'Full Desk', null, null],
+    ['strategy', 'Strategy focus', ['tiles', 'kpi', 'mnav', 'charts', 'strat', 'pdesk', 'news', 'week', 'wcw', 'board', 'ep'], ['chart', 'zones', 'models', 'field', 'links']],
+    ['minimal', 'Minimal', ['tiles', 'kpi', 'charts', 'mnav', 'news'], 'rest']];
+  function preset(id) { var P = PRESETS.filter(function (x) { return x[0] === id; })[0]; if (!P || !P[2]) return { order: DEF.slice(), hidden: DEFHID.filter(function (k) { return EL[k]; }) };
+    var order = P[2].filter(function (k) { return EL[k]; }); DEF.forEach(function (k) { if (order.indexOf(k) < 0) order.push(k); });
+    var hidden = P[3] === 'rest' ? DEF.filter(function (k) { return P[2].indexOf(k) < 0; }) : P[3].filter(function (k) { return EL[k]; }); return { order: order, hidden: hidden }; }
+  function same(a, b) { return a.order.join() === b.order.join() && a.hidden.slice().sort().join() === b.hidden.slice().sort().join(); }
+  function activePreset() { for (var i = 0; i < PRESETS.length; i++) if (same(L, preset(PRESETS[i][0]))) return PRESETS[i][0]; return null; }
+  function presetChips() { var a = activePreset(); return PRESETS.map(function (P) { return '<button type="button" class="chip' + (P[0] === a ? ' on' : '') + '" data-cz-preset="' + P[0] + '" aria-pressed="' + (P[0] === a) + '">' + P[1] + '</button>'; }).join('') + (a ? '' : '<span class="cz-st">Custom</span>'); }
   function rows() { return L.order.map(function (k, i) { var off = L.hidden.indexOf(k) >= 0;
     return '<li' + (off ? ' class="off"' : '') + '><label><input type="checkbox" data-cz-show="' + k + '"' + (off ? '' : ' checked') + '> <span>' + esc(NAME[k]) + '</span></label>' +
       '<button type="button" data-cz-up="' + i + '"' + (i ? '' : ' disabled') + ' aria-label="Move ' + esc(NAME[k]) + ' up">&#9650;</button><button type="button" data-cz-dn="' + i + '"' + (i < L.order.length - 1 ? '' : ' disabled') + ' aria-label="Move ' + esc(NAME[k]) + ' down">&#9660;</button></li>'; }).join(''); }
-  function paint(focusSel) { $('[data-cz-list]', pnl).innerHTML = rows(); $('[data-cz-state]', pnl).textContent = isDef() ? 'Default layout' : 'Your layout · saved in this browser'; if (focusSel) { var f = $(focusSel, pnl); if (f && !f.disabled) f.focus(); } }
+  function paint(focusSel) { $('[data-cz-list]', pnl).innerHTML = rows(); $('[data-cz-presets]', pnl).innerHTML = presetChips(); $('[data-cz-state]', pnl).textContent = isDef() ? 'Default layout' : 'Your layout · saved in this browser'; if (focusSel) { var f = $(focusSel, pnl); if (f && !f.disabled) f.focus(); } }
   function close() { if (!pnl) return; pnl.remove(); pnl = null; document.body.classList.remove('cz-open'); if (opener) opener.focus(); }
   function open(btn) {
     close(); opener = btn; pnl = document.createElement('div'); pnl.className = 'cz'; pnl.setAttribute('role', 'dialog'); pnl.setAttribute('aria-modal', 'true'); pnl.setAttribute('aria-label', 'Customize desk');
     pnl.innerHTML = '<div class="cz-box"><div class="cz-h"><b>Customize desk</b><span class="cz-st" data-cz-state></span><button type="button" class="cz-x" data-cz-close aria-label="Close">&times;</button></div>' +
       '<p class="cz-s">Show or hide sections and move them up or down. Saved in this browser. Price tiles and the price scroll have their own ✎ pickers.</p>' +
+      '<p class="cz-s"><b>Layouts</b> · one tap, then fine-tune below</p><div class="cz-pre" data-cz-presets role="group" aria-label="Preset layouts"></div>' +
       '<ol class="cz-l" data-cz-list></ol>' +
       '<div class="cz-f"><button type="button" class="chip" data-cz-reset>Reset to default</button><button type="button" class="chip" data-cz-exp aria-expanded="false">Export settings</button><button type="button" class="chip" data-cz-imp aria-expanded="false">Import settings</button><button type="button" class="chip on" data-cz-close>Done</button></div>' +
       '<div class="cz-io" data-cz-expbox hidden><p class="cz-s">Your layout, tiles, price scroll and chart choices. Copy the code (or download the file) and import it on another device. No account needed; nothing leaves your browser.</p>' +
@@ -67,6 +78,7 @@
       var b = e.target.closest('button'); if (!b) return; var i, msg = $('[data-cz-msg]', pnl);
       if (b.dataset.czUp != null) { i = +b.dataset.czUp; L.order.splice(i - 1, 0, L.order.splice(i, 1)[0]); save(); apply(); paint('[data-cz-up="' + (i - 1) + '"]'); }
       else if (b.dataset.czDn != null) { i = +b.dataset.czDn; L.order.splice(i + 1, 0, L.order.splice(i, 1)[0]); save(); apply(); paint('[data-cz-dn="' + (i + 1) + '"]'); }
+      else if (b.dataset.czPreset) { L = preset(b.dataset.czPreset); save(); apply(); paint('[data-cz-preset="' + b.dataset.czPreset + '"]'); msg.textContent = b.textContent + ' layout applied. Fine-tune it below; it is saved in this browser.'; }
       else if (b.hasAttribute('data-cz-reset')) { L = { order: DEF.slice(), hidden: DEFHID.filter(function (k) { return EL[k]; }) }; save(); apply(); paint(); msg.textContent = 'Back to the default layout.'; }
       else if (b.hasAttribute('data-cz-close')) close();
       else if (b.hasAttribute('data-cz-exp')) { var eb = $('[data-cz-expbox]', pnl), sh = eb.hidden; eb.hidden = !sh; $('[data-cz-impbox]', pnl).hidden = true; b.setAttribute('aria-expanded', sh); $('[data-cz-imp]', pnl).setAttribute('aria-expanded', 'false'); if (sh) { var ta = $('[data-cz-code]', pnl); ta.value = toCode(snapshot()); ta.select(); } }
