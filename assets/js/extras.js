@@ -17,6 +17,7 @@
   var SRC = '<a href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com</a>';
 
   var home = $('[data-x-kpi]') || $('[data-x-mnav]') || $('[data-x-wcw]'), cmp = $('[data-x-compare]'), full = $('[data-kpi-full]');
+  window.BTDX = { mnavSeries: function () { return mnavSeries.apply(null, arguments); }, drawMnav: function () { return drawMnav.apply(null, arguments); }, q: function () { return q.apply(null, arguments); } };
   if (!home && !cmp && !full) return;
 
   /* ---------- live quotes (same public feeds as the top strip) ---------- */

@@ -311,7 +311,7 @@
   function nyToday() { var p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); return p; }
   function daysSince(iso) { return Math.max(0, Math.round((Date.parse(nyToday()) - Date.parse(iso)) / 864e5)); }
   fetch('/assets/data/desk.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
-    DESK = d; setTimeout(tkFetch, 0); var s = d.strategy, st = d.strive, ep = d.episode, v = d.video_of_week;
+    DESK = d; setTimeout(tkFetch, 0); setTimeout(paintDom, 0); var s = d.strategy, st = d.strive, ep = d.episode, v = d.video_of_week;
     setK('mstr-btc', fmt(s.btc_held)); setK('asst-btc', fmt(st.btc_held));
     setK('mnav', s.mnav.toFixed(2) + 'x'); setK('bps', fmt(s.sats_per_share) + ' <small>sats</small>');
     setK('mstr-days', daysSince(s.last_buy_reported) + ' <small>(+' + fmt(s.last_buy_btc) + ' BTC, ' + dateLbl(s.last_buy_reported).replace(/, \d+$/, '') + ')</small>');
@@ -499,6 +499,21 @@
   }).catch(function () { stale('.p-field', true, 'Ratio history failed to load. Try again in a minute.'); $$('[data-rt-c]').forEach(function (e) { e.textContent = 'History unavailable'; }); });
   document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-rtw]'); if (!b) return; RTW = +b.dataset.rtw; LS.set('btd_rtw', String(RTW)); paintRatios(); });
 
+  /* BTC dominance: live (CoinGecko) vs weekly history in desk.json (CoinMarketCap, Sunday samples) */
+  function paintDom() {
+    var H = DESK && DESK.dominance, box = $('[data-rt="dom"]'); if (!H || !box) return;
+    var w = H.weekly.map(function (x) { return x[1]; }), cur = live.dom != null ? live.dom : w[w.length - 1], fresh = Date.now() - Date.parse(H.as_of + 'T00:00:00Z') < 3.5 * 864e5,
+      s = fresh ? w.slice(0, -1).concat([cur]) : w.concat([cur]), n = s.length - 1; // the latest Sunday point is replaced by the live value when it is this week's
+    var pp = function (k, l) { var x = s[n - k]; if (x == null) return ''; var v = cur - x; return l + ' <b class="' + (v > 0.05 ? 'up' : v < -0.05 ? 'dn' : '') + '">' + (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1) + 'pp</b>'; };
+    $('[data-dom-ch]').innerHTML = [pp(1, '7d'), pp(4, '30d'), pp(13, '90d'), pp(52, '1Y')].join(' ');
+    spark($('[data-spark="dom"]'), s);
+    var lo = Math.min.apply(null, s), hi = Math.max.apply(null, s), at = hi > lo ? (cur - lo) / (hi - lo) * 100 : 50;
+    $('[data-dom-rg]').innerHTML = '<span>' + lo.toFixed(1) + '%</span><i><b style="left:' + at.toFixed(1) + '%"></b></i><span>' + hi.toFixed(1) + '%</span>';
+    var up = 0; for (var i = n - 3; i <= n; i++) if (s[i] > s[i - 1]) up++;
+    var line = up >= 3 ? 'Rising ' + up + ' of the last 4 weeks: capital rotating into BTC.' : up <= 1 ? 'Falling ' + (4 - up) + ' of the last 4 weeks: alts gaining share.' : 'Mixed over the last 4 weeks: no clear rotation.';
+    $('[data-rt-s="dom"]').innerHTML = esc(line) + ' <span class="muted mono">1Y range (weekly) · CoinMarketCap history to ' + esc(dateLbl(H.as_of)) + '</span>';
+  }
+
   function paintStrategyLive() {
     if (!DESK || !live.btc) return; var s = DESK.strategy;
     var val = s.btc_held * live.btc, pl = (live.btc / s.avg_cost - 1) * 100;
@@ -523,7 +538,7 @@
       paintStrategyLive(); models(); ticker();
     }).catch(function () { setLive('btc', 'unavailable', null); stale('.p-field', true, 'Live prices failed to load. Retrying every minute.'); });
     getJSON(CG + '/global', 'global', 5 * 60e3).then(function (g) {
-      var dom = g.data.market_cap_percentage.btc; setLive('dom', dom.toFixed(1) + '%', +dom.toFixed(2)); setBar('dom', dom); live.dom = dom; ticker(); fieldStale();
+      var dom = g.data.market_cap_percentage.btc; setLive('dom', dom.toFixed(2) + '%', +dom.toFixed(2)); live.dom = dom; paintDom(); ticker(); fieldStale();
     }).catch(function () { setLive('dom', '—', null); stale('.p-field', true, 'BTC dominance failed to load.'); });
     getJSON('https://api.alternative.me/fng/?limit=31', 'fng', 30 * 60e3).then(function (f) {
       var d = f.data, v = +d[0].value; setLive('fng', String(v), v); setLive('fng-cls', d[0].value_classification, null); setBar('fng', v);

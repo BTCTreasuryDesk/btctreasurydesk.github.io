@@ -66,3 +66,8 @@ Every weekly refresh, or an ad hoc refresh if more than a week has passed since 
 3. No duplicates: before adding, check whether the same text (or a near copy from the same day) is already there. Keep one entry with the best source.
 4. The newest quote by `date` automatically becomes the home and Strategy-tab quote (Spotlight on /saylor/). Pick it so that the newest entry is a strong, on-topic one. Bump `quotes.json → as_of`.
 5. If the Saylor page's static quote list needs the new entries, edit `saylor/index.html` by hand (the v1 generator is disabled; see the tools README).
+
+## BTC dominance history + home Charts (added Oct 11, 2026)
+- **Dominance:** `python3 tools/update_dominance.py` → `desk.json → dominance` (53 weekly Sunday points from CoinMarketCap's free global-metrics history). The script cross-checks every point as CoinGecko BTC market cap ÷ CMC total market cap and stores the gap in `dominance.check`. If `median_gap_pp` goes above 0.3, stop and investigate before pushing. The live value on the site is CoinGecko `/global`; 7d/30d/90d/1Y changes compare it with these weekly points.
+- **Preferred yield history:** `python3 tools/update_pref_history.py` → `members/data/prefs_weekly.json` (weekly closes for fixed-rate STRF, STRK, STRD; yields computed in the browser). If Strategy issues a new fixed-rate series, add it to `RATES` in the script. Variable-rate STRC and SATA stay out until their past rates are stored.
+- **Charts tabs** (home, `assets/js/charts.js`) read only existing files: stocks_daily, btc_daily, strategy.json ledger, desk.json board, prefs_weekly. Nothing to edit by hand; check each tab once after the refresh.
