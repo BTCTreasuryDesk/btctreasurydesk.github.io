@@ -39,19 +39,22 @@
   function kpiTiles(D, all) {
     var s = D.strategy, K = s.kpis || {}, G = K.ledger || {}, L = K.live || {}, T = K.totals || {}, t = [];
     var ld = G.as_of ? 'ledger · ' + dl(G.as_of) : '', lv = L.as_of_securities ? dl(L.as_of_securities.replace(/(\d+)\/(\d+)\/(\d+).*/, '$3-$1-$2')) + ' close' : '';
+    var tc = T.total_cost_musd || (s.total_cost_usd ? s.total_cost_usd / 1e6 : null), ac = T.avg_cost || s.avg_cost;
     t.push(['BTC holdings', fmt(s.btc_held) + ' ₿', 'as of ' + dl(s.btc_as_of) + ' · 8-K']);
+    if (tc) t.push(['Unrealized gain · live', '…', 'BTC price × holdings − total cost', null, '', 'Since inception (first buy Aug 2020): live BTC price × ' + fmt(s.btc_held) + ' BTC minus total cost ' + musd(tc) + ' (strategy.com ledger totals).', 'ug']);
+    if (G.btc_yield_ytd_pct != null) t.push(['BTC Yield YTD', pct(G.btc_yield_ytd_pct), ld, G.btc_yield_ytd_pct, '', 'BTC Yield: Strategy KPI. Change in BTC per assumed diluted share since Dec 31.']);
+    if (L.sats_per_share) t.push(['Sats per share', fmt(L.sats_per_share), 'strategy.com', null, '', 'BTC per assumed diluted share, in sats (1 BTC = 100M sats), per strategy.com. Change vs the prior ledger row.', 'sps']);
+    if (ac) t.push(['BTC vs avg cost · live', '…', 'vs $' + fmt(ac) + ' avg cost', null, '', 'Live BTC price compared with Strategy’s average cost per BTC (strategy.com ledger totals).', 'vac']);
     if (s.mnav) t.push(['mNAV', s.mnav.toFixed(2) + 'x', lv || 'strategy.com']);
     if (T.avg_cost || s.avg_cost) t.push(['Avg cost / BTC', '$' + fmt(T.avg_cost || s.avg_cost), 'ledger totals']);
-    if (G.btc_yield_ytd_pct != null) t.push(['BTC Yield YTD', pct(G.btc_yield_ytd_pct), ld, G.btc_yield_ytd_pct, '', 'BTC Yield: Strategy KPI. Change in BTC per assumed diluted share since Dec 31.']);
-    if (G.btc_gain_ytd != null) t.push(['BTC Gain YTD', sgn(G.btc_gain_ytd) + ' ₿', ld, G.btc_gain_ytd, 'hero', 'BTC Gain: Strategy KPI. BTC Yield YTD x BTC held at the start of the year.']);
-    if (G.usd_gain_ytd_musd != null) t.push(['BTC $ Gain YTD', musd(G.usd_gain_ytd_musd), ld, G.usd_gain_ytd_musd, 'hero', 'BTC $ Gain: Strategy KPI. BTC Gain x the bitcoin price.']);
+    if (G.btc_gain_ytd != null) t.push(['BTC Gain YTD', sgn(G.btc_gain_ytd) + ' ₿', ld, G.btc_gain_ytd, '', 'BTC Gain: Strategy KPI. BTC Yield YTD x BTC held at the start of the year.']);
+    if (G.usd_gain_ytd_musd != null) t.push(['BTC $ Gain YTD', musd(G.usd_gain_ytd_musd), ld, G.usd_gain_ytd_musd, '', 'BTC $ Gain: Strategy KPI. BTC Gain x the bitcoin price.']);
     if (all) {
       if (G.btc_yield_qtd_pct != null) t.push(['BTC Yield QTD', pct(G.btc_yield_qtd_pct), ld, G.btc_yield_qtd_pct]);
       if (T.total_cost_musd) t.push(['Total cost', musd(T.total_cost_musd), 'ledger totals']);
       if (L.btc_nav_musd) t.push(['Market value of BTC', musd(L.btc_nav_musd), 'BTC NAV · ' + esc(L.as_of_btc || '')]);
       if (L.total_reserve_musd) t.push(['Reserve (BTC + USD)', musd(L.total_reserve_musd), esc(L.as_of_btc || '')]);
       if (L.btc_acquired_ytd) t.push(['BTC acquired YTD', '+' + fmt(L.btc_acquired_ytd) + ' ₿', 'strategy.com']);
-      if (L.sats_per_share) t.push(['Sats per share', fmt(L.sats_per_share), 'BTC ÷ assumed diluted shares']);
       if (L.amplification) t.push(['Amplification', L.amplification.toFixed(2) + 'x', 'per strategy.com']);
       if (L.market_cap_musd) t.push(['Market cap', musd(L.market_cap_musd), lv]);
       if (L.ev_musd) t.push(['Enterprise value', musd(L.ev_musd), lv]);
@@ -59,7 +62,18 @@
       if (L.pref_musd) t.push(['Preferred (notional)', musd(L.pref_musd), lv]);
       if (L.dividend_coverage_yrs) t.push(['Dividend coverage', fmt(L.dividend_coverage_yrs, 1) + ' yrs', 'reserve ÷ annual interest + dividends']);
     }
-    return t.map(function (x) { return '<div class="x-k' + (x[4] ? ' x-hero' : '') + '"' + (x[5] ? ' title="' + esc(x[5]) + '"' : '') + '><small>' + esc(x[0]) + '</small><b class="' + cls(x[3]).trim() + '">' + esc(x[1]) + '</b><small>' + esc(x[2]) + '</small></div>'; }).join('');
+    return t.map(function (x) { return '<div class="x-k' + (x[4] ? ' x-hero' : '') + '"' + (x[6] ? ' data-xl="' + x[6] + '"' : '') + (x[5] ? ' title="' + esc(x[5]) + '"' : '') + '><small>' + esc(x[0]) + '</small><b class="' + cls(x[3]).trim() + '">' + esc(x[1]) + '</b><small>' + esc(x[2]) + '</small></div>'; }).join('');
+  }
+  function kpiLive(root, D) {
+    var s = D.strategy, T = (s.kpis || {}).totals || {}, tc = T.total_cost_musd || s.total_cost_usd / 1e6, ac = T.avg_cost || s.avg_cost;
+    function paint() { if (!LV.btc) return; var mv = s.btc_held * LV.btc / 1e6, ug = mv - tc, v = LV.btc / ac * 100 - 100, at = ' · BTC $' + fmt(LV.btc) + ' ' + nyTime(LV.t);
+      root.querySelectorAll('[data-xl="ug"]').forEach(function (e) { var b = e.querySelector('b'); b.textContent = musd(ug) + ' (' + pct(ug / tc * 100) + ')'; b.className = cls(ug).trim(); e.querySelector('small:last-child').textContent = 'BTC × holdings − total cost' + at; });
+      root.querySelectorAll('[data-xl="vac"]').forEach(function (e) { var b = e.querySelector('b'); b.textContent = pct(v) + (v >= 0 ? ' above' : ' below'); b.className = cls(v).trim(); e.querySelector('small:last-child').textContent = '$' + fmt(LV.btc) + ' vs $' + fmt(ac) + ' avg cost'; }); }
+    paint(); pullLive(paint); setInterval(function () { if (!document.hidden) pullLive(paint); }, 60000);
+  }
+  function kpiSps(root) {
+    O('/assets/data/strategy.json').then(function (S) { if (!S) return; var r = S.purchases.filter(function (x) { return x.adso_k; }); if (r.length < 2) return; var a = r[r.length - 2], b = r[r.length - 1], ch = (b.holdings / b.adso_k) / (a.holdings / a.adso_k) * 100 - 100;
+      root.querySelectorAll('[data-xl="sps"] small:last-child').forEach(function (e) { e.innerHTML = '<span class="' + cls(ch).trim() + '">' + pct(ch, 2) + '</span> vs ' + dl(a.date) + ' ledger row'; }); });
   }
   function marketRow(D) {
     var P = D.treasuries.public; if (!P) return '';
@@ -184,12 +198,13 @@
 
   Promise.all([J('/assets/data/desk.json'), O('/members/data/weekly.json'), O('/assets/data/btc_daily.json')]).then(function (r) {
     var D = r[0], W = r[1], B = r[2], K = D.strategy.kpis || {};
-    var kb = $('[data-x-kpi]'); if (kb) kb.innerHTML = marketRow(D) + '<div class="x-kh"><span class="p-t">Strategy (MSTR) KPIs</span><span class="x-mu">source ' + SRC + (K.retrieved ? ' · retrieved ' + dl(K.retrieved) : '') + '</span><a class="more" href="/saylor/#strategy-kpis">Full Strategy KPIs &rarr;</a></div><div class="x-kg">' + kpiTiles(D, false) + '</div>';
+    var kb = $('[data-x-kpi]'); if (kb) kb.innerHTML = marketRow(D) + '<div class="x-kh"><span class="p-t">Strategy (MSTR) KPIs</span><span class="x-mu">source ' + SRC + (K.retrieved ? ' · retrieved ' + dl(K.retrieved) : '') + '</span><a class="more" href="/saylor/#strategy-kpis">Full Strategy KPIs &rarr;</a></div><div class="x-kg" data-x-kg>' + kpiTiles(D, false) + '</div><button type="button" class="x-more" data-x-more aria-expanded="false">More KPIs ▾</button>';
+    if (kb) { kpiLive(kb, D); kpiSps(kb); var mb2 = $('[data-x-more]', kb); mb2.addEventListener('click', function () { var o = kb.classList.toggle('x-open'); mb2.setAttribute('aria-expanded', o ? 'true' : 'false'); mb2.textContent = o ? 'Fewer KPIs ▴' : 'More KPIs ▾'; }); }
     var wb = $('[data-x-wcw]'); if (wb) wcw(wb, D, W, B);
     var mb = $('[data-x-mnav]'); if (mb && B) Promise.all([J('/assets/data/strategy.json'), J('/members/data/stocks_daily.json')]).then(function (x) { mnavPanel(mb, D, x[0], x[1].series.MSTR, B); }).catch(function (e) { mb.innerHTML = '<p class="x-mu">mNAV history unavailable.</p>'; });
     if (cmp) Promise.all([O('/assets/data/perf.json'), O('/assets/data/strive.json')]).then(function (x) { compare(cmp, D, x[0], null, x[1]); });
     if (full) O('/assets/data/quotes.json').then(function (Q) {
       full.innerHTML = '<div class="xw"><div class="x-kh"><span class="x-t">Strategy (MSTR) KPIs</span><span class="x-mu">official figures from ' + SRC + ' (dashboard + <a href="https://www.strategy.com/purchases" target="_blank" rel="noopener">BTC ledger</a>) · retrieved ' + dl(K.retrieved || D.updated) + '</span></div><div class="x-kg x-kg-full">' + kpiTiles(D, true) + '</div>' + spotlight(D, Q) +
-        '<p class="x-f">BTC Yield, BTC Gain and BTC $ Gain are Strategy’s own KPIs; see <a href="https://www.strategy.com/notes" target="_blank" rel="noopener">strategy.com/notes</a> for definitions. Negative values mean BTC per assumed diluted share is lower than on Dec 31. Refreshed each Sunday. Education only, not investment advice.</p></div>'; });
+        '<p class="x-f">BTC Yield, BTC Gain and BTC $ Gain are Strategy’s own KPIs; see <a href="https://www.strategy.com/notes" target="_blank" rel="noopener">strategy.com/notes</a> for definitions. Negative values mean BTC per assumed diluted share is lower than on Dec 31. Refreshed each Sunday. Education only, not investment advice.</p></div>'; kpiLive(full, D); kpiSps(full); });
   }).catch(function (e) { console.warn('extras', e); });
 })();

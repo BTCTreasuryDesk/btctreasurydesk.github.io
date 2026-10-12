@@ -58,3 +58,11 @@ Order matters; do these after the normal data steps.
 6. **What changed this week** is computed from `desk.json` (prev vs rows, `prefs_desk.upcoming`) + `members/data/weekly.json` (items with `new:true`) + btc_daily (model badges). Keep `prefs_desk.upcoming` current; edit `weekly.json` items.
 7. **Price scroll** reads the top 20 by BTC held from `treasuries.rows` (+ ASST and SWC always) and every series in `prefs_desk.rows`, so a new verified preferred added there appears automatically. Live quotes come from CNBC; ETH and SOL appear only at the very end of the scroll (nowhere else prominent).
 8. **Home order** (top-down): price tiles → market-wide row + Strategy (MSTR) KPIs → MSTR mNAV (live + history) + What changed → Treasury Board → Preferreds Desk → chart + Model Zones → models + BTC vs the field → Latest episode / Video of the Week → Strategy & Strive, Week ahead → email box → links. Full KPI panel + Spotlight live on /saylor/#strategy-kpis. Company Compare lives on /companies/#compare (linked from the Board header).
+
+## Saylor quotes (standing step, added Oct 11, 2026)
+Every weekly refresh, or an ad hoc refresh if more than a week has passed since `assets/data/quotes.json → as_of`:
+1. Add relevant new Michael Saylor quotes from the past week, plus strong older ones if the week is thin, to `assets/data/quotes.json → items`. Sources must be verified: his X posts (x.com/saylor), official interviews and keynotes (the original video or the outlet's own page), strategy.com, or Strategy filings and press releases. Never use aggregator or "quote" sites.
+2. Each item needs the exact verbatim `text`, `date` (ISO) and `date_label`, a `url` to the original source, `type`, `theme`, `context` and `verified: true`. Only quote what the source actually says, word for word.
+3. No duplicates: before adding, check whether the same text (or a near copy from the same day) is already there. Keep one entry with the best source.
+4. The newest quote by `date` automatically becomes the home and Strategy-tab quote (Spotlight on /saylor/). Pick it so that the newest entry is a strong, on-topic one. Bump `quotes.json → as_of`.
+5. If the Saylor page's static quote list needs the new entries, edit `saylor/index.html` by hand (the v1 generator is disabled; see the tools README).

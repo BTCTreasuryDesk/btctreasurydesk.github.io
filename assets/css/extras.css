@@ -35,3 +35,7 @@ body.dm .p-kpi,body.dm .p-mnav,body.dm .p-wcw{display:none!important}
 /* the old v1 two-company card on /companies/ is replaced by Company Compare (#compare) */ .card.compare[data-compare]{display:none}
 .x-mn-l .x-k small:last-child{white-space:normal;overflow:visible}
 @media (max-width:720px){.x-cmp{min-width:0;font-size:12px}.x-cmp th,.x-cmp td{padding:6px 6px}.x-cmp tbody th{white-space:normal;width:26%;font-size:10px}.x-cmp td b{font-size:13.5px}.x-cmp thead th{font-size:12px}}
+.p-kpi .x-kg{grid-template-columns:repeat(9,minmax(0,1fr))}.p-kpi .x-k b{font-size:15px}
+.x-more{display:none;margin-top:6px;width:100%;background:transparent;color:var(--xm);border:1px solid var(--xl);border-radius:3px;padding:6px;font:600 11px var(--xmono);text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
+@media (max-width:1300px){.p-kpi .x-kg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:720px){.p-kpi .x-kg{grid-template-columns:repeat(2,minmax(0,1fr))}.p-kpi:not(.x-open) .x-kg .x-k:nth-child(n+5){display:none}.p-kpi .x-more{display:block}}
