@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="/assets/css/desk.css?v=v2a">
 
   <link rel="stylesheet" href="/members/members.css?v=m1">
+  <link rel="stylesheet" href="/assets/css/optin.css?v=o1">
 </head><body class="desk">
 <header class="t-head">
     <a class="brand" href="/" aria-label="BTC Treasury Desk home"><img src="/assets/img/emblem-96.png" alt="" width="28" height="28"><span><span class="o">BTC</span> TREASURY DESK</span></a>
@@ -62,9 +63,7 @@
     <div><h2>Unlock the Members desk <span class="o">free</span> with your email</h2>
       <p class="muted" style="margin:0 0 4px">One email, instant access, remembered in this browser. No password, no repeat signup.</p>
       <ul><li>Signal Zones: the whole cycle in color</li><li>Model Builder: your own composite</li><li>Entry &amp; Exit Planner, your rules</li><li>Strategy Lab: DCA vs zones vs lump sum</li><li>Freedom Plan: when could you reach your goal?</li><li>Momentum &amp; Trend grid (W / M / Q)</li><li>mNAV Radar &amp; BTC Yield tracker</li><li>Cycle Clock &amp; halving countdown</li><li>All 7 Desk Library PDFs + Saylor Quotes bonus</li></ul></div>
-    <div><form data-unlock novalidate><label for="m-email">Email address</label><input id="m-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
-      <label><input type="checkbox" name="products_optin" value="yes"> Also send me news about products and services (optional)</label>
-      <button class="go" type="submit">Unlock free with your email</button><small>Joins the Desk list (Kit): a weekly email with the episode recap and one subscriber-only extra. Unsubscribe anytime. <a href="/privacy/">Privacy</a>.</small><small class="msg" role="status" aria-live="polite"></small></form>
+    <div><div class="optin optin-m" data-optin="members"></div>
       <div class="paid"><b class="o">Members tools are part of the paid membership.</b><p class="muted">Already a member? Sign in. New here? See the plans.</p><a class="go" style="display:block;text-align:center" data-paid-link href="/subscribe/">See membership</a></div></div>
   </section>
   <div class="welcome"><b class="o">Unlocked.</b> <span>Welcome to the Members desk. This browser remembers you.</span> <button class="tbtn" type="button" data-relock>Lock again (this browser)</button></div>
@@ -201,9 +200,10 @@
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-<script src="/members/members-config.js?v=m1"></script>
+<script src="/members/members-config.js?v=m2"></script>
 <script src="/members/members-models.js?v=m1"></script>
-<script src="/members/members-core.js?v=m1"></script>
+<script src="/members/members-core.js?v=m2"></script>
+<script src="/assets/js/optin.js?v=o1"></script>
 <script src="/members/tools-models.js?v=m1"></script>
 <script src="/members/tools-plans.js?v=m1"></script>
 <script src="/members/tools-market.js?v=m1"></script>

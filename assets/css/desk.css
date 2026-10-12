@@ -27,10 +27,7 @@ a{color:var(--o);text-decoration:none}a:hover{text-decoration:underline}
 .more{margin-left:auto;font:11px var(--mono)}
 .p-f{margin:8px 0 0;font-size:10.5px;color:var(--mu)}.p-f a{color:var(--mu);text-decoration:underline}
 .sub-h{font:700 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin:10px 0 4px;padding-top:8px;border-top:1px dashed var(--ln)}
-.strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0}
-.q-cell{position:relative;height:84px;padding:6px 10px 0;border-right:1px solid var(--ln);overflow:hidden}.q-cell:last-child{border-right:0}
 .q-k{position:absolute;top:6px;right:10px;font:700 10px var(--mono);color:var(--o);z-index:2}
-.tv-slot{height:78px;overflow:hidden}.tv-slot iframe{height:78px!important}
 .p-chart{grid-column:span 8}.p-ep{grid-column:span 4}
 .p-strat{grid-column:span 4}.p-field{grid-column:span 4}.p-zones{grid-column:span 4}
 .p-models{grid-column:span 7}.p-week{grid-column:span 5}
@@ -145,10 +142,6 @@ body.dm .p-tboard .tb-f,body.dm .p-tboard .tb-foot{display:none}body.dm .p-tboar
 .stale{width:7px;height:7px;border-radius:50%;background:#e8b04a;display:inline-block;opacity:.8;margin-left:4px;cursor:help}.stale[hidden]{display:none}
 @media (max-width:720px){.models{overflow-x:auto}.mtbl td,.mtbl th{white-space:normal}.mtbl td:nth-child(2){font-size:11px}.p-tboard .tb-h .tag{display:none}.rt-c{font-size:9.5px}}
 
-/* Top strip: 5 customizable tiles */
-.q-ed{position:absolute;top:4px;right:4px;z-index:3;width:20px;height:20px;padding:3px;border:1px solid transparent;border-radius:3px;background:transparent;color:#59616c;cursor:pointer;opacity:.55;transition:opacity .2s,color .2s}
-.q-ed svg{width:12px;height:12px;display:block}.q-cell:hover .q-ed,.q-ed:focus-visible{opacity:1;color:var(--o);border-color:var(--ln);background:#0d0f12e6}.q-ed:hover{color:var(--o)}
-@media (hover:none){.q-ed{opacity:.8}}
 .pk{position:fixed;z-index:210;background:#0f1216;border:1px solid #39414c;border-top:2px solid var(--o);border-radius:3px;box-shadow:0 10px 28px #000c;padding:8px;font-size:12px}
 .pk-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}.pk-h b{font:700 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--o)}.pk-h .muted{font:10.5px var(--mono)}
 .pk-x{margin-left:auto;background:none;border:0;color:var(--mu);font-size:16px;line-height:1;cursor:pointer;padding:0 2px}.pk-x:hover{color:var(--tx)}
@@ -160,11 +153,6 @@ body.dm .p-tboard .tb-f,body.dm .p-tboard .tb-foot{display:none}body.dm .p-tboar
 .pk-o:hover,.pk-o:focus-visible{background:var(--p2);outline:0}.pk-o.on{background:#1a1206}
 .pk-none{color:var(--mu);font-size:11px;padding:6px 2px}.pk-msg{margin:4px 0 0;color:#e8b04a;font-size:10.5px}.pk-msg:empty{display:none}
 .pk-f{display:flex;gap:6px;justify-content:flex-end;margin-top:6px;padding-top:6px;border-top:1px solid var(--ln)}
-@media (max-width:1100px) and (min-width:721px){.strip{grid-template-columns:repeat(6,minmax(0,1fr))}.q-cell{grid-column:span 2}.q-cell:nth-child(n+4){grid-column:span 3;border-top:1px solid var(--ln)}.q-cell:nth-child(3){border-right:0}}
-@media (max-width:720px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.q-cell{height:68px;padding:4px 6px 0;border-top:1px solid var(--ln)}.q-cell:first-child{grid-column:1/-1;border-top:0;border-right:0}
- .q-cell:nth-child(odd){border-right:0}.tv-slot{height:64px}.tv-slot iframe{height:78px!important;margin-top:-6px}}
-/* Desk Mode: same 5, compact, no edit control */
-body.dm .q-cell{height:70px;padding-top:2px}body.dm .tv-slot{height:68px}body.dm .q-ed{display:none}
 /* Models chart overlay chips */
 .mc-chips{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 6px;align-items:center}
 .mc-btc,.mc-c{font:600 10px/1.4 var(--mono);border:1px solid var(--ln);border-radius:10px;padding:2px 8px;white-space:nowrap}
@@ -174,16 +162,7 @@ body.dm .q-cell{height:70px;padding-top:2px}body.dm .tv-slot{height:68px}body.dm
 .mc-pl::before{background:var(--o)!important}.mc-s2f::before{background:#b18cff!important}.mc-wma::before{background:#2fd17c!important}.mc-pi::before{background:#ff5a5f!important}.mc-may::before{background:#4aa8ff!important}.mc-rp::before{background:#e8b04a!important}
 .mc-c[aria-pressed=false]::before{opacity:.35}
 @media (max-width:720px){.mc-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.mc-chips::-webkit-scrollbar{display:none}}
-.q-ed{right:30px;top:3px}
-@media (max-width:720px){.q-cell{height:62px}.q-cell:first-child{height:66px}.q-cell:not(:first-child) .tv-slot{width:138%;height:84px;transform:scale(.725);transform-origin:0 0}.q-cell:not(:first-child) .tv-slot iframe{margin-top:-4px}.q-ed{right:22px;top:2px}}
 
-/* MSTR featured tile (always the dominant tile; BTC and the rest equal and smaller) */
-.q-feat{background:linear-gradient(90deg,#160f05,#0d0f12 70%);box-shadow:inset 0 0 0 1px #F7931A99}
-.q-feat::after{content:"FEATURED";position:absolute;left:10px;bottom:4px;font:700 8.5px var(--mono);letter-spacing:.1em;color:#F7931Acc;z-index:2;pointer-events:none}
-@media(min-width:1101px){.strip{grid-template-columns:repeat(6,minmax(0,1fr))}.strip .q-feat{grid-column:span 2}}
-@media (max-width:1100px) and (min-width:721px){.strip{grid-template-columns:repeat(4,minmax(0,1fr))}.strip .q-cell,.strip .q-cell:nth-child(n+4){grid-column:span 1;border-top:1px solid var(--ln);border-right:1px solid var(--ln)}.strip .q-feat{grid-column:1/-1!important;border-top:0}}
-@media (max-width:720px){.q-feat::after{left:6px;bottom:2px}}
-body.dm .q-feat::after{display:none}
 .votw-more{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font:10.5px var(--mono)}.votw-more:empty{display:none}
 /* Strategy Spotlight (shared look with /members/) */
 .p-spot{grid-column:1/-1}.spot{border-left:3px solid var(--o)}
@@ -194,7 +173,35 @@ body.dm .q-feat::after{display:none}
 body.dm .p-spot{display:none}
 /* price scroll: slow and thin */
 .ticker{height:20px;font-size:10.5px;line-height:20px}
-.dtile{height:78px;display:flex;flex-direction:column;justify-content:center;gap:1px;padding-right:24px}.dtile small{font:600 9.5px var(--mono);color:var(--mu);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dtile b{font:700 20px var(--mono);color:#fff}
-@media (max-width:720px){.dtile{height:58px}.dtile b{font-size:16px}}
-.q-lock{position:absolute;top:4px;right:30px;z-index:3;color:#F7931A;font-size:11px;opacity:.8}
 .pk-px{margin-left:auto;font:10.5px var(--mono);color:var(--mu);font-style:normal;white-space:nowrap;padding-left:6px}
+
+
+/* Top strip: MSTR first (fixed, featured accent, slim size) · BTC big (fixed, live 24/7) · #2-#10 by BTC held (slim, swappable). Nothing auto-moves. */
+.strip-cap{grid-column:1/-1;display:flex;align-items:baseline;gap:10px;margin:0 0 -3px;padding:0 4px;min-width:0;font:600 10px/1.3 var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.strip-cap b{color:var(--o);font-weight:700;white-space:nowrap}.strip-cap span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.strip-cap em{font-style:normal;color:var(--tx)}
+.strip-all{margin-left:auto;white-space:nowrap;color:var(--tx)}.strip-cap .strip-swipe{display:none;white-space:nowrap;color:var(--tx)}
+.strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:86px;grid-auto-flow:row dense;gap:1px;background:var(--ln);overflow:hidden}
+.q-rail{display:contents}
+.q-cell{position:relative;min-width:0;overflow:hidden;background:var(--p)}
+.q-slim{padding:4px 8px 0}.q-slim .tv-slot{height:66px;overflow:hidden}.q-slim .tv-slot iframe{height:72px!important}
+.q-btc{grid-column:span 2;grid-row:span 2;padding:6px 8px 20px}.q-btc .tv-slot{height:100%;overflow:hidden}
+.q-feat{background:linear-gradient(180deg,#1a1206,#0d0f12 80%);box-shadow:inset 0 0 0 1px #F7931Aaa,inset 0 2px 0 #F7931A}
+.q-foot{position:absolute;left:8px;right:6px;bottom:3px;display:flex;align-items:center;gap:6px;font:600 9.5px/16px var(--mono);color:var(--mu);white-space:nowrap;z-index:2}
+.q-foot span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0}.q-foot i{font-style:normal}
+.q-feat .q-foot span:first-child{color:#F7931A}
+.q-mkt{margin-left:auto;padding:0 5px;border:1px solid #39414c;border-radius:8px;font:700 8.5px/13px var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.q-own .q-foot span:first-child{color:#e8b04a}
+.q-lock{margin-left:auto;color:#F7931A;font-size:10px;opacity:.8}
+.q-ed{margin-left:auto;flex:0 0 auto;width:18px;height:16px;padding:2px 3px;border:1px solid transparent;border-radius:3px;background:transparent;color:#59616c;cursor:pointer;opacity:.6;transition:opacity .2s,color .2s}
+.q-ed svg{width:11px;height:11px;display:block}.q-cell:hover .q-ed,.q-ed:focus-visible{opacity:1;color:var(--o);border-color:var(--ln)}
+@media (hover:none){.q-ed{opacity:.85}}
+.dtile{height:66px;display:flex;flex-direction:column;justify-content:center;gap:1px}.dtile small{font:600 9.5px var(--mono);color:var(--mu);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dtile b{font:700 17px var(--mono);color:#fff}
+/* tablet + phone: MSTR and BTC share the top row; the 9 slim tiles swipe sideways (first few visible) */
+@media (max-width:1179px){.strip{grid-template-columns:minmax(176px,1fr) 2fr;grid-auto-rows:auto}
+ .q-feat{height:96px}.q-feat .tv-slot{margin-top:6px}.q-btc{grid-column:auto;grid-row:auto;height:96px;padding:2px 6px 18px}
+ .q-rail{grid-column:1/-1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;gap:1px;background:var(--ln);mask-image:linear-gradient(90deg,#000 90%,transparent)}.q-rail::-webkit-scrollbar{display:none}
+ .q-rail .q-slim{flex:0 0 176px;height:86px;scroll-snap-align:start}
+ .strip-cap .strip-swipe{display:inline}}
+@media (max-width:760px){.strip-cap span:not(.strip-swipe){display:none}.q-feat .q-n{display:none}.strip{grid-template-columns:176px minmax(0,1fr)}}
+/* Desk Mode: same tiles, no edit control */
+body.dm .q-ed{display:none}

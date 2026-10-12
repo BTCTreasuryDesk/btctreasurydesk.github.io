@@ -1,0 +1,103 @@
+/* BTC Treasury Desk: one opt-in form for the home page and /members/ (no popup).
+   Visitors pick any combination: weekly Desk email (weekly or monthly digest), new-material alerts, individual Desk Library PDFs.
+   Nothing is pre-checked. One Kit form = one subscriber per email; each choice is a Kit tag (KIT_TAGS ids in members-config.js).
+   Returning visitors (localStorage 'btd_optin', set only in this browser) see "You're in", their downloads, what is new this week,
+   and can add more choices with one click (same email, Kit just adds the tag). Any signup unlocks the Members tools (free for now). */
+(function () {
+  var CFG = window.BTD_MEMBERS || {}, FORM = CFG.KIT_FORM || 'https://app.kit.com/forms/10006069/subscriptions', TAGS = CFG.KIT_TAGS || {};
+  var KEY = CFG.STORAGE_KEY || 'btd_member', SKEY = 'btd_optin';
+  var LIB = [
+    ['cheat', 'Bitcoin Treasury Cheat Sheet', 'mNAV, BTC Yield and sats per share on two pages.', '/library-files/f31a01ec624a/bitcoin-treasury-cheat-sheet-6e605f.pdf'],
+    ['prefs', 'Preferred Stock Playbook', 'STRC, STRF, STRK, STRD and SATA side by side: rate, rank, payout.', '/library-files/f31a01ec624a/preferred-stock-playbook-46b9b7.pdf'],
+    ['numbers', 'MSTR & ASST by the Numbers', 'Holdings, share counts and preferreds for both, each sourced.', '/library-files/f31a01ec624a/mstr-asst-by-the-numbers-ff665f.pdf'],
+    ['data', 'Where to Find the Real Data', 'The primary sources we use, so you can check any figure.', '/library-files/f31a01ec624a/where-to-find-the-real-data-7317af.pdf'],
+    ['glossary', 'Glossary', 'Every treasury-company term on one page.', '/library-files/f31a01ec624a/bitcoin-treasury-glossary-b1be26.pdf'],
+    ['whitepaper', 'Bitcoin Whitepaper in 2 Pages', 'The original paper, condensed into plain English.', '/library-files/f31a01ec624a/bitcoin-whitepaper-in-2-pages-9849b6.pdf'],
+    ['quotes', 'Greatest Saylor Quotes', 'Verbatim, dated and linked to the source.', '/library-files/f31a01ec624a/greatest-saylor-quotes-83c9d8.pdf']
+  ];
+  var TOOLS = { zones: 'Signal Zones', builder: 'Model Builder', planner: 'Entry & Exit Planner', lab: 'Strategy Lab', freedom: 'Freedom Plan', momentum: 'Momentum & Trend', ta: 'TA Overlays', radar: 'mNAV Radar', yield: 'BTC Yield', clock: 'Cycle Clock' };
+  var FRESH = { tools: [], library: [], week: '' };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function get() { var j = null; try { j = JSON.parse(localStorage.getItem(SKEY) || 'null'); } catch (e) {}
+    if (!j) { var m = null; try { m = localStorage.getItem(KEY); } catch (e) {} if (m === '1') j = { legacy: 1, weekly: true, freq: 'weekly', alerts: false, lib: LIB.map(function (x) { return x[0]; }) }; } // joined with the old form (list + all 7)
+    return j; }
+  function put(j) { try { localStorage.setItem(SKEY, JSON.stringify(j)); localStorage.setItem(KEY, '1'); } catch (e) {} }
+  function tagIds(ch) { var t = [];
+    if (ch.weekly) t.push(TAGS[ch.freq === 'monthly' ? 'monthly' : 'weekly']); if (ch.alerts) t.push(TAGS.alerts);
+    (ch.lib || []).forEach(function (k) { t.push(TAGS['lib_' + k]); });
+    return t.filter(function (x) { return x != null && x !== ''; }); }
+  function submit(email, ch) {
+    var fd = new FormData(); fd.append('email_address', email); tagIds(ch).forEach(function (id) { fd.append('tags[]', String(id)); });
+    return fetch(FORM, { method: 'POST', body: fd, mode: 'no-cors' });
+  }
+  function libRow(x, on, name) { return '<label class="oi-doc"><input type="checkbox" name="' + name + '" value="' + x[0] + '"' + (on ? ' checked' : '') + '><span><b>' + esc(x[1]) + '</b>' + (FRESH.library.indexOf(x[0]) >= 0 ? ' <i class="oi-new">New this week</i>' : '') + '<small>' + esc(x[2]) + '</small></span></label>'; }
+  function formHTML(ctx) {
+    return '<div class="oi-pitch"><h2 class="oi-h">Get the weekly Desk email <span>+ unlock Members tools</span></h2>' +
+      '<ul class="oi-perks"><li><b>The weekly Desk email.</b> The episode recap plus one deep dive you won\'t find on the channel or the site.</li>' +
+      '<li><b>Members toolkit, instantly.</b> Signal Zones, Model Builder, Entry &amp; Exit Planner, Freedom Plan, Momentum: plan with models, not hunches.</li>' +
+      '<li><b>Desk Library PDFs.</b> Pick only the ones you want: cheat sheet, preferreds playbook, MSTR &amp; ASST by the numbers and more.</li></ul></div>' +
+      '<form class="oi-form" novalidate><fieldset><legend>Choose what you want (any combination)</legend>' +
+      '<label class="oi-c"><input type="checkbox" name="weekly"><span><b>Weekly Desk email</b><small>Recap + one exclusive deep dive. <span class="oi-freq">Send it <select name="freq" aria-label="How often"><option value="weekly">weekly</option><option value="monthly">as a monthly digest</option></select></span></small></span></label>' +
+      '<label class="oi-c"><input type="checkbox" name="alerts"><span><b>New-material alerts</b><small>When we add Library PDFs or Members tools. Bundled, at most once a week.</small></span></label>' +
+      '<details class="oi-lib"><summary>Desk Library PDFs <span class="muted">(pick any of 7)</span></summary>' + LIB.map(function (x) { return libRow(x, false, 'lib'); }).join('') + '</details></fieldset>' +
+      '<div class="oi-row"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address"><button type="submit" class="oi-go">Join free</button></div>' +
+      '<p class="oi-fine"><b>Free for now · No spam · Max 1 email/week · Unsubscribe anytime.</b> Every email has a link to change your choices or frequency, and a one-click unsubscribe.</p>' +
+      '<p class="oi-fine">Privacy: your email goes to Kit, our email service, only to send what you picked. This browser remembers that you joined (stored on your device). <a href="/privacy/">Privacy note</a>.</p>' +
+      '<p class="oi-msg" role="status" aria-live="polite"></p></form>';
+  }
+  function inHTML(j, ctx) {
+    var mine = LIB.filter(function (x) { return (j.lib || []).indexOf(x[0]) >= 0; }), rest = LIB.filter(function (x) { return (j.lib || []).indexOf(x[0]) < 0; });
+    var fresh = FRESH.tools.filter(function (k) { return TOOLS[k]; }).map(function (k) { return '<a href="/members/#' + k + '">' + esc(TOOLS[k]) + '</a>'; })
+      .concat(LIB.filter(function (x) { return FRESH.library.indexOf(x[0]) >= 0; }).map(function (x) { return '<a href="' + x[3] + '" target="_blank" rel="noopener">' + esc(x[1]) + ' (PDF)</a>'; }));
+    var subs = [j.weekly ? (j.freq === 'monthly' ? 'Monthly digest' : 'Weekly Desk email') : null, j.alerts ? 'New-material alerts' : null, mine.length ? mine.length + ' Library PDF' + (mine.length > 1 ? 's' : '') : null].filter(Boolean);
+    var add = [];
+    if (!j.weekly) add.push('<button type="button" class="chip" data-oi-add="weekly">+ Weekly Desk email</button>');
+    if (!j.alerts) add.push('<button type="button" class="chip" data-oi-add="alerts">+ New-material alerts (max 1/week)</button>');
+    return '<div class="oi-in"><h2 class="oi-h">You\'re in <span>&#10003;</span></h2><p class="oi-sub">' + (subs.length ? 'You get: ' + esc(subs.join(' · ')) + '.' : '') + (ctx === 'home' ? ' <a href="/members/">Open the Members toolkit &rarr;</a>' : '') + '</p>' +
+      (fresh.length ? '<p class="oi-fresh"><i class="oi-new">New this week</i> ' + fresh.join(' · ') + '</p>' : '') +
+      (mine.length ? '<p class="oi-dl"><b>Your downloads:</b> ' + mine.map(function (x) { return '<a href="' + x[3] + '" target="_blank" rel="noopener">' + esc(x[1]) + '</a>'; }).join(' · ') + '</p>' : '') +
+      ((add.length || rest.length) ? '<details class="oi-more"><summary>Add more (same email, no repeat signup)</summary>' + (add.length ? '<div class="oi-adds">' + add.join('') + '</div>' : '') +
+        (rest.length ? '<form class="oi-addlib">' + rest.map(function (x) { return libRow(x, false, 'lib'); }).join('') + (j.email ? '' : '<input type="email" name="email" required autocomplete="email" placeholder="Your email" aria-label="Email address">') + '<button type="submit" class="chip">Add selected PDFs</button></form>' : '') + '</details>' : '') +
+      '<p class="oi-msg" role="status" aria-live="polite"></p><p class="oi-fine">Change choices, frequency or unsubscribe from the link in any Desk email.</p></div>';
+  }
+  function paint(box) { var j = get(), ctx = box.dataset.optin || 'home'; box.classList.toggle('oi-joined', !!j); box.innerHTML = j ? inHTML(j, ctx) : formHTML(ctx); }
+  function paintAll() { Array.prototype.forEach.call(document.querySelectorAll('[data-optin]'), paint); }
+  function joined(j) { put(j); paintAll(); try { document.dispatchEvent(new CustomEvent('btd:joined', { detail: j })); } catch (e) {} }
+  document.addEventListener('submit', function (ev) {
+    var f = ev.target; if (!f.closest || !f.closest('[data-optin]')) return; ev.preventDefault();
+    var box = f.closest('[data-optin]'), msg = box.querySelector('.oi-msg'), em = f.querySelector('input[type=email]');
+    var picked = Array.prototype.map.call(f.querySelectorAll('input[name=lib]:checked'), function (x) { return x.value; });
+    if (f.classList.contains('oi-form')) {
+      var ch = { weekly: f.weekly.checked, freq: f.freq.value, alerts: f.alerts.checked, lib: picked };
+      if (!ch.weekly && !ch.alerts && !ch.lib.length) { msg.textContent = 'Pick at least one: the weekly email, alerts, or a PDF.'; return; }
+      if (!em.value || !em.checkValidity()) { msg.textContent = 'Please enter a valid email address.'; em.focus(); return; }
+      msg.textContent = 'Joining…'; ch.email = em.value.trim(); ch.t = new Date().toISOString().slice(0, 10);
+      submit(ch.email, ch).then(function () { joined(ch); }).catch(function () { msg.textContent = 'Could not reach the signup service. Please try again.'; });
+    } else if (f.classList.contains('oi-addlib')) {
+      var j = get(), email = j.email || (em && em.value.trim()); if (!picked.length) { msg.textContent = 'Tick at least one PDF.'; return; }
+      if (!email || (em && !em.checkValidity())) { msg.textContent = 'Please enter the email you joined with.'; return; }
+      msg.textContent = 'Adding…';
+      submit(email, { lib: picked }).then(function () { j.email = email; j.lib = (j.lib || []).concat(picked); delete j.legacy; joined(j); }).catch(function () { msg.textContent = 'Could not reach the signup service. Please try again.'; });
+    }
+  });
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('[data-oi-add]'); if (!b) return;
+    var j = get(), k = b.dataset.oiAdd, box = b.closest('[data-optin]'), msg = box.querySelector('.oi-msg');
+    var email = j.email;
+    if (!email) { // joined with the old form: ask for the email once, inline
+      if (!b.hasAttribute('data-oi-em')) { msg.innerHTML = 'Enter the email you joined with: <input type="email" class="oi-em2" aria-label="Email address"> <button type="button" class="chip" data-oi-add="' + k + '" data-oi-em>Add</button>'; return; }
+      var i2 = box.querySelector('.oi-em2'); email = i2 && i2.value && i2.checkValidity() ? i2.value.trim() : ''; if (!email) { if (i2) i2.focus(); return; }
+    }
+    var ch = {}; ch[k] = true; ch.freq = 'weekly'; msg.textContent = 'Adding…';
+    submit(email, ch).then(function () { j.email = email; j[k] = true; if (k === 'weekly') j.freq = 'weekly'; delete j.legacy; joined(j); }).catch(function () { msg.textContent = 'Could not reach the signup service. Please try again.'; });
+  });
+  function badges() { // "New this week" on Members tabs and downloads (from weekly.json, edited at the Sunday refresh)
+    FRESH.tools.forEach(function (k) { var t = document.querySelector('[data-tab="' + k + '"]'); if (t && !t.querySelector('.newb')) t.insertAdjacentHTML('beforeend', '<span class="newb" title="New this week">NEW</span>'); });
+    LIB.forEach(function (x) { if (FRESH.library.indexOf(x[0]) < 0) return; var a = document.querySelector('a.dl[href="' + x[3] + '"]'); if (a && !a.querySelector('.newb')) a.insertAdjacentHTML('beforeend', '<span class="newb">NEW THIS WEEK</span>'); });
+  }
+  paintAll();
+  fetch('/members/data/weekly.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (w) {
+    var f = w.fresh || {}; FRESH = { tools: f.tools || [], library: f.library || [], week: w.week || '' }; paintAll(); badges();
+  }).catch(function () {});
+  window.BTD_OPTIN = { get: get };
+})();

@@ -30,6 +30,7 @@
     fetch(CFG.KIT_FORM, { method: 'POST', body: fd, mode: 'no-cors' }).then(function () { setMember(true); window.scrollTo(0, 0); })
       .catch(function () { msg.textContent = 'Could not reach the signup service. Please try again.'; });
   });
+  document.addEventListener('btd:joined', function () { if (!isMember()) return; setMember(true); });
   var rl = $('[data-relock]'); if (rl) rl.addEventListener('click', function () { setMember(false); });
   var gg = $('[data-goto-gate]'); if (gg) gg.addEventListener('click', function (e) { e.preventDefault(); var em = $('#m-email'); em.scrollIntoView({ block: 'center', behavior: 'smooth' }); setTimeout(function () { em.focus(); }, 400); });
 

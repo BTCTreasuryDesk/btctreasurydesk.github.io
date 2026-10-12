@@ -53,11 +53,12 @@
     s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-' + widget + '.js';
     s.textContent = JSON.stringify(cfg); box.appendChild(s); el.appendChild(box);
   }
-  /* ---------- Top strip: 5 customizable quote tiles (saved in localStorage 'btd_strip') ---------- */
-  var STRIP_DEF = [
-    { tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }, { tk: 'ASST', tv: 'NASDAQ:ASST' },
-    { tk: 'MPJPY', tv: 'OTC:MPJPY' }, { tk: 'XXI', tv: 'NYSE:XXI' }
-  ];
+  /* ---------- Top strip: compact Top 10 by BTC held ----------
+     Slot 0 = MSTR (large, featured, fixed). Slot 1 = BTC (slim, fixed). Slots 2-10 = the #2-#10 public companies by BTC held,
+     read from desk.json's Treasury Board (treasuries.rows), so they follow each Sunday refresh. Nothing auto-moves.
+     Visitors can override any of slots 2-10; overrides are saved per slot in localStorage 'btd_strip2' ({slot: {tk, tv}}),
+     and slots they never touched keep following the ranking. */
+  var STRIP_N = 11;
   var STRIP_EXTRA = [
     { tk: 'BTC', tv: 'BITSTAMP:BTCUSD', name: 'Bitcoin', g: 'Crypto' }, { tk: 'ETH', tv: 'BITSTAMP:ETHUSD', name: 'Ether', g: 'Crypto' }, { tk: 'SOL', tv: 'COINBASE:SOLUSD', name: 'Solana', g: 'Crypto' },
     { tk: 'STRC', tv: 'NASDAQ:STRC', name: 'Strategy Stretch preferred', g: 'Preferreds' }, { tk: 'STRF', tv: 'NASDAQ:STRF', name: 'Strategy Strife preferred', g: 'Preferreds' },
@@ -66,28 +67,62 @@
     { tk: 'MTPLF', tv: 'OTC:MTPLF', name: 'Metaplanet, older OTC line (main ticker is MPJPY)', g: 'Metaplanet-related' },
     { tk: 'SLE', tv: 'NASDAQ:SLE', name: 'Super League (Metaplanet-related; pending Superplanet deal)', g: 'Metaplanet-related' }
   ];
-  var STRIP_FALLBACK = [ // used until desk.json's board pool loads
+  var STRIP_FALLBACK = [ // ranking used until desk.json's board loads (Oct 11, 2026 order)
     { tk: 'MSTR', tv: 'NASDAQ:MSTR', name: 'Strategy' }, { tk: 'MPJPY', tv: 'OTC:MPJPY', name: 'Metaplanet (ADR)' }, { tk: 'XXI', tv: 'NYSE:XXI', name: 'Twenty One Capital' },
-    { tk: 'MARA', tv: 'NASDAQ:MARA', name: 'MARA Holdings' }, { tk: 'ASST', tv: 'NASDAQ:ASST', name: 'Strive' }, { tk: 'COIN', tv: 'NASDAQ:COIN', name: 'Coinbase' }
+    { tk: 'MARA', tv: 'NASDAQ:MARA', name: 'MARA Holdings' }, { tk: 'ASST', tv: 'NASDAQ:ASST', name: 'Strive' }, { tk: 'BLSH', tv: 'NYSE:BLSH', name: 'Bullish' },
+    { tk: 'SPCX', tv: 'NASDAQ:SPCX', name: 'SpaceX' }, { tk: 'COIN', tv: 'NASDAQ:COIN', name: 'Coinbase' }, { tk: 'CLSK', tv: 'NASDAQ:CLSK', name: 'CleanSpark' },
+    { tk: 'DJT', tv: 'NASDAQ:DJT', name: 'Trump Media' }
   ];
   var LOCK = { 'NASDAQ:MSTR': 1, 'BITSTAMP:BTCUSD': 1 };
-  function stripLoad() {
-    var a = null; try { a = JSON.parse(LS.get('btd_strip') || 'null'); } catch (e) {}
-    var ok = Array.isArray(a) && a.length === 5 && a.every(function (x) { return x && typeof x.tv === 'string' && /^[A-Z0-9:._!\-]{1,32}$/.test(x.tv); });
-    if (ok && LS.get('btd_strip_mig1') !== '1') { a = a.map(function (x) { return /MTPLF/.test(x.tv) ? { tk: 'MPJPY', tv: 'OTC:MPJPY' } : x; }); LS.set('btd_strip_mig1', '1'); } // one-time: old Metaplanet OTC default -> ADR
-    if (ok) { // MSTR and BTC are fixed tiles: put them back in slots 0 and 1 if a saved strip lacks them
-      a = a.filter(function (x) { return !LOCK[x.tv]; }); a = [{ tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }].concat(a).slice(0, 5); while (a.length < 5) a.push(STRIP_DEF[a.length]); }
-    return ok ? a.map(function (x) { return { tk: String(x.tk || x.tv).slice(0, 12), tv: x.tv }; }) : STRIP_DEF.map(function (x) { return { tk: x.tk, tv: x.tv }; });
+  var SYM_OK = /^[A-Z0-9:._!\-]{1,32}$/;
+  function stripOvLoad() {
+    var ov = {}, o = null; try { o = JSON.parse(LS.get('btd_strip2') || 'null'); } catch (e) {}
+    if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var x = o[k]; if (+k >= 2 && +k < STRIP_N && x && typeof x.tv === 'string' && SYM_OK.test(x.tv) && !LOCK[x.tv]) ov[+k] = { tk: String(x.tk || x.tv).slice(0, 12), tv: x.tv }; });
+    var a = null; try { a = JSON.parse(LS.get('btd_strip') || 'null'); } catch (e) {} // one-time: old 5-tile strip -> keep real customizations as slot overrides
+    if (Array.isArray(a)) {
+      var oldDef = { 2: /ASST/, 3: /MPJPY|MTPLF/, 4: /XXI/ };
+      a.forEach(function (x, i) { if (i >= 2 && i <= 4 && x && typeof x.tv === 'string' && SYM_OK.test(x.tv) && !LOCK[x.tv] && !oldDef[i].test(x.tv) && !ov[i]) ov[i] = { tk: String(x.tk || x.tv).slice(0, 12), tv: x.tv }; });
+      try { localStorage.removeItem('btd_strip'); localStorage.removeItem('btd_strip_mig1'); } catch (e) {}
+      if (Object.keys(ov).length) LS.set('btd_strip2', JSON.stringify(ov));
+    }
+    return ov;
   }
-  var STRIP = stripLoad();
-  function stripIsDefault() { return STRIP.every(function (x, i) { return x.tv === STRIP_DEF[i].tv; }); }
-  function stripSave() { if (stripIsDefault()) { try { localStorage.removeItem('btd_strip'); } catch (e) {} } else LS.set('btd_strip', JSON.stringify(STRIP)); }
-  function stripFeat() { for (var j = 0; j < STRIP.length; j++) if (STRIP[j].tv === 'NASDAQ:MSTR') return j; return 0; }
+  var OV = stripOvLoad(), STRIP = [];
+  function stripRank() { // public companies by BTC held, MSTR first
+    var rows = (TB && TB.rows) ? TB.rows.filter(function (r) { return r.tv; }).slice().sort(function (a, b) { return b.btc - a.btc; }) : STRIP_FALLBACK;
+    return rows.map(function (r) { return { tk: String(r.tk).slice(0, 12), tv: r.tv }; });
+  }
+  function stripDefaultAt(i) { return stripCompute({})[i]; }
+  function stripCompute(ov) {
+    var used = { 'NASDAQ:MSTR': 1, 'BITSTAMP:BTCUSD': 1 }; Object.keys(ov).forEach(function (k) { used[ov[k].tv] = 1; });
+    var pool = stripRank().filter(function (r) { return !used[r.tv]; }), out = [{ tk: 'MSTR', tv: 'NASDAQ:MSTR' }, { tk: 'BTC', tv: 'BITSTAMP:BTCUSD' }];
+    for (var i = 2; i < STRIP_N; i++) out.push(ov[i] ? { tk: ov[i].tk, tv: ov[i].tv, own: 1 } : (pool.shift() || { tk: 'COIN', tv: 'NASDAQ:COIN' }));
+    return out;
+  }
+  function stripCustom() { return Object.keys(OV).length > 0; }
+  function stripSave() { if (!stripCustom()) { try { localStorage.removeItem('btd_strip2'); } catch (e) {} } else LS.set('btd_strip2', JSON.stringify(OV)); stripCap(); }
+  function stripCap() {
+    var c = $('[data-strip-cap]'); if (!c) return; var n = Object.keys(OV).length;
+    c.innerHTML = '<b>Top 10 by BTC held</b><span>Public companies ranked by bitcoin on the balance sheet · BTC fixed · updates each Sunday' +
+      (n ? ' · <em>' + n + ' tile' + (n > 1 ? 's' : '') + ' are your picks</em>' : ' · ✎ to swap a tile') + '</span><span class="strip-swipe" aria-hidden="true">swipe &rarr;</span>';
+  }
+  function stripRow(tv0) { return TB && TB.rows ? TB.rows.filter(function (r) { return r.tv === tv0; })[0] : null; }
+  function stripMeta(i, c) {
+    var r = stripRow(c.tv);
+    if (i === 1) return 'Bitcoin · fixed';
+    if (r) return '#' + (TB.rows.filter(function (x) { return x.btc > r.btc; }).length + 1) + ' · ' + fmt(r.btc) + ' ₿' + (c.own ? ' · your pick' : '');
+    if (c.tv.indexOf('DATA:') === 0) return 'Data · your pick';
+    var e = STRIP_EXTRA.filter(function (x) { return x.tv === c.tv; })[0];
+    return (e ? (e.g === 'Preferreds' ? 'Preferred' : e.g === 'Crypto' ? 'Crypto' : 'Related') + ' · ' : '') + 'your pick';
+  }
   function stripCell(i) {
     var c = STRIP[i];
-    return '<div class="q-cell' + (i === stripFeat() ? ' q-feat' : '') + '" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div>' +
-      (LOCK[c.tv] ? '<span class="q-lock" title="' + (c.tv === 'NASDAQ:MSTR' ? 'MSTR is the fixed featured tile' : 'BTC is a fixed tile') + '">' + (c.tv === 'NASDAQ:MSTR' ? '&#9733;' : '&#128274;') + '</span></div>' : '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + (i + 1) + ' (' + esc(c.tk) + ')" title="Change this tile">' +
-      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button></div>');
+    if (i === 0) { var r = stripRow(c.tv); // MSTR: first, fixed, same size as the slim tiles, orange accent
+      return '<div class="q-cell q-slim q-feat" data-qi="0"><div class="tv-slot" data-tvq="' + esc(c.tv) + '" data-tk="MSTR"></div><div class="q-foot"><span title="MSTR is the fixed featured tile">&#9733; #1' + (r ? '<i class="q-n"> · ' + esc(fmt(r.btc)) + ' ₿</i>' : '') + '</span><span class="q-mkt" data-mstr-mkt hidden></span></div></div>'; }
+    if (i === 1) return '<div class="q-cell q-btc" data-qi="1"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div><div class="q-foot"><span>Bitcoin · live 24/7</span><span class="q-lock" title="BTC is a fixed tile">&#128274;</span></div></div>';
+    return '<div class="q-cell q-slim' + (c.own ? ' q-own' : '') + '" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '" data-tk="' + esc(c.tk) + '"></div><div class="q-foot"><span>' + esc(stripMeta(i, c)) + '</span>' +
+      (LOCK[c.tv] ? '<span class="q-lock" title="BTC is a fixed tile">&#128274;</span>' : '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + i + ' (' + esc(c.tk) + ')" title="Swap this tile">' +
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>') + '</div></div>';
   }
   var DATA_T = { MNAV: ['mNAV', 'MSTR mNAV (strategy.com)'], DOM: ['BTC.D', 'Bitcoin dominance'], BTCETH: ['BTC/ETH', 'BTC priced in ETH'], FNG: ['F&G', 'Crypto Fear & Greed'], ATH: ['ATH', 'BTC distance from all-time high'] };
   function dataVal(k) { if (typeof live === 'undefined' || !live) return null; switch (k) {
@@ -102,17 +137,33 @@
     if (DESK) { var p = DESK.preferreds.filter(function (x) { return x.t === r.tk; })[0]; if (p) return '$' + p.price.toFixed(2); }
     if (MET && MET.securities[r.tk] && MET.securities[r.tk].price) return MET.securities[r.tk].price;
     if (r.tk === 'BTC' && live.btc) return usd(live.btc); if (r.tk === 'ETH' && live.eth) return usd(live.eth); if (r.tk === 'SOL' && live.sol) return usd(live.sol); return ''; }
-  function stripQuote(el) { if (el.dataset.tvq.indexOf('DATA:') === 0) { el.innerHTML = '<div class="dtile" data-dtile="' + esc(el.dataset.tvq.slice(5)) + '"></div>'; dataTiles(); return; } tv(el, 'single-quote', { symbol: el.dataset.tvq, width: '100%', colorTheme: 'dark', isTransparent: true, locale: 'en' }); }
-  function stripRender(only) {
-    var s = $('[data-strip]'); if (!s) return;
-    if (only != null && ($('.q-feat', s) || {}).getAttribute && +$('.q-feat', s).dataset.qi === stripFeat()) {
-      var old = $('[data-qi="' + only + '"]', s); if (old) { var tmp = document.createElement('div'); tmp.innerHTML = stripCell(only); var n = tmp.firstChild; s.replaceChild(n, old); stripQuote($('[data-tvq]', n)); return; }
-    }
-    var f = stripFeat(), ord = [f].concat(STRIP.map(function (x, i) { return i; }).filter(function (i) { return i !== f; }));
-    s.innerHTML = ord.map(function (i) { return stripCell(i); }).join('');
-    $$('[data-tvq]', s).forEach(stripQuote);
+  var stripIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { stripIO.unobserve(e.target); stripLoadQuote(e.target); } }); }, { rootMargin: '0px 240px 0px 240px' }) : null;
+  function stripLoadQuote(el) {
+    var v = el.dataset.tvq;
+    if (v.indexOf('DATA:') === 0) { el.innerHTML = '<div class="dtile" data-dtile="' + esc(v.slice(5)) + '"></div>'; dataTiles(); return; }
+    if (el.closest('.q-btc')) { tv(el, 'mini-symbol-overview', { symbol: v, width: '100%', height: '100%', locale: 'en', dateRange: '1D', colorTheme: 'dark', isTransparent: true, autosize: true, largeChartUrl: '', noTimeScale: true, chartOnly: false }); return; }
+    tv(el, 'tickers', { symbols: [{ proName: v, title: el.dataset.tk || v.split(':').pop() }], colorTheme: 'dark', isTransparent: true, showSymbolLogo: false, locale: 'en' });
   }
-  stripRender();
+  function stripQuote(el) { if (stripIO && el.closest('.q-slim') && !el.closest('.q-feat')) stripIO.observe(el); else stripLoadQuote(el); }
+  function stripApply(focusI) { // recompute; re-render only tiles whose symbol (or label) changed
+    var s = $('[data-strip]'); if (!s) return; var old = STRIP; STRIP = stripCompute(OV);
+    var rail = $('.q-rail', s);
+    if (!rail || !$('[data-qi="0"]', s)) {
+      s.innerHTML = stripCell(0) + stripCell(1) + '<div class="q-rail" aria-label="#2 to #10 by BTC held">' + STRIP.slice(2).map(function (x, j) { return stripCell(j + 2); }).join('') + '</div>';
+      $$('[data-tvq]', s).forEach(stripQuote);
+    } else {
+      STRIP.forEach(function (c, i) {
+        var cell = $('[data-qi="' + i + '"]', s); if (!cell) return;
+        var tmp = document.createElement('div'); tmp.innerHTML = stripCell(i); var n = tmp.firstChild;
+        if (old[i] && old[i].tv === c.tv) { var f0 = $('.q-foot', cell), f1 = $('.q-foot', n); if (f0 && f1 && f0.innerHTML !== f1.innerHTML) f0.innerHTML = f1.innerHTML; cell.classList.toggle('q-own', !!c.own); return; }
+        cell.parentNode.replaceChild(n, cell); stripQuote($('[data-tvq]', n));
+      });
+    }
+    stripCap();
+    if (focusI != null) { var b = $('[data-q-edit="' + focusI + '"]'); if (b) b.focus(); }
+  }
+  function stripAutoDefaults() { stripApply(); } // desk.json board loaded: real ranking + BTC-held labels
+  stripApply();
   function stripPool() {
     var seen = { 'NASDAQ:MSTR': 1, 'BITSTAMP:BTCUSD': 1 }, out = [], rows = (TB && TB.rows) ? TB.rows.filter(function (r) { return r.tv; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name + ' · ' + fmt(r.btc) + ' ₿', g: 'Treasury stocks (ranked by BTC held)' }; }) : STRIP_FALLBACK.map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Treasury stocks (ranked by BTC held)' }; });
     var pref = STRIP_EXTRA.filter(function (r) { return r.g === 'Preferreds'; }), crypto = STRIP_EXTRA.filter(function (r) { return r.g === 'Crypto'; }).map(function (r) { return { tk: r.tk, tv: r.tv, name: r.name, g: 'Crypto ref' }; }), other = STRIP_EXTRA.filter(function (r) { return r.g !== 'Preferreds' && r.g !== 'Crypto'; });
@@ -135,17 +186,19 @@
     var t = String(tv0 || '').trim().toUpperCase().replace(/\s+/g, '');
     if (!/^[A-Z0-9:._!\-]{1,32}$/.test(t)) { var m = $('[data-pk-msg]', pk); if (m) m.textContent = 'Use letters, numbers and an optional exchange prefix, e.g. NASDAQ:COIN.'; return; }
     var hit = stripPool().filter(function (r) { return r.tv === t || r.tk.toUpperCase() === t; })[0];
-    STRIP[pkI] = hit ? { tk: hit.tk, tv: hit.tv } : { tk: (tk0 || t.split(':').pop()).slice(0, 12), tv: t };
-    var i = pkI; stripSave(); pkClose(false); stripRender(i);
-    var b = $('[data-q-edit="' + i + '"]'); if (b) b.focus();
+    if (LOCK[t]) { var m2 = $('[data-pk-msg]', pk); if (m2) m2.textContent = 'MSTR and BTC are already fixed tiles.'; return; }
+    var pick = hit ? { tk: hit.tk, tv: hit.tv } : { tk: (tk0 || t.split(':').pop()).slice(0, 12), tv: t }, i = pkI;
+    Object.keys(OV).forEach(function (k) { if (+k !== i && OV[k].tv === pick.tv) delete OV[k]; }); // no duplicate picks
+    delete OV[i]; if (stripCompute(OV)[i].tv !== pick.tv) OV[i] = pick; // picking the slot's own default = back to auto
+    stripSave(); pkClose(false); stripApply(i);
   }
   function pkOpen(i, btn) {
     pkClose(false); pkI = i; pkBtn = btn;
-    pk = document.createElement('div'); pk.className = 'pk'; pk.setAttribute('role', 'dialog'); pk.setAttribute('aria-label', 'Choose a ticker for tile ' + (i + 1));
-    pk.innerHTML = '<div class="pk-h"><b>Tile ' + (i + 1) + '</b><span class="muted">now ' + esc(STRIP[i].tk) + '</span><button type="button" class="pk-x" data-pk-close aria-label="Close">&times;</button></div>' +
+    pk = document.createElement('div'); pk.className = 'pk'; pk.setAttribute('role', 'dialog'); pk.setAttribute('aria-label', 'Choose a ticker for tile ' + i);
+    pk.innerHTML = '<div class="pk-h"><b>Tile ' + i + '</b><span class="muted">now ' + esc(STRIP[i].tk) + '</span><button type="button" class="pk-x" data-pk-close aria-label="Close">&times;</button></div>' +
       '<input type="text" class="pk-in" data-pk-in placeholder="Search or type a ticker (e.g. NASDAQ:COIN)" autocomplete="off" spellcheck="false" aria-label="Search or type a ticker">' +
       '<ul class="pk-l" data-pk-list role="list"></ul><p class="pk-msg" data-pk-msg></p>' +
-      '<div class="pk-f"><button type="button" class="chip" data-pk-reset1>Reset this tile</button><button type="button" class="chip" data-pk-reset>Reset to default</button></div>';
+      '<div class="pk-f"><button type="button" class="chip" data-pk-reset1>Back to ranking</button><button type="button" class="chip" data-pk-reset>Reset all tiles</button></div>';
     document.body.appendChild(pk); pkList('');
     var r = btn.getBoundingClientRect(), w = Math.min(300, window.innerWidth - 16);
     pk.style.width = w + 'px';
@@ -167,8 +220,8 @@
     if (!b) return;
     if (b.dataset.pkTv) pkPick(b.dataset.pkTv, b.dataset.pkTk);
     else if (b.hasAttribute('data-pk-close')) pkClose(true);
-    else if (b.hasAttribute('data-pk-reset1')) pkPick(STRIP_DEF[pkI].tv, STRIP_DEF[pkI].tk);
-    else if (b.hasAttribute('data-pk-reset')) { STRIP = STRIP_DEF.map(function (x) { return { tk: x.tk, tv: x.tv }; }); var i2 = pkI; stripSave(); pkClose(false); stripRender(); var fb = $('[data-q-edit="' + i2 + '"]'); if (fb) fb.focus(); }
+    else if (b.hasAttribute('data-pk-reset1')) { var i1 = pkI; delete OV[i1]; stripSave(); pkClose(false); stripApply(i1); }
+    else if (b.hasAttribute('data-pk-reset')) { var i2 = pkI; OV = {}; stripSave(); pkClose(false); stripApply(i2); }
   }, true);
   document.addEventListener('keydown', function (e) { if (pk && e.key === 'Escape') { e.stopPropagation(); pkClose(true); } }, true);
   window.addEventListener('resize', function () { pkClose(false); });
@@ -253,7 +306,7 @@
   function tbSave() { LS.set('btd_tb', JSON.stringify(TBS)); }
   function shortDate(iso) { if (!iso) return '—'; var p = iso.split('-'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1] - 1] + ' ' + (+p[2]) + " '" + p[0].slice(2); }
   function board(t) {
-    TB = t; var el = $('#board'); if (!el || !t) return;
+    TB = t; stripAutoDefaults(); var el = $('#board'); if (!el || !t) return;
     $('[data-tb-asof]').textContent = 'as of ' + dateLbl(t.as_of);
     $('[data-tb-src]').innerHTML = 'Source: <a href="' + esc(t.src.url) + '" target="_blank" rel="noopener">' + esc(t.src.name) + '</a>. Education only, not investment advice. <details class="tb-notes"><summary>Notes</summary>' + esc(t.holdings_note) + ' ' + esc(t.pool_note) + ' ' + esc(t.mnav_note) + ' ' + esc(t.last_add_note) + ' ' + esc(t.prices) + ' ' + esc(t.excluded) + '</details>';
     tbPaint();
@@ -586,6 +639,7 @@
     var el = $('[data-clock]'); if (!el) return;
     el.className = 'clock mono ' + (st ? st[2] : 'closed');
     $('[data-mkt]').textContent = st ? st[3] : 'Market closed';
+    var mt = $('[data-mstr-mkt]'); if (mt) { var ml = st && st[2] === 'open' ? '' : (st ? st[3] : 'Market closed'); mt.textContent = ml; mt.hidden = !ml; }
     var s = Math.max(0, Math.round((nxt - now) / 1e3)), hh = Math.floor(s / 3600), mm = Math.floor(s % 3600 / 60), ss = s % 60;
     $('[data-mkt-cd]').textContent = nxt ? lbl + (hh >= 24 ? Math.floor(hh / 24) + 'd ' + (hh % 24) + 'h' : hh + 'h ' + String(mm).padStart(2, '0') + 'm ' + String(ss).padStart(2, '0') + 's') : '';
     $('[data-ny]').textContent = new Date(now).toISOString().slice(11, 16) + ' ET';

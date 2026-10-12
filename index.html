@@ -32,7 +32,8 @@
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="preconnect" href="https://api.coingecko.com">
   <link rel="preconnect" href="https://s3.tradingview.com">
-  <link rel="stylesheet" href="/assets/css/desk.css?v=v2d">
+  <link rel="stylesheet" href="/assets/css/desk.css?v=v2e">
+  <link rel="stylesheet" href="/assets/css/optin.css?v=o1">
 </head><body class="desk">
   <a class="skip" href="#main">Skip to content</a>
   <header class="t-head">
@@ -47,8 +48,9 @@
   </header>
   <div class="ticker" data-ticker hidden aria-hidden="true"><div class="ticker-in" data-ticker-in></div></div>
   <main id="main" class="grid">
-    <section class="strip" aria-label="Prices (customizable)" data-strip>
-      <div class="q-cell q-feat"><div class="tv-slot" data-tvq="NASDAQ:MSTR"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="BITSTAMP:BTCUSD"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NASDAQ:ASST"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="OTC:MPJPY"></div></div><div class="q-cell"><div class="tv-slot" data-tvq="NYSE:XXI"></div></div>
+    <div class="strip-cap" data-strip-cap><b>Top 10 by BTC held</b><span>Public companies ranked by bitcoin on the balance sheet · BTC fixed · updates each Sunday</span></div>
+    <section class="strip" aria-label="Top 10 public companies by BTC held, plus BTC: live prices (customizable)" data-strip>
+      <div class="q-cell q-slim q-feat"></div><div class="q-cell q-btc"></div><div class="q-rail"><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div></div>
     </section>
 
     <section class="p p-spot spot" data-spot aria-label="Strategy Spotlight"><div class="p-h"><span class="p-t">Strategy Spotlight</span><a class="more" href="https://www.strategy.com/" target="_blank" rel="noopener">strategy.com &#8599;</a></div>
@@ -97,6 +99,8 @@
       <div class="ep-row"><a class="tbtn tbtn-yt" data-ep-watch href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a><span class="shorts" data-shorts></span></div>
       <div class="votw"><span class="p-t">Video of the Week</span><a data-votw href="#" target="_blank" rel="noopener"><img data-votw-img alt="" width="120" height="68"><span><b data-votw-title></b><small data-votw-meta></small></span></a><div class="votw-more" data-votw-more></div></div>
     </section>
+
+    <section class="p p-optin optin" data-optin="home" aria-label="Weekly Desk email and Members tools"></section>
 
     <section class="p p-strat" aria-label="Strategy and Strive">
       <div class="p-h"><span class="p-t">Strategy <small>MSTR</small></span><span class="tag" data-strat-asof></span></div>
@@ -204,6 +208,8 @@
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-  <script src="/assets/js/desk.js?v=v2d" defer></script>
+  <script src="/assets/js/desk.js?v=v2e" defer></script>
+  <script src="/members/members-config.js?v=m2" defer></script>
+  <script src="/assets/js/optin.js?v=o1" defer></script>
 </body>
 </html>

@@ -33,3 +33,11 @@ Rules: every number carries a source, no "buy"/"sell" signal wording, and the li
 - Run `python3 tools/update_members_stocks.py` (MSTR, ASST, MPJPY, XXI, MARA, COIN daily closes -> members/data/stocks_daily.json, plus members/data/last_closes.json for the home price scroll and strip picker).
 - Edit `members/data/weekly.json` ("This week in the Members desk"): 1-3 editorial items, `new: true` for fresh items. Zone/badge/momentum changes are computed automatically in the browser.
 - Metaplanet uses one ticker only: MPJPY (ADR, OTC). SLE (Super League) is a selectable "Metaplanet-related" option only, never ranked; it may become SUPA after the pending Superplanet deal closes.
+
+## Home top strip, opt-in and "New this week" (added Oct 11, 2026)
+- Top strip is automatic: MSTR first (fixed, featured accent, same size as the slim tiles, "Market closed" tag outside regular US hours), BTC the big tile (fixed, live 24/7), then the #2–#10 public companies by BTC held from `desk.json` → `treasuries.rows`. Keep holdings current and the strip follows. Visitors' own swaps are saved per tile (`btd_strip2`) and override only those tiles. All tiles are live TradingView widgets.
+- One Kit form for home + /members/ (`assets/js/optin.js`). Choices are Kit tags (ids in `members/members-config.js` → `KIT_TAGS`): weekly, monthly, alerts, and one per Library PDF. One subscriber per email; re-signing just adds tags. Nothing is pre-checked; no popups.
+- Email limits we promise on the form: max 1 email/week. New-material alerts are bundled into at most one email a week. Every email must include the Kit preferences link (change choices / weekly vs monthly) and the one-click unsubscribe.
+- Each Sunday edit `members/data/weekly.json` → `fresh`: `tools` (Members tab ids) and `library` (cheat, prefs, numbers, data, glossary, whitepaper, quotes) that are new or materially updated this week; clear last week's. These drive the "New this week" badges and the "You're in" box. Never mark something new that isn't.
+- NEVER run the old v1 generator (`/workspace/btctreasurydesk-tools/*.v1-disabled`). It overwrites the v2 pages. Pushes from the site checkout need `DESK_PUSH_OK=1` (pre-push hook).
+

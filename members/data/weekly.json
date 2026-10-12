@@ -1,5 +1,30 @@
-{"week": "2026-10-11", "note": "Edited at the Sunday refresh. Items with new:true get a NEW badge. Auto zone/badge/momentum changes are computed in the browser.",
+{
+ "week": "2026-10-11",
+ "note": "Edited at the Sunday refresh. Items with new:true get a NEW badge. Auto zone/badge/momentum changes are computed in the browser.",
  "items": [
-  {"t": "Members toolkit v1 is open: Signal Zones, Model Builder, Entry & Exit Planner, Strategy Lab, Freedom Plan, Momentum & Trend, TA Overlays, mNAV Radar, BTC Yield and the Cycle Clock.", "new": true},
-  {"t": "Ep. 12 recap: Strategy at 848,000 BTC, a $21B Q3 gain and the STRC daily-dividend vote on Oct 28.", "new": false}
- ]}
+  {
+   "t": "Members toolkit v1 is open: Signal Zones, Model Builder, Entry & Exit Planner, Strategy Lab, Freedom Plan, Momentum & Trend, TA Overlays, mNAV Radar, BTC Yield and the Cycle Clock.",
+   "new": true
+  },
+  {
+   "t": "Ep. 12 recap: Strategy at 848,000 BTC, a $21B Q3 gain and the STRC daily-dividend vote on Oct 28.",
+   "new": false
+  }
+ ],
+ "fresh": {
+  "tools": [
+   "zones",
+   "builder",
+   "planner",
+   "lab",
+   "freedom",
+   "momentum",
+   "ta",
+   "radar",
+   "yield",
+   "clock"
+  ],
+  "library": [],
+  "_note": "Sunday refresh: list tab ids and Library keys (cheat, prefs, numbers, data, glossary, whitepaper, quotes) that are new or materially updated this week; clear them the next week."
+ }
+}
