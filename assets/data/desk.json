@@ -1437,5 +1437,97 @@
       "method": "CoinGecko BTC market cap / CMC total market cap vs CMC btcDominance"
     },
     "_note": "Sunday refresh: python3 tools/update_dominance.py. Live value on the site is CoinGecko /global; changes compare it with these weekly points."
+  },
+  "news_week": {
+    "_note": "Sunday refresh: News of the Week. Max 8 material items from the past Mon-Sun, grouped in this order: strategy (Strategy & Saylor), treasury (other big treasury companies: Strive/ASST, Metaplanet...), industry (index/regulatory/capital-markets news for the sector, other companies), bitcoin (price milestones, network, ETFs, adoption, crypto regulation) (omit a group with nothing material). One line each, date, official source preferred (SEC/TSE filing, company press release, regulator, index provider, Farside for ETF flows). BEFORE replacing, append the old news_week object to assets/data/news_archive.json weeks[] (newest first). Mark the 3 most material items with \"top\": 1 (shown when the card is collapsed). Each item also gets \"why\": one line, 'Why it matters for holders' (plain, factual, no advice). Mark the week's single biggest item \"lead\": 1 (the bold Top story; any group). 'On deck next week' is built automatically from desk.json week_ahead.",
+    "week_of": "2026-10-05",
+    "label": "Oct 5 – 11, 2026",
+    "as_of": "2026-10-11",
+    "items": [
+      {
+        "cat": "strategy",
+        "date": "2026-10-05",
+        "text": "Bought 334 BTC (~$28.7M, avg $85,839) to reach 848,000 BTC; estimates a $20.91B Q3 gain on digital assets.",
+        "src": {
+          "name": "Strategy 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm"
+        },
+        "top": 1,
+        "why": "Small buy funded by MSTR sales and cash; the Q3 mark-to-market gain is non-cash but sets the tone for Oct 29 earnings.",
+        "lead": 1
+      },
+      {
+        "cat": "strategy",
+        "date": "2026-10-05",
+        "text": "Repurchased $176.3M of STRC (1.77M shares) Sep 28 – Oct 4; $547.2M left in the preferred buyback program, no preferred ATM sales.",
+        "src": {
+          "name": "Strategy 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm"
+        },
+        "why": "Bought back near $99.4/share, under $100 par, which supports STRC's price and uses cash instead of new issuance."
+      },
+      {
+        "cat": "strategy",
+        "date": "2026-10-08",
+        "text": "Q3 2026 results set for Thu Oct 29 after the close, live Video Webinar 5:00 PM ET (stockholder vote on daily preferred dividends Oct 28).",
+        "src": {
+          "name": "Strategy press release",
+          "url": "https://www.nasdaq.com/press-release/strategy-announces-earnings-release-date-and-live-video-webinar-third-quarter-2026"
+        },
+        "why": "First full look at Q3: BTC Yield, USD Reserve coverage of dividends, and any update on the capital plan."
+      },
+      {
+        "cat": "treasury",
+        "date": "2026-10-05",
+        "text": "Strive bought 2,000 BTC (avg ~$84,422) to reach 29,462 BTC and set up a repurchase facility of up to $500M for SATA.",
+        "src": {
+          "name": "Strive 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026064753/asst-20261005.htm"
+        },
+        "why": "More BTC per ASST share is the KPI; the SATA buyback gives Strive a tool to support its preferred's price."
+      },
+      {
+        "cat": "treasury",
+        "date": "2026-10-05",
+        "text": "Metaplanet ended Q3 at 44,000 BTC (net +1,000) after selling 10,000 and buying back 11,000 to show liquidity; plans 10-15% of assets in treasury-company preferreds.",
+        "src": {
+          "name": "Metaplanet TSE notice (via Japan IR)",
+          "url": "https://japanir.jp/en/company/company-3350/ir/3350-20261005-04_wp_financial_summary/"
+        },
+        "why": "Proves it can turn BTC into cash to cover debt, a step toward a credit rating and cheaper funding; adds a buyer for treasury preferreds."
+      },
+      {
+        "cat": "industry",
+        "date": "2026-10-16",
+        "text": "Coming: MSCI decision on 'non-operating companies' due on or before Oct 16; its simulation flagged Strategy and Metaplanet as possible index deletions.",
+        "src": {
+          "name": "MSCI consultation",
+          "url": "https://app2.msci.com/webapp/index_ann/DocGet?format=html&lang=en&pub_key=akYg4WzbEDk%3D"
+        },
+        "top": 1,
+        "why": "An exclusion could force passive index funds to sell MSTR and Metaplanet; current members get a two-period buffer before removal."
+      },
+      {
+        "cat": "bitcoin",
+        "date": "2026-10-07",
+        "text": "US spot bitcoin ETFs saw $484.9M of net outflows, the largest day since June 25, erasing October's early inflows; BTC dipped toward $82K.",
+        "src": {
+          "name": "Farside Investors",
+          "url": "https://farside.co.uk/btc/"
+        },
+        "top": 1,
+        "why": "ETF flows are a big source of marginal BTC demand; sustained outflows can weigh on price and on treasury-stock premiums."
+      },
+      {
+        "cat": "bitcoin",
+        "date": "2026-10-05",
+        "text": "CFTC opened rulemaking (Regulation CTX and CAM) for leveraged and margined retail crypto trading, after the CLARITY Act stalled in the Senate.",
+        "src": {
+          "name": "CFTC press release",
+          "url": "https://www.cftc.gov/PressRoom/PressReleases/9307-26"
+        },
+        "why": "Early step toward onshore federal rules for leveraged crypto trading; no direct change for spot BTC or treasury stocks yet."
+      }
+    ]
   }
 }
