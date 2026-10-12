@@ -118,7 +118,7 @@
     var D = MEM.desk, set = function (k, h) { var e = $('[data-sp="' + k + '"]'); if (e) e.innerHTML = h; };
     var st = MEM.stocks && MEM.stocks.series.MSTR; if (st) { var L = st.c.length - 1; set('mstr', usd(st.c[L], 2)); set('mstr-s', 'close ' + st.d[L] + (D ? ' · mNAV ' + D.strategy.mnav.toFixed(2) + 'x' : '')); }
     if (D) { var s = D.strategy, p = D.preferreds.filter(function (x) { return x.t === 'STRC'; })[0];
-      if (p) { set('strc', p.rate.toFixed(2) + '%'); set('strc-s', 'rate · price $' + p.price.toFixed(2) + ' (' + p.price_as_of + ')'); }
+      var PR = (D.prefs_desk ? D.prefs_desk.rows : []), EY = PR.map(function (x) { return x.rate * x.par / x.close; }); if (EY.length) { set('strc', Math.min.apply(0, EY).toFixed(1) + '–' + Math.max.apply(0, EY).toFixed(1) + '%'); set('strc-s', 'effective yield range · ' + PR.map(function (x) { return x.t; }).join(' · ')); }
       set('btc', s.btc_held.toLocaleString('en-US') + ' ₿'); set('btc-s', 'as of ' + s.btc_as_of + ' · ' + s.sats_per_share.toLocaleString('en-US') + ' sats/share'); }
     var S = MEM.strategy; if (S) { var rows = S.purchases.filter(function (x) { return x.adso_k; }), last = rows[rows.length - 1], yr = last.date.slice(0, 4), base = null;
       rows.forEach(function (x) { if (x.date < yr) base = x; }); if (base) { var sps = function (x) { return x.holdings / x.adso_k; }; set('yield', pct((sps(last) / sps(base) - 1) * 100)); set('yield-s', base.date + ' → ' + last.date + ' · from strategy.com ledger ADSO; official BTC Yield KPI may differ'); } }

@@ -32,11 +32,27 @@ for r in D['treasuries']['rows']:
         q = {'sym': s, 'cur': x['meta'].get('currency'), 'd': last_d.isoformat(), 'c': round(last, 4),
              'ytd': round(last / y0[-1] * 100 - 100, 1) if y0 else None,
              'y1': round(last / y1[-1] * 100 - 100, 1) if y1 else None, 'first': pts[0][0].isoformat()}
+        # Movers & Makers inputs: 1W / 1M moves, 52-week range, 200-day MA state and recent cross
+        def back(days):
+            t = last_d - datetime.timedelta(days=days); c = [v for d, v in pts if d <= t]; return c[-1] if c else None
+        w1, m1 = back(7), back(30); q['w1'] = round(last / w1 * 100 - 100, 1) if w1 else None; q['m1'] = round(last / m1 * 100 - 100, 1) if m1 else None
+        yr = [v for d, v in pts if d > a1]
+        if len(yr) > 200: q['hi52'] = round(max(yr), 4); q['lo52'] = round(min(yr), 4)
+        cl = [v for d, v in pts]
+        if len(cl) >= 206:
+            ma = lambda i: sum(cl[i - 199:i + 1]) / 200
+            above = [cl[i] > ma(i) for i in range(len(cl) - 6, len(cl))]
+            q['ma200'] = round(ma(len(cl) - 1), 4); q['above200'] = above[-1]; q['cross200'] = ('up' if above[-1] else 'down') if len(set(above)) > 1 else None
         n = (OVR.get(r['tk']) or (None, None))[1] or NOTES.get(r['tk'])
         if n: q['note'] = n
         out['q'][r['tk']] = q; print(r['tk'], s, q['ytd'], q['y1'])
     except Exception as e:
         print('skip', r['tk'], s, e)
     time.sleep(0.6)
+# BTC reference for relative strength (same windows, Coinbase daily closes from btc_daily.json)
+B = json.loads((ROOT / 'assets/data/btc_daily.json').read_text()); b0 = datetime.date.fromisoformat(B['start']); bc = B['closes']
+bl = bc[-1]; bd = b0 + datetime.timedelta(len(bc) - 1)
+def bback(days): i = len(bc) - 1 - days; return bc[i] if i >= 0 else None
+out['btc'] = {'d': bd.isoformat(), 'w1': round(bl / bback(7) * 100 - 100, 1), 'm1': round(bl / bback(30) * 100 - 100, 1)}
 (ROOT / 'assets/data/perf.json').write_text(json.dumps(out, separators=(',', ':')))
 print('wrote perf.json', len(out['q']), 'tickers')

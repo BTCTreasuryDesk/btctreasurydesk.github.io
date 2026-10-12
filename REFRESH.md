@@ -105,3 +105,18 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 - /tip/ shows "Tip on X" (X Money via https://x.com/BTCTreasuryDesk). Lightning and on-chain slots stay hidden until Phil fills `TIP.lightning` / `TIP.onchain` in `members/members-config.js`. Never invent or paste an example address.
 - YouTube: add ONE line to the standard description template (with the channel links block), not a separate push in every episode:
   `Support the Desk (optional): https://btctreasurydesk.com/tip/`
+
+## Movers & Makers (every Sunday, after the board rows + treasuries.prev are updated)
+1. `python3 tools/update_perf.py` (YTD/1Y + 1W/1M moves, 52-week range, 200-day state/cross, BTC reference).
+2. `python3 tools/movers.py`: writes `assets/data/movers.json` (full ranked list; home card shows the top 5) and `desk.json → movers_week` (top 3 with a one-line "why"; use it for the Sunday episode segment).
+- Rules (in the script): |1W| ≥ 10%, |1M| ≥ 20%, new 52-week high/low, 200-day cross in the last 5 sessions, 1M strength vs BTC ≥ 15 pts, reported additions ≥ 1,000 BTC or +5%. Moves over 80% (1M) are skipped as likely splits/ticker changes. Wording stays descriptive: never buy/sell language.
+
+## Home order + live chart (standing rules, Oct 11 2026)
+- **Full Desk default order** (layout.js `SECS`): tiles (BTC + MSTR fixed, then top holders) → compact Strategy KPI row (BTC Gain, $ Gain, BTC Yield, holdings, mNAV; the rest behind "More KPIs") → live chart card → Quick glance (dominance trend, BTC/ETH + BTC/SOL, Fear & Greed, distance from ATH, halving countdown) → Movers & Makers + Coming up → Preferreds Desk → Video of the Week + latest episode → News of the Week → email box → Charts (library) → Treasury Board → mNAV card → What changed → Strategy & Strive → Model Zones → Models → links.
+- **Live chart card** (`assets/js/live.js`, `btd_live`): modest size. `Live` mode = BTC 24/7 from Coinbase Exchange (candles + ticker every 5s), line/area/candles, 1D/1W/1M/1Y, thin day-open line, "since you opened the page" readout, MSTR side-quote. MSTR: CNBC real-time in US market hours, otherwise "Market closed · last close". MSTR is never blank: with no intraday history, 1D shows the last 10 daily closes (from `members/data/stocks_daily.json`) until live prices build up. `Long-term` mode = the overlays/models chart (price.js) with a live current-price dot + label. No data to refresh by hand; keep stocks_daily.json fresh on Sundays.
+- **Desk Mode layouts** (`btd_dml`, per device, not exported): Grid / Focus (tiles + KPIs + live chart big) / Ticker wall (tiles + board + movers).
+
+## Desk music (standing rule)
+- Off by default, never autoplays; remembers track, volume and playback mode (`btd_music`: Play all (default, continuous with a 2.5s crossfade) / Shuffle / Repeat one), never the playing state. Prev/next buttons.
+- Tracks: `assets/audio/tracks.json` lists the slots (Lo-fi `lofi.mp3`, Ambient `ambient.mp3`, Chill electronic `chill-electronic.mp3`, Late-night jazz `late-night-jazz.mp3`). Copy MP3s from `/workspace/desk-music/` into `assets/audio/` using those names. Only files that exist are offered; the Music button stays hidden until at least one exists.
+- Only royalty-free or licensed tracks; put the credit line in `credit`. Keep files small (128 kbps, a few MB).

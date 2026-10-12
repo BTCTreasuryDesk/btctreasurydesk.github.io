@@ -289,14 +289,13 @@
     { n: 'BTC', s: 'BITSTAMP:BTCUSD' },
     { n: 'MSTR', s: 'NASDAQ:MSTR' },
     { n: 'ASST', s: 'NASDAQ:ASST' },
-    { n: 'MSTR vs BTC', s: 'NASDAQ:MSTR', cmp: 'BITSTAMP:BTCUSD' },
-    { n: 'STRC', s: 'NASDAQ:STRC' }
+    { n: 'MSTR vs BTC', s: 'NASDAQ:MSTR', cmp: 'BITSTAMP:BTCUSD' }
   ];
   var cs = { i: 0, style: '1', iv: 'D' };
   var tabs = $('[data-chart-tabs]');
   if (tabs) tabs.innerHTML = CHARTS.map(function (c, i) { return '<button data-ci="' + i + '">' + esc(c.n) + '</button>'; }).join('');
   function drawChart() {
-    var c = CHARTS[cs.i], box = $('[data-chart]'); if (!box) return;
+    var c = CHARTS[cs.i] || CHARTS[cs.i = 0], box = $('[data-chart]'); if (!box) return;
     var cfg = { autosize: true, symbol: c.s, interval: cs.iv, timezone: 'America/New_York', theme: 'dark', style: c.cmp ? '2' : cs.style,
       locale: 'en', hide_side_toolbar: true, allow_symbol_change: false, save_image: false, calendar: false, hide_volume: !!c.cmp,
       backgroundColor: 'rgba(0,0,0,1)', gridColor: 'rgba(30,35,43,0.5)', support_host: 'https://www.tradingview.com' };
@@ -543,12 +542,15 @@
       .then(function (p) { return { btc: p.bitcoin.usd, btc24: p.bitcoin.usd_24h_change, eth: p.ethereum.usd, sol: p.solana.usd, eth24: p.ethereum.usd_24h_change, sol24: p.solana.usd_24h_change, src: 'CoinGecko' }; })
       .catch(function () { return Promise.all([coinbaseSpot('BTC'), coinbaseSpot('ETH'), coinbaseSpot('SOL')]).then(function (a) { return { btc: a[0], btc24: null, eth: a[1], sol: a[2], src: 'Coinbase' }; }); });
   }
+  function paintAth() { var ath = athOf(); if (!ath || !live.btc) return; var dA = (live.btc / ath - 1) * 100; setLive('ath', dA >= -0.05 ? 'at ATH' : pct(dA, 1), dA, true); setLive('ath-v', usd(ath)); }
   function refreshMarket() {
     pullPrices().then(function (p) {
       live.btc = p.btc; live.eth = p.eth; live.sol = p.sol; live.eth24 = p.eth24; live.sol24 = p.sol24; fieldStale(); paintRatios();
       setLive('btc', usd(p.btc), p.btc); setLive('btc-24h', p.btc24 == null ? '—' : pct(p.btc24), p.btc24, true);
       setLive('btceth', (p.btc / p.eth).toFixed(2) + ' ETH', p.btc / p.eth); setLive('btcsol', fmt(p.btc / p.sol, 1) + ' SOL', p.btc / p.sol);
       setLive('sats', fmt(1e8 / p.btc) + ' sats', 1e8 / p.btc);
+      paintAth();
+      var nh = Date.UTC(2024, 3, 20) + 210000 * 600e3, dh = Math.max(0, Math.ceil((nh - Date.now()) / 864e5)); setLive('halv', '~' + fmt(dh) + ' days (' + new Date(nh).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }) + ')');
       var a = $('[data-field-asof]'); if (a) a.textContent = p.src + ' · ' + new Date().toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }) + ' ET';
       paintStrategyLive(); models(); ticker();
     }).catch(function () { setLive('btc', 'unavailable', null); stale('.p-field', true, 'Live prices failed to load. Retrying every minute.'); });
@@ -564,7 +566,7 @@
 
   /* ---------- Bitcoin models (client-side) ---------- */
   var HIST = null;
-  fetch('/assets/data/btc_daily.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (h) { HIST = h; models(); }).catch(function (e) { console.warn('btc_daily.json unavailable', e); stale('.p-models', true, 'Daily history failed to load.'); stale('.p-zones', true, 'Daily history failed to load.'); });
+  fetch('/assets/data/btc_daily.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (h) { HIST = h; models(); paintAth(); }).catch(function (e) { console.warn('btc_daily.json unavailable', e); stale('.p-models', true, 'Daily history failed to load.'); stale('.p-zones', true, 'Daily history failed to load.'); });
   var GEN = Date.UTC(2009, 0, 3);
   var HALV = [[Date.UTC(2012, 10, 28), 10.5e6, 25], [Date.UTC(2016, 6, 9), 15.75e6, 12.5], [Date.UTC(2020, 4, 11), 18.375e6, 6.25], [Date.UTC(2024, 3, 20), 19.6875e6, 3.125]];
   function s2f(t) { var h = HALV[0]; for (var i = 0; i < HALV.length; i++) if (t >= HALV[i][0]) h = HALV[i];
@@ -753,7 +755,7 @@
   function spotlight(D) {
     var box = $('[data-spot]'); if (!box) return; var set = function (k, h) { var e = $('[data-sp="' + k + '"]', box); if (e) e.innerHTML = h; }, s = D.strategy;
     set('mnav', s.mnav.toFixed(2) + 'x'); set('mnav-s', 'MSTR mNAV · ' + esc(s.kpi_as_of));
-    var p = D.preferreds.filter(function (x) { return x.t === 'STRC'; })[0]; if (p) { set('strc', p.rate.toFixed(2) + '%'); set('strc-s', 'rate · $' + p.price.toFixed(2) + ' (' + dateLbl(p.price_as_of) + ')'); }
+    var PR = (D.prefs_desk ? D.prefs_desk.rows : []), EY = PR.map(function (x) { return x.rate * x.par / x.close; }); if (EY.length) { set('strc', Math.min.apply(0, EY).toFixed(1) + '–' + Math.max.apply(0, EY).toFixed(1) + '%'); set('strc-s', 'effective yield range · ' + PR.map(function (x) { return x.t; }).join(' · ')); }
     set('btc', fmt(s.btc_held) + ' ₿'); set('btc-s', 'as of ' + dateLbl(s.btc_as_of) + ' · ' + fmt(s.sats_per_share) + ' sats/share');
     fetch('/assets/data/strategy.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (S) {
       var rows = S.purchases.filter(function (x) { return x.adso_k; }), last = rows[rows.length - 1], yr = last.date.slice(0, 4), base = null; rows.forEach(function (x) { if (x.date < yr) base = x; });
@@ -804,7 +806,7 @@
     if (v === 'prefs') return D0.filter(function (x) { return x.id[0] === 'P'; });
     if (v === 'keys') return ['BTC', 'MNAV', 'GAIN', 'ATH', 'PLAW', 'HALV', 'FNG', 'DOM'].map(function (k) { return { id: 'D:' + k, tk: TKDL[k] }; });
     if (v === 'alts') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'D:DOM', tk: TKDL.DOM }, { id: 'D:BTCETH', tk: 'BTC/ETH' }, { id: 'D:BTCSOL', tk: 'BTC/SOL' }, { id: 'C:ETH', tk: 'ETH' }, { id: 'C:SOL', tk: 'SOL' }];
-    if (v === 'mine') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'S:MSTR', tk: 'MSTR' }, { id: 'D:MNAV', tk: TKDL.MNAV }, { id: 'S:ASST', tk: 'ASST' }, { id: 'P:STRC', tk: 'STRC' }, { id: 'D:GAIN', tk: TKDL.GAIN }];
+    if (v === 'mine') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'S:MSTR', tk: 'MSTR' }, { id: 'D:MNAV', tk: TKDL.MNAV }, { id: 'S:ASST', tk: 'ASST' }, { id: 'D:DOM', tk: TKDL.DOM }, { id: 'D:GAIN', tk: TKDL.GAIN }];
     return D0; }
   function tkDesk() { var L = [];
     tkRows().forEach(function (r) { L.push({ id: 'S:' + r.tk.toUpperCase(), tk: r.tk }); }); tkPrefs().forEach(function (t) { L.push({ id: 'P:' + t, tk: t }); });
@@ -923,22 +925,36 @@
 
   /* ---------- Desk Mode ---------- */
   var mmT = null, cycT = null;
+  // Labeled on/off toggle (header) + a top-right Exit button in Desk Mode that wakes on mouse move / tap and fades, + a short hint on entry.
+  var dmX = document.createElement('button'); dmX.type = 'button'; dmX.className = 'dm-x'; dmX.setAttribute('data-deskmode-exit', ''); dmX.innerHTML = '&times; Exit Desk Mode'; dmX.setAttribute('aria-label', 'Exit Desk Mode'); document.body.appendChild(dmX);
+  var dmH = document.createElement('div'); dmH.className = 'dm-hint'; dmH.setAttribute('role', 'status'); dmH.setAttribute('aria-live', 'polite'); document.body.appendChild(dmH);
+  function dmLabel(on) { $$('[data-deskmode]').forEach(function (b) { b.innerHTML = '&#9635; Desk Mode: ' + (on ? 'On' : 'Off'); b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.title = on ? 'Exit Desk Mode (Esc)' : 'Full-screen Desk Mode (Esc or the Exit button to leave)'; }); }
+  dmLabel(false);
+  // Desk Mode layouts: Grid (default), Focus (big numbers + main chart), Ticker wall (dense lists). Remembered per device ('btd_dml', not exported).
+  var DML = [['grid', 'Grid'], ['focus', 'Focus'], ['wall', 'Ticker wall']], dml = LS.get('btd_dml'); if (!DML.some(function (x) { return x[0] === dml; })) dml = 'grid';
+  function dmlApply() { DML.forEach(function (x) { document.body.classList.toggle('dml-' + x[0], x[0] === dml); }); $$('[data-dml]').forEach(function (b) { var on = b.dataset.dml === dml; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); window.dispatchEvent(new Event('resize')); }
+  var dmc = $('[data-dm-ctl]'); if (dmc) { var sg = document.createElement('span'); sg.className = 'seg dm-lay'; sg.setAttribute('role', 'group'); sg.setAttribute('aria-label', 'Desk Mode layout');
+    sg.innerHTML = DML.map(function (x) { return '<button type="button" data-dml="' + x[0] + '">' + x[1] + '</button>'; }).join(''); dmc.insertBefore(sg, dmc.firstChild);
+    sg.addEventListener('click', function (e) { var b = e.target.closest('[data-dml]'); if (!b) return; e.stopPropagation(); dml = b.dataset.dml; LS.set('btd_dml', dml); dmlApply(); dmWake(); }); }
+  dmlApply();
   function enterDM() {
-    document.body.classList.add('dm');
+    document.body.classList.add('dm'); dmLabel(true);
+    var touch = window.matchMedia && window.matchMedia('(hover:none)').matches; dmH.textContent = touch ? 'Desk Mode on · tap the screen, then tap Exit (top-right) to leave' : 'Desk Mode on · press Esc or click Exit (top-right) to leave';
+    dmH.classList.add('on'); setTimeout(function () { dmH.classList.remove('on'); }, 3800); dmWake();
     var de = document.documentElement; if (de.requestFullscreen) de.requestFullscreen().catch(function () {});
     setTimeout(function () { modelsKey = ''; models(); }, 400);
   }
   function exitDM() {
-    document.body.classList.remove('dm', 'mm'); setCycle(false);
+    document.body.classList.remove('dm', 'mm'); setCycle(false); dmLabel(false); dmH.classList.remove('on');
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
     setTimeout(function () { modelsKey = ''; models(); }, 400);
   }
-  $$('[data-deskmode]').forEach(function (b) { b.addEventListener('click', enterDM); });
-  $$('[data-deskmode-exit]').forEach(function (b) { b.addEventListener('click', exitDM); });
+  $$('[data-deskmode]').forEach(function (b) { b.addEventListener('click', function () { if (document.body.classList.contains('dm')) exitDM(); else enterDM(); }); });
+  $$('[data-deskmode-exit]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); exitDM(); }); });
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.body.classList.contains('dm')) exitDM(); });
   function dmWake() { // show Desk Mode controls on mouse move OR touch (phones have no mouse and no Esc key)
     if (!document.body.classList.contains('dm')) return; document.body.classList.add('mm');
-    clearTimeout(mmT); mmT = setTimeout(function () { document.body.classList.remove('mm'); }, 2500);
+    clearTimeout(mmT); mmT = setTimeout(function () { document.body.classList.remove('mm'); }, 3500);
   }
   document.addEventListener('mousemove', dmWake); document.addEventListener('touchstart', dmWake, { passive: true });
   function setCycle(on) {

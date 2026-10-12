@@ -98,6 +98,8 @@
       var mx = Math.max.apply(0, buys.map(function (b) { return b[2].btc; }).concat([1])); buys.forEach(function (b) { g.fillStyle = 'rgba(247,147,26,.9)'; g.strokeStyle = '#000'; g.beginPath(); g.arc(X(b[0]), Y(b[1]), 2.2 + Math.sqrt(b[2].btc / mx) * 6, 0, 7); g.fill(); g.stroke(); }); }
     g.restore();
     var lp = P[P.length - 1]; g.fillStyle = '#fff'; g.beginPath(); g.arc(X(lp[0]), Y(lp[1]), 3, 0, 7); g.fill();
+    if (mode !== 'cmp' && LIVE[mode] && LIVE[mode].px) { var lx = X(lp[0]), ly = Y(lp[1]), lt = 'live $' + fmt(lp[1], lp[1] < 1000 ? 2 : 0); g.font = 'bold 10px ui-monospace,Menlo,monospace'; var tw = g.measureText(lt).width + 10; // live current-price dot + label
+      g.fillStyle = 'rgba(247,147,26,.25)'; g.beginPath(); g.arc(lx, ly, 7, 0, 7); g.fill(); g.fillStyle = '#F7931A'; g.fillRect(Math.min(lx - tw - 9, w - pr - tw), ly - 8, tw, 16); g.fillStyle = '#0b0d10'; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText(lt, Math.min(lx - tw - 9, w - pr - tw) + 5, ly); }
     // headline numbers + foot
     var hd = body.querySelector('[data-pc-hd]'), pc = function (a) { return (a[a.length - 1][1] / a[0][1] - 1) * 100; }, cl = function (v) { return v >= 0 ? 'up' : 'dn'; }, sp = function (v) { return (v >= 0 ? '+' : '−') + fmt(Math.abs(v), Math.abs(v) < 100 ? 1 : 0) + '%'; };
     var plbl = m.per === 'All' ? (mode === 'cmp' ? 'since ' + new Date(x0).getUTCFullYear() : 'all') : m.per;
@@ -166,6 +168,7 @@
       mounts = mounts.filter(function (x) { return x.body !== body && document.body.contains(x.body); }); mounts.push(m);
       load().then(function () { return lay.indexOf('zones') >= 0 && isMem() ? needZones() : null; }).then(function () { paint(m); }).catch(function () { body.querySelector('[data-pc-hd]').textContent = 'Price history unavailable right now.'; });
     },
+    setLive: function (k, px) { if (!px) return; LIVE[k] = Object.assign({}, LIVE[k] || {}, { px: px }); var n = Date.now(); if (n - (this._t || 0) < 15000) return; this._t = n; this.repaint(); },
     repaint: function () { mounts.forEach(function (m) { if (document.body.contains(m.body)) paint(m); }); }
   };
 })();

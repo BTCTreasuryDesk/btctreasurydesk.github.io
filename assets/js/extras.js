@@ -50,6 +50,8 @@
     if (T.avg_cost || s.avg_cost) t.push(['Avg cost / BTC', '$' + fmt(T.avg_cost || s.avg_cost), 'ledger totals']);
     if (G.btc_gain_ytd != null) t.push(['BTC Gain YTD', sgn(G.btc_gain_ytd) + ' ₿', ld, G.btc_gain_ytd, '', 'BTC Gain: Strategy KPI. BTC Yield YTD x BTC held at the start of the year.']);
     if (G.usd_gain_ytd_musd != null) t.push(['BTC $ Gain YTD', musd(G.usd_gain_ytd_musd), ld, G.usd_gain_ytd_musd, '', 'BTC $ Gain: Strategy KPI. BTC Gain x the bitcoin price.']);
+    var PRI = ['BTC Gain YTD', 'BTC $ Gain YTD', 'BTC Yield YTD', 'BTC holdings', 'mNAV']; // Phil's compact order; the rest follow behind "More KPIs"
+    t = t.filter(function (x) { return PRI.indexOf(x[0]) >= 0; }).sort(function (a, b) { return PRI.indexOf(a[0]) - PRI.indexOf(b[0]); }).concat(t.filter(function (x) { return PRI.indexOf(x[0]) < 0; }));
     if (all) {
       if (G.btc_yield_qtd_pct != null) t.push(['BTC Yield QTD', pct(G.btc_yield_qtd_pct), ld, G.btc_yield_qtd_pct]);
       if (T.total_cost_musd) t.push(['Total cost', musd(T.total_cost_musd), 'ledger totals']);
@@ -199,7 +201,8 @@
   /* ---------- Spotlight (Strategy tab) ---------- */
   function spotlight(D, Q) {
     var p = (D.prefs_desk ? D.prefs_desk.rows : []).filter(function (x) { return x.t === 'STRC'; })[0], qq = Q && Q.items ? Q.items.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; })[0] : null;
-    return '<div class="x-spot">' + (p ? '<div class="x-k"><small>STRC (preferred)</small><b>' + p.rate.toFixed(2) + '%</b><small>' + esc(p.rate_kind) + ' rate · $' + p.close.toFixed(2) + ' close · ' + esc(p.pay) + '</small></div>' : '') +
+    var PR = D.prefs_desk ? D.prefs_desk.rows : [], EY = PR.map(function (x) { return x.rate * x.par / x.close; });
+    return '<div class="x-spot">' + (EY.length ? '<div class="x-k"><small>Preferreds (' + PR.length + ' series)</small><b>' + Math.min.apply(0, EY).toFixed(1) + '–' + Math.max.apply(0, EY).toFixed(1) + '%</b><small>effective yield range · ' + esc(PR.map(function (x) { return x.t; }).join(' · ')) + ' · <a href="/#preferreds-desk">Preferreds Desk</a></small></div>' : '') +
       (qq ? '<blockquote>&ldquo;' + esc(qq.text.length > 220 ? qq.text.slice(0, 217) + '…' : qq.text) + '&rdquo;<cite>Michael Saylor · ' + esc(qq.date_label || qq.date) + (qq.url ? ' · <a href="' + esc(qq.url) + '" target="_blank" rel="noopener">source</a>' : '') + '</cite></blockquote>' : '') + '</div>';
   }
 

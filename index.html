@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BTC Treasury Desk | News and analysis on Bitcoin treasury companies</title>
-  <meta name="description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), STRC and SATA preferreds, live dashboard and sourced data. Education only.">
+  <meta name="description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), preferreds (STRC, STRF, STRK, STRD, SATA), live dashboard and sourced data. Education only.">
   <link rel="canonical" href="https://btctreasurydesk.com/">
   <meta name="theme-color" content="#0b0c0d">
   <meta name="color-scheme" content="dark">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BTC Treasury Desk">
   <meta property="og:title" content="BTC Treasury Desk | News and analysis on Bitcoin treasury companies">
-  <meta property="og:description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), STRC and SATA preferreds, live dashboard and sourced data. Education only.">
+  <meta property="og:description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), preferreds (STRC, STRF, STRK, STRD, SATA), live dashboard and sourced data. Education only.">
   <meta property="og:url" content="https://btctreasurydesk.com/">
   <meta property="og:image" content="https://btctreasurydesk.com/assets/img/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@BTCTreasuryDesk">
   <meta name="twitter:title" content="BTC Treasury Desk | News and analysis on Bitcoin treasury companies">
-  <meta name="twitter:description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), STRC and SATA preferreds, live dashboard and sourced data. Education only.">
+  <meta name="twitter:description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), preferreds (STRC, STRF, STRK, STRD, SATA), live dashboard and sourced data. Education only.">
   <meta name="twitter:image" content="https://btctreasurydesk.com/assets/img/og-image.jpg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -32,11 +32,11 @@
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="preconnect" href="https://api.coingecko.com">
   <link rel="preconnect" href="https://s3.tradingview.com">
-  <link rel="stylesheet" href="/assets/css/desk.css?v=v2n">
+  <link rel="stylesheet" href="/assets/css/desk.css?v=v2v">
   <link rel="stylesheet" href="/assets/css/optin.css?v=o1">
 <link rel="stylesheet" href="/assets/css/layout.css?v=l3">
   <link rel="stylesheet" href="/assets/css/news.css?v=n3">
-  <link rel="stylesheet" href="/assets/css/extras.css?v=x9">
+  <link rel="stylesheet" href="/assets/css/extras.css?v=x14">
 </head><body class="desk">
   <a class="skip" href="#main">Skip to content</a>
   <header class="t-head">
@@ -58,7 +58,9 @@
 
     <section class="p p-kpi" data-x-kpi aria-label="Strategy (MSTR) KPIs, source strategy.com"><p class="x-mu">Loading Strategy KPIs…</p></section>
 
-    <section class="p p-charts" id="charts" data-charts aria-label="Main chart and chart library"></section>
+    <section class="p p-live" data-lvcard aria-label="Live price chart: BTC or MSTR"></section>
+
+    <section class="p p-charts" id="charts" data-charts aria-label="Charts: long-term price with models and TA, plus chart library"></section>
 
     <section class="p p-mnav p-mnavc" aria-label="MSTR mNAV: live, percentile, sparkline"><div class="p-h"><span class="p-t">MSTR mNAV</span><span class="tag">live</span><a class="more" href="#charts" data-mnav-full>Full chart &rarr;</a></div><div data-x-mnav><p class="x-mu">Loading…</p></div></section>
 
@@ -84,6 +86,7 @@
       <div class="tb-foot"><button type="button" class="chip tb-more" data-tb-more aria-expanded="false">Expand</button><button type="button" class="chip tb-live" data-tb-live aria-expanded="false">Live prices</button><span class="tb-src" data-tb-src></span></div>
     </section>
 
+    <section class="p p-movers" data-movers aria-label="Movers and Makers: treasury companies making waves"><p class="muted">Loading Movers &amp; Makers…</p></section>
     <section class="p p-pdesk" id="preferreds-desk" aria-label="Preferreds Desk: Strategy and Strive preferred stocks">
       <div class="p-h"><span class="p-t">Preferreds Desk</span><span class="tag">STRC · STRF · STRK · STRD · SATA</span><span class="tag" data-pd-asof>…</span><a class="more" href="/preferreds/">Yield Desk &rarr;</a></div>
       <div class="pd-wrap"><table class="pd"><thead><tr><th>Security</th><th>Live price · day</th><th>Rate</th><th title="Stated annual rate on $100 divided by last close">Eff. yield</th><th>Pays</th><th>Par</th><th>Type</th><th>Seniority</th><th>Next ex-div</th></tr></thead><tbody data-pd-rows></tbody></table></div>
@@ -128,9 +131,13 @@
     </section>
 
     <section class="p p-field" aria-label="Bitcoin vs the field">
-      <div class="p-h"><span class="p-t">Bitcoin vs the field</span><span class="tag" data-field-asof>live</span></div>
+      <div class="p-h"><span class="p-t" title="Bitcoin vs the field: dominance, ratios, sentiment, cycle">Quick glance</span><span class="tag" data-field-asof>live</span></div>
+      <div class="fg-hid">
       <div class="kv big"><span>BTC price</span><b class="mono" data-live="btc">…</b></div>
       <div class="kv"><span>24h</span><b class="mono" data-live="btc-24h">…</b></div>
+      </div>
+      <div class="fg-row">
+      <div class="fg-c">
       <div class="rt dom" data-rt="dom">
         <div class="kv"><span data-tip="Bitcoin's share of the total crypto market value. Rising = money moving into BTC relative to altcoins.">BTC dominance</span><b class="mono" data-live="dom">…</b></div>
         <div class="dom-ch mono" data-dom-ch>…</div>
@@ -138,6 +145,8 @@
         <div class="dom-rg" data-dom-rg></div>
         <div class="rt-s" data-rt-s="dom"></div>
       </div>
+      </div>
+      <div class="fg-c">
       <div class="sub-h rt-h"><span>Ratios vs 1-year history</span><span class="seg" role="group" aria-label="Sparkline window"><button type="button" data-rtw="30">1M</button><button type="button" data-rtw="365">1Y</button></span></div>
       <div class="rt" data-rt="eth">
         <div class="kv"><span data-tip="How many ETH one bitcoin buys. Rising means BTC is outperforming ETH.">BTC / ETH</span><b class="mono" data-live="btceth">…</b></div>
@@ -149,13 +158,22 @@
         <div class="rt-r"><canvas data-spark="sol" width="240" height="40" aria-label="BTC/SOL history sparkline"></canvas><span class="rt-c mono" data-rt-c="sol">…</span></div>
         <div class="rt-s" data-rt-s="sol"></div>
       </div>
-      <div class="kv"><span data-tip="How many sats (0.00000001 BTC) one US dollar buys right now.">Sats per $1</span><b class="mono" data-live="sats">…</b></div>
-      <p class="p-f">CoinGecko (fallback Coinbase); ratio history: CoinGecko daily closes, past 365 days. Dominance: live from CoinGecko; 1-year weekly history from CoinMarketCap (cross-checked, median gap 0.1pp).</p>
+      </div>
+      <div class="fg-c">
       <div class="sub-h">Sentiment</div>
       <div class="fng"><b class="mono" data-live="fng">…</b><span data-live="fng-cls"></span></div>
       <div class="bar fng-bar"><i data-live-bar="fng"></i></div>
       <div class="kv sm"><span>Yesterday · 1 week · 1 month ago</span><b class="mono" data-live="fng-hist">…</b></div>
-      <p class="p-f">Crypto Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a></p>
+      </div>
+      <div class="fg-c">
+      <div class="sub-h">Cycle</div>
+      <div class="kv"><span data-tip="How far BTC is below (or at) its highest daily close, including today's live price.">From all-time high</span><b class="mono" data-live="ath">…</b></div>
+      <div class="kv sm"><span>All-time high close</span><b class="mono" data-live="ath-v">…</b></div>
+      <div class="kv"><span data-tip="Estimated days to the next halving, when the new-BTC issuance per block is cut in half (about every 210,000 blocks, ~4 years). Estimate assumes 10-minute blocks.">Next halving</span><b class="mono" data-live="halv">…</b></div>
+      <div class="kv"><span data-tip="How many sats (0.00000001 BTC) one US dollar buys right now.">Sats per $1</span><b class="mono" data-live="sats">…</b></div>
+      </div>
+      </div>
+      <p class="p-f">Prices: CoinGecko (fallback Coinbase); ratio history: CoinGecko daily closes, past 365 days. Dominance: live from CoinGecko; 1-year weekly history from CoinMarketCap (cross-checked, median gap 0.1pp). Crypto Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a></p>
     </section>
 
     <section class="p p-ep" aria-label="Latest episode">
@@ -182,8 +200,8 @@
       <p class="p-f" data-strat-src></p>
     </section>
 
-    <section class="p p-week" aria-label="Week ahead">
-      <div class="p-h"><span class="p-t">Week ahead</span><span class="tag">ET</span></div>
+    <section class="p p-week" aria-label="Coming up: calendar">
+      <div class="p-h"><span class="p-t">Coming up</span><span class="tag">ET</span></div>
       <ul class="cal" data-week></ul>
       <a class="mem-cta" href="/members/"><b>Members area &rarr;</b><small>Free with your email: the Desk Library downloads and the Allocation Planner preview.</small></a>
     </section>
@@ -220,13 +238,16 @@
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-  <script src="/assets/js/desk.js?v=v2n" defer></script>
+  <script src="/assets/js/desk.js?v=v2s" defer></script>
   <script src="/members/members-config.js?v=m3" defer></script>
   <script src="/assets/js/optin.js?v=o2" defer></script>
-<script src="/assets/js/extras.js?v=x6" defer></script>
-<script src="/assets/js/price.js?v=p4"></script>
-<script src="/assets/js/charts.js?v=c5" defer></script>
-<script src="/assets/js/layout.js?v=l3"></script>
+<script src="/assets/js/extras.js?v=x13" defer></script>
+<script src="/assets/js/live.js?v=l2" defer></script>
+<script src="/assets/js/music.js?v=m3" defer></script>
+<script src="/assets/js/price.js?v=p5"></script>
+<script src="/assets/js/charts.js?v=c7" defer></script>
+<script src="/assets/js/layout.js?v=l7"></script>
+<script src="/assets/js/movers.js?v=mv1" defer></script>
 <script src="/assets/js/news.js?v=n3" defer></script>
 </body>
 </html>

@@ -1555,5 +1555,38 @@
         "why": "Early step toward onshore federal rules for leveraged crypto trading; no direct change for spot BTC or treasury stocks yet."
       }
     ]
+  },
+  "movers_week": {
+    "_note": "Written by tools/movers.py each Sunday: the top 3 Movers & Makers for the episode segment. Descriptive, no advice.",
+    "as_of": "2026-10-11",
+    "items": [
+      {
+        "tk": "3189.T",
+        "name": "Anap Holdings",
+        "why": "−17% in a week (BTC −2%)",
+        "also": [
+          "At a new 52-week low",
+          "Lagged BTC by 30 pts over a month"
+        ]
+      },
+      {
+        "tk": "CLSK",
+        "name": "CleanSpark",
+        "why": "−18% in a week (BTC −2%)",
+        "also": [
+          "Crossed below its 200-day average this week",
+          "Lagged BTC by 27 pts over a month"
+        ]
+      },
+      {
+        "tk": "RIOT",
+        "name": "Riot Platforms",
+        "why": "−14% in a week (BTC −2%)",
+        "also": [
+          "Crossed below its 200-day average this week",
+          "Lagged BTC by 29 pts over a month"
+        ]
+      }
+    ]
   }
 }

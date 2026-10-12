@@ -4,11 +4,8 @@
   'use strict';
   var main = document.querySelector('main.grid'); if (!main) return;
   var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var SECS = [ // default order = current page order
-    ['tiles', 'Price tiles (BTC, MSTR, Top 10)', '[data-strip]'], ['kpi', 'Market row + Strategy (MSTR) KPIs', '.p-kpi'], ['charts', 'Main chart + Chart library', '.p-charts'], ['mnav', 'MSTR mNAV card', '.p-mnav'],
-    ['wcw', 'What changed this week', '.p-wcw'], ['board', 'Treasury Board', '.p-tboard'], ['pdesk', 'Preferreds Desk', '.p-pdesk'],     ['chart', 'Live chart (TradingView)', '.p-chart'], ['zones', 'Model Zones', '.p-zones'], ['models', 'Bitcoin Models & Cycle', '.p-models'], ['field', 'Bitcoin vs the field', '.p-field'],
-    ['ep', 'Latest episode + Video of the Week', '.p-ep'], ['strat', 'Strategy & Strive', '.p-strat'], ['week', 'Week ahead', '.p-week'], ['news', 'News of the Week', '.p-news'],
-    ['optin', 'Weekly email box', '.p-optin'], ['links', 'Research desk', '.p-links']
+  var SECS = [ // default order (Phil's Full Desk)
+    ['tiles', 'Price tiles (BTC, MSTR, Top 10)', '[data-strip]'], ['kpi', 'Market row + Strategy (MSTR) KPIs', '.p-kpi'], ['live', 'Live price chart (BTC / MSTR)', '.p-live'], ['field', 'Quick glance: dominance, ratios, sentiment, ATH, halving', '.p-field'], ['movers', 'Movers & Makers', '.p-movers'], ['week', 'Coming up (calendar)', '.p-week'], ['pdesk', 'Preferreds Desk', '.p-pdesk'], ['ep', 'Latest episode + Video of the Week', '.p-ep'], ['news', 'News of the Week', '.p-news'], ['optin', 'Weekly email box', '.p-optin'], ['charts', 'Charts: long-term + models, chart library', '.p-charts'], ['board', 'Treasury Board', '.p-tboard'], ['mnav', 'MSTR mNAV card', '.p-mnav'], ['wcw', 'What changed this week', '.p-wcw'], ['strat', 'Strategy & Strive', '.p-strat'], ['zones', 'Model Zones', '.p-zones'], ['models', 'Bitcoin Models & Cycle', '.p-models'], ['chart', 'Live chart (TradingView)', '.p-chart'], ['links', 'Research desk', '.p-links']
   ];
   var DEFHID = ['chart']; // default-hidden: superseded by the main chart (still shown in Desk Mode)
   var NAME = {}, EL = {}, DEF = [];
@@ -28,13 +25,13 @@
   function apply() {
     L.order.forEach(function (k) { if (k === 'tiles' && cap) main.insertBefore(cap, tail); main.insertBefore(EL[k], tail); });
     DEF.forEach(function (k) { var h = L.hidden.indexOf(k) >= 0; EL[k].classList.toggle('sec-off', h); if (k === 'tiles' && cap) cap.classList.toggle('sec-off', h); });
-    main.classList.toggle('lay-custom', L.order.join() !== DEF.join() || L.hidden.length > 0);
+    main.classList.toggle('lay-custom', !isDef());
     window.dispatchEvent(new Event('resize')); // canvases re-measure after moving
   }
   apply();
 
   /* settings that travel with Export / Import (never membership or email state) */
-  var KEYS = ['btd_layout', 'btd_strip2', 'btd_tk2', 'btd_tk3', 'btd_ticker', 'btd_ctab', 'btd_cper', 'btd_mnav_p', 'btd_pmode', 'btd_pper', 'btd_cview', 'btd_cgrid', 'btd_news_open', 'btd_cmp', 'btd_mchart', 'btd_rtw', 'btd_tb', 'btd_mem_builder', 'btd_mem_plans', 'btd_mem_lab', 'btd_mem_freedom'];
+  var KEYS = ['btd_layout', 'btd_live', 'btd_music', 'btd_strip2', 'btd_tk2', 'btd_tk3', 'btd_cco', 'btd_ticker', 'btd_ctab', 'btd_cper', 'btd_mnav_p', 'btd_pmode', 'btd_pper', 'btd_cview', 'btd_cgrid', 'btd_news_open', 'btd_cmp', 'btd_mchart', 'btd_rtw', 'btd_tb', 'btd_mem_builder', 'btd_mem_plans', 'btd_mem_lab', 'btd_mem_freedom'];
   function snapshot() { var o = { app: 'btctreasurydesk', v: 1, saved: new Date().toISOString().slice(0, 10), s: {} }; KEYS.forEach(function (k) { var v = LS.get(k); if (v != null) o.s[k] = v; }); return o; }
   function toCode(o) { return 'BTD1-' + btoa(unescape(encodeURIComponent(JSON.stringify(o)))); }
   function parse(txt) { txt = String(txt || '').trim(); var o;
@@ -47,8 +44,8 @@
   var pnl = null, opener = null;
   /* Preset layouts: one tap sets order + visibility (still fully editable afterwards). Full Desk = the default. */
   var PRESETS = [['full', 'Full Desk', null, null],
-    ['strategy', 'Strategy focus', ['tiles', 'kpi', 'mnav', 'charts', 'strat', 'pdesk', 'news', 'week', 'wcw', 'board', 'ep'], ['chart', 'zones', 'models', 'field', 'links']],
-    ['minimal', 'Minimal', ['tiles', 'kpi', 'charts', 'mnav', 'news'], 'rest']];
+    ['strategy', 'Strategy focus', ['tiles', 'kpi', 'live', 'mnav', 'strat', 'pdesk', 'news', 'week', 'wcw', 'board', 'movers', 'charts', 'ep'], ['chart', 'zones', 'models', 'field', 'links']],
+    ['minimal', 'Minimal', ['tiles', 'kpi', 'live', 'field', 'news'], 'rest']];
   function preset(id) { var P = PRESETS.filter(function (x) { return x[0] === id; })[0]; if (!P || !P[2]) return { order: DEF.slice(), hidden: DEFHID.filter(function (k) { return EL[k]; }) };
     var order = P[2].filter(function (k) { return EL[k]; }); DEF.forEach(function (k) { if (order.indexOf(k) < 0) order.push(k); });
     var hidden = P[3] === 'rest' ? DEF.filter(function (k) { return P[2].indexOf(k) < 0; }) : P[3].filter(function (k) { return EL[k]; }); return { order: order, hidden: hidden }; }
