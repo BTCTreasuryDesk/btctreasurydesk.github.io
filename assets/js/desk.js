@@ -119,7 +119,7 @@
     var c = STRIP[i];
     if (i === 0) { var r = stripRow(c.tv); // MSTR: first, fixed, same size as the slim tiles, orange accent
       return '<div class="q-cell q-slim q-feat" data-qi="0"><div class="tv-slot" data-tvq="' + esc(c.tv) + '" data-tk="MSTR"></div><div class="q-foot"><span title="MSTR is the fixed featured tile">&#9733; #1' + (r ? '<i class="q-n"> · ' + esc(fmt(r.btc)) + ' ₿</i>' : '') + '</span><span class="q-mkt" data-mstr-mkt hidden></span></div></div>'; }
-    if (i === 1) return '<div class="q-cell q-btc" data-qi="1"><div class="tv-slot" data-tvq="' + esc(c.tv) + '"></div><div class="q-foot"><span>Bitcoin · live 24/7</span><span class="q-lock" title="BTC is a fixed tile">&#128274;</span></div></div>';
+    if (i === 1) return '<div class="q-cell q-slim q-btc" data-qi="1"><div class="tv-slot" data-tvq="' + esc(c.tv) + '" data-tk="BTC"></div><div class="q-foot"><span>Bitcoin · live 24/7</span><span class="q-lock" title="BTC is a fixed tile">&#128274;</span></div></div>';
     return '<div class="q-cell q-slim' + (c.own ? ' q-own' : '') + '" data-qi="' + i + '"><div class="tv-slot" data-tvq="' + esc(c.tv) + '" data-tk="' + esc(c.tk) + '"></div><div class="q-foot"><span>' + esc(stripMeta(i, c)) + '</span>' +
       (LOCK[c.tv] ? '<span class="q-lock" title="BTC is a fixed tile">&#128274;</span>' : '<button type="button" class="q-ed" data-q-edit="' + i + '" aria-haspopup="dialog" aria-label="Change tile ' + i + ' (' + esc(c.tk) + ')" title="Swap this tile">' +
       '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 2 14l.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>') + '</div></div>';
@@ -141,15 +141,15 @@
   function stripLoadQuote(el) {
     var v = el.dataset.tvq;
     if (v.indexOf('DATA:') === 0) { el.innerHTML = '<div class="dtile" data-dtile="' + esc(v.slice(5)) + '"></div>'; dataTiles(); return; }
-    if (el.closest('.q-btc')) { tv(el, 'mini-symbol-overview', { symbol: v, width: '100%', height: '100%', locale: 'en', dateRange: '1D', colorTheme: 'dark', isTransparent: true, autosize: true, largeChartUrl: '', noTimeScale: true, chartOnly: false }); return; }
     tv(el, 'tickers', { symbols: [{ proName: v, title: el.dataset.tk || v.split(':').pop() }], colorTheme: 'dark', isTransparent: true, showSymbolLogo: false, locale: 'en' });
   }
-  function stripQuote(el) { if (stripIO && el.closest('.q-slim') && !el.closest('.q-feat')) stripIO.observe(el); else stripLoadQuote(el); }
+  function stripQuote(el) { if (stripIO && el.closest('.q-rail')) stripIO.observe(el); else stripLoadQuote(el); }
   function stripApply(focusI) { // recompute; re-render only tiles whose symbol (or label) changed
     var s = $('[data-strip]'); if (!s) return; var old = STRIP; STRIP = stripCompute(OV);
     var rail = $('.q-rail', s);
     if (!rail || !$('[data-qi="0"]', s)) {
-      s.innerHTML = stripCell(0) + stripCell(1) + '<div class="q-rail" aria-label="#2 to #10 by BTC held">' + STRIP.slice(2).map(function (x, j) { return stripCell(j + 2); }).join('') + '</div>';
+      s.innerHTML = stripCell(1) + stripCell(0) + '<div class="q-rail" aria-label="#2 to #10 by BTC held">' + STRIP.slice(2).map(function (x, j) { return stripCell(j + 2); }).join('') +
+        '<a class="q-cell q-slim q-all" href="#board"><b>All 50 &darr;</b><small>Treasury Board: filters, mNAV, last buys</small></a></div>';
       $$('[data-tvq]', s).forEach(stripQuote);
     } else {
       STRIP.forEach(function (c, i) {
