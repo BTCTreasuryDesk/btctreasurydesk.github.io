@@ -121,7 +121,7 @@ body.dm .chart-box{height:calc(100vh - 160px)}
 .tb-live{display:none}
 @media (max-width:720px){
  .tb{grid-template-columns:1fr}.tb-ftog{display:inline-block}.tb-f{display:none;flex-basis:100%}.p-tboard.fopen .tb-f{display:flex}.tb-fl{margin-left:0}
- .tb-t .c-sec,.tb-t .c-co{display:none}.tb-more{display:inline-block}.tb-tbl{max-height:none;overflow:visible}.tb-t tbody tr.x5{display:none}.p-tboard.open .tb-tbl{max-height:250px;overflow:auto}.p-tboard.open .tb-t tbody tr.x5{display:table-row}
+ .tb-t .c-sec,.tb-t .c-co{display:none}.tb-more{display:none!important}.tb-tbl{max-height:262px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
  .tb-q{display:none;border-left:0;padding-left:0}.p-tboard.qopen .tb-q{display:flex}.tb-qw{height:250px}.tb-live{display:inline-block}.tb-foot{flex-wrap:wrap}
 }
 /* Desk Mode: compact board under the chart */
@@ -226,3 +226,7 @@ body.dm .q-ed{display:none}
 .pd-st{font:700 9px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#000;background:#e8b04a;padding:1px 5px;border-radius:2px}
 body.dm .p-pdesk{display:none}
 @media (min-width:1180px){.strip-all{display:none}}
+
+#board{scroll-margin-top:64px}
+@media (hover:none){body.dm .dm-ctl{opacity:1;pointer-events:auto;left:8px;right:8px;bottom:8px;justify-content:space-between}}
+body.dm .dm-yt,body.dm .dm-ctl{z-index:2147483000}

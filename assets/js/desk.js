@@ -420,7 +420,7 @@
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('#board button'); if (!b) return;
-    if (b.dataset.tbN) TBS.n = +b.dataset.tbN;
+    if (b.dataset.tbN) { TBS.n = +b.dataset.tbN; var sc = $('[data-tb-scroll]'); if (sc) sc.scrollTop = 0; }
     else if (b.dataset.pin) { var k = b.dataset.pin, i = TBS.pins.indexOf(k); if (i >= 0) TBS.pins.splice(i, 1); else TBS.pins.push(k); }
     else if (b.dataset.v && b.parentNode.dataset.tbG) TBS[b.parentNode.dataset.tbG] = b.dataset.v;
     else if (b.hasAttribute('data-tb-more')) TBS.open = !TBS.open;
@@ -430,6 +430,11 @@
     tbSave(); tbPaint();
   });
   window.addEventListener('resize', function () { clearTimeout(tbT); tbT = setTimeout(tbPaint, 300); });
+  document.addEventListener('click', function (e) { // strip "All 50" link/tile: open the board on All 50 and scroll to it
+    var a = e.target.closest && e.target.closest('a.q-all, a.strip-all'); if (!a) return; e.preventDefault();
+    TBS.n = 50; TBS.reg = 'all'; TBS.type = 'all'; tbSave(); tbPaint(); var sc = $('[data-tb-scroll]'); if (sc) sc.scrollTop = 0;
+    var bd = $('#board'); if (bd) bd.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  });
 
   /* ---------- stale-data dot + jargon tooltips ---------- */
   function tipN(n, t) { return '<span data-tip="' + esc(t) + '">' + esc(n) + '</span>'; }
@@ -765,10 +770,11 @@
   $$('[data-deskmode]').forEach(function (b) { b.addEventListener('click', enterDM); });
   $$('[data-deskmode-exit]').forEach(function (b) { b.addEventListener('click', exitDM); });
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.body.classList.contains('dm')) exitDM(); });
-  document.addEventListener('mousemove', function () {
+  function dmWake() { // show Desk Mode controls on mouse move OR touch (phones have no mouse and no Esc key)
     if (!document.body.classList.contains('dm')) return; document.body.classList.add('mm');
     clearTimeout(mmT); mmT = setTimeout(function () { document.body.classList.remove('mm'); }, 2500);
-  });
+  }
+  document.addEventListener('mousemove', dmWake); document.addEventListener('touchstart', dmWake, { passive: true });
   function setCycle(on) {
     $$('[data-autocycle]').forEach(function (x) { x.checked = on; });
     clearInterval(cycT); if (on) cycT = setInterval(function () { step(1); }, 45e3);
