@@ -311,7 +311,7 @@
   function nyToday() { var p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); return p; }
   function daysSince(iso) { return Math.max(0, Math.round((Date.parse(nyToday()) - Date.parse(iso)) / 864e5)); }
   fetch('/assets/data/desk.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
-    DESK = d; var s = d.strategy, st = d.strive, ep = d.episode, v = d.video_of_week;
+    DESK = d; setTimeout(tkFetch, 0); var s = d.strategy, st = d.strive, ep = d.episode, v = d.video_of_week;
     setK('mstr-btc', fmt(s.btc_held)); setK('asst-btc', fmt(st.btc_held));
     setK('mnav', s.mnav.toFixed(2) + 'x'); setK('bps', fmt(s.sats_per_share) + ' <small>sats</small>');
     setK('mstr-days', daysSince(s.last_buy_reported) + ' <small>(+' + fmt(s.last_buy_btc) + ' BTC, ' + dateLbl(s.last_buy_reported).replace(/, \d+$/, '') + ')</small>');
@@ -510,12 +510,12 @@
   function coinbaseSpot(sym) { return fetch('https://api.coinbase.com/v2/prices/' + sym + '-USD/spot').then(function (r) { return r.json(); }).then(function (j) { return +j.data.amount; }); }
   function pullPrices() {
     return getJSON(CG + '/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true', 'px', 45e3)
-      .then(function (p) { return { btc: p.bitcoin.usd, btc24: p.bitcoin.usd_24h_change, eth: p.ethereum.usd, sol: p.solana.usd, src: 'CoinGecko' }; })
+      .then(function (p) { return { btc: p.bitcoin.usd, btc24: p.bitcoin.usd_24h_change, eth: p.ethereum.usd, sol: p.solana.usd, eth24: p.ethereum.usd_24h_change, sol24: p.solana.usd_24h_change, src: 'CoinGecko' }; })
       .catch(function () { return Promise.all([coinbaseSpot('BTC'), coinbaseSpot('ETH'), coinbaseSpot('SOL')]).then(function (a) { return { btc: a[0], btc24: null, eth: a[1], sol: a[2], src: 'Coinbase' }; }); });
   }
   function refreshMarket() {
     pullPrices().then(function (p) {
-      live.btc = p.btc; live.eth = p.eth; live.sol = p.sol; fieldStale(); paintRatios();
+      live.btc = p.btc; live.eth = p.eth; live.sol = p.sol; live.eth24 = p.eth24; live.sol24 = p.sol24; fieldStale(); paintRatios();
       setLive('btc', usd(p.btc), p.btc); setLive('btc-24h', p.btc24 == null ? '—' : pct(p.btc24), p.btc24, true);
       setLive('btceth', (p.btc / p.eth).toFixed(2) + ' ETH', p.btc / p.eth); setLive('btcsol', fmt(p.btc / p.sol, 1) + ' SOL', p.btc / p.sol);
       setLive('sats', fmt(1e8 / p.btc) + ' sats', 1e8 / p.btc);
@@ -736,23 +736,51 @@
   /* ---------- optional thin ticker (off by default) ---------- */
   var tk = $('[data-ticker]'), tkBtn = $('[data-ticker-toggle]');
   var MET = null; fetch('/assets/data/metrics.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (m) { MET = m; ticker(); }).catch(function () {});
-  function ticker() { // order: treasury stock prices, preferreds, then the high-value data
-    dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return; var items = [];
-    if (LAST) ['MSTR', 'ASST', 'MPJPY', 'XXI', 'MARA', 'COIN'].forEach(function (t) { var q = LAST.q[t]; if (q) items.push([t, '$' + q.c.toFixed(2), (q.c / q.prev - 1) * 100]); });
-    if (DESK) DESK.preferreds.forEach(function (p) { items.push([p.t, '$' + p.price.toFixed(2) + ' · ' + p.rate.toFixed(2) + '%']); });
-    if (MET) ['STRF', 'STRK', 'STRD'].forEach(function (t) { var m = MET.securities[t]; if (m) items.push([t, m.price + ' · ' + m.dividend]); });
+  /* Price scroll: top 20 by BTC held (+ Strive and Smarter Web), preferreds, key data, then BTC vs alts. Live via CNBC (same feed as the tiles), last close as fallback. */
+  var TKQ = {}, TKP = ['STRC', 'STRF', 'STRK', 'STRD', 'SATA'];
+  function tkRows() { if (!DESK) return []; var r = DESK.treasuries.rows.slice().sort(function (a, b) { return b.btc - a.btc; }), L = r.slice(0, 20);
+    ['ASST', 'SWC'].forEach(function (t) { if (!L.some(function (x) { return x.tk === t; })) { var x = r.filter(function (y) { return y.tk === t; })[0]; if (x) L.push(x); } }); return L; }
+  function tkCn(r) { return r.tk === 'SWC' ? 'SWC-GB' : r.tv ? qtCnbc(r.tv) : null; }
+  function tkFetch() {
+    if (!tk || tk.hidden || document.hidden || !DESK) return; var sy = [];
+    tkRows().forEach(function (r) { var c = tkCn(r); if (c && sy.indexOf(c) < 0) sy.push(c); }); TKP.concat(DESK.prefs_desk ? DESK.prefs_desk.rows.map(function (x) { return x.t; }) : []).forEach(function (t) { if (sy.indexOf(t) < 0) sy.push(t); });
+    fetch('https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols=' + encodeURIComponent(sy.join('|')) + '&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1')
+      .then(function (r) { return r.json(); }).then(function (j) {
+        var arr = (j.FormattedQuoteResult || {}).FormattedQuote || []; arr = Array.isArray(arr) ? arr : [arr];
+        arr.forEach(function (x) { var px = parseFloat(String(x.last).replace(/,/g, '')); if (!isFinite(px) || String(x.code) !== '0') return;
+          TKQ[x.symbol] = { px: px, chp: parseFloat(String(x.change_pct).replace(/[%+,]/g, '')), cur: x.currencyCode }; });
+        ticker(); }).catch(function () {});
+  }
+  setInterval(tkFetch, 60000);
+  function tkPx(q) { return q.cur === 'GBp' ? q.px.toFixed(2) + 'p' : q.cur && q.cur !== 'USD' ? q.px.toFixed(2) + ' ' + q.cur : '$' + (q.px < 10 ? q.px.toFixed(3) : q.px.toFixed(2)); }
+  function mstrLive() { var q = TKQ.MSTR || QT['NASDAQ:MSTR']; return q && q.px ? q.px : (LAST && LAST.q.MSTR ? LAST.q.MSTR.c : null); }
+  // Live mNAV, strategy.com method: EV (MSTR price x implied shares + debt + pref - USD reserve/cash) / (BTC held x BTC price).
+  window.btdLiveMnav = function (K, mstr, btc) { var L = K && K.live; if (!L || !mstr || !btc) return null; var sh = L.market_cap_musd / L.mstr_close, cash = L.market_cap_musd + L.debt_musd + L.pref_musd - L.ev_musd;
+    return (mstr * sh + L.debt_musd + L.pref_musd - cash) / (L.btc_held * btc / 1e6); };
+  function ticker() {
+    dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return; var items = [], seen = {};
+    tkRows().forEach(function (r) { var q = TKQ[tkCn(r)]; if (q) items.push([r.tk, tkPx(q), q.chp]); else if (LAST && LAST.q[r.tk]) { var l = LAST.q[r.tk]; items.push([r.tk, '$' + l.c.toFixed(2) + ' close', (l.c / l.prev - 1) * 100]); } });
+    var PR = DESK && DESK.prefs_desk ? DESK.prefs_desk.rows : [];
+    var PT = TKP.slice(); PR.forEach(function (x) { if (PT.indexOf(x.t) < 0) PT.push(x.t); });
+    PT.forEach(function (t) { var q = TKQ[t], d = PR.filter(function (x) { return x.t === t; })[0]; if (!q && !d) return;
+      items.push([t, (q ? '$' + q.px.toFixed(2) : '$' + d.close.toFixed(2) + ' close') + (d ? ' · ' + d.rate.toFixed(2) + '%' : ''), q ? q.chp : d && d.prev ? (d.close / d.prev - 1) * 100 : null]); });
     items.push(['BTC', live.btc ? usd(live.btc) : '—']);
-    if (DESK) { var s = DESK.strategy; items.push(['MSTR mNAV', s.mnav.toFixed(2) + 'x'], ['Strategy', fmt(s.btc_held) + ' ₿'], ['Last buy', '+' + fmt(s.last_buy_btc) + ' ₿ · ' + dateLbl(s.last_buy_reported)]); }
-    if (live.dom) items.push(['BTC.D', live.dom.toFixed(1) + '%']); if (live.btc && live.eth) items.push(['BTC/ETH', (live.btc / live.eth).toFixed(1)]); if (live.btc && live.sol) items.push(['BTC/SOL', (live.btc / live.sol).toFixed(0)]);
+    if (DESK) { var s = DESK.strategy, K = s.kpis, mn = window.btdLiveMnav(K, mstrLive(), live.btc);
+      items.push(['MSTR mNAV', mn ? mn.toFixed(2) + 'x live' : s.mnav.toFixed(2) + 'x']);
+      if (K && K.ledger && K.ledger.btc_gain_ytd != null) items.push(['Strategy BTC Gain YTD', (K.ledger.btc_gain_ytd < 0 ? '−' : '+') + fmt(Math.abs(K.ledger.btc_gain_ytd)) + ' ₿', null, K.ledger.btc_gain_ytd < 0 ? 'dn' : 'up']); }
+    if (live.dom) items.push(['BTC.D', live.dom.toFixed(1) + '%']);
+    if (live.btc && live.eth) items.push(['BTC/ETH', (live.btc / live.eth).toFixed(1)]); if (live.btc && live.sol) items.push(['BTC/SOL', (live.btc / live.sol).toFixed(0)]);
     if (live.fng) items.push(['Fear & Greed', live.fng]);
     var ath = athOf(); if (ath && live.btc) items.push(['From ATH', pct((live.btc / ath - 1) * 100, 1)]);
     if (live.btc) items.push(['Power Law', (live.btc / plaw(Date.now())).toFixed(2) + 'x trend']);
     var nh = Date.UTC(2024, 3, 20) + 210000 * 600e3; items.push(['Halving', '~' + Math.max(0, Math.ceil((nh - Date.now()) / 864e5)) + ' days']);
-    inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + esc(x[1]) + (x[2] != null ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : ''); }).join('') + '<b class="muted">Stocks: last close</b>';
+    if (live.eth) items.push(['ETH', usd(live.eth), live.eth24]); if (live.sol) items.push(['SOL', usd(live.sol), live.sol24]);
+    inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : ''); }).join('') + '<b class="muted">Stocks via CNBC (some delayed); "close" = last close</b>';
+    inn.style.animationDuration = Math.max(140, items.length * 6) + 's'; // keep it slow however long the list is
   }
   // Off by default; a visitor's On/Off click is saved as their default. Reduced-motion visitors always start Off (and it never animates for them).
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setTicker(on, save) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); tkBtn.textContent = 'Price scroll: ' + (on ? 'On' : 'Off'); if (save) LS.set('btd_ticker', on ? '1' : '0'); ticker(); }
+  function setTicker(on, save) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); tkBtn.textContent = 'Price scroll: ' + (on ? 'On' : 'Off'); if (save) LS.set('btd_ticker', on ? '1' : '0'); ticker(); if (on) tkFetch(); }
   if (tk && tkBtn) { setTicker(!RM && LS.get('btd_ticker') === '1', false); tkBtn.addEventListener('click', function () { setTicker(tk.hidden, true); }); }
 
   /* ---------- Desk Mode ---------- */

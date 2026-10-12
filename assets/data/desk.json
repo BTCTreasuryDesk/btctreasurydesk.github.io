@@ -59,6 +59,48 @@
     "kpi_src": {
       "name": "strategy.com dashboard",
       "url": "https://www.strategy.com/"
+    },
+    "kpis": {
+      "live": {
+        "as_of_btc": "2026-10-11 09:25 PM ET",
+        "as_of_securities": "10/09/2026 04:00 PM ET",
+        "btc_held": 848000.3,
+        "mnav": 1.1975,
+        "btc_nav_musd": 71122,
+        "total_reserve_musd": 76833,
+        "net_reserve_musd": 56973,
+        "amplification": 1.2483,
+        "sats_per_share": 187748,
+        "btc_acquired_ytd": 175500,
+        "dividend_coverage_yrs": 48.6025,
+        "market_cap_musd": 65142.0,
+        "ev_musd": 80091.0,
+        "debt_musd": 6714.0,
+        "pref_musd": 13946.0,
+        "mstr_close": 154.34
+      },
+      "ledger": {
+        "as_of": "2026-10-05",
+        "row": 122,
+        "btc_held": 848000.0,
+        "adso_k": 451577.0,
+        "btc_yield_qtd_pct": 0.0,
+        "btc_yield_ytd_pct": -3.7,
+        "btc_gain_ytd": -24963.0,
+        "usd_gain_ytd_musd": -2104.0,
+        "btc_reserve_musd": 71477.0
+      },
+      "totals": {
+        "btc_held": 848000.0,
+        "avg_cost": 75441.0,
+        "total_cost_musd": 63974.0
+      },
+      "retrieved": "2026-10-11",
+      "src": {
+        "name": "strategy.com (dashboard + BTC ledger)",
+        "url": "https://www.strategy.com/purchases"
+      },
+      "_note": "Official strategy.com figures only. ledger.* = latest ledger row (BTC Yield / Gain are Strategy KPIs; see strategy.com/notes). live.* = dashboard at retrieval time."
     }
   },
   "strive": {
@@ -768,7 +810,225 @@
         "last_add_src": "Not tracked in our dataset yet"
       }
     ],
-    "pool_note": "Top 50 ranked public companies by BTC held, BitcoinTreasuries.NET, viewed Oct 11, 2026. Types: our classification (pure-play treasury / miner / operating company), based on BitcoinTreasuries.NET categories."
+    "pool_note": "Top 50 ranked public companies by BTC held, BitcoinTreasuries.NET, viewed Oct 11, 2026. Types: our classification (pure-play treasury / miner / operating company), based on BitcoinTreasuries.NET categories.",
+    "prev": {
+      "as_of": "2026-10-04",
+      "src": "BitcoinTreasuries.NET ranked list, retrieved 2026-10-04",
+      "_note": "Sunday refresh: BEFORE updating rows, copy each row's current btc and rank here and set as_of to the old treasuries.as_of. Used for week-over-week board movers.",
+      "rows": {
+        "MSTR": {
+          "btc": 847666.0,
+          "rank": 1
+        },
+        "MPJPY": {
+          "btc": 43000.0,
+          "rank": 3
+        },
+        "XXI": {
+          "btc": 43514.0,
+          "rank": 2
+        },
+        "MARA": {
+          "btc": 35577.0,
+          "rank": 4
+        },
+        "ASST": {
+          "btc": 27462.0,
+          "rank": 5
+        },
+        "BLSH": {
+          "btc": 22000.0,
+          "rank": 6
+        },
+        "SPCX": {
+          "btc": 18712.0,
+          "rank": 7
+        },
+        "COIN": {
+          "btc": 17311.0,
+          "rank": 8
+        },
+        "CLSK": {
+          "btc": 13703.0,
+          "rank": 9
+        },
+        "DJT": {
+          "btc": 12061.66,
+          "rank": 10
+        },
+        "TSLA": {
+          "btc": 11509.0,
+          "rank": 11
+        },
+        "RIOT": {
+          "btc": 11380.0,
+          "rank": 12
+        },
+        "HUT": {
+          "btc": 10278.0,
+          "rank": 13
+        },
+        "XYZ": {
+          "btc": 9117.0,
+          "rank": 14
+        },
+        "ABTC": {
+          "btc": 8300.0,
+          "rank": 15
+        },
+        "GDC": {
+          "btc": 7500.0,
+          "rank": 16
+        },
+        "GLXY": {
+          "btc": 6894.0,
+          "rank": 17
+        },
+        "NXTT": {
+          "btc": 5833.0,
+          "rank": 18
+        },
+        "GEMI": {
+          "btc": 5528.0,
+          "rank": 19
+        },
+        "SVIA": {
+          "btc": 5130.0,
+          "rank": 20
+        },
+        "0434.HK": {
+          "btc": 4468.0,
+          "rank": 21
+        },
+        "NAKA": {
+          "btc": 4467.0,
+          "rank": 22
+        },
+        "OBTC3": {
+          "btc": 3950.0,
+          "rank": 23
+        },
+        "ADE": {
+          "btc": 3605.0,
+          "rank": 24
+        },
+        "ALCPB": {
+          "btc": 3538.0,
+          "rank": 25
+        },
+        "H100": {
+          "btc": 3506.4,
+          "rank": 26
+        },
+        "DDC": {
+          "btc": 2899.0,
+          "rank": 27
+        },
+        "IOND": {
+          "btc": 2882.0,
+          "rank": 28
+        },
+        "SWC": {
+          "btc": 2747.0,
+          "rank": 29
+        },
+        "DEFT": {
+          "btc": 2596.96,
+          "rank": 30
+        },
+        "BTGO": {
+          "btc": 2523.0,
+          "rank": 31
+        },
+        "KEEL": {
+          "btc": 2469.0,
+          "rank": 32
+        },
+        "ZBAO": {
+          "btc": 2380.0,
+          "rank": 33
+        },
+        "HOLO": {
+          "btc": 2353.0,
+          "rank": 34
+        },
+        "CAN": {
+          "btc": 1917.0,
+          "rank": 35
+        },
+        "3659.T": {
+          "btc": 1717.0,
+          "rank": 36
+        },
+        "3825.T": {
+          "btc": 1501.27,
+          "rank": 37
+        },
+        "3189.T": {
+          "btc": 1422.79,
+          "rank": 38
+        },
+        "FUFU": {
+          "btc": 1373.0,
+          "rank": 39
+        },
+        "EMPD": {
+          "btc": 1179.0,
+          "rank": 40
+        },
+        "TRSR": {
+          "btc": 1111.0,
+          "rank": 41
+        },
+        "CANG": {
+          "btc": 1065.11,
+          "rank": 42
+        },
+        "ZOOZ": {
+          "btc": 1046.0,
+          "rank": 43
+        },
+        "FIG": {
+          "btc": 1016.0,
+          "rank": 44
+        },
+        "NA": {
+          "btc": 1000.0,
+          "rank": 45
+        },
+        "USBC": {
+          "btc": 1000.0,
+          "rank": 46
+        },
+        "APUS": {
+          "btc": 1000.0,
+          "rank": 47
+        },
+        "CIMG": {
+          "btc": 937.7,
+          "rank": 48
+        },
+        "CORZ": {
+          "btc": 848.0,
+          "rank": 49
+        },
+        "MSW": {
+          "btc": 833.0,
+          "rank": 50
+        }
+      }
+    },
+    "public": {
+      "total_btc": 1275684,
+      "count": 197,
+      "strategy_btc": 847666,
+      "as_of": "2026-10-04",
+      "src": {
+        "name": "BitcoinTreasuries.NET public-company total",
+        "url": "https://bitcointreasuries.net/"
+      },
+      "_note": "Sunday refresh: total BTC held by all public companies and the number listed, from the BitcoinTreasuries.NET headline, same retrieval date."
+    }
   },
   "week_ahead": [
     {
