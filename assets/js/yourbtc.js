@@ -61,7 +61,7 @@
     if (u) { el.className = 'yb-card yb-bad'; el.innerHTML = '<b class="yb-ck">\u2715</b><div><b>\u201c' + esc(u) + '\u201d is not in our top-50 list</b><small>Try a ticker (MSTR, MPJPY, ASST) or a company name. Showing ' + esc(lbl(c)) + '.</small></div>'; return; }
     var mstr = c.t === 'MSTR', sh = c.bps ? c.btc / c.bps : null, shAsof = mstr && DESK && DESK.strategy.btc_as_of ? DESK.strategy.btc_as_of : String(asof).slice(0, 10), shSrc = mstr ? 'strategy.com, assumed diluted' : 'BitcoinTreasuries.NET, basic';
     var spx = sq && sq.px != null ? (sq.ext && F.session() !== 'open' ? sq.ext.px : sq.px) : null, cur = sq ? sq.cur : c.cur, usdL = cur === 'USD' || !cur;
-    var back = spx && usdL && b && c.bps ? c.bps * b.px / spx * 100 : null, lb2 = lastBuy(c), L = mstr && DESK && DESK.strategy.kpis ? DESK.strategy.kpis.ledger || {} : null;
+    var back = spx && usdL && b && c.bps ? c.bps * b.px / spx * 100 : null, lb2 = lastBuy(c), L = mstr && DESK && DESK.strategy.kpis ? DESK.strategy.kpis.ledger || {} : null; if (L && L.as_of && L.btc_acq) lb2 = [L.as_of, (L.btc_acq > 0 ? '+' : '') + n(L.btc_acq) + ' BTC \u00b7 strategy.com ledger'];
     var kv = [['BTC held', n(c.btc) + ' BTC <small>#' + c.rank + ' by holdings</small>'],
       ['Shares outstanding', sh ? n(sh) + ' <small>as of ' + esc(shAsof) + ' \u00b7 ' + shSrc + '</small>' : '<small>data coming soon</small>'],
       ['BTC per share', c.bps ? c.bps.toFixed(8) + ' BTC' : '\u2014'], ['Sats per share', c.bps ? n(Math.round(c.bps * 1e8)) + ' sats' : '\u2014'],

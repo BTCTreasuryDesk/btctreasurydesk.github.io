@@ -49,40 +49,41 @@
     },
     "kpis": {
       "live": {
-        "as_of_btc": "2026-10-11 09:25 PM ET",
-        "as_of_securities": "10/09/2026 04:00 PM ET",
-        "btc_held": 848000.3,
-        "mnav": 1.1975,
-        "btc_nav_musd": 71122,
-        "total_reserve_musd": 76833,
-        "net_reserve_musd": 56973,
-        "amplification": 1.2483,
-        "sats_per_share": 187748,
-        "btc_acquired_ytd": 175500,
-        "dividend_coverage_yrs": 48.6025,
-        "market_cap_musd": 65142.0,
-        "ev_musd": 80091.0,
+        "as_of_btc": "2026-10-18 06:57 PM ET",
+        "as_of_securities": "10/16/2026 04:00 PM ET",
+        "btc_held": 848250.0,
+        "mnav": 1.0767,
+        "btc_nav_musd": 69289,
+        "total_reserve_musd": 74807,
+        "net_reserve_musd": 54345,
+        "amplification": 1.275,
+        "sats_per_share": 187750,
+        "btc_acquired_ytd": 175750,
+        "dividend_coverage_yrs": 48.04,
+        "market_cap_musd": 57769.0,
+        "ev_musd": 72713.0,
         "debt_musd": 6714.0,
-        "pref_musd": 13946.0,
-        "mstr_close": 154.34
+        "pref_musd": 13748.0,
+        "mstr_close": 136.83
       },
       "ledger": {
-        "as_of": "2026-10-05",
-        "row": 122,
-        "btc_held": 848000.0,
-        "adso_k": 451577.0,
+        "as_of": "2026-10-12",
+        "row": 123,
+        "btc_acq": 250.0,
+        "btc_held": 848250.0,
+        "adso_k": 451797.0,
         "btc_yield_qtd_pct": 0.0,
         "btc_yield_ytd_pct": -3.7,
-        "btc_gain_ytd": -24963.0,
-        "usd_gain_ytd_musd": -2104.0,
-        "btc_reserve_musd": 71477.0
+        "btc_gain_ytd": -24954.0,
+        "usd_gain_ytd_musd": -2053.0,
+        "btc_reserve_musd": 69771.0
       },
       "totals": {
-        "btc_held": 848000.0,
-        "avg_cost": 75441.0,
-        "total_cost_musd": 63974.0
+        "btc_held": 848250.0,
+        "avg_cost": 75444.0,
+        "total_cost_musd": 63995.0
       },
-      "retrieved": "2026-10-11",
+      "retrieved": "2026-10-18",
       "src": {
         "name": "strategy.com (dashboard + BTC ledger)",
         "url": "https://www.strategy.com/purchases"
@@ -157,7 +158,7 @@
         "mnav": 1.2,
         "mnav_src": "strategy.com, Oct 11",
         "last_add": "2026-10-12",
-        "last_add_src": "Strategy 8-K, Oct 5 (+334 BTC)"
+        "last_add_src": "Strategy 8-K, Oct 12 (+250 BTC)"
       },
       {
         "rank": 2,

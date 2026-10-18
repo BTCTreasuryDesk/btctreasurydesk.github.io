@@ -30,7 +30,7 @@ m = re.search(r'\n(\d+)\t(\d{1,2}/\d{1,2}/\d{4})\t(.*?)\n(?=\d+\t\d{1,2}/\d{1,2}
 tok = re.findall(r'\(?-?\$?[\d,.]+%?\)?', m.group(3))
 if len(tok) >= 10:
     d = datetime.datetime.strptime(m.group(2), '%m/%d/%Y').date().isoformat()
-    k['ledger'] = {'as_of': d, 'row': int(m.group(1)), 'btc_held': num(tok[3]), 'adso_k': num(tok[4]),
+    k['ledger'] = {'as_of': d, 'row': int(m.group(1)), 'btc_acq': num(tok[0]), 'btc_held': num(tok[3]), 'adso_k': num(tok[4]),
                    'btc_yield_qtd_pct': num(tok[5]), 'btc_yield_ytd_pct': num(tok[6]), 'btc_gain_ytd': num(tok[7]),
                    'usd_gain_ytd_musd': num(tok[8]), 'btc_reserve_musd': num(tok[9])}
 tot = re.search(r'BTC Reserve\s\(\$M\)\s+([\d,]+)\s+\$([\d,]+)\s+\$([\d,]+)', t)
