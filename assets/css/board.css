@@ -157,11 +157,21 @@ body.dm main.grid>.p-hs{display:none}
 @media (prefers-reduced-motion:reduce){.lc-dot{animation:none}}
 /* Phone hero: just the big price, % change, minimal 1H/1D/1W tabs and the chart */
 @media (max-width:760px){
-  body:not(.dm) .p-live .lc-sym,body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-add,body:not(.dm) .p-live .lc-hl,body:not(.dm) .p-live .lc-ft,body:not(.dm) .p-live .lc-cmp,body:not(.dm) .p-live .lc-name{display:none!important}
+  body:not(.dm) .p-live .lc-sym,body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-add,body:not(.dm) .p-live .lc-hl,body:not(.dm) .p-live .lc-ft,body:not(.dm) .p-live .lc-cmp{display:none!important}
   body:not(.dm) .p-live [data-lc-r="1M"],body:not(.dm) .p-live [data-lc-r="1Y"],body:not(.dm) .p-live [data-lc-r="All"]{display:none}
   body:not(.dm) .p-live .lc-h{justify-content:flex-end;margin-bottom:0}
   body:not(.dm) .p-live .lc-px{font-size:38px}
-  main.grid>.p-live .lc-cv{height:240px}
+  main.grid>.p-live .lc-cv{height:180px}
   .hs-t{min-width:88px;flex:0 0 auto}
 }
 @media (max-width:760px){body.desk:not(.dm) .deskbar{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;gap:6px;padding-top:4px;padding-bottom:4px}body.desk:not(.dm) .deskbar::-webkit-scrollbar{display:none}body.desk:not(.dm) .deskbar>*{flex:0 0 auto;white-space:nowrap}}
+/* Price scroll + its ✎ edit control */
+.tk-wrap{display:flex;align-items:stretch;border-bottom:1px solid var(--ln);background:#050607}
+.tk-wrap[hidden]{display:none!important}
+.tk-wrap>.ticker{flex:1 1 auto;min-width:0;border-bottom:0}
+.tk-edit{flex:0 0 auto;min-width:36px;padding:0 10px;border:0;border-left:1px solid var(--ln);background:#0b0d10;color:var(--o,#F7931A);font:700 14px/1 var(--mono);cursor:pointer}
+.tk-edit:hover,.tk-edit:focus-visible{background:#151a21;outline:none}
+@media (max-width:760px){.tk-edit{min-width:44px;min-height:30px;font-size:15px}.tk-wrap>.ticker{align-self:center}}
+.mk-tk,.hs-tk{color:#e6e9ee;font-family:var(--mono);font-weight:700;letter-spacing:.02em}.mk-nm{color:#8a93a0;font-weight:500}
+.hs-l .hs-tk{color:#e6e9ee}
+.lc-name{font:700 12px var(--mono);color:#cfd5dd;letter-spacing:.04em}

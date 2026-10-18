@@ -29,6 +29,8 @@
   var mk = document.querySelector('[data-mk]');
   var FUT = { '.SPX': '@SP.1', '.IXIC': '@ND.1', '.DJI': '@DJ.1' };
   var GN = { desk: 'Bitcoin desk', us: 'US stocks', rt: 'Rates · dollar · vol', cm: 'Commodities', gl: 'Global', mag: 'Mag 7 · top stocks', mine: 'My picks' };
+  var MKT = { BTC: ['BTC-USD'], ETH: ['ETH-USD'], SOL: ['SOL-USD'], '.SPX': ['SPX', 'S&P 500'], '.IXIC': ['IXIC', 'Nasdaq'], '.DJI': ['DJI', 'Dow'], '.RUT': ['RUT', 'Russell 2000'], '@GC.1': ['GC=F', 'Gold fut'], '@SI.1': ['SI=F', 'Silver fut'], '@CL.1': ['CL=F', 'WTI fut'], '@HG.1': ['HG=F', 'Copper fut'], '@NG.1': ['NG=F', 'Nat gas fut'], '.DXY': ['DXY'], '.VIX': ['VIX'], US2Y: ['US2Y'], US5Y: ['US5Y'], US10Y: ['US10Y'], US30Y: ['US30Y'], 'EUR=': ['EURUSD'], 'JPY=': ['USDJPY'], '.N225': ['N225', 'Nikkei'], '.STOXX': ['SXXP', 'Stoxx 600'], '.FTSE': ['UKX', 'FTSE 100'], '.GDAXI': ['DAX'], '.HSI': ['HSI', 'Hang Seng'], '.KS11': ['KOSPI'], '.SSEC': ['SSEC', 'Shanghai'], MNAV: ['MSTR mNAV'], T10: ['T10', 'Desk Treasury 10'], STREET: ['MSTR', 'Street Sentiment'], MTPLF: ['MTPLF', 'Metaplanet'], '3350.T': ['3350.T', 'Metaplanet'], MPJPY: ['MPJPY'] };
+  var FUTL = { '@SP.1': 'ES=F', '@ND.1': 'NQ=F', '@DJ.1': 'YM=F', '@RTY.1': 'RTY=F' };
   var TIPS = { BTC: 'BTC-USD, Coinbase live feed (every trade)', MNAV: 'Strategy method: enterprise value ÷ bitcoin NAV, recomputed live from MSTR and BTC', T10: 'Desk Treasury 10: the top 10 public bitcoin treasury stocks, average day move weighted by BTC held. Desk calculation.', STREET: 'MSTR analysts: 60% ratings mix + 40% average-target upside vs the live price (0–100). Analysts\u2019 views, not ours.' };
   var MKDEF = [['BTC', 'Bitcoin', 'desk'], ['MSTR', 'Strategy MSTR', 'desk'], ['ETH', 'Ether', 'desk'], ['SOL', 'Solana', 'desk'],
     ['.SPX', 'S&P 500', 'us'], ['.IXIC', 'Nasdaq', 'us'], ['.DJI', 'Dow', 'us'], ['.RUT', 'Russell 2000', 'us'],
@@ -40,7 +42,8 @@
   function mkGet() { var o = null; try { o = JSON.parse(LS.get('btd_mk') || 'null'); } catch (e) {} if (!Array.isArray(o) || !o.length) return MKDEF.slice();
     var out = o.filter(function (x) { return Array.isArray(x) && MK_RX.test(x[0]) && GN[x[2]]; }).map(function (x) { return [x[0], String(x[1]).slice(0, 22), x[2]]; }).slice(0, 48); if (!out.some(function (x) { return x[0] === 'BTC'; })) out.unshift(MKDEF[0]); return out; }
   function mkSave(L) { if (JSON.stringify(L) === JSON.stringify(MKDEF)) LS.del('btd_mk'); else LS.set('btd_mk', JSON.stringify(L)); }
-  function tile(k, label, cls2, tip) { return '<div class="mk-t ' + (cls2 || '') + '" data-mt="' + esc(k) + '"' + (tip ? ' title="' + esc(tip) + '"' : '') + '><span class="mk-l">' + esc(label) + '</span><b class="mk-v">…</b><span class="mk-c"></span><span class="mk-x"></span></div>'; }
+  function tile(k, label, cls2, tip) { var L = /^X:/.test(k) ? [k.slice(2) + 'x', 'token'] : MKT[k] || [k.replace(/^[.@]/, ''), '']; if (!tip) tip = /^X:/.test(k) ? '' : L[0] + ' · source: CNBC quote service (may be delayed)';
+    return '<div class="mk-t ' + (cls2 || '') + '" data-mt="' + esc(k) + '"' + (tip ? ' title="' + esc(tip) + '"' : '') + '><span class="mk-l"><b class="mk-tk">' + esc(L[0]) + '</b>' + (L[1] ? ' <span class="mk-nm">' + esc(L[1]) + '</span>' : '') + '</span><b class="mk-v">…</b><span class="mk-c"></span><span class="mk-x"></span></div>'; }
   function grp(id, name, inner, extra) { return '<div class="mk-g mk-' + id + '"' + (extra || '') + '><div class="mk-gh">' + esc(name) + '</div><div class="mk-gt">' + inner + '</div></div>'; }
   var MKL = mkGet();
   function mkBuild() { if (!mk) return; var after = F.session() !== 'open'; MKL = mkGet(); var by = {}, order = [];
@@ -71,13 +74,13 @@
       if (q && q.px != null) { clearInterval(iv); MKL.push([v, (q.sn || v).slice(0, 18), 'mine']); commit('Added ' + v + '.'); } else if ((q && q.none) || t > 20) { clearInterval(iv); paintE('No quote found for ' + v + '.'); } }, 300); });
     document.body.appendChild(mke); paintE(); var x0 = mke.querySelector('[data-e-x]'); if (x0) x0.focus(); }
   document.addEventListener('keydown', function (e) { if (mke && e.key === 'Escape') mkEdit(); });
-  function setT(k, v, chg, x, title) { var el = mk && mk.querySelector('[data-mt="' + k + '"]'); if (!el) return; var vb = el.querySelector('.mk-v'), old = vb.textContent;
+  function setT(k, v, chg, x, title) { if (/\.T$/.test(k) && v && v[0] !== '¥' && v !== '…') v = '¥' + v; var el = mk && mk.querySelector('[data-mt="' + k + '"]'); if (!el) return; var vb = el.querySelector('.mk-v'), old = vb.textContent;
     vb.textContent = v; if (old !== '…' && old !== v) flash(vb, parseFloat(v.replace(/[^0-9.\-]/g, '')) > parseFloat(old.replace(/[^0-9.\-]/g, '')) ? 1 : -1);
     var c = el.querySelector('.mk-c'); c.textContent = chg ? chg[0] : ''; c.className = 'mk-c ' + (chg ? chg[1] : ''); el.querySelector('.mk-x').innerHTML = x || ''; if (title) el.title = title; }
   function qTile(sym, opt) { opt = opt || {}; var q = F.get(sym); if (!q || q.px == null) return; var s = F.session(), main = q.px, ch = q.chp, x = '';
     if (q.yld) { setT(sym, q.px.toFixed(3) + '%', [(q.ch >= 0 ? '+' : '−') + Math.abs(q.ch * 100).toFixed(1) + ' bp', cls(q.ch)], s === 'open' ? '<small>yield · live</small>' : '<small>yield · last close</small>'); return; }
     if (q.ext && s !== 'open') x = '<em>' + (q.ext.kind === 'pre' ? 'Pre' : 'AH') + '</em> ' + lv(q.ext.px) + ' <span class="' + cls(q.ext.chp) + '">' + pc(q.ext.chp) + '</span>';
-    var fs = opt.fut || FUT[sym]; if (fs) { var f = F.get(fs); if (f && f.px != null && s !== 'open') x = '<em>Fut</em> ' + lv(f.px) + ' <span class="' + cls(f.chp) + '">' + pc(f.chp) + '</span>'; }
+    var fs = opt.fut || FUT[sym]; if (fs) { var f = F.get(fs); if (f && f.px != null && s !== 'open') x = '<em>' + (FUTL[fs] || 'Fut') + '</em> ' + lv(f.px) + ' <span class="' + cls(f.chp) + '">' + pc(f.chp) + '</span>'; }
     if (s !== 'open' && !x && q.chp != null) x = '<small>' + (q.cached ? 'cached ' : '') + 'last close</small>';
     setT(sym, opt.usd ? px(main, q.cur) : lv(main), [pc(ch), cls(ch)], x); }
   function mkCrypto(k) { var q = F.get(k); if (!q) return; setT(k, px(q.px), [pc(q.chp), cls(q.chp)], k === 'BTC' ? '<small>24h · H ' + n(q.hi, 0) + ' L ' + n(q.lo, 0) + '</small>' : '<small>24h</small>'); }
@@ -210,17 +213,17 @@
 /* Hero strip under the live chart: US indexes (futures outside regular hours) + MSTR and the Mag 7. One row; swipe on phone. */
 (function () {
   var el = document.querySelector('[data-hs]'), F = window.BTD_FEED; if (!el || !F) return;
-  var IX = [['.SPX', '@SP.1', 'S&P 500'], ['.IXIC', '@ND.1', 'Nasdaq'], ['.DJI', '@DJ.1', 'Dow']], ST = ['MSTR', 'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA'];
+  var IX = [['.SPX', '@SP.1', 'S&P 500', 'SPX', 'ES=F'], ['.IXIC', '@ND.1', 'Nasdaq', 'IXIC', 'NQ=F'], ['.DJI', '@DJ.1', 'Dow', 'DJI', 'YM=F']], ST = ['MSTR', 'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA'];
   F.watch(IX.map(function (x) { return x[0]; }).concat(IX.map(function (x) { return x[1]; }), ST));
   var f2 = function (v, d) { return v == null ? '…' : Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
   var pc = function (v) { return v == null || isNaN(v) ? '' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%'; };
   var cl = function (v) { return v > 0 ? 'up' : v < 0 ? 'dn' : 'fl'; };
-  function tile(lbl, px, ch, tag, d) { return '<div class="hs-t"><span class="hs-l">' + lbl + (tag ? ' <em>' + tag + '</em>' : '') + '</span><b>' + f2(px, d) + '</b><span class="hs-c ' + cl(ch) + '">' + pc(ch) + '</span></div>'; }
+  function tile(tk, nm, px, ch, tag, d, src) { return '<div class="hs-t" title="' + src + '"><span class="hs-l"><b class="hs-tk">' + tk + '</b>' + (nm ? ' ' + nm : '') + (tag ? ' <em>' + tag + '</em>' : '') + '</span><b>' + f2(px, d) + '</b><span class="hs-c ' + cl(ch) + '">' + pc(ch) + '</span></div>'; }
   function paint() { var ses = F.session(), out = [];
     IX.forEach(function (x) { var q = F.get(x[0]), fu = F.get(x[1]);
-      if (ses !== 'open' && fu && fu.px != null) out.push(tile(x[2], fu.px, fu.chp, 'Fut', 2)); else out.push(tile(x[2], q && q.px, q && q.chp, '', 2)); });
+      if (ses !== 'open' && fu && fu.px != null) out.push(tile(x[4], x[2] + ' fut', fu.px, fu.chp, '', 2, x[2] + ' futures (front month), CNBC quote service')); else out.push(tile(x[3], x[2], q && q.px, q && q.chp, '', 2, x[2] + ' cash index, CNBC quote service')); });
     ST.forEach(function (t) { var q = F.get(t), ext = q && q.ext && ses !== 'open' ? q.ext : null;
-      out.push(tile(t, ext ? ext.px : q && q.px, ext ? ext.chp : q && q.chp, ext ? (ext.kind === 'pre' ? 'Pre' : 'AH') : '', 2)); });
+      out.push(tile(t, '', ext ? ext.px : q && q.px, ext ? ext.chp : q && q.chp, ext ? (ext.kind === 'pre' ? 'Pre' : 'AH') : '', 2, t + (ext ? (ext.kind === 'pre' ? ' pre-market' : ' after-hours') : '') + ', CNBC quote service (may be delayed)')); });
     el.innerHTML = out.join(''); }
   paint(); F.on('quotes', paint); F.on('session', paint);
 })();
