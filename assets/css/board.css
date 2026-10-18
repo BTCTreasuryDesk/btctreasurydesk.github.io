@@ -147,7 +147,7 @@ body:not(.dm) main.grid>.p-hs{order:-1}
 body.dm main.grid>.p-hs{display:none}
 .hs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
 .hs::-webkit-scrollbar{display:none}
-.hs-t{flex:1 0 auto;min-width:96px;scroll-snap-align:start;background:#0b0d10;border:1px solid #1c2129;border-radius:4px;padding:5px 8px;display:flex;flex-direction:column;gap:1px}
+.hs-t{flex:1 0 auto;min-width:88px;scroll-snap-align:start;background:#0b0d10;border:1px solid #1c2129;border-radius:4px;padding:5px 8px;display:flex;flex-direction:column;gap:1px}
 .hs-l{font:600 10.5px var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}.hs-l em{font-style:normal;color:var(--o,#F7931A);font-weight:700}
 .hs-t b{font:700 15px var(--mono);color:#fff;white-space:nowrap}.hs-c{font:600 12px var(--mono)}
 @media (min-width:1101px){.p-wl{grid-column:1/7}.p-cx{grid-column:7/13}.p-tok{grid-column:1/-1}}
@@ -201,12 +201,9 @@ body:not(.dm) .p-live .lc-ft{display:none}
 .tz-ed{border:1px solid var(--ln);border-radius:6px;padding:8px;margin-bottom:8px;max-height:320px;overflow:auto}.tz-add{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
 @media (max-width:760px){.tz-g{grid-template-columns:repeat(2,minmax(0,1fr))}.tz-p{font-size:16px}.tz-sort{margin-left:0}}
 .cx-read{margin:2px 0 8px;font-size:13px;color:#dfe4ea}
-/* My Watchlist */
-.p-my{grid-column:1/-1}.p-my .p-h{display:flex;align-items:center;gap:8px}.my-ed{margin-left:auto}
-.my-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
-.my-t{display:grid;gap:1px;padding:7px 9px;border:1px solid var(--ln);border-radius:6px;background:#090b0e;min-width:0}
-.my-l{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.my-l small{color:#8a93a0}.my-l em{font-style:normal;font-size:10px;padding:0 4px;border-radius:6px;background:#1a1f26;color:#cfd5dc;margin-left:2px}
-.my-p{font:700 18px var(--mono)}.my-c{font:600 12px var(--mono)}
-.my-add{border-style:dashed;align-content:center}.my-add input{background:#0d0f12;color:var(--tx);border:1px solid #2a3039;border-radius:12px;font:600 12px var(--mono);padding:5px 8px;min-width:0;width:100%}.my-add small{font-size:11px;color:#aab2bd}
-.my-edp{border:1px solid var(--ln);border-radius:6px;padding:8px;margin-top:8px}.my-q{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:8px 0}.my-hint{font-size:12px}
-@media (max-width:760px){.my-g{grid-template-columns:repeat(2,minmax(0,1fr))}.my-p{font-size:16px}}
+/* My Watchlist row (under the hero chart) + its editor */
+.hs-ed{flex:0 0 auto!important;min-width:46px!important;align-items:center;justify-content:center;cursor:pointer;color:#cfd5dc;font-size:15px}.hs-ed small{font:600 10px var(--mono);color:var(--mu)}.hs-ed[aria-expanded="true"]{border-color:#F7931A}
+.my-edp{border:1px solid var(--ln);border-radius:6px;padding:8px;margin-top:6px;background:#090b0e}.my-eh{font-size:12px;margin-bottom:6px}
+.my-add{display:flex;gap:6px}.my-add input{flex:1;min-width:0;background:#0d0f12;color:var(--tx);border:1px solid #2a3039;border-radius:12px;font:600 13px var(--mono);padding:6px 9px}
+.my-msg{display:block;font-size:11px;color:#aab2bd;min-height:14px;margin:4px 0}
+.my-q{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:8px 0}.my-hint{font-size:12px}

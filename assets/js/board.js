@@ -257,27 +257,9 @@
     f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; f.allowFullscreen = true; f.className = 'ep-frame'; a.replaceWith(f); });
 })();
 
-/* Hero strip under the live chart: US indexes (futures outside regular hours) + MSTR and the Mag 7. One row; swipe on phone. */
+/* My Watchlist = the row under the hero chart. Default: US indexes (futures outside regular hours) + MSTR + Mag 7. Visitors can add any stock/ETF, index, future, yield, or a coin typed as TICKER-USD; remove, reorder, reset. Saved in btd_my2, separate from the price strip. Indexes/futures always stay on the Markets board below. */
 (function () {
-  var el = document.querySelector('[data-hs]'), F = window.BTD_FEED; if (!el || !F) return;
-  var IX = [['.SPX', '@SP.1', 'S&P 500', 'SPX', 'ES=F'], ['.IXIC', '@ND.1', 'Nasdaq', 'IXIC', 'NQ=F'], ['.DJI', '@DJ.1', 'Dow', 'DJI', 'YM=F']], ST = ['MSTR', 'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA'];
-  F.watch(IX.map(function (x) { return x[0]; }).concat(IX.map(function (x) { return x[1]; }), ST));
-  var f2 = function (v, d) { return v == null ? '…' : Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
-  var pc = function (v) { return v == null || isNaN(v) ? '' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%'; };
-  var cl = function (v) { return v > 0 ? 'up' : v < 0 ? 'dn' : 'fl'; };
-  function tile(tk, nm, px, ch, tag, d, src) { return '<div class="hs-t" title="' + src + '"><span class="hs-l"><b class="hs-tk">' + tk + '</b>' + (nm ? ' ' + nm : '') + (tag ? ' <em>' + tag + '</em>' : '') + '</span><b>' + f2(px, d) + '</b><span class="hs-c ' + cl(ch) + '">' + pc(ch) + '</span></div>'; }
-  function paint() { var ses = F.session(), out = [];
-    IX.forEach(function (x) { var q = F.get(x[0]), fu = F.get(x[1]);
-      if (ses !== 'open' && fu && fu.px != null) out.push(tile(x[4], x[2] + ' fut', fu.px, fu.chp, '', 2, x[2] + ' futures (front month), CNBC quote service')); else out.push(tile(x[3], x[2], q && q.px, q && q.chp, '', 2, x[2] + ' cash index, CNBC quote service')); });
-    ST.forEach(function (t) { var q = F.get(t), ext = q && q.ext && ses !== 'open' ? q.ext : null;
-      out.push(tile(t, '', ext ? ext.px : q && q.px, ext ? ext.chp : q && q.chp, ext ? (ext.kind === 'pre' ? 'Pre' : 'AH') : '', 2, t + (ext ? (ext.kind === 'pre' ? ' pre-market' : ' after-hours') : '') + ', CNBC quote service (may be delayed)')); });
-    el.innerHTML = out.join(''); }
-  paint(); F.on('quotes', paint); F.on('session', paint);
-})();
-
-/* My Watchlist: up to 8 visitor picks (any stock/ETF, index, future, commodity, or a coin typed as TICKER-USD). Own saved list (btd_my), separate from the price strip. */
-(function () {
-  var el = document.querySelector('[data-my]'), F = window.BTD_FEED; if (!el || !F) return;
+  var el = document.querySelector('[data-hs]'), sec = el && el.closest('.p-hs'), F = window.BTD_FEED; if (!el || !F) return;
   var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var f2 = function (v) { if (v == null || !isFinite(v)) return '…'; var a = Math.abs(v), d = a >= 1000 ? 2 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
@@ -287,27 +269,29 @@
   var AL = { SPX: ['.SPX', 'SPX', 'S&P 500'], '^GSPC': ['.SPX', 'SPX', 'S&P 500'], IXIC: ['.IXIC', 'IXIC', 'Nasdaq'], NASDAQ: ['.IXIC', 'IXIC', 'Nasdaq'], DJI: ['.DJI', 'DJI', 'Dow'], DOW: ['.DJI', 'DJI', 'Dow'], RUT: ['.RUT', 'RUT', 'Russell 2000'], VIX: ['.VIX', 'VIX', 'Volatility'], DXY: ['.DXY', 'DXY', 'Dollar index'],
     'ES=F': ['@SP.1', 'ES=F', 'S&P 500 fut'], 'NQ=F': ['@ND.1', 'NQ=F', 'Nasdaq fut'], 'YM=F': ['@DJ.1', 'YM=F', 'Dow fut'], 'GC=F': ['@GC.1', 'GC=F', 'Gold fut'], GOLD: ['@GC.1', 'GC=F', 'Gold fut'], 'SI=F': ['@SI.1', 'SI=F', 'Silver fut'], SILVER: ['@SI.1', 'SI=F', 'Silver fut'], 'CL=F': ['@CL.1', 'CL=F', 'WTI fut'], OIL: ['@CL.1', 'CL=F', 'WTI fut'], 'HG=F': ['@HG.1', 'HG=F', 'Copper fut'], 'NG=F': ['@NG.1', 'NG=F', 'Nat gas fut'],
     US10Y: ['US10Y', 'US10Y', '10Y yield'], US2Y: ['US2Y', 'US2Y', '2Y yield'], US30Y: ['US30Y', 'US30Y', '30Y yield'], US5Y: ['US5Y', 'US5Y', '5Y yield'] };
-  var DEF = [{ k: 'C:BTC', tk: 'BTC-USD' }, { k: 'MSTR', tk: 'MSTR' }], MAX = 8, L, CB = {}, msg = '';
-  var get = function () { var o = null; try { o = JSON.parse(LS.get('btd_my') || 'null'); } catch (e) {} return Array.isArray(o) ? o.filter(function (x) { return x && typeof x.k === 'string' && typeof x.tk === 'string'; }).slice(0, MAX) : DEF.slice(); };
-  var save = function () { if (JSON.stringify(L) === JSON.stringify(DEF)) LS.del('btd_my'); else LS.set('btd_my', JSON.stringify(L)); };
+  var IX = { 'IX:SPX': ['.SPX', '@SP.1', 'SPX', 'S&P 500', 'ES=F'], 'IX:IXIC': ['.IXIC', '@ND.1', 'IXIC', 'Nasdaq', 'NQ=F'], 'IX:DJI': ['.DJI', '@DJ.1', 'DJI', 'Dow', 'YM=F'] };
+  var DEF = [{ k: 'IX:SPX', tk: 'S&P 500' }, { k: 'IX:IXIC', tk: 'Nasdaq' }, { k: 'IX:DJI', tk: 'Dow' }].concat(['MSTR', 'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA'].map(function (t) { return { k: t, tk: t }; })), MAX = 16, L, CB = {}, msg = '';
+  var get = function () { var o = null; try { o = JSON.parse(LS.get('btd_my2') || 'null'); } catch (e) {} return Array.isArray(o) ? o.filter(function (x) { return x && typeof x.k === 'string' && typeof x.tk === 'string'; }).slice(0, MAX) : DEF.slice(); };
+  var save = function () { if (JSON.stringify(L) === JSON.stringify(DEF)) LS.del('btd_my2'); else LS.set('btd_my2', JSON.stringify(L)); };
   L = get();
   var native = { BTC: 1, ETH: 1, SOL: 1 };
   var cbPoll = function () { L.forEach(function (x) { var m = /^C:(.+)$/.exec(x.k); if (!m || native[m[1]]) return; cbFetch(m[1]).then(function (o) { if (o) { CB[m[1]] = o; paint(); } }); }); };
   var cbFetch = function (c) { return fetch('https://api.exchange.coinbase.com/products/' + encodeURIComponent(c) + '-USD/stats').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { if (!j || !j.last) return null; var l = +j.last, o = +j.open; return { px: l, chp: o ? (l / o - 1) * 100 : null }; }).catch(function () { return null; }); };
-  var watch = function () { F.watch(L.filter(function (x) { return !/^C:/.test(x.k); }).map(function (x) { return x.k; })); };
+  var watch = function () { var w = []; L.forEach(function (x) { if (IX[x.k]) w.push(IX[x.k][0], IX[x.k][1]); else if (!/^C:/.test(x.k)) w.push(x.k); }); F.watch(w); };
   var quote = function (x) { var m = /^C:(.+)$/.exec(x.k), s = F.session();
+    if (IX[x.k]) { var I = IX[x.k], cq = F.get(I[0]), fq = F.get(I[1]); if (s !== 'open' && fq && fq.px != null) return { px: fq.px, chp: fq.chp, tk: I[4], nm: I[3] + ' fut', src: I[3] + ' futures (front month), CNBC quote service' }; return cq && cq.px != null ? { px: cq.px, chp: cq.chp, tk: I[2], nm: I[3], src: I[3] + ' cash index, CNBC quote service' } : { px: null, tk: I[2], nm: I[3], src: 'CNBC quote service' }; }
     if (m) { var q = native[m[1]] ? F.get(m[1]) : CB[m[1]]; return q && q.px != null ? { px: q.px, chp: q.chp, tag: '24/7', src: 'Coinbase spot' } : null; }
     var q2 = F.get(x.k); if (!q2 || q2.px == null) return null; var fut = /^@/.test(x.k);
     if (q2.ext && s !== 'open' && q2.ext.px != null) return { px: q2.ext.px, chp: q2.ext.chp, tag: q2.ext.kind === 'pre' ? 'Pre' : 'AH', src: 'CNBC quote service, extended hours (may be delayed)' };
     return { px: q2.px, chp: q2.chp, tag: fut && !/fut/.test(x.nm || '') ? 'fut' : (s !== 'open' && !/^US\d/.test(x.k) ? 'close' : ''), src: 'CNBC quote service (may be delayed)', yd: /^US\d/.test(x.k) }; };
-  el.innerHTML = '<div class="p-h"><span class="p-t">My Watchlist</span><span class="tag">your picks \u00b7 saved on this device</span><button type="button" class="chip my-ed" data-my-ed aria-expanded="false">\u270e Edit</button></div><div class="my-g" data-my-g></div><div class="my-edp" data-my-edp hidden></div>';
-  function paint() { var g = el.querySelector('[data-my-g]');
-    g.innerHTML = L.map(function (x) { var q = quote(x); return '<div class="my-t" title="' + esc(x.tk + (x.nm ? ' \u00b7 ' + x.nm : '') + ' \u00b7 source: ' + (q ? q.src : 'loading')) + '"><span class="my-l"><b>' + esc(x.tk) + '</b>' + (x.nm ? ' <small>' + esc(x.nm) + '</small>' : '') + (q && q.tag ? ' <em>' + q.tag + '</em>' : '') + '</span><b class="my-p">' + (q ? (q.yd ? q.px.toFixed(3) + '%' : f2(q.px)) : '\u2026') + '</b><span class="my-c ' + (q ? cl(q.chp) : '') + '">' + (q ? pc(q.chp) : '') + '</span></div>'; }).join('') +
-      (L.length < MAX ? '<form class="my-t my-add" data-my-form><input data-my-in maxlength="16" placeholder="Type a ticker" aria-label="Add a ticker (stocks, ETFs, indexes, futures; coins as TICKER-USD)" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="submit" class="chip">\uff0b Add</button><small data-my-msg>' + esc(msg) + '</small></form>' : '');
-    edPaint(); }
-  function edPaint() { var e = el.querySelector('[data-my-edp]'); if (e.hidden) return;
-    e.innerHTML = '<ol class="cz-l">' + L.map(function (x, i) { return '<li><span><b>' + esc(x.tk) + '</b></span><button type="button" data-my-up="' + i + '" aria-label="Move up">\u2191</button><button type="button" data-my-dn="' + i + '" aria-label="Move down">\u2193</button><button type="button" data-my-rm="' + i + '" aria-label="Remove">\u00d7</button></li>'; }).join('') + '</ol>' +
-      '<div class="my-q"><span class="muted">Quick add:</span> ' + ['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'COIN', 'ASST', 'MPJPY', 'MARA', 'IBIT', 'SPX', 'ES=F', 'GOLD', 'US10Y', 'DXY', 'VIX'].filter(function (t) { return !L.some(function (x) { return x.tk === t || x.tk === (AL[t] || [])[1]; }); }).map(function (t) { return '<button type="button" class="chip" data-my-add="' + t + '">\uff0b ' + t + '</button>'; }).join('') + '</div>' +
+  el.insertAdjacentHTML('afterend', '<div class="my-edp" data-my-edp hidden></div>');
+  var edp = sec.querySelector('[data-my-edp]');
+  function tile(x) { var q = quote(x), tk = q && q.tk || x.tk, nm = q && q.nm || x.nm || '', ok = q && q.px != null;
+    return '<div class="hs-t" title="' + esc(tk + (nm ? ' \u00b7 ' + nm : '') + ' \u00b7 source: ' + (q ? q.src : 'loading')) + '"><span class="hs-l"><b class="hs-tk">' + esc(tk) + '</b>' + (nm ? ' ' + esc(nm) : '') + (q && q.tag && q.tag !== 'close' ? ' <em>' + q.tag + '</em>' : '') + '</span><b>' + (ok ? (q.yd ? q.px.toFixed(3) + '%' : f2(q.px)) : '\u2026') + '</b><span class="hs-c ' + (ok ? cl(q.chp) : '') + '">' + (ok ? pc(q.chp) : '') + '</span></div>'; }
+  function paint() { el.innerHTML = L.map(tile).join('') + '<button type="button" class="hs-t hs-ed" data-my-ed aria-expanded="' + !edp.hidden + '" aria-label="Edit My Watchlist" title="My Watchlist: add any ticker, remove, reorder, reset">\u270e<small>Edit</small></button>'; edPaint(); }
+  function edPaint() { var e = edp; if (e.hidden) return;
+    e.innerHTML = '<div class="my-eh"><b>My Watchlist</b> <span class="muted">saved on this device \u00b7 indexes and futures stay on the Markets board below</span></div>' + (L.length < MAX ? '<form class="my-add" data-my-form><input data-my-in maxlength="16" placeholder="Type a ticker" aria-label="Add a ticker (stocks, ETFs, indexes, futures; coins as TICKER-USD)" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="submit" class="chip">\uff0b Add</button></form>' : '') + '<small class="my-msg" data-my-msg>' + esc(msg) + '</small><ol class="cz-l">' + L.map(function (x, i) { return '<li><span><b>' + esc((quote(x) || {}).tk || x.tk) + '</b> <small class="muted">' + esc(x.nm || (IX[x.k] ? 'index, futures off-hours' : '')) + '</small></span><button type="button" data-my-up="' + i + '" aria-label="Move up">\u2191</button><button type="button" data-my-dn="' + i + '" aria-label="Move down">\u2193</button><button type="button" data-my-rm="' + i + '" aria-label="Remove">\u00d7</button></li>'; }).join('') + '</ol>' +
+      '<div class="my-q"><span class="muted">Quick add:</span> ' + ['MSTR', 'AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'COIN', 'ASST', 'MPJPY', 'MARA', 'IBIT', 'GOLD', 'US10Y', 'DXY', 'VIX'].filter(function (t) { return !L.some(function (x) { return x.tk === t || x.tk === (AL[t] || [])[1]; }); }).map(function (t) { return '<button type="button" class="chip" data-my-add="' + t + '">\uff0b ' + t + '</button>'; }).join('') + '</div>' +
       '<p class="muted my-hint">Type any stock or ETF ticker, an index (SPX, VIX, DXY), a future (ES=F, GC=F, CL=F), a yield (US10Y), or a coin as TICKER-USD. Up to ' + MAX + '.</p><button type="button" class="chip" data-my-reset>Reset to default</button>'; }
   function add(raw) { var t = String(raw || '').trim().toUpperCase().replace(/\s+/g, ''); if (!t) return; if (L.length >= MAX) { msg = 'Watchlist is full (' + MAX + '). Remove one first.'; return paint(); }
     var cm = /^([A-Z0-9]{2,10})-USD$/.exec(t);
@@ -316,16 +300,16 @@
       return cbFetch(cm[1]).then(function (o) { if (!o) { msg = '\u201c' + t + '\u201d isn\u2019t a Coinbase USD pair. Check the spelling.'; return paint(); } CB[cm[1]] = o; L.push({ k: 'C:' + cm[1], tk: t }); save(); msg = ''; paint(); }); }
     var a = AL[t], k = a ? a[0] : (F.cn ? F.cn(t) : t) || t, tk = a ? a[1] : t, nm = a ? a[2] : '';
     if (!/^[.@A-Z0-9][A-Z0-9.\-=:]{0,15}$/.test(k)) { msg = 'That doesn\u2019t look like a ticker.'; return paint(); }
-    if (L.some(function (x) { return x.k === k; })) { msg = tk + ' is already on your list.'; return paint(); }
+    if (L.some(function (x) { return x.k === k || (IX[x.k] && (IX[x.k][0] === k || IX[x.k][1] === k)); })) { msg = tk + ' is already on your list.'; return paint(); }
     msg = 'Checking ' + tk + '\u2026'; paint(); F.watch([k]); var t0 = Date.now();
     (function wait() { var q = F.get(k); if (q && q.px != null) { L.push({ k: k, tk: tk, nm: nm }); save(); msg = ''; return paint(); } if (Date.now() - t0 > 7000) { msg = '\u201c' + tk + '\u201d wasn\u2019t found on the quote feed. Coins: type TICKER-USD.'; return paint(); } setTimeout(wait, 500); })(); }
-  el.addEventListener('submit', function (e) { if (!e.target.matches('[data-my-form]')) return; e.preventDefault(); add(el.querySelector('[data-my-in]').value); });
-  el.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.type === 'submit') return; var d = b.dataset;
-    if (b.hasAttribute('data-my-ed')) { var p = el.querySelector('[data-my-edp]'); p.hidden = !p.hidden; b.setAttribute('aria-expanded', !p.hidden); edPaint(); return; }
+  sec.addEventListener('submit', function (e) { if (!e.target.matches('[data-my-form]')) return; e.preventDefault(); add(sec.querySelector('[data-my-in]').value); });
+  sec.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.type === 'submit') return; var d = b.dataset;
+    if (b.hasAttribute('data-my-ed')) { edp.hidden = !edp.hidden; b.setAttribute('aria-expanded', !edp.hidden); edPaint(); if (!edp.hidden) { var inp = sec.querySelector('[data-my-in]'); if (inp && innerWidth > 760) inp.focus(); } return; }
     if (d.myAdd) return add(d.myAdd);
     if (d.myUp != null) { var i = +d.myUp; if (i > 0) L.splice(i - 1, 0, L.splice(i, 1)[0]); } else if (d.myDn != null) { var j = +d.myDn; if (j < L.length - 1) L.splice(j + 1, 0, L.splice(j, 1)[0]); }
     else if (d.myRm != null) L.splice(+d.myRm, 1); else if (b.hasAttribute('data-my-reset')) L = DEF.slice(); else return; save(); msg = ''; watch(); paint(); });
   watch(); paint(); cbPoll(); setInterval(cbPoll, 30000);
-  var pt = 0; var soft = function () { if (Date.now() - pt > 2000 && !el.contains(document.activeElement)) { pt = Date.now(); paint(); } };
+  var pt = 0; var soft = function () { if (Date.now() - pt > 2000 && !edp.contains(document.activeElement)) { pt = Date.now(); el.innerHTML = L.map(tile).join('') + el.querySelector('[data-my-ed]').outerHTML; } };
   F.on('quotes', soft); F.on('BTC', soft); F.on('ETH', soft); F.on('SOL', soft); F.on('session', paint);
 })();
