@@ -1,0 +1,24 @@
+/* Shared site header: identical on every page (fixed heights, self-contained styles, no dependence on page CSS). Built by tools/build_header.py. */
+:root{--sh-h:48px}
+@media (max-width:720px){:root{--sh-h:0px}}
+html{scrollbar-gutter:stable}
+.sh,.sh *{box-sizing:border-box}
+.sh{position:sticky;top:0;z-index:60;height:var(--sh-h);margin:0;padding:0;background:#050607;border-bottom:1px solid #1e232b;font-size:13px;line-height:1}
+.sh::before{content:none!important}
+.sh-in{display:flex;align-items:center;gap:14px;height:100%;padding:0 14px;margin:0;max-width:none}
+.sh-brand{flex:none;display:flex;align-items:center;gap:8px;height:32px;color:#d8dde4!important;font:700 13px/1 ui-monospace,"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace;letter-spacing:.08em;white-space:nowrap;text-decoration:none!important}
+.sh-brand img{width:26px;height:26px;display:block;flex:none}.sh-brand .o{color:#F7931A}
+.sh-nav{flex:1;min-width:0;display:flex;align-items:center;gap:2px;height:32px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0;padding:0}.sh-nav::-webkit-scrollbar{display:none}
+.sh-nav a{flex:none;display:block;height:24px;padding:6px 8px;color:#7d8794!important;font:600 11px/12px ui-monospace,"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;border-radius:3px;text-decoration:none!important;background:none}
+.sh-nav a:hover{color:#d8dde4!important;background:#12151a}.sh-nav a[aria-current]{color:#F7931A!important;background:#12151a}
+.sh-yt{flex:none;display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid #3a2a12;border-radius:3px;background:#1a1206;color:#F7931A!important;font:600 11px/1 ui-monospace,Menlo,Consolas,monospace;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-decoration:none!important}
+.sh-yt svg{width:16px;height:16px;flex:none;color:#ff3b30}
+/* Narrower screens: brand + YouTube on row 1, every nav item visible on row 2 (wraps; same on every page, no hidden items, no auto-scroll) */
+@media (max-width:1329px){.sh{height:auto}.sh-in{flex-wrap:wrap;height:auto;column-gap:10px;row-gap:0}.sh-brand{height:44px;flex:1}
+  .sh-nav{order:3;flex:0 0 100%;flex-wrap:wrap;height:auto;overflow:visible;padding:0 0 6px;margin:0 0 0 -8px;row-gap:2px}}
+/* Phone: header scrolls away with the page (not sticky) so the wrapped nav never covers content */
+@media (max-width:720px){.sh{position:relative}.sh-in{padding:0 10px}.sh-yt{height:30px}.sh-yt span{display:none}.sh-nav a{padding:6px 6px;font-size:10.5px;letter-spacing:.04em}}
+body.dm .sh,body.dm .deskbar{display:none!important}
+/* Home desk toolbar (page content, below the shared header) */
+.deskbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:40px;padding:6px 14px;border-bottom:1px solid #1e232b;background:#07080a}
+.deskbar .clock{margin-right:auto}

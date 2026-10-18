@@ -155,7 +155,7 @@
     var al = e.target.closest('[data-lv-alt]'); if (al) { e.preventDefault(); S.s = al.dataset.sym; save(); load(); return; }
     var b = e.target.closest('[data-lv-s],[data-lv-r],[data-lv-m]'); if (b && !b.disabled) {
       if (b.dataset.lvS) S.s = b.dataset.lvS; if (b.dataset.lvR) S.r = b.dataset.lvR; if (b.dataset.lvM) S.m = b.dataset.lvM; save(); load(); return; }
-    var lt = e.target.closest('[data-lv-lt]'); if (lt) { e.preventDefault(); document.dispatchEvent(new CustomEvent('btd:chart', { detail: 'price' })); } });
+    var lt = e.target.closest('[data-lv-lt]'); if (lt) { e.preventDefault(); var c = document.getElementById('charts'); c && c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' }); } });
   cv.addEventListener('mousemove', function (e) { hov = e.offsetX; draw(); }); cv.addEventListener('mouseleave', function () { hov = null; draw(); });
   cv.addEventListener('touchmove', function (e) { var r = cv.getBoundingClientRect(); hov = e.touches[0].clientX - r.left; draw(); }, { passive: true }); cv.addEventListener('touchend', function () { hov = null; draw(); });
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(draw, 80); });

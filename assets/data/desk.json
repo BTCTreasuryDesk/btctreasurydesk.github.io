@@ -42,18 +42,18 @@
     "note": "No new official Saylor interview found for Oct 4-11, 2026; newest unfeatured Saylor interview from a reputable channel used (rule in REFRESH.md)."
   },
   "strategy": {
-    "btc_held": 848000,
-    "btc_as_of": "2026-10-05",
-    "last_buy_reported": "2026-10-05",
-    "last_buy_btc": 334,
-    "avg_cost": 75440.7,
-    "total_cost_usd": 63970000000,
+    "btc_held": 848250,
+    "btc_as_of": "2026-10-11",
+    "last_buy_reported": "2026-10-12",
+    "last_buy_btc": 250,
+    "avg_cost": 75444,
+    "total_cost_usd": 64000000000,
     "btc_src": {
-      "name": "Strategy 8-K, Oct 5, 2026",
-      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm"
+      "name": "Strategy 8-K Ex. 99.1, Oct 12, 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526419726/mstr-ex99_1.htm"
     },
     "mnav": 1.1975,
-    "sats_per_share": 187748,
+    "sats_per_share": 187750,
     "net_sats_per_share": 157322,
     "kpi_as_of": "2026-10-11 17:00 ET",
     "kpi_src": {
@@ -104,13 +104,13 @@
     }
   },
   "strive": {
-    "btc_held": 29462,
-    "btc_as_of": "2026-10-02",
-    "last_buy_reported": "2026-10-05",
-    "last_buy_btc": 2000,
+    "btc_held": 35595,
+    "btc_as_of": "2026-10-14",
+    "last_buy_reported": "2026-10-14",
+    "last_buy_btc": 6133,
     "btc_src": {
-      "name": "Strive 8-K, Oct 5, 2026",
-      "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026064753/asst-20261005.htm"
+      "name": "Strive 8-Ks, Oct 13–14, 2026",
+      "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001920406&type=8-K"
     }
   },
   "preferreds": [
@@ -149,7 +149,7 @@
   },
   "treasuries": {
     "as_of": "2026-10-11",
-    "holdings_note": "BTC held as shown on BitcoinTreasuries.NET on Oct 11, 2026 (includes Oct 5 filings: Strategy 848,000, Metaplanet 44,000, Strive 29,462).",
+    "holdings_note": "BTC held as shown on BitcoinTreasuries.NET on Oct 11, 2026 (includes Oct 5 filings: Strategy 848,000, Metaplanet 44,000, Strive 29,462). Updated Oct 18, 2026 for Strategy (848,250, 8-K Oct 12) and Strive (35,595, 8-Ks Oct 13–14).",
     "src": {
       "name": "BitcoinTreasuries.NET (viewed Oct 11, 2026) + company filings",
       "url": "https://bitcointreasuries.net/"
@@ -164,12 +164,12 @@
         "name": "Strategy",
         "tk": "MSTR",
         "tv": "NASDAQ:MSTR",
-        "btc": 848000,
+        "btc": 848250,
         "flag": "US",
         "type": "treasury",
         "mnav": 1.2,
         "mnav_src": "strategy.com, Oct 11",
-        "last_add": "2026-10-05",
+        "last_add": "2026-10-12",
         "last_add_src": "Strategy 8-K, Oct 5 (+334 BTC)"
       },
       {
@@ -200,6 +200,19 @@
       },
       {
         "rank": 4,
+        "name": "Strive",
+        "tk": "ASST",
+        "tv": "NASDAQ:ASST",
+        "btc": 35595,
+        "flag": "US",
+        "type": "treasury",
+        "mnav": 1.46,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "last_add": "2026-10-14",
+        "last_add_src": "Strive 8-K, Oct 5 (+2,000 BTC)"
+      },
+      {
+        "rank": 5,
         "name": "MARA Holdings",
         "tk": "MARA",
         "tv": "NASDAQ:MARA",
@@ -210,19 +223,6 @@
         "mnav_src": null,
         "last_add": "2026-06-16",
         "last_add_src": "BitcoinTreasuries.NET history (miner; adds include mined BTC)"
-      },
-      {
-        "rank": 5,
-        "name": "Strive",
-        "tk": "ASST",
-        "tv": "NASDAQ:ASST",
-        "btc": 29462,
-        "flag": "US",
-        "type": "treasury",
-        "mnav": 1.46,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
-        "last_add": "2026-10-05",
-        "last_add_src": "Strive 8-K, Oct 5 (+2,000 BTC)"
       },
       {
         "rank": 6,
@@ -1048,16 +1048,24 @@
       "e": "STRC record date (Oct 31, $0.50/share)"
     },
     {
-      "d": "Fri Oct 16",
-      "e": "MSCI decision on non-operating companies (on or before)"
-    },
-    {
       "d": "Wed Oct 28",
       "e": "Strategy special meeting: daily preferred dividends vote, 10:00 AM ET"
     },
     {
       "d": "Thu Oct 29",
       "e": "Strategy Q3 2026 earnings after close; live Video Webinar 5:00 PM ET"
+    },
+    {
+      "d": "Fri Oct 31",
+      "e": "STRC monthly dividend payable ($0.50/share, record date Oct 15)"
+    },
+    {
+      "d": "Wed Nov 11",
+      "e": "MSCI November Index Review: final list of non-operating companies (Strategy and Metaplanet on the potential-deletion list)"
+    },
+    {
+      "d": "Mon Nov 30",
+      "e": "MSCI non-operating companies rule takes effect at the close"
     }
   ],
   "featured_history": [
@@ -1094,7 +1102,7 @@
         "rank": "2nd of 5 (after STRF)",
         "next_ex": "2026-10-15",
         "next_ex_note": "Record date for the Oct 31 payment ($0.50/share)",
-        "explain": "Strategy's short-duration digital credit: the rate is adjusted so the price stays near $100.",
+        "explain": "Strategy's variable-rate preferred: Strategy resets the rate to keep the price near $100 (12.00% for periods from Oct 16, 2026, per its Oct 1 8-K). Dividends are cumulative.",
         "src": {
           "name": "Strategy 8-K, Oct 1, 2026; 10-Q Q2 2026",
           "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm"
@@ -1116,7 +1124,7 @@
         "rank": "Most senior (1st of 5)",
         "next_ex": null,
         "next_ex_note": "Q4 dividend not declared yet (scheduled pay date Dec 31)",
-        "explain": "First in line among Strategy's preferreds; a fixed 10%, and missed dividends accrue.",
+        "explain": "Most senior of Strategy's preferreds: a fixed 10% rate on $100, and missed dividends accrue (cumulative).",
         "src": {
           "name": "Strategy 10-Q Q2 2026",
           "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm"
@@ -1138,7 +1146,7 @@
         "rank": "4th of 5 (after STRF, STRC, STRE)",
         "next_ex": null,
         "next_ex_note": "Q4 dividend not declared yet (scheduled pay date Dec 31)",
-        "explain": "Lower coupon plus MSTR upside: each share converts into 0.1 MSTR share.",
+        "explain": "Fixed 8% rate on $100 plus an equity link: each share can convert into 0.1 MSTR share. Dividends can be paid in cash, MSTR stock or both.",
         "src": {
           "name": "Strategy 10-Q Q2 2026",
           "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm"
@@ -1160,7 +1168,7 @@
         "rank": "Most junior (5th of 5)",
         "next_ex": null,
         "next_ex_note": "Q4 dividend not declared yet (scheduled pay date Dec 31)",
-        "explain": "Highest yield, most risk: dividends are discretionary and skipped ones do not accrue.",
+        "explain": "Most junior Strategy preferred: a fixed 10% rate, but dividends are at the board's discretion and skipped ones never accrue (non-cumulative). That is why it usually trades at the highest effective yield.",
         "src": {
           "name": "Strategy 10-Q Q2 2026",
           "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm"
@@ -1182,7 +1190,7 @@
         "rank": "Ahead of Strive common stock",
         "next_ex": "daily",
         "next_ex_note": "Every business day in October",
-        "explain": "Strive's take on STRC: a variable rate paid every business day, aimed at trading near $100.",
+        "explain": "Strive's variable-rate preferred: 13.00% for October 2026 (Strive 8-K, Sep 15), paid each business day; Strive aims for it to trade between $99 and $101. Dividends are cumulative.",
         "src": {
           "name": "Strive 8-K, Sep 15, 2026",
           "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026061949/asst-20260914.htm"
@@ -1524,14 +1532,14 @@
       },
       {
         "cat": "industry",
-        "date": "2026-10-16",
-        "text": "Coming: MSCI decision on 'non-operating companies' due on or before Oct 16; its simulation flagged Strategy and Metaplanet as possible index deletions.",
+        "date": "2026-10-15",
+        "text": "MSCI adopted its 'non-operating companies' rule (Oct 15): issuers failing an operating-assets screen and 4 of 5 financial ratios become ineligible from the Nov 30 close. Strategy and Metaplanet are on the potential-deletion list; the final list is due Nov 11. Strategy called the rule 'discriminatory' and asked MSCI to withdraw it.",
         "src": {
-          "name": "MSCI consultation",
-          "url": "https://app2.msci.com/webapp/index_ann/DocGet?format=html&lang=en&pub_key=akYg4WzbEDk%3D"
+          "name": "MSCI announcement",
+          "url": "https://app2.msci.com/webapp/index_ann/DocGet?lang=en&pub_key=aq0wbkjxPgo%3D"
         },
         "top": 1,
-        "why": "An exclusion could force passive index funds to sell MSTR and Metaplanet; current members get a two-period buffer before removal."
+        "why": "Current constituents are removed only if they fail the screen in each of their two most recent annual filings. Funds tracking MSCI hold about 13M MSTR shares (~3.1% of basic shares)."
       },
       {
         "cat": "bitcoin",

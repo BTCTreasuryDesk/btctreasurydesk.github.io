@@ -9,9 +9,10 @@
   function O(u) { return J(u).catch(function () { return null; }); }
   var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   var t0 = function (d) { return Date.parse(d + 'T00:00:00Z'); };
-  var TABS = [['price', 'Long-term price + models'], ['mnav', 'mNAV history'], ['perf', 'MSTR vs BTC'], ['hold', 'Strategy holdings'], ['dom', 'BTC dominance'], ['ratios', 'BTC/ETH · BTC/SOL'], ['models', 'Models & cycle'], ['prefs', 'Preferred yields'], ['top', 'Treasury BTC'], ['cmpco', 'Company compare']];
-  var NOPER = { top: 1 }, GDEF = ['price', 'perf', 'mnav', 'hold'];
-  var cur = LS.get('btd_ctab'); if (!TABS.some(function (t) { return t[0] === cur; })) cur = 'price';
+  var TABS = [['mnav', 'mNAV history'], ['hold', 'Strategy holdings'], ['bps', 'BTC per share'], ['top', 'Treasury BTC'], ['prefs', 'Preferred yields'], ['perf', 'MSTR vs BTC'], ['cmpco', 'Company compare']]; // long-term BTC/models, dominance and ratios live in the top chart + Quick glance (no duplicates)
+  var NOPER = { top: 1 }, GDEF = ['mnav', 'hold', 'bps', 'perf'];
+  var cur = LS.get('btd_ctab'); if (!TABS.some(function (t) { return t[0] === cur; })) cur = 'mnav';
+  var hm = /^#chart-(\w+)$/.exec(location.hash); if (hm && TABS.some(function (t) { return t[0] === hm[1]; })) { cur = hm[1]; LS.set('btd_ctab', cur); LS.set('btd_cview', 'one'); setTimeout(function () { var c = document.getElementById('charts'); c && c.scrollIntoView({ block: 'start' }); }, 400); } // deep links from /strategy/
   var view = LS.get('btd_cview') === 'grid' ? 'grid' : 'one', grid = null; try { grid = JSON.parse(LS.get('btd_cgrid') || 'null'); } catch (e) {} if (!Array.isArray(grid) || grid.length !== 4) grid = GDEF.slice(); grid = grid.map(function (k, i) { return TABS.some(function (t) { return t[0] === k; }) ? k : GDEF[i]; });
   var PERS = ['1M', '3M', 'YTD', '1Y', '5Y', 'All'], rng = LS.get('btd_cper'); if (PERS.indexOf(rng) < 0) rng = '1Y'; var DATA = {};
   function fromT(endT) { var e = new Date(endT), y = e.getUTCFullYear(), m = e.getUTCMonth(), d = e.getUTCDate(); return rng === '1M' ? Date.UTC(y, m - 1, d) : rng === '3M' ? Date.UTC(y, m - 3, d) : rng === '5Y' ? Date.UTC(y - 5, m, d) : rng === 'YTD' ? Date.UTC(y, 0, 1) : rng === '1Y' ? Date.UTC(y - 1, m, d) : -Infinity; }
@@ -101,6 +102,17 @@
         foot.innerHTML = 'Growth of 100, ' + (rng === 'All' ? 'since Strategy’s first BTC purchase (Aug 10, 2020)' : perTxt()) + ' to ' + esc(M.d[M.d.length - 1]) + (rng === 'All' ? ', log scale' : '') + '. MSTR: ' + esc(d[1].source) + '; BTC: Coinbase daily closes.';
         });
     },
+    bps: function (body, foot) {
+      need(['strat']).then(function (d) { var S = d[0], P = [];
+        S.purchases.filter(function (x) { return x.adso_k && x.holdings; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (x) { P.push([t0(x.date), x.holdings / (x.adso_k * 1e3) * 1e8]); });
+        if (P.length < 2) { body.innerHTML = '<p class="muted">Not enough ledger rows with share counts yet.</p>'; return; }
+        var from = fromT(Date.now()), before = P.filter(function (p) { return p[0] < from; }).pop(), Q = clip(P, from); if (before && rng !== 'All') Q.unshift([from, before[1]]); Q.push([Date.now(), Q[Q.length - 1][1]]);
+        var ch = (Q[Q.length - 1][1] / Q[0][1] - 1) * 100;
+        body.innerHTML = '<div class="ch-sub">' + seg() + LEG([['#2fd17c', 'Sats per assumed diluted share (k = thousand)']]) + '<span class="mono ' + (ch >= 0 ? 'up' : 'dn') + '">' + (ch >= 0 ? '+' : '') + ch.toFixed(1) + '% ' + esc(perTxt()) + '</span></div><canvas class="ch-cv"></canvas>';
+        line($('canvas', body), [{ p: Q, c: '#2fd17c', step: true, fill: 'rgba(47,209,124,.08)' }], { yf: function (v) { return v >= 1e4 ? fmt(v / 1e3, 1) + 'k' : fmt(v); } });
+        foot.innerHTML = 'BTC per share = BTC held ÷ assumed diluted shares outstanding, from each row of the <a href="' + esc(S.source_url) + '" target="_blank" rel="noopener">strategy.com ledger</a> (to ' + esc(S.as_of) + '), shown in sats (1 BTC = 100M sats). This is what Strategy\u2019s BTC Yield KPI measures; it is a company KPI, not a stock return. Axis in sats (k = thousand).';
+      }).catch(function () { body.innerHTML = '<p class="muted">Ledger data unavailable right now.</p>'; });
+    },
     hold: function (body, foot) {
       need(['strat', 'btc']).then(function (d) { var S = d[0], B = d[1], h = 0, cost = 0, H = [], A = [];
         S.purchases.forEach(function (p) { if (p.btc >= 0) { cost += p.cost_musd || 0; h += p.btc; } else { cost -= -p.btc * cost / h; h += p.btc; } var t = t0(p.date); H.push([t, p.holdings]); A.push([t, cost * 1e6 / p.holdings]); });
@@ -186,7 +198,7 @@
     else if (b.dataset.ctab) { cur = b.dataset.ctab; LS.set('btd_ctab', cur); show(); }
     else if (b.dataset.cview) { view = b.dataset.cview; LS.set('btd_cview', view); show(); } });
   box.addEventListener('change', function (e) { var s = e.target; if (s.dataset.cg == null) return; grid[+s.dataset.cg] = s.value; LS.set('btd_cgrid', JSON.stringify(grid)); show(); });
-  document.addEventListener('btd:chart', function (e) { var k = e.detail; if (!R[k]) return; cur = k; LS.set('btd_ctab', k); if (view === 'grid') { view = 'one'; LS.set('btd_cview', 'one'); } show(); box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  document.addEventListener('btd:chart', function (e) { var k = e.detail; if (!R[k] || !TABS.some(function (t) { return t[0] === k; })) return; cur = k; LS.set('btd_ctab', k); if (view === 'grid') { view = 'one'; LS.set('btd_cview', 'one'); } show(); box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   var rt, lw = box.clientWidth; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (box.clientWidth !== lw) { lw = box.clientWidth; show(); } }, 200); });
   show();
 })();

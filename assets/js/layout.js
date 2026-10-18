@@ -4,10 +4,11 @@
   'use strict';
   var main = document.querySelector('main.grid'); if (!main) return;
   var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var SECS = [ // default order (Phil's Full Desk)
-    ['tiles', 'Price tiles (BTC, MSTR, Top 10)', '[data-strip]'], ['kpi', 'Market row + Strategy (MSTR) KPIs', '.p-kpi'], ['live', 'Live price chart (BTC / MSTR)', '.p-live'], ['field', 'Quick glance: dominance, ratios, sentiment, ATH, halving', '.p-field'], ['movers', 'Movers & Makers', '.p-movers'], ['week', 'Coming up (calendar)', '.p-week'], ['pdesk', 'Preferreds Desk', '.p-pdesk'], ['ep', 'Latest episode + Video of the Week', '.p-ep'], ['news', 'News of the Week', '.p-news'], ['optin', 'Weekly email box', '.p-optin'], ['charts', 'Charts: long-term + models, chart library', '.p-charts'], ['board', 'Treasury Board', '.p-tboard'], ['mnav', 'MSTR mNAV card', '.p-mnav'], ['wcw', 'What changed this week', '.p-wcw'], ['strat', 'Strategy & Strive', '.p-strat'], ['zones', 'Model Zones', '.p-zones'], ['models', 'Bitcoin Models & Cycle', '.p-models'], ['chart', 'Live chart (TradingView)', '.p-chart'], ['links', 'Research desk', '.p-links']
+  var SECS = [ // default order: intraday first screen, then the weekly / research shelf
+    ['mk', 'Markets board (BTC desk + TradFi)', '.p-mk'], ['live', 'Live chart (BTC / MSTR / top 50, compare)', '.p-live'], ['wl', 'Treasury companies window + preferreds', '.p-wl'], ['cx', 'Crypto market (dominance, alts, stablecoins, sentiment)', '.p-cx'], ['tok', 'Tokenized stocks (24/7)', '.p-tok'], ['wall', 'Live Wall (BTC + your 4 picks)', '.p-wall'],
+    ['slowh', 'Divider: This week & research', '[data-slow-h]'], ['yb', 'Your Bitcoin + Pro tools', '.p-yb'], ['kpi', 'Strategy (MSTR) KPIs', '.p-kpi'], ['board', 'Treasury Board (holdings, weekly)', '.p-tboard'], ['charts', 'Long-term charts: models, TA, chart library', '.p-charts'], ['movers', 'Movers & Makers (weekly)', '.p-movers'], ['week', 'Coming up (calendar)', '.p-week'], ['wcw', 'What changed this week', '.p-wcw'], ['news', 'News of the Week', '.p-news'], ['ep', 'Latest episode + Video of the Week', '.p-ep'], ['optin', 'Weekly email box', '.p-optin'], ['links', 'Research desk links', '.p-links']
   ];
-  var DEFHID = ['chart']; // default-hidden: superseded by the main chart (still shown in Desk Mode)
+  var DEFHID = ['wcw']; // default-hidden (addable in Customize): old TradingView chart (superseded), mNAV card (mNAV is in the KPI row + Charts), What changed (covered by Movers + News)
   var NAME = {}, EL = {}, DEF = [];
   SECS.forEach(function (s) { var el = $(s[2], main); if (!el || el.parentNode !== main) return; el.setAttribute('data-sec', s[0]); EL[s[0]] = el; NAME[s[0]] = s[1]; DEF.push(s[0]); });
   var cap = $('[data-strip-cap]', main), tail = document.createComment('end of sections'); main.appendChild(tail);
@@ -23,15 +24,15 @@
   function isDef() { return L.order.join() === DEF.join() && L.hidden.slice().sort().join() === DEFHID.filter(function (k) { return EL[k]; }).sort().join(); }
   function save() { if (isDef()) LS.del('btd_layout'); else LS.set('btd_layout', JSON.stringify({ v: 1, order: L.order, hidden: L.hidden })); }
   function apply() {
-    L.order.forEach(function (k) { if (k === 'tiles' && cap) main.insertBefore(cap, tail); main.insertBefore(EL[k], tail); });
-    DEF.forEach(function (k) { var h = L.hidden.indexOf(k) >= 0; EL[k].classList.toggle('sec-off', h); if (k === 'tiles' && cap) cap.classList.toggle('sec-off', h); });
+    L.order.forEach(function (k) { main.insertBefore(EL[k], tail); });
+    DEF.forEach(function (k) { var h = L.hidden.indexOf(k) >= 0; EL[k].classList.toggle('sec-off', h); });
     main.classList.toggle('lay-custom', !isDef());
     window.dispatchEvent(new Event('resize')); // canvases re-measure after moving
   }
   apply();
 
   /* settings that travel with Export / Import (never membership or email state) */
-  var KEYS = ['btd_layout', 'btd_live', 'btd_music', 'btd_strip2', 'btd_tk2', 'btd_tk3', 'btd_cco', 'btd_ticker', 'btd_ctab', 'btd_cper', 'btd_mnav_p', 'btd_pmode', 'btd_pper', 'btd_cview', 'btd_cgrid', 'btd_news_open', 'btd_cmp', 'btd_mchart', 'btd_rtw', 'btd_tb', 'btd_mem_builder', 'btd_mem_plans', 'btd_mem_lab', 'btd_mem_freedom'];
+  var KEYS = ['btd_layout', 'btd_live', 'btd_music', 'btd_strip2', 'btd_tk2', 'btd_tk3', 'btd_cco', 'btd_ticker', 'btd_ctab', 'btd_cper', 'btd_mnav_p', 'btd_pmode', 'btd_pper', 'btd_cview', 'btd_cgrid', 'btd_news_open', 'btd_cmp', 'btd_mchart', 'btd_rtw', 'btd_tb', 'btd_mem_builder', 'btd_mem_plans', 'btd_mem_lab', 'btd_mem_freedom', 'btd_mk', 'btd_tw', 'btd_wlt', 'btd_wlp', 'btd_lc', 'btd_wall', 'btd_wallr', 'btd_yb', 'btd_ybp'];
   function snapshot() { var o = { app: 'btctreasurydesk', v: 1, saved: new Date().toISOString().slice(0, 10), s: {} }; KEYS.forEach(function (k) { var v = LS.get(k); if (v != null) o.s[k] = v; }); return o; }
   function toCode(o) { return 'BTD1-' + btoa(unescape(encodeURIComponent(JSON.stringify(o)))); }
   function parse(txt) { txt = String(txt || '').trim(); var o;
@@ -44,8 +45,9 @@
   var pnl = null, opener = null;
   /* Preset layouts: one tap sets order + visibility (still fully editable afterwards). Full Desk = the default. */
   var PRESETS = [['full', 'Full Desk', null, null],
-    ['strategy', 'Strategy focus', ['tiles', 'kpi', 'live', 'mnav', 'strat', 'pdesk', 'news', 'week', 'wcw', 'board', 'movers', 'charts', 'ep'], ['chart', 'zones', 'models', 'field', 'links']],
-    ['minimal', 'Minimal', ['tiles', 'kpi', 'live', 'field', 'news'], 'rest']];
+    ['trader', 'Trader', ['mk', 'live', 'wl', 'tok', 'wall', 'cx', 'slowh', 'charts', 'board'], ['kpi', 'movers', 'week', 'news', 'ep', 'optin', 'links', 'yb']],
+    ['strategy', 'Strategy focus', ['mk', 'live', 'wl', 'slowh', 'kpi', 'charts', 'news', 'week', 'board', 'movers', 'ep'], ['tok', 'cx', 'wall', 'links']],
+    ['minimal', 'Minimal', ['mk', 'live', 'wl'], 'rest']];
   function preset(id) { var P = PRESETS.filter(function (x) { return x[0] === id; })[0]; if (!P || !P[2]) return { order: DEF.slice(), hidden: DEFHID.filter(function (k) { return EL[k]; }) };
     var order = P[2].filter(function (k) { return EL[k]; }); DEF.forEach(function (k) { if (order.indexOf(k) < 0) order.push(k); });
     var hidden = P[3] === 'rest' ? DEF.filter(function (k) { return P[2].indexOf(k) < 0; }) : P[3].filter(function (k) { return EL[k]; }); return { order: order, hidden: hidden }; }
@@ -60,7 +62,7 @@
   function open(btn) {
     close(); opener = btn; pnl = document.createElement('div'); pnl.className = 'cz'; pnl.setAttribute('role', 'dialog'); pnl.setAttribute('aria-modal', 'true'); pnl.setAttribute('aria-label', 'Customize desk');
     pnl.innerHTML = '<div class="cz-box"><div class="cz-h"><b>Customize desk</b><span class="cz-st" data-cz-state></span><button type="button" class="cz-x" data-cz-close aria-label="Close">&times;</button></div>' +
-      '<p class="cz-s">Show or hide sections and move them up or down. Saved in this browser. Price tiles and the price scroll have their own ✎ pickers.</p>' +
+      '<p class="cz-s">Show or hide sections and move them up or down. Saved in this browser. The markets board, the treasury-companies window and the price scroll each have their own ✎ Customize.</p>' +
       '<p class="cz-s"><b>Layouts</b> · one tap, then fine-tune below</p><div class="cz-pre" data-cz-presets role="group" aria-label="Preset layouts"></div>' +
       '<ol class="cz-l" data-cz-list></ol>' +
       '<div class="cz-f"><button type="button" class="chip" data-cz-reset>Reset to default</button><button type="button" class="chip" data-cz-exp aria-expanded="false">Export settings</button><button type="button" class="chip" data-cz-imp aria-expanded="false">Import settings</button><button type="button" class="chip on" data-cz-close>Done</button></div>' +

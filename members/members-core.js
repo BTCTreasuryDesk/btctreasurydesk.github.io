@@ -79,6 +79,7 @@
 
   /* ---------- tabs ---------- */
   var MEM = window.MEM = { $: $, $$: $$, esc: esc, LS: LS, usd: usd, pct: pct, iso: iso, dlbl: dlbl, chart: chart, tools: {}, weekly: [], unlocked: false, ready: false, DAY: DAY };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (b) { if ((CFG.TOOLS || {})[b.dataset.tab] === 'pro' && !b.querySelector('.t-pro')) b.insertAdjacentHTML('beforeend', '<sup class="t-pro" title="Pro tool (free during launch)">PRO</sup>'); });
   MEM.unlocked = isMember(); document.body.classList.toggle('member', MEM.unlocked);
   var cur = (location.hash || '').replace('#', ''); if (!$('[data-pane="' + cur + '"]')) cur = 'zones';
   function show(name, force) {

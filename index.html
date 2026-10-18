@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BTC Treasury Desk | News and analysis on Bitcoin treasury companies</title>
-  <meta name="description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), preferreds (STRC, STRF, STRK, STRD, SATA), live dashboard and sourced data. Education only.">
+  <title>BTC Treasury Desk | Live Bitcoin treasury company desk: BTC, MSTR, mNAV, markets</title>
+  <meta name="description" content="Live desk for Bitcoin treasury companies: BTC and MSTR tick by tick, live mNAV, top 50 treasury stocks, preferreds (STRC, STRF, STRK, STRD, SATA), futures, yields, gold and the Your Bitcoin calculator. Free. Education only.">
   <link rel="canonical" href="https://btctreasurydesk.com/">
   <meta name="theme-color" content="#0b0c0d">
   <meta name="color-scheme" content="dark">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BTC Treasury Desk">
   <meta property="og:title" content="BTC Treasury Desk | News and analysis on Bitcoin treasury companies">
-  <meta property="og:description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), preferreds (STRC, STRF, STRK, STRD, SATA), live dashboard and sourced data. Education only.">
+  <meta property="og:description" content="Live desk for Bitcoin treasury companies: BTC and MSTR tick by tick, live mNAV, top 50 treasury stocks, preferreds (STRC, STRF, STRK, STRD, SATA), futures, yields, gold and the Your Bitcoin calculator. Free. Education only.">
   <meta property="og:url" content="https://btctreasurydesk.com/">
   <meta property="og:image" content="https://btctreasurydesk.com/assets/img/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@BTCTreasuryDesk">
   <meta name="twitter:title" content="BTC Treasury Desk | News and analysis on Bitcoin treasury companies">
-  <meta name="twitter:description" content="News and analysis on Bitcoin treasury companies: Strategy (MSTR), Strive (ASST), preferreds (STRC, STRF, STRK, STRD, SATA), live dashboard and sourced data. Education only.">
+  <meta name="twitter:description" content="Live desk for Bitcoin treasury companies: BTC and MSTR tick by tick, live mNAV, top 50 treasury stocks, preferreds (STRC, STRF, STRK, STRD, SATA), futures, yields, gold and the Your Bitcoin calculator. Free. Education only.">
   <meta name="twitter:image" content="https://btctreasurydesk.com/assets/img/og-image.jpg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -31,42 +31,46 @@
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="preconnect" href="https://api.coingecko.com">
-  <link rel="preconnect" href="https://s3.tradingview.com">
-  <link rel="stylesheet" href="/assets/css/desk.css?v=v2v">
+  <link rel="preconnect" href="https://quote.cnbc.com">
+  <link rel="preconnect" href="https://api.exchange.coinbase.com">
+  <link rel="stylesheet" href="/assets/css/desk.css?v=v3">
   <link rel="stylesheet" href="/assets/css/optin.css?v=o1">
 <link rel="stylesheet" href="/assets/css/layout.css?v=l3">
-  <link rel="stylesheet" href="/assets/css/news.css?v=n3">
+  <link rel="stylesheet" href="/assets/css/news.css?v=r1018">
   <link rel="stylesheet" href="/assets/css/extras.css?v=x14">
+  <link rel="stylesheet" href="/assets/css/head.css?v=h2">
+  <link rel="stylesheet" href="/assets/css/analysts.css?v=a1">
+  <link rel="stylesheet" href="/assets/css/board.css?v=r1018">
 </head><body class="desk">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="t-head">
-    <a class="brand" href="/" aria-label="BTC Treasury Desk home"><img src="/assets/img/emblem-96.png" alt="" width="28" height="28"><span><span class="o">BTC</span> TREASURY DESK</span></a>
-    <nav class="t-nav" aria-label="Main"><a href="/" aria-current="page">Desk</a><a href="/companies/">Companies</a><a href="/preferreds/">Yield Desk</a><a href="/saylor/">Saylor</a><a href="/dashboard/">Dashboard</a><a href="/lab/">Math Lab</a><a href="/episodes/">Episodes</a><a href="/members/">Members</a><a href="/start/">Start here</a><a href="/glossary/">Glossary</a><a href="/resources/">Resources</a></nav>
-    <div class="t-tools">
-      <div class="clock mono" data-clock><span class="dot"></span><b data-mkt>…</b><span data-mkt-cd></span><span class="ny" data-ny></span></div>
+  <header class="sh"><div class="sh-in"><a class="sh-brand" href="/" aria-label="BTC Treasury Desk home"><img src="/assets/img/emblem-96.png" alt="" width="26" height="26"><span><span class="o">BTC</span> TREASURY DESK</span></a><nav class="sh-nav" aria-label="Main"><a href="/" aria-current="page">Desk</a><a href="/strategy/">Strategy</a><a href="/companies/">Companies</a><a href="/your-bitcoin/">Your Bitcoin</a><a href="/preferreds/">Yield Desk</a><a href="/saylor/">Saylor</a><a href="/dashboard/">Dashboard</a><a href="/lab/">Math Lab</a><a href="/episodes/">Episodes</a><a href="/news/">News</a><a href="/members/">Members</a><a href="/resources/">Resources</a><a href="/start/">Start here</a></nav><a class="sh-yt" href="https://www.youtube.com/@btctreasurydesk" target="_blank" rel="noopener" aria-label="Watch on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg><span>Watch on YouTube</span></a></div></header><script>(function(){var h=document.querySelector(".sh");function f(){if(h&&getComputedStyle(h).position==="sticky")document.documentElement.style.setProperty("--sh-h",h.offsetHeight+"px");else document.documentElement.style.removeProperty("--sh-h");}f();addEventListener("resize",f);})();</script>
+  <div class="deskbar" aria-label="Desk tools"><div class="clock mono" data-clock><span class="dot"></span><b data-mkt>…</b><span data-mkt-cd></span><span class="ny" data-ny></span></div>
       <button class="tbtn" type="button" data-ticker-toggle aria-pressed="false" title="Slow, thin price scroll (off by default; your choice is remembered)">Price scroll: Off</button><button class="tbtn tbtn-vw" type="button" data-tk-view title="Tap through the price scroll views: Desk default, Treasury stocks, Preferreds, Key numbers, BTC vs Alts, My mix">Desk default ▸</button><button class="tbtn tbtn-ed" type="button" data-tk-edit aria-haspopup="dialog" aria-label="Customize the price scroll" title="Customize the price scroll: add, remove, reorder">&#9998;</button>
-      <button class="tbtn tbtn-cz" type="button" data-customize aria-haspopup="dialog" title="Show, hide and reorder sections; export or import your settings">&#9881; Customize</button><button class="tbtn tbtn-o" type="button" data-deskmode title="Full-screen Desk Mode (Esc to exit)">&#9635; Desk Mode</button>
-      <a class="tbtn tbtn-yt" href="https://www.youtube.com/@btctreasurydesk" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a>
-    </div>
-  </header>
+      <button class="tbtn tbtn-cz" type="button" data-customize aria-haspopup="dialog" title="Show, hide and reorder sections; export or import your settings">&#9881; Customize</button><button class="tbtn tbtn-o" type="button" data-deskmode title="Full-screen Desk Mode (Esc to exit)">&#9635; Desk Mode</button></div>
   <div class="ticker" data-ticker hidden aria-hidden="true"><div class="ticker-in" data-ticker-in></div></div>
   <main id="main" class="grid">
-    <div class="strip-cap" data-strip-cap><b>Top 10 by BTC held</b><span>Public companies ranked by bitcoin on the balance sheet · BTC fixed · updates each Sunday</span></div>
-    <section class="strip" aria-label="Top 10 public companies by BTC held, plus BTC: live prices (customizable)" data-strip>
-      <div class="q-cell q-slim q-btc"></div><div class="q-cell q-slim q-feat"></div><div class="q-rail"><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div><div class="q-cell q-slim"></div></div>
+    <section class="p p-mk" data-mk aria-label="Markets board: Bitcoin desk, US stocks and futures, rates, dollar, volatility, commodities, global indexes, Mag 7"><p class="muted">Loading markets…</p></section>
+
+    <section class="p p-live" data-lc aria-label="Live price chart: BTC, MSTR or any top-50 treasury company, with compare"></section>
+
+    <section class="p p-wl" data-wl aria-label="Treasury companies window: watchlist, movers, preferreds"></section>
+
+    <section class="p p-cx" data-cx aria-label="Crypto market: dominance, total cap, alt index, stablecoins, sentiment"></section>
+
+    <section class="p p-tok" data-tok aria-label="Tokenized stocks, 24/7"></section>
+
+    <section class="p p-wall" data-wall aria-label="Live Wall: BTC and your picks"></section>
+
+    <div class="slow-h" data-slow-h><b>This week &amp; research</b><span>Slower-moving numbers refreshed weekly: company KPIs, holdings, long-term charts, calendar and news.</span></div>
+
+    <section class="p p-yb slow" aria-label="Your Bitcoin calculator"><div class="p-h"><span class="p-t">Your Bitcoin</span><span class="tag">free tool</span></div>
+      <a class="yb-cta" href="/your-bitcoin/"><b>How much bitcoin do your shares hold?</b><span>Pick MSTR, Metaplanet, Strive or any top-50 treasury company, enter your shares and see your BTC, sats and live value.</span><span class="go">Open the calculator &rarr;</span></a>
+      <a class="yb-cta yb-cta2" href="/members/pro/#planning"><b>Pro planning tools</b><span>Retirement planner, withdrawal planner, preferreds income ladder and a tax helper. Free with your email during launch.</span><span class="go">Pro Vault &rarr;</span></a>
     </section>
 
-    <section class="p p-kpi" data-x-kpi aria-label="Strategy (MSTR) KPIs, source strategy.com"><p class="x-mu">Loading Strategy KPIs…</p></section>
+    <section class="p p-kpi slow" data-x-kpi aria-label="Strategy (MSTR) KPIs, source strategy.com"><p class="x-mu">Loading Strategy KPIs…</p></section>
 
-    <section class="p p-live" data-lvcard aria-label="Live price chart: BTC or MSTR"></section>
-
-    <section class="p p-charts" id="charts" data-charts aria-label="Charts: long-term price with models and TA, plus chart library"></section>
-
-    <section class="p p-mnav p-mnavc" aria-label="MSTR mNAV: live, percentile, sparkline"><div class="p-h"><span class="p-t">MSTR mNAV</span><span class="tag">live</span><a class="more" href="#charts" data-mnav-full>Full chart &rarr;</a></div><div data-x-mnav><p class="x-mu">Loading…</p></div></section>
-
-    <section class="p p-wcw" aria-label="What changed this week"><div class="p-h"><span class="p-t">What changed this week</span><span class="tag">weekly</span></div><div data-x-wcw><p class="x-mu">Loading…</p></div></section>
-
-    <section class="p p-tboard" id="board" aria-label="Treasury Board: top public Bitcoin treasury companies">
+    <section class="p p-tboard slow" id="board" aria-label="Treasury Board: top public Bitcoin treasury companies">
       <div class="p-h tb-h"><span class="p-t">Treasury Board</span>
         <div class="seg" role="group" aria-label="Board size"><button type="button" data-tb-n="10">Top 10</button><button type="button" data-tb-n="20">Top 20</button><button type="button" data-tb-n="50">All 50</button></div>
         <button type="button" class="chip tb-ftog" data-tb-ftog aria-expanded="false">Filters</button>
@@ -86,28 +90,60 @@
       <div class="tb-foot"><button type="button" class="chip tb-more" data-tb-more aria-expanded="false">Expand</button><button type="button" class="chip tb-live" data-tb-live aria-expanded="false">Live prices</button><span class="tb-src" data-tb-src></span></div>
     </section>
 
-    <section class="p p-movers" data-movers aria-label="Movers and Makers: treasury companies making waves"><p class="muted">Loading Movers &amp; Makers…</p></section>
-    <section class="p p-pdesk" id="preferreds-desk" aria-label="Preferreds Desk: Strategy and Strive preferred stocks">
+    <section class="p p-charts slow" id="charts" data-charts aria-label="Charts: long-term price with models and TA, plus chart library"></section>
+
+    <section class="p p-movers slow" data-movers aria-label="Movers and Makers: treasury companies making waves"><p class="muted">Loading Movers &amp; Makers…</p></section>
+
+    <section class="p p-week slow" aria-label="Coming up: calendar">
+      <div class="p-h"><span class="p-t">Coming up</span><span class="tag">ET</span></div>
+      <ul class="cal" data-week></ul>
+      <a class="mem-cta" href="/members/"><b>Members area &rarr;</b><small>Free with your email: the Desk Library downloads and the Allocation Planner preview.</small></a>
+    </section>
+
+    <section class="p p-wcw slow" aria-label="What changed this week"><div class="p-h"><span class="p-t">What changed this week</span><span class="tag">weekly</span></div><div data-x-wcw><p class="x-mu">Loading…</p></div></section>
+
+    <section class="p p-news slow" data-news-week aria-label="News of the Week"><p class="muted">Loading News of the Week…</p></section>
+
+    <section class="p p-ep slow" aria-label="Latest episode">
+      <div class="p-h"><span class="p-t">Latest episode</span><span class="tag" data-ep-date></span></div>
+      <a class="ep" data-ep-link href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><img data-ep-img src="https://i.ytimg.com/vi/uS2i-UBoMO4/hqdefault.jpg" alt="Episode thumbnail" width="480" height="360"><span class="play">&#9654;</span></a>
+      <h2 class="ep-t" data-ep-title>Ep. 12</h2>
+      <div class="ep-row"><a class="tbtn tbtn-yt" data-ep-watch href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a><span class="shorts" data-shorts></span></div>
+      <div class="votw"><span class="p-t">Video of the Week</span><a data-votw href="#" target="_blank" rel="noopener"><img data-votw-img alt="" width="120" height="68"><span><b data-votw-title></b><small data-votw-meta></small></span></a><div class="votw-more" data-votw-more></div></div>
+    </section>
+
+    <section class="p p-optin slow optin" data-optin="home" aria-label="Weekly Desk email and Members tools"></section>
+
+    <section class="p p-links slow" aria-label="On-chain and research links">
+      <div class="p-h"><span class="p-t">Research desk</span><span class="tag">trusted free sources</span></div>
+      <div class="links">
+        <a href="https://charts.blockhorizon.io/charts/pb-s2f" target="_blank" rel="noopener"><b>PlanB S2F</b><small>BlockHorizon</small></a>
+        <a href="https://charts.blockhorizon.io/charts/pb-market-cycle" target="_blank" rel="noopener"><b>PlanB Market Cycle</b><small>BlockHorizon</small></a>
+        <a href="https://planbtc.com/" target="_blank" rel="noopener"><b>PlanB official</b><small>planbtc.com</small></a>
+        <a href="https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/" target="_blank" rel="noopener"><b>Pi Cycle Top</b><small>LookIntoBitcoin</small></a>
+        <a href="https://www.lookintobitcoin.com/charts/mvrv-zscore/" target="_blank" rel="noopener"><b>MVRV Z-Score</b><small>LookIntoBitcoin</small></a>
+        <a href="https://cryptoquant.com/asset/btc/summary" target="_blank" rel="noopener"><b>BTC Summary</b><small>CryptoQuant</small></a>
+        <a href="https://bitcoin.clarkmoody.com/dashboard/" target="_blank" rel="noopener"><b>Dashboard</b><small>Clark Moody</small></a>
+        <a href="https://charts.checkonchain.com/" target="_blank" rel="noopener"><b>On-chain suite</b><small>Checkonchain</small></a>
+        <a href="https://www.coinglass.com/FundingRate" target="_blank" rel="noopener"><b>Funding &amp; OI</b><small>CoinGlass</small></a>
+        <a href="https://mempool.space/" target="_blank" rel="noopener"><b>Fees &amp; blocks</b><small>mempool.space</small></a>
+      </div>
+      <p class="p-f">Models by PlanB · charts via BlockHorizon / planbtc.com. Links open the source; we never rehost their charts.</p>
+    </section>
+
+  </main>
+  <!-- legacy hooks: hidden containers older scripts still write into (kept so nothing errors; not shown) -->
+  <div class="legacy-hooks" hidden aria-hidden="true">
+    <section class="legacy p-mnav p-mnavc" aria-label="MSTR mNAV: live, percentile, sparkline"><div class="p-h"><span class="p-t">MSTR mNAV</span><span class="tag">live</span><a class="more" href="#charts" data-mnav-full>Full chart &rarr;</a></div><div data-x-mnav><p class="x-mu">Loading…</p></div></section>
+
+    <section class="legacy p-pdesk" id="preferreds-desk" aria-label="Preferreds Desk: Strategy and Strive preferred stocks">
       <div class="p-h"><span class="p-t">Preferreds Desk</span><span class="tag">STRC · STRF · STRK · STRD · SATA</span><span class="tag" data-pd-asof>…</span><a class="more" href="/preferreds/">Yield Desk &rarr;</a></div>
       <div class="pd-wrap"><table class="pd"><thead><tr><th>Security</th><th>Live price · day</th><th>Rate</th><th title="Stated annual rate on $100 divided by last close">Eff. yield</th><th>Pays</th><th>Par</th><th>Type</th><th>Seniority</th><th>Next ex-div</th></tr></thead><tbody data-pd-rows></tbody></table></div>
       <div class="pd-up" data-pd-up></div>
       <p class="p-f" data-pd-src></p>
     </section>
 
-
-    <section class="p p-chart" aria-label="Main chart">
-      <div class="p-h"><span class="p-t">Chart <b data-chart-name>BTC</b></span>
-        <div class="seg" data-chart-tabs></div>
-        <div class="seg"><button data-style="1" class="on">Candles</button><button data-style="2">Line</button></div>
-        <div class="seg"><button data-iv="D" class="on">1D</button><button data-iv="W">1W</button><button data-iv="M">1M</button></div>
-        <div class="seg"><button data-prev aria-label="Previous chart">&#9664;</button><button data-next aria-label="Next chart">&#9654;</button></div>
-        <label class="mini-opt" title="Desk Mode: slowly cycle charts every 45 s"><input type="checkbox" data-autocycle> Auto-cycle</label>
-      </div>
-      <div class="chart-box" data-chart></div>
-      <p class="p-f">TradingView live chart. Use &larr; &rarr; keys to switch.</p>
-    </section>
-
-    <section class="p p-zones" aria-label="Model zones">
+    <section class="legacy p-zones" aria-label="Model zones">
       <div class="p-h"><span class="p-t">Model Zones</span><span class="tag">BTC</span></div>
       <div class="mz" data-mz>
         <div class="mz-overall"><small>Overall read</small><b data-mz-overall class="mz-v z-neu">Loading…</b><span class="mz-sub mono" data-mz-sub></span></div>
@@ -118,7 +154,7 @@
       <p class="mz-note">Model read. Education only, not investment advice.</p>
     </section>
 
-    <section class="p p-models" id="models" aria-label="Bitcoin models and cycle">
+    <section class="legacy p-models" id="models" aria-label="Bitcoin models and cycle">
       <div class="p-h"><span class="p-t">Bitcoin Models &amp; Cycle</span><span class="tag" data-models-asof></span></div>
       <div class="models">
         <div class="mc-chips mono" data-mc-chips role="group" aria-label="Show models on the chart"></div>
@@ -130,7 +166,7 @@
       <p class="p-f">Computed in your browser from daily BTC closes (Coinbase, refreshed weekly) plus the live price. Zones describe history only. Education only, not investment advice.</p>
     </section>
 
-    <section class="p p-field" aria-label="Bitcoin vs the field">
+    <section class="legacy p-field" aria-label="Bitcoin vs the field">
       <div class="p-h"><span class="p-t" title="Bitcoin vs the field: dominance, ratios, sentiment, cycle">Quick glance</span><span class="tag" data-field-asof>live</span></div>
       <div class="fg-hid">
       <div class="kv big"><span>BTC price</span><b class="mono" data-live="btc">…</b></div>
@@ -160,10 +196,11 @@
       </div>
       </div>
       <div class="fg-c">
-      <div class="sub-h">Sentiment</div>
-      <div class="fng"><b class="mono" data-live="fng">…</b><span data-live="fng-cls"></span></div>
+      <div class="sub-h">Sentiment <a class="more" href="/strategy/#sentiment" style="float:right;font-size:10px">all gauges →</a></div>
+      <div class="fng"><b class="mono" data-live="fng-legacy">…</b><span data-live="fng-cls-legacy"></span></div>
       <div class="bar fng-bar"><i data-live-bar="fng"></i></div>
       <div class="kv sm"><span>Yesterday · 1 week · 1 month ago</span><b class="mono" data-live="fng-hist">…</b></div>
+      
       </div>
       <div class="fg-c">
       <div class="sub-h">Cycle</div>
@@ -176,15 +213,7 @@
       <p class="p-f">Prices: CoinGecko (fallback Coinbase); ratio history: CoinGecko daily closes, past 365 days. Dominance: live from CoinGecko; 1-year weekly history from CoinMarketCap (cross-checked, median gap 0.1pp). Crypto Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a></p>
     </section>
 
-    <section class="p p-ep" aria-label="Latest episode">
-      <div class="p-h"><span class="p-t">Latest episode</span><span class="tag" data-ep-date></span></div>
-      <a class="ep" data-ep-link href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><img data-ep-img src="https://i.ytimg.com/vi/uS2i-UBoMO4/hqdefault.jpg" alt="Episode thumbnail" width="480" height="360"><span class="play">&#9654;</span></a>
-      <h2 class="ep-t" data-ep-title>Ep. 12</h2>
-      <div class="ep-row"><a class="tbtn tbtn-yt" data-ep-watch href="https://youtu.be/uS2i-UBoMO4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch on YouTube</a><span class="shorts" data-shorts></span></div>
-      <div class="votw"><span class="p-t">Video of the Week</span><a data-votw href="#" target="_blank" rel="noopener"><img data-votw-img alt="" width="120" height="68"><span><b data-votw-title></b><small data-votw-meta></small></span></a><div class="votw-more" data-votw-more></div></div>
-    </section>
-
-    <section class="p p-strat" aria-label="Strategy and Strive">
+    <section class="legacy p-strat" aria-label="Strategy and Strive">
       <div class="p-h"><span class="p-t">Strategy <small>MSTR</small></span><span class="tag" data-strat-asof></span></div>
       <div class="kv big"><span>BTC held</span><b class="mono" data-k="mstr-btc">848,000</b></div>
       <div class="kv"><span>Live value</span><b class="mono" data-live="mstr-val">…</b></div>
@@ -199,55 +228,30 @@
       <table class="tbl" data-prefs><thead><tr><th>Pref</th><th>Rate</th><th>Price</th><th>Cur. yield</th></tr></thead><tbody></tbody></table>
       <p class="p-f" data-strat-src></p>
     </section>
+  </div>
 
-    <section class="p p-week" aria-label="Coming up: calendar">
-      <div class="p-h"><span class="p-t">Coming up</span><span class="tag">ET</span></div>
-      <ul class="cal" data-week></ul>
-      <a class="mem-cta" href="/members/"><b>Members area &rarr;</b><small>Free with your email: the Desk Library downloads and the Allocation Planner preview.</small></a>
-    </section>
-
-    <section class="p p-news" data-news-week aria-label="News of the Week"><p class="muted">Loading News of the Week…</p></section>
-
-    <section class="p p-optin optin" data-optin="home" aria-label="Weekly Desk email and Members tools"></section>
-
-    <section class="p p-links" aria-label="On-chain and research links">
-      <div class="p-h"><span class="p-t">Research desk</span><span class="tag">trusted free sources</span></div>
-      <div class="links">
-        <a href="https://charts.blockhorizon.io/charts/pb-s2f" target="_blank" rel="noopener"><b>PlanB S2F</b><small>BlockHorizon</small></a>
-        <a href="https://charts.blockhorizon.io/charts/pb-market-cycle" target="_blank" rel="noopener"><b>PlanB Market Cycle</b><small>BlockHorizon</small></a>
-        <a href="https://planbtc.com/" target="_blank" rel="noopener"><b>PlanB official</b><small>planbtc.com</small></a>
-        <a href="https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/" target="_blank" rel="noopener"><b>Pi Cycle Top</b><small>LookIntoBitcoin</small></a>
-        <a href="https://www.lookintobitcoin.com/charts/mvrv-zscore/" target="_blank" rel="noopener"><b>MVRV Z-Score</b><small>LookIntoBitcoin</small></a>
-        <a href="https://cryptoquant.com/asset/btc/summary" target="_blank" rel="noopener"><b>BTC Summary</b><small>CryptoQuant</small></a>
-        <a href="https://bitcoin.clarkmoody.com/dashboard/" target="_blank" rel="noopener"><b>Dashboard</b><small>Clark Moody</small></a>
-        <a href="https://charts.checkonchain.com/" target="_blank" rel="noopener"><b>On-chain suite</b><small>Checkonchain</small></a>
-        <a href="https://www.coinglass.com/FundingRate" target="_blank" rel="noopener"><b>Funding &amp; OI</b><small>CoinGlass</small></a>
-        <a href="https://mempool.space/" target="_blank" rel="noopener"><b>Fees &amp; blocks</b><small>mempool.space</small></a>
-      </div>
-      <p class="p-f">Models by PlanB · charts via BlockHorizon / planbtc.com. Links open the source; we never rehost their charts.</p>
-    </section>
-
-  </main>
-
-  <a class="dm-yt tbtn tbtn-yt" href="https://youtu.be/uS2i-UBoMO4" data-dm-yt target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch Ep. 12 on YouTube</a>
+  <a class="dm-yt tbtn tbtn-yt" href="https://youtu.be/uS2i-UBoMO4" data-dm-yt target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> Watch the latest episode</a>
   <div class="dm-ctl" data-dm-ctl><label><input type="checkbox" data-autocycle> Auto-cycle charts</label><button class="tbtn" type="button" data-deskmode-exit>Exit Desk Mode (Esc)</button></div>
 
   <footer class="t-foot">
-    <nav class="f-links" aria-label="Footer"><a href="/companies/">Companies</a><a href="/preferreds/">Yield Desk</a><a href="/saylor/">Saylor</a><a href="/dashboard/">Dashboard</a><a href="/lab/">Math Lab</a><a href="/episodes/">Episodes</a><a href="/members/">Members &amp; downloads</a><a href="/start/">Start here</a><a href="/glossary/">Glossary</a><a href="/resources/">Resources</a><a href="/about/">About</a><a href="/subscribe/">Subscribe</a><a href="/privacy/">Privacy</a><a href="/tip/" class="f-tip">Tip the Desk</a><a href="https://www.youtube.com/@btctreasurydesk" target="_blank" rel="noopener">YouTube</a><a href="https://x.com/BTCTreasuryDesk" target="_blank" rel="noopener">X</a></nav>
+    <nav class="f-links" aria-label="Footer"><a href="/companies/">Companies</a><a href="/preferreds/">Yield Desk</a><a href="/strategy/">Strategy</a><a href="/saylor/">Saylor</a><a href="/dashboard/">Dashboard</a><a href="/lab/">Math Lab</a><a href="/episodes/">Episodes</a><a href="/members/">Members &amp; downloads</a><a href="/start/">Start here</a><a href="/glossary/">Glossary</a><a href="/resources/">Resources</a><a href="/about/">About</a><a href="/subscribe/">Subscribe</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/tip/" class="f-tip">Tip the Desk</a><a href="https://www.youtube.com/@btctreasurydesk" target="_blank" rel="noopener">YouTube</a><a href="https://x.com/BTCTreasuryDesk" target="_blank" rel="noopener">X</a></nav>
     <p class="disclaimer">BTC Treasury Desk is an independent show, not affiliated with Strategy, Strive, Michael Saylor or any company it covers. Data is shown as sourced and dated; check the source before relying on any figure.</p>
     <p class="disclosure">The host owns MSTR and ASST. Education only, not investment advice.</p>
     <p class="copy">&copy; 2026 BTC Treasury Desk</p>
   </footer>
-  <script src="/assets/js/desk.js?v=v2s" defer></script>
+  <script src="/assets/js/feed.js?v=r1018"></script>
+  <script src="/assets/js/desk.js?v=r1018" defer></script>
   <script src="/members/members-config.js?v=m3" defer></script>
-  <script src="/assets/js/optin.js?v=o2" defer></script>
-<script src="/assets/js/extras.js?v=x13" defer></script>
-<script src="/assets/js/live.js?v=l2" defer></script>
+  <script src="/assets/js/optin.js?v=o3" defer></script>
+<script src="/assets/js/extras.js?v=r1018" defer></script>
+<script src="/assets/js/livechart.js?v=r1018" defer></script>
+<script src="/assets/js/board.js?v=r1018" defer></script>
+<script src="/assets/js/analysts.js?v=a1" defer></script>
 <script src="/assets/js/music.js?v=m3" defer></script>
 <script src="/assets/js/price.js?v=p5"></script>
-<script src="/assets/js/charts.js?v=c7" defer></script>
-<script src="/assets/js/layout.js?v=l7"></script>
+<script src="/assets/js/charts.js?v=c9" defer></script>
+<script src="/assets/js/layout.js?v=l9"></script>
 <script src="/assets/js/movers.js?v=mv1" defer></script>
-<script src="/assets/js/news.js?v=n3" defer></script>
+<script src="/assets/js/news.js?v=r1018" defer></script>
 </body>
 </html>

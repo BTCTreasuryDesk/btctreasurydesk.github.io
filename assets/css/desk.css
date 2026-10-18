@@ -256,10 +256,10 @@ body.dm .dm-hint.on{opacity:1}
 @media (prefers-reduced-motion:reduce){body.dm .dm-x,body.dm .dm-hint{transition:none}}
 /* Desk Mode layouts */
 body.dm .dm-lay button{font-size:11px;padding:4px 9px}
-body.dm.dml-focus main.grid>*:not([data-strip]):not([data-strip-cap]):not(.p-kpi):not(.p-live):not(.p-mnavc){display:none!important}
+body.dm.dml-focus main.grid>*:not(.p-mk):not(.p-live){display:none!important}
 body.dm.dml-focus main.grid>.p-live{grid-column:1/-1!important}body.dm.dml-focus .lv-cv{height:calc(100vh - 330px)!important;min-height:280px}body.dm.dml-focus .lv-px{font-size:34px}body.dm.dml-focus .x-k b{font-size:1.5em}
-body.dm.dml-wall main.grid>*:not([data-strip]):not([data-strip-cap]):not(.p-tboard):not(.p-pdesk):not(.p-movers){display:none!important}
-body.dm.dml-wall main.grid>.p-tboard{grid-column:1/9!important;grid-row:auto!important}body.dm.dml-wall main.grid>.p-pdesk,body.dm.dml-wall main.grid>.p-movers{grid-column:9/13!important;grid-row:auto!important}
+body.dm.dml-wall main.grid>*:not(.p-mk):not(.p-wl):not(.p-wall):not(.p-tok):not(.p-cx){display:none!important}
+body.dm.dml-wall main.grid>.p-wall{grid-column:1/9!important;grid-row:auto!important}body.dm.dml-wall main.grid>.p-wl{grid-column:9/13!important;grid-row:span 2!important}
 body.dm.dml-wall .p-tboard [data-tb-scroll],body.dm.dml-wall .p-tboard .tb-wrap{max-height:calc(100vh - 220px)!important}
 @media (max-width:900px){body.dm.dml-wall main.grid>*{grid-column:1/-1!important}}
 @media (max-width:600px){body.dm .dm-ctl{flex-wrap:wrap;gap:6px}body.dm .dm-ctl label{display:none}body.dm .dm-lay{flex:1 1 100%;display:flex}body.dm .dm-lay button{flex:1;padding:7px 4px;font-size:12px}body.dm .dm-ctl>.tbtn{flex:1 1 100%}}

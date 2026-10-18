@@ -2,8 +2,8 @@
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
-  var CATS = [['strategy', 'Strategy & Saylor'], ['treasury', 'Other treasury companies'], ['industry', 'Industry'], ['bitcoin', 'Bitcoin']];
-  var CL = {}; CATS.forEach(function (c) { CL[c[0]] = c[1]; });
+  var CATS = [['strategy', 'Strategy & Saylor'], ['treasury', 'Other treasury companies'], ['industry', 'Industry & Bitcoin']]; function cat(x) { return x.cat === 'bitcoin' ? 'industry' : x.cat; } // empty groups are hidden
+  var CL = { bitcoin: 'Industry & Bitcoin' }; CATS.forEach(function (c) { CL[c[0]] = c[1]; });
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function dl(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); }
   function safe(u) { return /^https:\/\//.test(u || '') ? u : '#'; }
@@ -24,12 +24,12 @@
     var A = D.week_ahead || [], t0 = Date.parse((W.as_of || D.updated) + 'T12:00:00Z'), y = new Date(t0).getUTCFullYear(), out = [];
     A.forEach(function (x) { var m = /([A-Z][a-z]{2}) (\d{1,2})/.exec(x.d || ''); if (!m || MON[m[1]] == null) return; var t = Date.UTC(y, MON[m[1]], +m[2], 12); if (t < t0 - 864e5 * 180) t = Date.UTC(y + 1, MON[m[1]], +m[2], 12);
       var dd = (t - t0) / 864e5, key = /earnings|vote|meeting|dividend|record|ex-div|decision|CPI|FOMC/i.test(x.e);
-      if (dd > 0 && (dd <= 7 || (key && dd <= 21))) out.push({ t: t, d: x.d, e: x.e.split(/; |\. /)[0].replace(/,? *\d{1,2}:\d{2} ?[AP]M ET.*$/, '').trim() }); });
+      if (dd > 0 && t > Date.now() - 864e5 && (dd <= 7 || (key && dd <= 21))) out.push({ t: t, d: x.d, e: x.e.split(/; |\. /)[0].replace(/,? *\d{1,2}:\d{2} ?[AP]M ET.*$/, '').trim() }); });
     out.sort(function (a, b) { return a.t - b.t; });
     return out.length ? '<p class="nw-deck"><b>On deck next week</b> ' + out.slice(0, 6).map(function (x) { return '<span><i class="mono">' + esc(x.d.replace(/^[A-Z][a-z]{2} /, '')) + '</i> ' + esc(x.e) + '</span>'; }).join('') + '</p>' : '';
   }
   function grouped(items) {
-    return CATS.map(function (c) { var g = items.filter(function (x) { return x.cat === c[0]; }); if (!g.length) return '';
+    return CATS.map(function (c) { var g = items.filter(function (x) { return cat(x) === c[0]; }); if (!g.length) return '';
       return '<div class="nw-g"><h4 class="nw-h nw-' + c[0] + '">' + esc(c[1]) + '</h4><ul class="nw-l">' + g.map(function (x) { return li(x, false); }).join('') + '</ul></div>'; }).join('');
   }
   function weekLbl(W) { return 'Week of ' + esc(W.label || W.week_of); }
@@ -41,13 +41,13 @@
     var items = W.items.slice(0, 8), L = items.filter(function (x) { return x.lead; })[0] || items[0], rest = items.filter(function (x) { return x !== L; });
     var top = rest.filter(function (x) { return x.top; }).slice(0, 2); if (top.length < 2) top = top.concat(rest.filter(function (x) { return top.indexOf(x) < 0; })).slice(0, 2);
     var ord = function (c) { for (var i = 0; i < CATS.length; i++) if (CATS[i][0] === c) return i; return 9; };
-    top.sort(function (a, b) { return ord(a.cat) - ord(b.cat); });
+    top.sort(function (a, b) { return ord(cat(a)) - ord(cat(b)); });
     var open = LS.get('btd_news_open') === '1';
     home.innerHTML = '<div class="p-h"><span class="p-t">News of the Week</span><span class="tag nw-wk">' + weekLbl(W) + '</span><a class="more" href="/news/">Past weeks &rarr;</a></div>' + lead(L) +
       '<div class="nw-top"' + (open ? ' hidden' : '') + '><ul class="nw-l">' + top.map(function (x) { return li(x, true); }).join('') + '</ul></div>' +
       '<div class="nw-all" id="nw-all"' + (open ? '' : ' hidden') + '>' + grouped(rest) + '</div>' + onDeck(D, W) +
       '<div class="nw-f"><button type="button" class="chip nw-tg" aria-expanded="' + open + '" aria-controls="nw-all">' + (open ? 'Show less &#9652;' : 'Show all ' + items.length + ' &#9662;') + '</button>' +
-      '<span class="muted">Material news only · official sources first · updated Sundays · education only</span></div>';
+      '<span class="muted">Official sources first · updated Sundays · education only</span></div>';
     var b = $('.nw-tg', home);
     b.addEventListener('click', function () { open = !open; LS.set('btd_news_open', open ? '1' : '0'); $('.nw-top', home).hidden = open; $('.nw-all', home).hidden = !open;
       b.setAttribute('aria-expanded', open); b.innerHTML = open ? 'Show less &#9652;' : 'Show all ' + items.length + ' &#9662;'; });

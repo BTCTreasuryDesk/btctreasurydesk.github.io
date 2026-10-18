@@ -322,6 +322,7 @@
 
   /* ---------- weekly data file ---------- */
   var DESK = null, live = { btc: null };
+  if (window.BTD_FEED) { BTD_FEED.on('BTC', function (q) { live.btc = q.px; }); BTD_FEED.on('ETH', function (q) { live.eth = q.px; live.eth24 = q.chp; }); BTD_FEED.on('SOL', function (q) { live.sol = q.px; live.sol24 = q.chp; }); }
   function nyToday() { var p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); return p; }
   function daysSince(iso) { return Math.max(0, Math.round((Date.parse(nyToday()) - Date.parse(iso)) / 864e5)); }
   fetch('/assets/data/desk.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
@@ -348,7 +349,10 @@
     spotlight(d);
     board(d.treasuries);
     pdesk(d.prefs_desk);
-    $('[data-week]').innerHTML = d.week_ahead.map(function (w) { return '<li><b>' + esc(w.d) + '</b><span>' + esc(w.e) + '</span></li>'; }).join('');
+    var MO = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 }, yy = new Date().getFullYear(), today = new Date(); today.setHours(0, 0, 0, 0);
+    var wk = d.week_ahead.filter(function (w) { var m = /([A-Z][a-z]{2}) (\d{1,2})/.exec(w.d || ''); if (!m || MO[m[1]] == null) return true; var t = new Date(yy, MO[m[1]], +m[2]); if (t - today > 200 * 864e5) t = new Date(yy - 1, MO[m[1]], +m[2]); return t >= today; });
+    if (!wk.length) wk = [{ d: 'Next', e: 'The calendar refreshes with the Sunday update.' }];
+    $('[data-week]').innerHTML = wk.map(function (w) { return '<li><b>' + esc(w.d) + '</b><span>' + esc(w.e) + '</span></li>'; }).join('');
     paintStrategyLive(); models();
   }).catch(function (e) { console.warn('desk.json unavailable', e); });
 
@@ -538,6 +542,7 @@
   var CG = 'https://api.coingecko.com/api/v3';
   function coinbaseSpot(sym) { return fetch('https://api.coinbase.com/v2/prices/' + sym + '-USD/spot').then(function (r) { return r.json(); }).then(function (j) { return +j.data.amount; }); }
   function pullPrices() {
+    var FD = window.BTD_FEED; if (FD) { var fb = FD.get('BTC'), fe = FD.get('ETH'), fs = FD.get('SOL'); if (fb && fe && fs && fb.px && Date.now() - fb.t < 60e3) return Promise.resolve({ btc: fb.px, btc24: fb.chp, eth: fe.px, sol: fs.px, eth24: fe.chp, sol24: fs.chp, src: 'Coinbase' }); }
     return getJSON(CG + '/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true', 'px', 45e3)
       .then(function (p) { return { btc: p.bitcoin.usd, btc24: p.bitcoin.usd_24h_change, eth: p.ethereum.usd, sol: p.solana.usd, eth24: p.ethereum.usd_24h_change, sol24: p.solana.usd_24h_change, src: 'CoinGecko' }; })
       .catch(function () { return Promise.all([coinbaseSpot('BTC'), coinbaseSpot('ETH'), coinbaseSpot('SOL')]).then(function (a) { return { btc: a[0], btc24: null, eth: a[1], sol: a[2], src: 'Coinbase' }; }); });
@@ -853,8 +858,12 @@
   function ticker() {
     dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
     var items = tkShown(); tkViewBtn();
-    inn.innerHTML = items.map(function (x) { return '<b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : ''); }).join('') + '<b class="muted">Stocks via CNBC (some delayed); "close" = last close</b>';
-    inn.style.animationDuration = Math.max(140, items.length * 6) + 's'; // keep it slow however long the list is
+    var seq = items.map(function (x) { return '<span class="tk-i"><b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : '') + '</span>'; }).join('') + '<span class="tk-i tk-src">Stocks via CNBC (some delayed) · "close" = last close</span>';
+    /* seamless loop: two identical halves, each at least as wide as the strip; the track slides exactly one half (-50%) and wraps with no gap or jump */
+    var halves = inn.querySelectorAll('.tk-seq'); if (halves.length !== 2) { inn.innerHTML = '<span class="tk-seq"></span><span class="tk-seq" aria-hidden="true"></span>'; halves = inn.querySelectorAll('.tk-seq'); }
+    halves[0].innerHTML = seq; var w1 = halves[0].scrollWidth || 1, rep = Math.max(1, Math.ceil((tk.clientWidth || 1200) / w1)); if (rep > 1) halves[0].innerHTML = new Array(rep + 1).join(seq);
+    halves[1].innerHTML = halves[0].innerHTML; var hw = halves[0].scrollWidth;
+    var dur = Math.max(30, Math.round(hw / 45)) + 's'; if (inn.style.animationDuration !== dur) inn.style.animationDuration = dur; // ~45 px per second, steady whatever the list length
   }
   /* Ribbon editor: grouped options + type any ticker (validated via the quote feed), up/down, remove, reset */
   var tke = null, tkeBtn = null;
@@ -931,7 +940,7 @@
   function dmLabel(on) { $$('[data-deskmode]').forEach(function (b) { b.innerHTML = '&#9635; Desk Mode: ' + (on ? 'On' : 'Off'); b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.title = on ? 'Exit Desk Mode (Esc)' : 'Full-screen Desk Mode (Esc or the Exit button to leave)'; }); }
   dmLabel(false);
   // Desk Mode layouts: Grid (default), Focus (big numbers + main chart), Ticker wall (dense lists). Remembered per device ('btd_dml', not exported).
-  var DML = [['grid', 'Grid'], ['focus', 'Focus'], ['wall', 'Ticker wall']], dml = LS.get('btd_dml'); if (!DML.some(function (x) { return x[0] === dml; })) dml = 'grid';
+  var DML = [['grid', 'Grid'], ['focus', 'Focus'], ['wall', 'Live Wall']], dml = LS.get('btd_dml'); if (!DML.some(function (x) { return x[0] === dml; })) dml = 'grid';
   function dmlApply() { DML.forEach(function (x) { document.body.classList.toggle('dml-' + x[0], x[0] === dml); }); $$('[data-dml]').forEach(function (b) { var on = b.dataset.dml === dml; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); window.dispatchEvent(new Event('resize')); }
   var dmc = $('[data-dm-ctl]'); if (dmc) { var sg = document.createElement('span'); sg.className = 'seg dm-lay'; sg.setAttribute('role', 'group'); sg.setAttribute('aria-label', 'Desk Mode layout');
     sg.innerHTML = DML.map(function (x) { return '<button type="button" data-dml="' + x[0] + '">' + x[1] + '</button>'; }).join(''); dmc.insertBefore(sg, dmc.firstChild);

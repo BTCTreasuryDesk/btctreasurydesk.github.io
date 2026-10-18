@@ -131,10 +131,10 @@ LIBR = [ # key (Kit tag lib_<key>), title, 1-line benefit, file, type, cover, up
  ('pguide', 'Strategy Preferreds Guide', 'STRC, STRF, STRK, STRD and SATA explained: terms, yields, seniority, dividend dates and how each behaves.', F + 'strategy-preferreds-guide.pdf', '3-page PDF', 'strategy-preferreds-guide', NEWD, 1),
  ('cycle', 'Long-Term Cycle Playbook', 'The models, a monthly cycle checklist and how HODLers plan macro entries and exits by rules.', F + 'long-term-cycle-playbook.pdf', '2-page PDF', 'long-term-cycle-playbook', NEWD, 1),
  ('numbers', 'MSTR & ASST by the Numbers', 'Holdings, share counts and preferreds for both companies, every figure sourced.', F + 'mstr-asst-by-the-numbers-ff665f.pdf', '3-page PDF', 'by-the-numbers', '2026-10-05', 0),
- ('cheat', 'Treasury Metrics Explained', 'Read any treasury company in minutes: mNAV, BTC Yield and sats per share on two pages.', F + 'bitcoin-treasury-cheat-sheet-6e605f.pdf', '2-page PDF', 'cheat-sheet', '2026-10-05', 0),
+ ('cheat', 'Treasury Metrics Explained', 'Read any treasury company in minutes: mNAV, BTC Yield and sats per share on two pages.', F + 'bitcoin-treasury-cheat-sheet-6e605f.pdf', '2-page PDF', 'cheat-sheet', '2026-10-18', 0),
  ('data', 'Where to Find the Real Data', 'The primary sources behind every number, so you can check any figure yourself.', F + 'where-to-find-the-real-data-7317af.pdf', '1-page PDF', 'data-sources', '2026-10-05', 0),
  ('quotes', 'Greatest Saylor Quotes', 'Saylor in his own words: verbatim, dated and linked to the source.', F + 'greatest-saylor-quotes-83c9d8.pdf', '3-page PDF', None, '2026-10-05', 0),
- ('whitepaper', 'Bitcoin Whitepaper in 2 Pages', 'Understand what you own: the original paper in plain English.', F + 'bitcoin-whitepaper-in-2-pages-9849b6.pdf', '2-page PDF', 'whitepaper', '2026-10-05', 0),
+ ('whitepaper', 'Bitcoin Whitepaper in 2 Pages', 'Understand what you own: the original paper in plain English.', F + 'bitcoin-whitepaper-in-2-pages-9849b6.pdf', '2-page PDF', 'whitepaper', '2026-10-18', 0),
  ('glossary', 'Speak Treasury: 25 Terms Every BTC Treasury Investor Should Know', 'Minor extra: the vocabulary, one page.', F + 'bitcoin-treasury-glossary-b1be26.pdf', '1-page PDF', 'glossary', '2026-10-05', 0),
 ]
 for x in LIBR: assert os.path.exists(x[3].lstrip('/')), x[3]

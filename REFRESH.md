@@ -59,7 +59,7 @@ Order matters; do these after the normal data steps.
 5. **mNAV history** needs nothing extra: it is built in the browser from `members/data/stocks_daily.json` (run `tools/update_members_stocks.py`), `assets/data/strategy.json` (ledger rows with ADSO) and `assets/data/btc_daily.json`. Check the chart's last date matches the latest Friday close.
 6. **What changed this week** is computed from `desk.json` (prev vs rows, `prefs_desk.upcoming`) + `members/data/weekly.json` (items with `new:true`) + btc_daily (model badges). Keep `prefs_desk.upcoming` current; edit `weekly.json` items.
 7. **Price scroll** reads the top 20 by BTC held from `treasuries.rows` (+ ASST and SWC always) and every series in `prefs_desk.rows`, so a new verified preferred added there appears automatically. Live quotes come from CNBC; ETH and SOL appear only at the very end of the scroll (nowhere else prominent).
-8. **Home order** (top-down): price tiles → market-wide row + Strategy (MSTR) KPIs → MSTR mNAV (live + history) + What changed → Treasury Board → Preferreds Desk → chart + Model Zones → models + BTC vs the field → Latest episode / Video of the Week → Strategy & Strive, Week ahead → email box → links. Full KPI panel + Spotlight live on /saylor/#strategy-kpis. Company Compare lives on /companies/#compare (linked from the Board header).
+8. **Home order** (top-down): price tiles → market-wide row + Strategy (MSTR) KPIs → MSTR mNAV (live + history) + What changed → Treasury Board → Preferreds Desk → chart + Model Zones → models + BTC vs the field → Latest episode / Video of the Week → Strategy & Strive, Week ahead → email box → links. Full KPI panel + Spotlight live on /strategy/#strategy-kpis. Company Compare lives on /companies/#compare (linked from the Board header).
 
 ## Saylor quotes (standing step, added Oct 11, 2026)
 Every weekly refresh, or an ad hoc refresh if more than a week has passed since `assets/data/quotes.json → as_of`:
@@ -102,7 +102,7 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 
 ## Tip the Desk (standing rule)
 - Quiet only: one footer link ("Tip the Desk" → /tip/) and a small card in Members. No popups, no nags, no banners.
-- /tip/ shows "Tip on X" (X Money via https://x.com/BTCTreasuryDesk). Lightning and on-chain slots stay hidden until Phil fills `TIP.lightning` / `TIP.onchain` in `members/members-config.js`. Never invent or paste an example address.
+- /tip/ shows "Tip on X" (X Money via https://x.com/BTCTreasuryDesk). Lightning and on-chain slots stay hidden until the owner fills `TIP.lightning` / `TIP.onchain` in `members/members-config.js`. Never invent or paste an example address.
 - YouTube: add ONE line to the standard description template (with the channel links block), not a separate push in every episode:
   `Support the Desk (optional): https://btctreasurydesk.com/tip/`
 
@@ -120,3 +120,29 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 - Off by default, never autoplays; remembers track, volume and playback mode (`btd_music`: Play all (default, continuous with a 2.5s crossfade) / Shuffle / Repeat one), never the playing state. Prev/next buttons.
 - Tracks: `assets/audio/tracks.json` lists the slots (Lo-fi `lofi.mp3`, Ambient `ambient.mp3`, Chill electronic `chill-electronic.mp3`, Late-night jazz `late-night-jazz.mp3`). Copy MP3s from `/workspace/desk-music/` into `assets/audio/` using those names. Only files that exist are offered; the Music button stays hidden until at least one exists.
 - Only royalty-free or licensed tracks; put the credit line in `credit`. Keep files small (128 kbps, a few MB).
+
+## Legal pages (standing rule)
+- `/terms/` (Terms of Use) and `/privacy/` are plain-English and dated ("Last updated"). Update the date whenever you change them.
+- **Before any paid launch, have a lawyer review /terms/ and /privacy/** (billing, cancellation and refund terms; Florida governing law; liability limits; any analytics actually in use). The billing/refund section is a placeholder until paid plans exist.
+- Analytics wording says "if we use any, cookieless (such as GoatCounter)". If GoatCounter is installed, change both pages to state it plainly.
+
+## Home dedupe (standing rule, Oct 12 2026)
+- The long-term BTC chart with models/overlays lives ONLY in the top chart card (Long-term mode). The Charts library holds only charts not shown above: mNAV history, Strategy holdings, BTC per share, Treasury BTC, Preferred yields, MSTR vs BTC, Company compare. Dominance and BTC/ETH, BTC/SOL live in Quick glance.
+- Default-hidden (addable via Customize desk): old TradingView chart, compact mNAV card (mNAV is in the KPI row + Charts), What changed this week (covered by Movers + News).
+- News of the Week: no "material only" label or filter (every item is material by rule). Groups: Strategy & Saylor / Other treasury companies / Industry & Bitcoin, Top story first; empty groups are hidden.
+
+## Analyst Views + Sentiment gauges (every Sunday)
+- Run `python3 tools/update_analysts.py`. It writes `assets/data/analysts.json`: consensus per company from Nasdaq.com's public analyst API (buy/hold/sell, average/low/high 12-month target, monthly consensus history), per-firm latest rating + target from MarketBeat's public forecast page (last 12 months, with change kind: upgrade, downgrade, initiation, target raised/cut, new target, reiterated), a weekly average-target history rebuilt from those dated actions, and one snapshot per week (26 kept).
+- Coverage: US-listed treasury pure-plays + miners from the Board top 20, plus ASST; shown only with 3+ analysts (no coverage = hidden). MSTR always first. Items dated within the last week are flagged "this week".
+- Notable notes: curate 2-6 recent notes per company in `NOTES` (date, firm, action, from/to, one line, source link). Public reports only; never invent. Drop notes older than ~2 months.
+- Street Sentiment = 60% ratings mix + 40% average-target upside (method shown in the ⓘ). Funding heat = OKX BTC-USDT perp funding, live in the browser. Fear & Greed stays separate. Treasury mNAV mood and social buzz are not shown until broad, free, verifiable data exists.
+- Label everywhere: "Third-party views, not ours · education only".
+
+## Added Oct 18, 2026 (live desk revision)
+- Weekly: `python3 tools/update_stock_hist.py` (daily closes for charts, writes assets/data/stocks_hist.json).
+- Weekly: append this week's BTC-per-share snapshot to `assets/data/bps_history.json` (same shape as the 2026-10-04 entry; one object per date, ticker -> btc_per_share_basic from leaderboard.json).
+- Weekly: append Strategy's new ledger row to `assets/data/strategy.json` purchases and update `desk.json` strategy (btc_held, btc_as_of, avg_cost, total_cost_usd, sats_per_share, btc_src) from the 8-K Ex. 99.1.
+- Weekly: prune past items from `desk.json` week_ahead (the site also hides past dates automatically).
+- Library: after desk.json updates run `python3 tools/build_library.py`; for the static PDFs edit `downloads/src/build_*.py`, run `render.py <name>` and copy to `library-files/f31a01ec624a/<name>-<hash>.pdf`.
+- Music: set `"ready": true` in `assets/audio/tracks.json` only after the MP3 is uploaded to assets/audio/.
+- Live data is client-side only (Coinbase WS, CNBC quote service, CoinGecko, DefiLlama). No API keys, no AI credits.

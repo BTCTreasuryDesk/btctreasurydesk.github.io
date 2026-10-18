@@ -42,7 +42,7 @@
     return out; }
   var D = null, LIVE = {}, loading = null, mounts = [];
   function live() {
-    var a = fetch('https://api.exchange.coinbase.com/products/BTC-USD/stats').then(function (r) { return r.json(); }).then(function (x) { var l = +x.last, o = +x.open; if (l) LIVE.btc = { px: l, chp: o ? (l / o - 1) * 100 : null }; }).catch(function () {});
+    var FD = window.BTD_FEED, fb = FD && FD.get('BTC'); if (fb && fb.px) LIVE.btc = { px: fb.px, chp: fb.chp }; var a = fb && fb.px ? Promise.resolve() : fetch('https://api.exchange.coinbase.com/products/BTC-USD/stats').then(function (r) { return r.json(); }).then(function (x) { var l = +x.last, o = +x.open; if (l) LIVE.btc = { px: l, chp: o ? (l / o - 1) * 100 : null }; }).catch(function () {});
     var b = fetch('https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols=MSTR&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1').then(function (r) { return r.json(); }).then(function (j) {
       var x = (j.FormattedQuoteResult || {}).FormattedQuote; x = Array.isArray(x) ? x[0] : x; var px = parseFloat(String(x.last).replace(/,/g, '')); if (isFinite(px)) LIVE.mstr = { px: px, chp: parseFloat(String(x.change_pct).replace(/[%+,]/g, '')) }; }).catch(function () {});
     return Promise.all([a, b]);

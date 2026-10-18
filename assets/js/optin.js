@@ -101,5 +101,5 @@
   fetch('/members/data/weekly.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (w) {
     var f = w.fresh || {}; FRESH = { tools: f.tools || [], library: f.library || [], week: w.week || '' }; paintAll(); badges();
   }).catch(function () {});
-  window.BTD_OPTIN = { get: get };
+  window.BTD_OPTIN = { get: get, paint: paintAll };
 })();

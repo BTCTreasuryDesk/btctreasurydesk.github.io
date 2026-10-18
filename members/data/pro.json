@@ -1,0 +1,27 @@
+{
+  "week": "2026-10-11",
+  "note": "Pro Vault content. Every item is tier 'pro' so BTD_MEMBERS.PRO_GATE gates all of it in one place. Refreshed each Sunday (REFRESH.md > Pro Vault). Education only.",
+  "videos": [],
+  "videos_planned": [
+    { "tier": "pro", "title": "The HODLer's cycle playbook: reading the models without trading the noise" },
+    { "tier": "pro", "title": "mNAV, explained once and for all: premiums, discounts and what they have meant" },
+    { "tier": "pro", "title": "Strategy's preferreds from the ground up: seniority, yield and the dividend calendar" }
+  ],
+  "treats": [
+    { "tier": "pro", "type": "snapshot", "date": "2026-10-11", "title": "BTC 5-year cycle view: Power Law band + 200-week MA", "img": "/members/pro/snaps/2026-10-11-btc-cycle-5y.png",
+      "desc": "BTC sits at 1.25x its 200-week MA and 0.54x the Power Law trend: below trend, above the long-run floor line." },
+    { "tier": "pro", "type": "snapshot", "date": "2026-10-11", "title": "MSTR mNAV, past year, with percentile bands", "img": "/members/pro/snaps/2026-10-11-mstr-mnav-1y.png",
+      "desc": "Market-cap mNAV back near its 1-year median (about 0.95x to 1.0x) after the July-August discount." },
+    { "tier": "pro", "type": "sheet", "date": "2026-10-11", "title": "Treasury Company Cheat Sheet (this week's edition)", "href": "/library-files/f31a01ec624a/treasury-company-cheat-sheet.pdf",
+      "desc": "Top 20 public bitcoin holders on one page: BTC held, mNAV, BTC per share where published, preferreds, last buy." },
+    { "tier": "pro", "type": "preset", "title": "Cycle view preset", "desc": "Opens the home Long-term chart on 5Y with Power Law, 200-week MA and halvings.",
+      "apply": { "btd_live": "{\"v\":\"lt\",\"s\":\"btc\",\"r\":\"1D\",\"m\":\"line\",\"lr\":\"5Y\"}", "btd_pmode": "btc", "btd_play": "[\"pl\",\"wma\",\"halv\"]" }, "go": "/#top" },
+    { "tier": "pro", "type": "preset", "title": "Floor-line preset", "desc": "Long-term chart on All with the 200-week MA, Mayer Multiple and Pi Cycle panels: where past cycles found support and tops.",
+      "apply": { "btd_live": "{\"v\":\"lt\",\"s\":\"btc\",\"r\":\"1D\",\"m\":\"line\",\"lr\":\"All\"}", "btd_pmode": "btc", "btd_play": "[\"wma\",\"mayer\",\"pi\"]" }, "go": "/#top" }
+  ],
+  "tools_soon": [
+    { "tier": "pro", "title": "Chart Builder", "desc": "1, 2 or 4 charts at once, stackable indicators, one-click presets." },
+    { "tier": "pro", "title": "Desk Cycle Heat + alerts", "desc": "Composite cycle score with browser notifications (thresholds, quiet hours, digest)." },
+    { "tier": "pro", "title": "Company Compare Pro", "desc": "More companies and metrics, saved setups." }
+  ]
+}

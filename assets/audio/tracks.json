@@ -1,9 +1,33 @@
 {
-  "note": "Desk Mode music. Drop MP3s into this folder (from /workspace/desk-music/) using these file names; the Music button stays hidden until at least one file exists. Only use tracks we have the rights to (royalty-free / licensed); put credit lines in 'credit'.",
+  "note": "Desk Mode music. Drop MP3s into this folder (from /workspace/desk-music/) using these file names; the Music button stays hidden until at least one file exists. Only use tracks we have the rights to (royalty-free / licensed); put credit lines in 'credit'. Set \"ready\": true on a track once its MP3 is in this folder (no file = no request, no console errors).",
   "tracks": [
-    { "id": "lofi", "name": "Lo-fi", "file": "lofi.mp3", "credit": "" },
-    { "id": "ambient", "name": "Ambient", "file": "ambient.mp3", "credit": "" },
-    { "id": "chill", "name": "Chill electronic", "file": "chill-electronic.mp3", "credit": "" },
-    { "id": "jazz", "name": "Late-night jazz", "file": "late-night-jazz.mp3", "credit": "" }
+    {
+      "id": "lofi",
+      "name": "Lo-fi",
+      "file": "lofi.mp3",
+      "credit": "",
+      "ready": false
+    },
+    {
+      "id": "ambient",
+      "name": "Ambient",
+      "file": "ambient.mp3",
+      "credit": "",
+      "ready": false
+    },
+    {
+      "id": "chill",
+      "name": "Chill electronic",
+      "file": "chill-electronic.mp3",
+      "credit": "",
+      "ready": false
+    },
+    {
+      "id": "jazz",
+      "name": "Late-night jazz",
+      "file": "late-night-jazz.mp3",
+      "credit": "",
+      "ready": false
+    }
   ]
 }

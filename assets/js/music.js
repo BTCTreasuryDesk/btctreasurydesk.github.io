@@ -8,7 +8,7 @@
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   var TR = [], au = null, pnl = null, btns = [], XF = 2.5, fading = false, ALL = [], fid = 0, MODES = [['all', 'Play all'], ['shuffle', 'Shuffle'], ['one', 'Repeat one']];
   fetch('/assets/audio/tracks.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) {
-    return Promise.all((j.tracks || []).map(function (t) { return fetch('/assets/audio/' + t.file, { method: 'HEAD' }).then(function (r) { return r.ok ? t : null; }).catch(function () { return null; }); }));
+    return Promise.all((j.tracks || []).filter(function (t) { return t.ready === true; }).map(function (t) { return fetch('/assets/audio/' + t.file, { method: 'HEAD' }).then(function (r) { return r.ok ? t : null; }).catch(function () { return null; }); }));
   }).then(function (a) { TR = a.filter(Boolean); if (TR.length) mount(); }).catch(function () {});
   function playing() { return ALL.some(function (x) { return !x.paused; }); }
   function label() { btns.forEach(function (b) { b.textContent = '♪ Music: ' + (playing() ? 'On' : 'Off'); b.setAttribute('aria-pressed', playing()); b.classList.toggle('on', playing()); }); }
