@@ -183,7 +183,7 @@
 
   /* ---------- Live Wall ---------- */
   var wall = document.querySelector('[data-wall]');
-  if (wall && C) { var WD = ['MSTR', 'ASST', 'XXI', 'MPJPY'], WR = LS.get('btd_wallr') || '1W', picks;
+  if (wall && C) { var WD = ['MSTR', 'ASST', 'XXI', 'MPJPY'], WR = LS.get('btd_wallr') || '1W', picks; if (WR === '1H' || WR === '1D') WR = '1W'; /* never open the Wall on the hero's timeframe or 1H */
     try { picks = JSON.parse(LS.get('btd_wall') || 'null'); } catch (e) {} if (!Array.isArray(picks) || picks.length !== 4) picks = WD.slice();
     var opts = function (cur) { return LB.map(function (c) { return '<option value="' + esc(c.ticker) + '"' + (c.ticker === cur ? ' selected' : '') + '>' + esc(c.ticker) + ' · ' + esc(c.name.slice(0, 22)) + '</option>'; }).join(''); };
     var cells = function () { return ['BTC'].concat(picks); };

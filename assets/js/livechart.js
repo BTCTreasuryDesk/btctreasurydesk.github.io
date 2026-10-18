@@ -98,8 +98,8 @@
   /* ---------- the main chart card ---------- */
   var box = document.querySelector('[data-lc]'); if (!box) return;
   var COLS = ['#F7931A', '#4ea1ff', '#c58bff', '#2fd17c', '#ffd166', '#ff6b9a'];
-  var S = { s: 'BTC', r: '1D', m: 'area', cmp: [] }; try { var so = JSON.parse(LS.get('btd_lc') || '{}'); if (so.s) S.s = String(so.s).slice(0, 12); if (RANGES.indexOf(so.r) >= 0) S.r = so.r; if (['area', 'line', 'candle'].indexOf(so.m) >= 0) S.m = so.m; if (Array.isArray(so.cmp)) S.cmp = so.cmp.slice(0, 5).map(String); } catch (e) {}
-  function save() { LS.set('btd_lc', JSON.stringify(S)); }
+  var S = { s: 'BTC', r: '1D', m: 'area', cmp: [] }; try { var so = JSON.parse(LS.get('btd_lc') || '{}'); if (so.s) S.s = String(so.s).slice(0, 12); /* timeframe is never restored: the hero always opens on 1D (older builds saved 1H) */ if (['area', 'line', 'candle'].indexOf(so.m) >= 0) S.m = so.m; if (Array.isArray(so.cmp)) S.cmp = so.cmp.slice(0, 5).map(String); } catch (e) {}
+  function save() { LS.set('btd_lc', JSON.stringify({ s: S.s, m: S.m, cmp: S.cmp })); }
   box.innerHTML = '<div class="lc-h"><div class="lc-sym" role="group" aria-label="Symbol" data-lc-syms></div>' +
     '<div class="seg lc-r" role="tablist" aria-label="Time range">' + RANGES.map(function (r) { return '<button type="button" role="tab" data-lc-r="' + r + '">' + r + '</button>'; }).join('') + '</div>' +
     '<div class="seg lc-m" role="group" aria-label="Chart style"><button type="button" data-lc-m="area">Area</button><button type="button" data-lc-m="line">Line</button><button type="button" data-lc-m="candle" title="Candles (BTC)">Candles</button></div>' +
