@@ -20,7 +20,7 @@
       return { t: c.ticker, name: c.name, slug: c.slug, rank: +c.rank, btc: btcH, bps: bps || null, cur: c.currency, sp: c.stock_price, mc: c.market_cap_basic, sub: c.subtype }; });
     CO.sort(function (a, b) { return a.rank - b.rank; });
     asof = r[0].as_of; init(); }).catch(function () { box.innerHTML = '<p class="muted">Could not load company data. Please refresh.</p>'; });
-  var asof = '', S = { t: 'MSTR', sh: 100 }; try { var so = JSON.parse(LS.get('btd_yb') || '{}'); if (so.t) S.t = String(so.t); if (so.sh > 0) S.sh = +so.sh; } catch (e) {}
+  var asof = '', S = { t: 'MSTR', sh: 100 }; try { var so = JSON.parse(LS.get('btd_yb') || '{}'); /* company is never restored: every visit opens on Strategy (MSTR); older builds saved the last pick (e.g. MARA) */ if (so.sh > 0) S.sh = +so.sh; } catch (e) {}
   function co(t) { return CO.filter(function (c) { return c.t === t; })[0] || CO.filter(function (c) { return c.t === 'MSTR'; })[0] || CO[0]; }
   function lbl(c) { return c.name + ' (' + c.t + ')'; }
   function match(v) { v = String(v || '').trim().toLowerCase(); if (!v) return CO.slice(); var ex = [], pre = [], sub = []; CO.forEach(function (c) { var t = c.t.toLowerCase(), nm = c.name.toLowerCase(); if (t === v || t.split('.')[0] === v) ex.push(c); else if (t.indexOf(v) === 0 || nm.indexOf(v) === 0) pre.push(c); else if (nm.indexOf(v) >= 0 || (v.length > 2 && t.indexOf(v) >= 0)) sub.push(c); }); return ex.concat(pre, sub); }
@@ -71,7 +71,7 @@
     el.className = 'yb-card ' + (c.bps ? 'yb-ok' : 'yb-warn');
     el.innerHTML = '<div class="yb-ch"><b class="yb-ck">' + (c.bps ? '\u2713' : '!') + '</b><div><b>' + esc(lbl(c)) + '</b><small>' + (c.bps ? 'Recognized \u00b7 top-50 Bitcoin treasury company' : 'Recognized \u00b7 share-count data coming soon') + '</small></div></div><dl>' + kv.map(function (x) { return '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>'; }).join('') + '</dl><p class="yb-s">BTC behind each share = BTC per share \u00d7 live BTC price, as a share of the stock price. Ignores debt, preferreds and cash. Education only, not investment advice.</p>'; }
   function throttle(f, ms) { var t = 0; return function () { if (Date.now() - t > ms) { t = Date.now(); f(); } }; }
-  function save() { LS.set('btd_yb', JSON.stringify(S)); }
+  function save() { LS.set('btd_yb', JSON.stringify({ sh: S.sh })); }
   function q(t) { var s = F && F.cn(t); if (s) F.watch([s]); return s && F.get(s); }
   function set(k, v, h) { var e = box.querySelector('[data-yb-' + k + ']'); if (e) { if (h) e.innerHTML = v; else e.textContent = v; } }
   function paint() { var c = co(S.t); if (!c) return; var b = F && F.get('BTC'), sq = q(c.t); card(c, b, sq);
