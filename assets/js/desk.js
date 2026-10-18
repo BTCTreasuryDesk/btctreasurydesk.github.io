@@ -865,10 +865,18 @@
       case 'HALV': var nh = Date.UTC(2024, 3, 20) + 210000 * 600e3; return ['Halving', '~' + Math.max(0, Math.ceil((nh - Date.now()) / 864e5)) + ' days'];
     } return null;
   }
+  /* strip change: tap cycles timeframe (1D/1W/1M/YTD/1Y), hold flips % / amount (shared with the tiles via BTD_CTX) */
+  var TKF = { ES: '@SP.1', NQ: '@ND.1', YM: '@DJ.1', GC: '@GC.1', CL: '@CL.1', SI: '@SI.1' }, TKX = { 'BTC-USD': 'BTC', 'ETH-USD': 'ETH', 'SOL-USD': 'SOL', DXY: '.DXY', VIX: '.VIX' }, tkReg = 0;
+  function tkKey(l) { var f = /^([A-Z]{2})=F/.exec(l); if (f) return TKF[f[1]] || null; if (TKX[l]) return TKX[l]; var w = l.split(' ')[0]; if (w === 'SPX' || w === 'IXIC' || w === 'DJI') return '.' + w; return /^[A-Z0-9.\-]{1,10}$/.test(w) ? w : null; }
+  function tkChg(x) { var X = window.BTD_CTX, F = window.BTD_FEED, k = tkKey(x[0]); if (X && !tkReg) { tkReg = 1; X.onRange(function () { ticker(); }); X.on(function () { ticker(); }); }
+    var plain = x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : '';
+    if (!X || !k) return plain; var q = (F && F.get(k)) || null; if (!q || q.px == null) { var v = parseFloat(String(x[1]).replace(/[^0-9.\-]/g, '')); q = isFinite(v) ? { px: v, chp: x[2] } : null; }
+    var fq = q ? X.fmt(k, q) : null; if (!fq) return plain;
+    return ' <span class="tk-ch ' + (fq.v >= 0 ? 'up' : 'dn') + '" data-spk="' + esc(k) + '" role="button" title="' + X.tip + '">' + esc(fq.t) + '<small>' + fq.r + '</small></span>'; }
   function ticker() {
     dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
     var items = tkShown(); tkViewBtn();
-    var seq = items.map(function (x) { return '<span class="tk-i" title="' + esc(/-USD$/.test(x[0]) ? 'Source: Coinbase spot' : /mNAV|BTC\.D|Gain|ATH|Halving|Power|Fear|\//.test(x[0]) ? 'Desk data item' : (/ fut$/.test(x[0]) ? 'Futures (front-month contract), trade nearly 24h on weekdays. ' : /^US\d+Y$/.test(x[0]) ? 'US Treasury yield. ' : x[0] === 'DXY' ? 'US dollar index. ' : x[0] === 'VIX' ? 'Volatility index (expected S&P 500 swings). ' : '') + 'Source: CNBC quote service (may be delayed)') + '"><b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : '') + '</span>'; }).join('');
+    var seq = items.map(function (x) { return '<span class="tk-i" title="' + esc(/-USD$/.test(x[0]) ? 'Source: Coinbase spot' : /mNAV|BTC\.D|Gain|ATH|Halving|Power|Fear|\//.test(x[0]) ? 'Desk data item' : (/ fut$/.test(x[0]) ? 'Futures (front-month contract), trade nearly 24h on weekdays. ' : /^US\d+Y$/.test(x[0]) ? 'US Treasury yield. ' : x[0] === 'DXY' ? 'US dollar index. ' : x[0] === 'VIX' ? 'Volatility index (expected S&P 500 swings). ' : '') + 'Source: CNBC quote service (may be delayed)') + '"><b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + tkChg(x) + '</span>'; }).join('');
     /* seamless loop: two identical halves, each at least as wide as the strip; the track slides exactly one half (-50%) and wraps with no gap or jump */
     var halves = inn.querySelectorAll('.tk-seq'); if (halves.length !== 2) { inn.innerHTML = '<span class="tk-seq"></span><span class="tk-seq" aria-hidden="true"></span>'; halves = inn.querySelectorAll('.tk-seq'); }
     halves[0].innerHTML = seq; var w1 = halves[0].scrollWidth || 1, rep = Math.max(1, Math.ceil((tk.clientWidth || 1200) / w1)); if (rep > 1) halves[0].innerHTML = new Array(rep + 1).join(seq);

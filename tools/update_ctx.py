@@ -19,8 +19,11 @@ for k, y in Y.items():
     c = [(t, v) for t, v in zip(r.get('timestamp') or [], r['indicators']['quote'][0]['close']) if v is not None]
     if len(c) < 30: print('skip', k, 'short'); continue
     v = [x[1] for x in c]
+    yr = datetime.date.today().year; iy = next((i for i, x in enumerate(c) if datetime.datetime.fromtimestamp(x[0], datetime.UTC).year == yr), None)
+    ytd = v[max(0, iy - 1):] if iy is not None else None
+    if ytd and len(ytd) > 60: ytd = ytd[:1] + ytd[1:][::-1][::3][::-1]
     f = lambda x: float('%.6g' % x)
-    out['k'][k] = {'c5': [f(x) for x in v[-6:]], 'd': datetime.datetime.fromtimestamp(c[-1][0], datetime.UTC).date().isoformat(), 'm1': f(v[-22]), 'y': [f(sum(v) / len(v)), f(min(v)), f(max(v))], 'c22': [f(x) for x in v[-22:]], 'w': [f(x) for x in v[::-5][::-1]]}
+    out['k'][k] = {'c5': [f(x) for x in v[-6:]], 'd': datetime.datetime.fromtimestamp(c[-1][0], datetime.UTC).date().isoformat(), 'm1': f(v[-22]), 'y': [f(sum(v) / len(v)), f(min(v)), f(max(v))], 'c22': [f(x) for x in v[-22:]], 'w': [f(x) for x in v[::-5][::-1]], 'ytd': [f(x) for x in ytd] if ytd else None}
     time.sleep(0.4)
 p = ROOT / 'assets' / 'data' / 'ctx.json'
 p.write_text(json.dumps(out, separators=(',', ':')))

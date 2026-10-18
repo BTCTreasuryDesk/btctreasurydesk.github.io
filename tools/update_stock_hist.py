@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SYMS = {'MSTR': 'MSTR', 'XXI': 'XXI', '3350.T': '3350.T', 'MARA': 'MARA', 'ASST': 'ASST', 'BLSH': 'BLSH', 'COIN': 'COIN', 'CLSK': 'CLSK',
         'DJT': 'DJT', 'TSLA': 'TSLA', 'RIOT': 'RIOT', 'HUT': 'HUT', 'XYZ': 'XYZ', 'ABTC': 'ABTC', 'GLXY': 'GLXY', 'NAKA': 'NAKA', 'GME': 'GME', 'MPJPY': 'MPJPY',
         'SWC.L': 'SWC.L', 'ALCPB.PA': 'ALCPB.PA', 'ADE.DE': 'ADE.DE', 'CORZ': 'CORZ', 'KULR': 'KULR',
-        'SPX': '^GSPC', 'IXIC': '^IXIC', 'GOLD': 'GC=F', 'STRC': 'STRC', 'STRF': 'STRF', 'STRK': 'STRK', 'STRD': 'STRD', 'SATA': 'SATA'}
+        'SPX': '^GSPC', 'IXIC': '^IXIC', 'GOLD': 'GC=F', 'STRC': 'STRC', 'STRF': 'STRF', 'STRK': 'STRK', 'STRD': 'STRD', 'SATA': 'SATA', 'DXY': 'DX-Y.NYB'}
 out = {'source': 'Yahoo Finance closes (split-adjusted, local currency)', 'as_of': datetime.date.today().isoformat(), 'series': {}}
 for k, y in SYMS.items():
     try:
