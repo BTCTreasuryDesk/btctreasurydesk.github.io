@@ -1,7 +1,7 @@
 /* BTC Treasury Desk: main LIVE chart + shared series/draw core (window.BTD_CH, also used by the Live Wall).
    BTC: Coinbase Exchange candles, last candle driven tick-by-tick by BTD_FEED (the SAME feed as the board tiles, so header and chart always match).
    Stocks: intraday = live quotes collected in this browser + tokenized-stock (xStocks) 24/7 intraday where one exists; daily/weekly closes from
-   assets/data/stocks_hist.json (weekly refresh) + the live quote. Ranges 1H 1D 1W 1M 1Y All. Compare up to 5 symbols (% change). Education only. */
+   assets/data/stocks_hist.json (weekly refresh) + the live quote. Ranges 1H 1D 1W 1M 3M 1Y All (BTC: Coinbase 1-min/5-min/hourly/hourly/daily/daily candles; All = btc_daily.json weekly). Compare up to 5 symbols (% change). Education only. */
 (function () {
   'use strict';
   var F = window.BTD_FEED, DAY = 864e5;
@@ -10,7 +10,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function fp(v, cur) { if (v == null || !isFinite(v)) return '—'; var a = Math.abs(v), d = a >= 1000 ? 0 : a >= 100 ? 2 : a >= 1 ? 2 : 4; var s = v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); return cur === 'pct' ? s + '%' : cur && cur !== 'USD' ? s : '$' + s; }
   function sg(v, d) { return v == null || !isFinite(v) ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d == null ? 2 : d) + '%'; }
-  var RANGES = ['1H', '1D', '1W', '1M', '1Y', 'All'];
+  var RANGES = ['1H', '1D', '1W', '1M', '3M', '1Y', 'All'];
   var IDX = { SPX: ['.SPX', 'S&P 500'], IXIC: ['.IXIC', 'Nasdaq'], GOLD: ['@GC.1', 'Gold'] };
 
   /* ---------- names (top 50 from the weekly leaderboard) ---------- */
@@ -21,7 +21,7 @@
   /* ---------- series ---------- */
   var HIST = null, histP = null; function hist() { return histP || (histP = J('/assets/data/stocks_hist.json').then(function (j) { HIST = j; return j; }).catch(function () { HIST = { series: {} }; return HIST; })); }
   var BTCD = null; function btcDaily() { return BTCD ? Promise.resolve(BTCD) : J('/assets/data/btc_daily.json').then(function (j) { var t0 = Date.parse(j.start + 'T00:00:00Z'); BTCD = j.closes.map(function (c, i) { return { t: t0 + i * DAY, c: c }; }); return BTCD; }); }
-  var CBU = 'https://api.exchange.coinbase.com/products/BTC-USD/candles', GR = { '1H': [60, 1 / 24], '1D': [300, 1], '1W': [3600, 7], '1M': [21600, 30], '1Y': [86400, 366] }, cache = {};
+  var CBU = 'https://api.exchange.coinbase.com/products/BTC-USD/candles', GR = { '1H': [60, 1 / 24], '1D': [300, 1], '1W': [3600, 7], '1M': [3600, 30], '3M': [86400, 92], '1Y': [86400, 366] }, cache = {};
   function btcSeries(r) {
     if (r === 'All') return btcDaily().then(function (d) { var w = d.filter(function (p, i) { return i % 7 === 0 || i === d.length - 1; }); return w.map(function (p) { return { t: p.t, c: p.c }; }); });
     var k = 'BTC' + r; if (cache[k] && Date.now() - cache[k].at < 120e3) return Promise.resolve(cache[k].s);
@@ -52,7 +52,7 @@
           s2.note = 'Prior close → live quote. Intraday line fills in as live quotes arrive (no free intraday history for ' + t + ')'; s2.flat = 1; return s2; }); }
         s.note = note; return s; });
     }
-    return hist().then(function () { var h = histOf(t) || [], from = r === 'All' ? 0 : now - { '1W': 8, '1M': 31, '1Y': 366 }[r] * DAY, s = h.filter(function (p) { return p.t >= from; });
+    return hist().then(function () { var h = histOf(t) || [], from = r === 'All' ? 0 : now - { '1W': 8, '1M': 31, '3M': 92, '1Y': 366 }[r] * DAY, s = h.filter(function (p) { return p.t >= from; });
       if (q && s.length) { var lp = curPx(q); if (now - s[s.length - 1].t > 18 * 36e5) s.push({ t: now, c: lp }); else s[s.length - 1] = { t: s[s.length - 1].t, c: lp }; }
       if (!s.length && q) { s = [{ t: now - DAY, c: q.prev || q.px }, { t: now, c: curPx(q) }]; s.note = 'No stored history for ' + t + ' yet; showing prior close → live'; s.flat = 1; }
       else s.note = 'Daily closes (weekly before the last ~18 months) + live quote'; return s; });
@@ -131,7 +131,7 @@
     else if (b.dataset.lcAddt) { if (S.cmp.length < MAXC()) S.cmp.push(b.dataset.lcAddt); pickPaint(); if (S.cmp.length >= MAXC() || innerWidth <= 760) { $('[data-lc-pick]').hidden = true; box.querySelector('[data-lc-cmpbtn]').setAttribute('aria-expanded', 'false'); } }
     else if (b.hasAttribute('data-lc-cmpbtn')) { var p = $('[data-lc-pick]'); p.hidden = !p.hidden; $('[data-lc-tops]').hidden = true; b.setAttribute('aria-expanded', !p.hidden); if (!p.hidden) pickPaint(); return; }
     else return; save(); ui(); load(); });
-  box.addEventListener('click', function (e) { if (!e.target.closest('[data-lc-ch]')) return; var R = ['1D', '1W', '1M', '1Y'], i = R.indexOf(S.r); S.r = R[(i + 1) % R.length]; save(); ui(); load(); });
+  box.addEventListener('click', function (e) { if (!e.target.closest('[data-lc-ch]')) return; var R = ['1D', '1W', '1M', '3M', '1Y', 'All'], i = R.indexOf(S.r); S.r = R[(i + 1) % R.length]; save(); ui(); load(); });
   var lcReg = 0;
   box.addEventListener('change', function (e) { if (e.target.matches('[data-lc-more]') && e.target.value === '__clr') { forget(); if (S.s !== 'BTC' && S.s !== 'MSTR') S.s = 'BTC'; save(); ui(); load(); return; } if (e.target.matches('[data-lc-more]') && e.target.value) { remember(e.target.value); S.s = e.target.value; S.cmp = S.cmp.filter(function (t) { return t !== S.s; }); if (S.m === 'candle') S.m = 'area'; save(); ui(); load(); } });
   function watchAll() { if (F) F.watch([S.s].concat(S.cmp).map(cnOf).filter(Boolean)); }
@@ -168,6 +168,6 @@
   cv.addEventListener('mousemove', hv); cv.addEventListener('touchstart', hv, { passive: true }); cv.addEventListener('touchmove', hv, { passive: true });
   cv.addEventListener('mouseleave', function () { hov = null; soon(); }); cv.addEventListener('touchend', function () { setTimeout(function () { hov = null; soon(); }, 1200); });
   addEventListener('resize', soon);
-  setInterval(function () { if (!document.hidden && S.s === 'BTC' && (S.r === '1W' || S.r === '1M' || S.r === '1Y')) { cache['BTC' + S.r] = null; load(); } }, 300e3);
+  setInterval(function () { if (!document.hidden && S.s === 'BTC' && (S.r === '1W' || S.r === '1M' || S.r === '3M' || S.r === '1Y')) { cache['BTC' + S.r] = null; load(); } }, 300e3);
   ui(); load(); lbP.then(function () { ui(); });
 })();

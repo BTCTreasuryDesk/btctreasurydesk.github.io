@@ -148,3 +148,4 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 - Live data is client-side only (Coinbase WS, CNBC quote service, CoinGecko, DefiLlama). No API keys, no AI credits.
 
 - Context references for live tiles (5D sparklines, 1y avg / 1 mo ago / 52w range reads): `python3 tools/update_ctx.py` (writes assets/data/ctx.json).
+- `tools/update_prefs_kpi.py` (weekly): Strategy preferreds from strategy.com KPI JSON + effective-yield history -> assets/data/prefs_kpi.json (tokenized panel preferreds).
