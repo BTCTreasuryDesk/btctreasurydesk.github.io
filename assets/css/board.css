@@ -157,7 +157,7 @@ body.dm main.grid>.p-hs{display:none}
 @media (prefers-reduced-motion:reduce){.lc-dot{animation:none}}
 /* Phone hero: just the big price, % change, minimal 1H/1D/1W tabs and the chart */
 @media (max-width:760px){
-  body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-hl,body:not(.dm) .p-live .lc-ft{display:none!important}
+  body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-ft{display:none!important}
   body:not(.dm) .p-live [data-lc-r="1M"],body:not(.dm) .p-live [data-lc-r="1Y"],body:not(.dm) .p-live [data-lc-r="All"]{display:none}
   body:not(.dm) .p-live .lc-h{justify-content:space-between;flex-wrap:nowrap;gap:6px;margin-bottom:0}
   .p-live .lc-sym{flex-wrap:nowrap;gap:4px}.p-live .lc-sym .chip{padding:4px 8px;font-size:11px}.p-live .lc-sel{display:none}.p-live .lc-topbtn{display:inline-flex}
@@ -184,3 +184,4 @@ body:not(.dm) .p-live .lc-ft{display:none}
 .lc-tops{max-height:190px}
 .lc-adds{display:none}
 @media (max-width:760px){.p-live .lc-add{order:1;padding:4px 8px;font-size:11px;margin-left:0}.p-live .lc-sym{order:0}.p-live .lc-r{order:2}.lc-addl{display:none}.lc-adds{display:inline}.p-live .lc-cmp{gap:6px;font-size:11px;margin:2px 0}.p-live .lc-cmp small:not(.lc-cn){display:none}.p-live .lc-cn{flex-basis:100%;color:var(--mut,#8a93a0)}}
+@media (max-width:760px){body:not(.dm) .p-live .lc-hl{flex-basis:100%;font-size:11px;margin-top:2px}}
