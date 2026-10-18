@@ -30,11 +30,11 @@
   var FUT = { '.SPX': '@SP.1', '.IXIC': '@ND.1', '.DJI': '@DJ.1' };
   var GN = { desk: 'Bitcoin desk', us: 'US stocks', rt: 'Rates · dollar · vol', cm: 'Commodities', gl: 'Global', mag: 'Mag 7 · top stocks', mine: 'My picks' };
   var TIPS = { BTC: 'BTC-USD, Coinbase live feed (every trade)', MNAV: 'Strategy method: enterprise value ÷ bitcoin NAV, recomputed live from MSTR and BTC', T10: 'Desk Treasury 10: the top 10 public bitcoin treasury stocks, average day move weighted by BTC held. Desk calculation.', STREET: 'MSTR analysts: 60% ratings mix + 40% average-target upside vs the live price (0–100). Analysts\u2019 views, not ours.' };
-  var MKDEF = [['BTC', 'Bitcoin', 'desk'], ['MSTR', 'Strategy MSTR', 'desk'], ['MNAV', 'MSTR mNAV · live', 'desk'], ['T10', 'Treasury 10 · day', 'desk'], ['STREET', 'Street Sentiment', 'desk'], ['ETH', 'Ether', 'desk'], ['SOL', 'Solana', 'desk'],
+  var MKDEF = [['BTC', 'Bitcoin', 'desk'], ['MSTR', 'Strategy MSTR', 'desk'], ['ETH', 'Ether', 'desk'], ['SOL', 'Solana', 'desk'],
     ['.SPX', 'S&P 500', 'us'], ['.IXIC', 'Nasdaq', 'us'], ['.DJI', 'Dow', 'us'], ['.RUT', 'Russell 2000', 'us'],
     ['US2Y', 'US 2Y', 'rt'], ['US10Y', 'US 10Y', 'rt'], ['.DXY', 'Dollar DXY', 'rt'], ['.VIX', 'VIX', 'rt'], ['@GC.1', 'Gold', 'cm'], ['@SI.1', 'Silver', 'cm'], ['@CL.1', 'WTI oil', 'cm'],
     ['.N225', 'Nikkei 225', 'gl'], ['.STOXX', 'Stoxx 600', 'gl'], ['AAPL', 'AAPL', 'mag'], ['MSFT', 'MSFT', 'mag'], ['NVDA', 'NVDA', 'mag'], ['GOOGL', 'GOOGL', 'mag'], ['AMZN', 'AMZN', 'mag'], ['META', 'META', 'mag'], ['TSLA', 'TSLA', 'mag']];
-  var MKCAT = MKDEF.concat([['US5Y', 'US 5Y', 'rt'], ['US30Y', 'US 30Y', 'rt'], ['EUR=', 'EUR/USD', 'rt'], ['JPY=', 'USD/JPY', 'rt'], ['@HG.1', 'Copper', 'cm'], ['@NG.1', 'Natural gas', 'cm'], ['.FTSE', 'FTSE 100', 'gl'], ['.GDAXI', 'DAX', 'gl'], ['.HSI', 'Hang Seng', 'gl'], ['.KS11', 'KOSPI', 'gl'], ['.SSEC', 'Shanghai', 'gl'],
+  var MKCAT = MKDEF.concat([['MNAV', 'MSTR mNAV · live', 'desk'], ['T10', 'Treasury 10 · day', 'desk'], ['STREET', 'Street Sentiment', 'desk'], ['US5Y', 'US 5Y', 'rt'], ['US30Y', 'US 30Y', 'rt'], ['EUR=', 'EUR/USD', 'rt'], ['JPY=', 'USD/JPY', 'rt'], ['@HG.1', 'Copper', 'cm'], ['@NG.1', 'Natural gas', 'cm'], ['.FTSE', 'FTSE 100', 'gl'], ['.GDAXI', 'DAX', 'gl'], ['.HSI', 'Hang Seng', 'gl'], ['.KS11', 'KOSPI', 'gl'], ['.SSEC', 'Shanghai', 'gl'],
     ['COIN', 'COIN', 'mag'], ['HOOD', 'HOOD', 'mag'], ['AVGO', 'AVGO', 'mag'], ['CRCL', 'CRCL', 'mag'], ['IBIT', 'IBIT (BTC ETF)', 'mag'], ['GLD', 'GLD', 'mag'], ['BTC.CM=', 'CME BTC futures', 'desk']]);
   var MK_RX = /^[A-Z0-9.@=\-]{1,12}$/;
   function mkGet() { var o = null; try { o = JSON.parse(LS.get('btd_mk') || 'null'); } catch (e) {} if (!Array.isArray(o) || !o.length) return MKDEF.slice();
@@ -205,4 +205,22 @@
   a.addEventListener('click', function (e) { var m = /(?:youtu\.be\/|v=)([\w-]{11})/.exec(a.href); if (!m) return; e.preventDefault();
     var f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0'; f.title = document.querySelector('[data-ep-title]').textContent || 'Latest episode';
     f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; f.allowFullscreen = true; f.className = 'ep-frame'; a.replaceWith(f); });
+})();
+
+/* Hero strip under the live chart: US indexes (futures outside regular hours) + MSTR and the Mag 7. One row; swipe on phone. */
+(function () {
+  var el = document.querySelector('[data-hs]'), F = window.BTD_FEED; if (!el || !F) return;
+  var IX = [['.SPX', '@SP.1', 'S&P 500'], ['.IXIC', '@ND.1', 'Nasdaq'], ['.DJI', '@DJ.1', 'Dow']], ST = ['MSTR', 'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA'];
+  F.watch(IX.map(function (x) { return x[0]; }).concat(IX.map(function (x) { return x[1]; }), ST));
+  var f2 = function (v, d) { return v == null ? '…' : Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var pc = function (v) { return v == null || isNaN(v) ? '' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%'; };
+  var cl = function (v) { return v > 0 ? 'up' : v < 0 ? 'dn' : 'fl'; };
+  function tile(lbl, px, ch, tag, d) { return '<div class="hs-t"><span class="hs-l">' + lbl + (tag ? ' <em>' + tag + '</em>' : '') + '</span><b>' + f2(px, d) + '</b><span class="hs-c ' + cl(ch) + '">' + pc(ch) + '</span></div>'; }
+  function paint() { var ses = F.session(), out = [];
+    IX.forEach(function (x) { var q = F.get(x[0]), fu = F.get(x[1]);
+      if (ses !== 'open' && fu && fu.px != null) out.push(tile(x[2], fu.px, fu.chp, 'Fut', 2)); else out.push(tile(x[2], q && q.px, q && q.chp, '', 2)); });
+    ST.forEach(function (t) { var q = F.get(t), ext = q && q.ext && ses !== 'open' ? q.ext : null;
+      out.push(tile(t, ext ? ext.px : q && q.px, ext ? ext.chp : q && q.chp, ext ? (ext.kind === 'pre' ? 'Pre' : 'AH') : '', 2)); });
+    el.innerHTML = out.join(''); }
+  paint(); F.on('quotes', paint); F.on('session', paint);
 })();

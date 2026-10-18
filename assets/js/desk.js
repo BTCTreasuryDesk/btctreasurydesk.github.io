@@ -780,7 +780,7 @@
   function tkCn(r) { return r.tk === 'SWC' ? 'SWC-GB' : r.tv ? qtCnbc(r.tv) : null; }
   function tkFetch() {
     if (!tk || tk.hidden || document.hidden || !DESK) return; var sy = [];
-    tkList().forEach(function (x) { var c = x.id[0] === 'S' ? tkCnOf(x) : x.id[0] === 'P' ? x.tk : null; if (c && sy.indexOf(c) < 0) sy.push(c); });
+    tkList().forEach(function (x) { var m = x.id[0] === 'M' ? TKM[x.id.slice(2)] : null; (m ? [m[1], m[2]] : [x.id[0] === 'S' ? tkCnOf(x) : x.id[0] === 'P' ? x.tk : null]).forEach(function (c) { if (c && sy.indexOf(c) < 0) sy.push(c); }); });
     if (!sy.length) return;
     fetch(CNURL + encodeURIComponent(sy.join('|'))).then(function (r) { return r.json(); }).then(function (j) {
         var arr = (j.FormattedQuoteResult || {}).FormattedQuote || []; arr = Array.isArray(arr) ? arr : [arr];
@@ -797,7 +797,9 @@
   /* Ribbon list: default = top 20 + ASST/SWC, all preferreds, key data, then ETH and SOL. Visitors can add, remove and reorder; saved in 'btd_tk2'. */
   var TKD = { BTC: 'BTC price', MNAV: 'MSTR mNAV (live)', GAIN: 'Strategy BTC Gain YTD', DOM: 'BTC dominance', BTCETH: 'BTC/ETH', BTCSOL: 'BTC/SOL', FNG: 'Fear & Greed', ATH: 'From ATH', PLAW: 'Power Law position', HALV: 'Days to halving' };
   var TKDL = { BTC: 'BTC', MNAV: 'MSTR mNAV', GAIN: 'Strategy BTC Gain YTD', DOM: 'BTC.D', BTCETH: 'BTC/ETH', BTCSOL: 'BTC/SOL', FNG: 'Fear & Greed', ATH: 'From ATH', PLAW: 'Power Law', HALV: 'Halving' };
-  var TK_ID = /^[SPDC]:[A-Z0-9.\-]{1,15}$/, TK_CN = /^[A-Z0-9.\-]{1,15}$/;
+  var TK_ID = /^[SPDCM]:[A-Z0-9.\-]{1,15}$/, TK_CN = /^[A-Z0-9.@=\-]{1,15}$/;
+  var TKM = { SPX: ['S&P 500', '.SPX', '@SP.1', 'ix'], IXIC: ['Nasdaq', '.IXIC', '@ND.1', 'ix'], DJI: ['Dow', '.DJI', '@DJ.1', 'ix'], GOLD: ['Gold', '@GC.1', null, 'cm'], OIL: ['WTI oil', '@CL.1', null, 'cm'], US10Y: ['US 10Y', 'US10Y', null, 'yd'], DXY: ['DXY', '.DXY', null, 'ix'], VIX: ['VIX', '.VIX', null, 'ix'] };
+  function tkMq(k) { var m = TKM[k], F = window.BTD_FEED; if (!m) return null; var open = F && F.session ? F.session() === 'open' : true, g = function (c) { return c ? (TKQ[c] || (F && F.get(c))) : null; }, fu = !open && m[2] ? g(m[2]) : null, q = fu && fu.px != null ? fu : g(m[1]); return q && q.px != null ? { q: q, fut: !!(fu && fu.px != null) } : null; }
   function tkPrefs() { var PT = TKP.slice(); (DESK && DESK.prefs_desk ? DESK.prefs_desk.rows : []).forEach(function (x) { if (PT.indexOf(x.t) < 0) PT.push(x.t); }); return PT; }
   /* Views: one-tap presets, each its own editable list. 'desk' = the original default (custom list stays in 'btd_tk2');
      the others + current view + sort live in 'btd_tk3' {v, sort, L:{view:[items]}}. Items may carry h:1 (hidden, kept in the list). */
@@ -813,9 +815,10 @@
     if (v === 'alts') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'D:DOM', tk: TKDL.DOM }, { id: 'D:BTCETH', tk: 'BTC/ETH' }, { id: 'D:BTCSOL', tk: 'BTC/SOL' }, { id: 'C:ETH', tk: 'ETH' }, { id: 'C:SOL', tk: 'SOL' }];
     if (v === 'mine') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'S:MSTR', tk: 'MSTR' }, { id: 'D:MNAV', tk: TKDL.MNAV }, { id: 'S:ASST', tk: 'ASST' }, { id: 'D:DOM', tk: TKDL.DOM }, { id: 'D:GAIN', tk: TKDL.GAIN }];
     return D0; }
-  function tkDesk() { var L = [];
-    tkRows().forEach(function (r) { L.push({ id: 'S:' + r.tk.toUpperCase(), tk: r.tk }); }); tkPrefs().forEach(function (t) { L.push({ id: 'P:' + t, tk: t }); });
-    Object.keys(TKD).forEach(function (k) { L.push({ id: 'D:' + k, tk: TKDL[k] }); }); ['ETH', 'SOL'].forEach(function (k) { L.push({ id: 'C:' + k, tk: k }); }); return L; }
+  function tkDesk() { // Desk default order: BTC, ETH, SOL, treasury + major stocks, Mag 7, US indexes (futures outside regular hours), macro
+    var L = [{ id: 'D:BTC', tk: 'BTC' }, { id: 'C:ETH', tk: 'ETH' }, { id: 'C:SOL', tk: 'SOL' }];
+    [['MSTR'], ['COIN'], ['ASST', 'Strive'], ['MPJPY', 'Metaplanet'], ['AAPL'], ['MSFT'], ['NVDA'], ['AMZN'], ['GOOGL'], ['META'], ['TSLA']].forEach(function (a) { L.push({ id: 'S:' + a[0], tk: a[1] || a[0], cn: a[0] }); });
+    Object.keys(TKM).forEach(function (k) { L.push({ id: 'M:' + k, tk: TKM[k][0] }); }); return L; }
   function tkClean(o) { if (!Array.isArray(o) || !o.length) return null;
     var out = o.filter(function (x) { return x && typeof x.id === 'string' && TK_ID.test(x.id); }).slice(0, 80).map(function (x) { var y = { id: x.id, tk: String(x.tk || x.id.slice(2)).slice(0, 24), cn: x.cn && TK_CN.test(x.cn) ? x.cn : null }; if (x.h) y.h = 1; return y; });
     return out.length ? out : null; }
@@ -826,7 +829,7 @@
     if (v === 'desk') { if (same) { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else LS.set('btd_tk2', JSON.stringify(L)); return; }
     if (same) delete V.L[v]; else V.L[v] = L; tkVSave(V); }
   function tkReset() { var V = tkV(); if (V.v === 'desk') { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else { delete V.L[V.v]; tkVSave(V); } }
-  function tkShown() { var V = tkV(), CO = { S: 0, P: 1, D: 2, C: 3 }, L = tkList().filter(function (x) { return !x.h; }), R = L.map(function (x, i) { return { x: x, it: tkItem(x), i: i }; }).filter(function (r) { return r.it; });
+  function tkShown() { var V = tkV(), CO = { D: 0, C: 1, S: 2, M: 3, P: 4 }, L = tkList().filter(function (x) { return !x.h; }), R = L.map(function (x, i) { return { x: x, it: tkItem(x), i: i }; }).filter(function (r) { return r.it; });
     if (V.sort === 'movers') R.sort(function (a, b) { var A = a.it[2], B = b.it[2], ha = A != null && isFinite(A), hb = B != null && isFinite(B); return ha && hb ? Math.abs(B) - Math.abs(A) : ha ? -1 : hb ? 1 : a.i - b.i; });
     else if (V.sort === 'cat') R.sort(function (a, b) { return (CO[a.x.id[0]] - CO[b.x.id[0]]) || a.i - b.i; });
     else if (V.sort === 'az') R.sort(function (a, b) { return String(a.it[0]).localeCompare(String(b.it[0])); });
@@ -838,9 +841,10 @@
   function tkCnOf(x) { if (x.cn) return x.cn; var r = tkBoard(x.id.slice(2)); return r ? tkCn(r) : null; }
   function tkItem(x) {
     var k = x.id.slice(2), t = x.id[0];
-    if (t === 'S') { var q = TKQ[tkCnOf(x)]; if (q) return [x.tk, tkPx(q), q.chp]; var l = LAST && LAST.q[k]; return l ? [x.tk, '$' + l.c.toFixed(2) + ' close', (l.c / l.prev - 1) * 100] : null; }
+    if (t === 'S') { var q = TKQ[tkCnOf(x)] || (window.BTD_FEED && tkCnOf(x) && window.BTD_FEED.get(tkCnOf(x))); if (q) return [x.tk, tkPx(q), q.chp]; var l = LAST && LAST.q[k]; return l ? [x.tk, '$' + l.c.toFixed(2) + ' close', (l.c / l.prev - 1) * 100] : null; }
     if (t === 'P') { var PR = DESK && DESK.prefs_desk ? DESK.prefs_desk.rows : [], qp = TKQ[k], d = PR.filter(function (y) { return y.t === k; })[0]; if (!qp && !d) return null;
       return [k, (qp ? '$' + qp.px.toFixed(2) : '$' + d.close.toFixed(2) + ' close') + (d ? ' · ' + d.rate.toFixed(2) + '%' : ''), qp ? qp.chp : d && d.prev ? (d.close / d.prev - 1) * 100 : null]; }
+    if (t === 'M') { var mq = tkMq(k), mm = TKM[k]; if (!mq) return null; var v = mq.q.px, lab = mm[0] + (mq.fut ? ' fut' : ''); return [lab, mm[3] === 'yd' ? v.toFixed(3) + '%' : mm[3] === 'cm' ? '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), mm[3] === 'yd' ? null : mq.q.chp]; }
     if (t === 'C') return k === 'ETH' ? (live.eth ? ['ETH', usd(live.eth), live.eth24] : null) : (live.sol ? ['SOL', usd(live.sol), live.sol24] : null);
     switch (k) {
       case 'BTC': return ['BTC', live.btc ? usd(live.btc) : '—'];

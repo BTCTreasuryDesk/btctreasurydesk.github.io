@@ -83,7 +83,8 @@
       if (o.candle && !o.pct && si === 0 && s[0].h) { var bw = Math.max(1, pw / s.length * 0.7);
         s.forEach(function (p) { var up = p.c >= p.o, cx = X(p.t); x.strokeStyle = x.fillStyle = up ? '#2fd17c' : '#ff5a5f'; x.beginPath(); x.moveTo(cx, Y(p.h)); x.lineTo(cx, Y(p.l)); x.stroke(); var y1 = Y(Math.max(p.o, p.c)), y2 = Y(Math.min(p.o, p.c)); x.fillRect(cx - bw / 2, y1, bw, Math.max(1, y2 - y1)); }); return; }
       x.beginPath(); s.forEach(function (p, i) { var px = X(p.t), py = Y(S.v[i]); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.strokeStyle = col; x.lineWidth = S.w || 1.8; x.lineJoin = 'round'; x.stroke();
-      if (o.area && si === 0 && !o.pct) { x.lineTo(X(s[s.length - 1].t), pt + ph); x.lineTo(X(s[0].t), pt + ph); x.closePath(); var g = x.createLinearGradient(0, pt, 0, pt + ph); g.addColorStop(0, col + '40'); g.addColorStop(1, col + '00'); x.fillStyle = g; x.fill(); }
+      if (si === 0 && S.v) cv._last = { x: X(s[s.length - 1].t), y: Y(S.v[s.length - 1]) };
+      if (o.area && si === 0 && !o.pct) { x.lineTo(X(s[s.length - 1].t), pt + ph); x.lineTo(X(s[0].t), pt + ph); x.closePath(); var g = x.createLinearGradient(0, pt, 0, pt + ph); g.addColorStop(0, col + '59'); g.addColorStop(0.6, col + '1a'); g.addColorStop(1, col + '00'); x.fillStyle = g; x.fill(); }
       var lx = X(s[s.length - 1].t), ly = Y(S.v[S.v.length - 1]); x.fillStyle = col; x.beginPath(); x.arc(lx, ly, si === 0 ? 3 : 2.5, 0, 7); x.fill();
       if (ax && si === 0) { x.fillStyle = col; x.fillRect(pw + 3, ly - 8, pr - 4, 16); x.fillStyle = '#000'; x.textAlign = 'left'; x.font = 'bold 11px ui-monospace,Menlo,monospace'; x.fillText(o.pct ? sg(S.v[S.v.length - 1], 1) : fp(S.v[S.v.length - 1], o.cur), pw + 6, ly + 4); } });
     if (o.hover != null) { var hx = o.hover; if (hx >= 2 && hx <= pw + 2) { var th = t0 + (hx - 2) / pw * (t1 - t0); x.strokeStyle = '#8892a0'; x.setLineDash([2, 3]); x.beginPath(); x.moveTo(hx, pt); x.lineTo(hx, pt + ph); x.stroke(); x.setLineDash([]);
@@ -105,7 +106,7 @@
     '<button type="button" class="chip lc-add" data-lc-cmpbtn aria-expanded="false">＋ Compare</button></div>' +
     '<div class="lc-read"><span class="lc-name" data-lc-name></span><b class="lc-px" data-lc-px>…</b><span class="lc-ch" data-lc-ch></span><span class="lc-sess" data-lc-sess></span><span class="lc-hl" data-lc-hl></span></div>' +
     '<div class="lc-cmp" data-lc-legend></div><div class="lc-pick" data-lc-pick hidden></div>' +
-    '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div>' +
+    '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><span class="lc-dot" data-lc-dot hidden></span><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div>' +
     '<p class="lc-ft" data-lc-ft></p>';
   var $ = function (q) { return box.querySelector(q); }, cv = $('[data-lc-cv]'), hov = null, DATA = [], tok = 0, raf = 0;
   function symsBar() { var base = ['BTC', 'MSTR']; if (base.indexOf(S.s) < 0) base.push(S.s);
@@ -131,6 +132,7 @@
     var sets = list.map(function (t, i) { return { s: DATA[i] || [], col: COLS[i], lab: t, w: i ? 1.5 : 2 }; });
     var q = S.s === 'BTC' ? (F && F.get('BTC')) : liveQ(S.s);
     var res = draw(cv, sets, { pct: pct, candle: S.m === 'candle' && S.s === 'BTC', area: S.m === 'area', hover: hov, base: !pct && s0.length && (S.r === '1H' || S.r === '1D') ? s0[0].c : null, cur: q && q.cur });
+    var dot = $('[data-lc-dot]'); if (dot) { if (res !== null && cv._last && !pct && S.s === 'BTC' && S.m !== 'candle') { dot.style.left = cv._last.x + 'px'; dot.style.top = cv._last.y + 'px'; dot.hidden = false; } else dot.hidden = true; }
     var msg = $('[data-lc-msg]'); msg.hidden = !!(s0.length > 1); if (!msg.hidden) msg.textContent = s0.length ? 'Waiting for more data…' : 'No data from the free feed right now. Retrying…';
     var tip = $('[data-lc-tip]'); if (res && res.rows) { tip.hidden = false; tip.innerHTML = '<b>' + esc(new Date(res.t).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + ' ET</b>' + res.rows.map(function (r) { return '<span>' + esc(r[0]) + ' ' + (pct ? sg(r[1]) : fp(r[1], q && q.cur)) + '</span>'; }).join(''); tip.style.left = Math.min(Math.max(hov - 70, 4), cv.clientWidth - 150) + 'px'; } else tip.hidden = true;
     // readout

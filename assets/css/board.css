@@ -140,8 +140,28 @@ body.dm .mk-ed,body.dm .p-wl .p-h .chip{display:none}
 .p-ep .ep-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:6px;display:block;background:#000}
 .p-ep .tbtn-sub{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:4px;background:#c00;color:#fff;font:700 12px var(--mono);text-decoration:none;margin-left:6px}.p-ep .tbtn-sub:hover{background:#e00}
 .p-ep .ep-tools{font-size:13px;line-height:1.6;margin:10px 0 4px;color:var(--mu)}.p-ep .ep-tools b{color:#fff;font-weight:600}.p-ep .ep-tools a{color:var(--o,#F7931A)}
-/* Phone: live BTC chart is the first panel on the first screen; markets board follows */
-@media (max-width:760px){body:not(.dm) main.grid>.p-live{order:-1!important}main.grid>.p-live .lc-cv{height:240px}}
-/* Desktop: live chart (with the treasury window beside it) leads the first screen; markets board follows */
-body:not(.dm) main.grid>.p-live{order:-1}
-@media (min-width:1101px){body:not(.dm) main.grid>.p-wl{order:-1}}
+/* Hero: live BTC price + chart lead the page on every width, then the indexes + top stocks strip, then the Markets board */
+body:not(.dm) main.grid>.p-live{order:-2;grid-column:1/-1}
+body:not(.dm) main.grid>.p-hs{order:-1}
+.p-hs{grid-column:1/-1;padding:6px!important}
+body.dm main.grid>.p-hs{display:none}
+.hs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.hs::-webkit-scrollbar{display:none}
+.hs-t{flex:1 0 auto;min-width:96px;scroll-snap-align:start;background:#0b0d10;border:1px solid #1c2129;border-radius:4px;padding:5px 8px;display:flex;flex-direction:column;gap:1px}
+.hs-l{font:600 10.5px var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}.hs-l em{font-style:normal;color:var(--o,#F7931A);font-weight:700}
+.hs-t b{font:700 15px var(--mono);color:#fff;white-space:nowrap}.hs-c{font:600 12px var(--mono)}
+@media (min-width:1101px){.p-wl{grid-column:1/7}.p-cx{grid-column:7/13}.p-tok{grid-column:1/-1}}
+/* Live dot at the latest price */
+.lc-cv{position:relative}.lc-dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#F7931A;box-shadow:0 0 0 0 rgba(247,147,26,.7);animation:lcpulse 1.6s ease-out infinite;pointer-events:none}
+@keyframes lcpulse{0%{box-shadow:0 0 0 0 rgba(247,147,26,.65)}70%{box-shadow:0 0 0 12px rgba(247,147,26,0)}100%{box-shadow:0 0 0 0 rgba(247,147,26,0)}}
+@media (prefers-reduced-motion:reduce){.lc-dot{animation:none}}
+/* Phone hero: just the big price, % change, minimal 1H/1D/1W tabs and the chart */
+@media (max-width:760px){
+  body:not(.dm) .p-live .lc-sym,body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-add,body:not(.dm) .p-live .lc-hl,body:not(.dm) .p-live .lc-ft,body:not(.dm) .p-live .lc-cmp,body:not(.dm) .p-live .lc-name{display:none!important}
+  body:not(.dm) .p-live [data-lc-r="1M"],body:not(.dm) .p-live [data-lc-r="1Y"],body:not(.dm) .p-live [data-lc-r="All"]{display:none}
+  body:not(.dm) .p-live .lc-h{justify-content:flex-end;margin-bottom:0}
+  body:not(.dm) .p-live .lc-px{font-size:38px}
+  main.grid>.p-live .lc-cv{height:240px}
+  .hs-t{min-width:88px;flex:0 0 auto}
+}
+@media (max-width:760px){body.desk:not(.dm) .deskbar{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;gap:6px;padding-top:4px;padding-bottom:4px}body.desk:not(.dm) .deskbar::-webkit-scrollbar{display:none}body.desk:not(.dm) .deskbar>*{flex:0 0 auto;white-space:nowrap}}
