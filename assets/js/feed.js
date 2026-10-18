@@ -40,7 +40,7 @@
   function watch(list) { (list || []).forEach(function (s) { if (s && CB.indexOf(s) < 0) want[s] = 1; }); qPollSoon(); }
   var qT = null; function qPollSoon() { clearTimeout(qT); qT = setTimeout(qPoll, 60); }
   function parseQ(x) { var px = num(x.last); if (px == null || String(x.code) !== '0') return null; var e = x.ExtendedMktQuote || null, ext = null;
-    if (e && num(e.last) != null && /PRE|POST/.test(e.type || '')) ext = { px: num(e.last), ch: num(e.change), chp: num(e.change_pct), kind: /PRE/.test(e.type) ? 'pre' : 'post' };
+    if (e && num(e.last) != null && /PRE|POST/.test(e.type || '')) ext = { px: num(e.last), ch: num(e.change), chp: num(e.change_pct), kind: /PRE/.test(e.type) ? 'pre' : 'post', vol: e.volume_alt || null, t: e.last_timedate || e.last_time || null };
     return { px: px, ch: num(x.change), chp: num(x.change_pct), prev: num(x.previous_day_closing), open: num(x.open), hi: num(x.high), lo: num(x.low), name: x.name || x.shortName, sn: x.shortName, cur: x.currencyCode,
       status: x.curmktstatus, ext: ext, yld: /%/.test(String(x.last)), rt: String(x.realTime) !== 'false', lt: x.last_time, src: 'CNBC' }; }
   function qPoll() {
@@ -78,7 +78,12 @@
       Object.keys(XS).forEach(function (k) { var x = j[XS[k]]; if (x && x.usd) o[k] = { px: x.usd, chp: x.usd_24h_change, t: x.last_updated_at * 1e3, vol: x.usd_24h_vol }; }); if (Object.keys(o).length) { G.tok = o; tokTry = 0; LS.set('btd_tok', JSON.stringify(o)); emit('tok', o); } else throw 0; }).catch(function () { if (tokTry++ < 3) setTimeout(gTok, 20e3 * tokTry); }); }
   var tokTry = 0; (function () { try { var c = JSON.parse(LS.get('btd_tok') || 'null'); if (c && !G.tok) { G.tok = c; setTimeout(function () { if (G.tok === c) emit('tok', c); }, 0); } } catch (e) {} })(); /* last good token prices; tiles grey out as stale by their own timestamps */
 
-  window.BTD_FEED = { on: on, get: function (k) { return Q[k] || G[k] || null; }, watch: watch, session: session, num: num, XS: XS, all: Q, g: G,
+  /* Robinhood-style extended-hours line: 'After hours $X  +$Y (+Z%)', change measured from the regular-session close (q.px). Shown only when CNBC has an extended price and the regular session is not open. */
+  function xh(q, o) { o = o || {}; if (!q || !q.ext || q.ext.px == null || q.px == null || session() === 'open') return ''; var e = q.ext, d = e.px - q.px, p = q.px ? d / q.px * 100 : e.chp, usd = !q.cur || q.cur === 'USD', sym = usd ? '$' : '', up = d >= 0,
+      f = function (v) { return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }, lab = e.kind === 'pre' ? 'Pre-market' : 'After hours',
+      tip = lab + (e.kind === 'pre' ? ' trading, 4:00\u20139:30 AM ET' : ' trading, 4:00\u20138:00 PM ET') + (e.t ? '. Last extended trade: ' + e.t : '') + (e.vol ? '. Extended-hours volume ' + e.vol : '') + '. Change from the regular-session close ' + sym + f(q.px) + (usd ? '' : ' ' + q.cur) + '. CNBC quote service (may be delayed).';
+    return '<span class="xh' + (o.cls ? ' ' + o.cls : '') + '" title="' + tip.replace(/"/g, '&quot;') + '"><span class="xh-l"><span class="xh-lf">' + lab + '</span><span class="xh-ls">' + (e.kind === 'pre' ? 'Pre' : 'AH') + '</span></span> <b class="xh-p">' + sym + f(e.px) + (usd ? '' : ' ' + (q.cur || '')) + '</b> <span class="xh-c ' + (up ? 'up' : 'dn') + '"><span class="xh-d">' + (up ? '+' : '\u2212') + sym + f(Math.abs(d)) + ' </span>(' + (up ? '+' : '\u2212') + Math.abs(p).toFixed(2) + '%)</span>' + (e.vol ? '<span class="xh-v"> \u00b7 vol ' + e.vol + '</span>' : '') + '</span>'; }
+  window.BTD_FEED = { on: on, xh: xh, get: function (k) { return Q[k] || G[k] || null; }, watch: watch, session: session, num: num, XS: XS, all: Q, g: G,
     /* treasury ticker -> CNBC symbol (null if the feed has no listing) */
     cn: function (t) { if (!t) return null; t = String(t).toUpperCase(); var m = { 'SWC.L': 'SWC-GB', 'SWC': 'SWC-GB', 'ALCPB.PA': 'ALCPB-FR', 'ADE.DE': 'ADE-DE', 'OBTC3.SA': 'OBTC3-BR', 'MPJPY': 'MPJPY', '3350.T': 'MTPLF' };
       if (m[t]) return m[t]; if (/\.(T)$/.test(t)) return t; if (/\.(HK|NE|SE|ST|AX|TO|V)$/.test(t)) return null; return /^[A-Z0-9]{1,6}$/.test(t) ? t : null; } };

@@ -958,7 +958,7 @@
   document.addEventListener('keydown', function (e) { if (tke && e.key === 'Escape') { e.stopPropagation(); tkeClose(true); } }, true);
   // Off by default; a visitor's On/Off click is saved as their default. Reduced-motion visitors always start Off (and it never animates for them).
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setTicker(on, save) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); tkBtn.textContent = 'Price scroll: ' + (on ? 'On' : 'Off'); if (save) LS.set('btd_ticker', on ? '1' : '0'); ticker(); if (on) tkFetch(); }
+  function setTicker(on, save) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); var stE = tkBtn.querySelector('[data-tk-st]'); if (stE) stE.textContent = on ? 'On' : 'Off'; else tkBtn.textContent = 'Price scroll: ' + (on ? 'On' : 'Off'); if (save) LS.set('btd_ticker', on ? '1' : '0'); ticker(); if (on) tkFetch(); }
   (function tkMigrate() { // one-time: saved strips that equal an old default move to the new default; real custom strips are kept
     if (LS.get('btd_tkv') === '3') return; var o = null; try { o = JSON.parse(LS.get('btd_tk2') || 'null'); } catch (e) {}
     if (Array.isArray(o) && o.length) { var ids = o.map(function (x) { return x && x.id; }), hid = o.some(function (x) { return x && x.h; }), k = ids.join(',');

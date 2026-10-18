@@ -60,12 +60,12 @@
   function card(c, b, sq) { var el = box.querySelector('[data-yb-card]'), u = box._unknown && box._unknown();
     if (u) { el.className = 'yb-card yb-bad'; el.innerHTML = '<b class="yb-ck">\u2715</b><div><b>\u201c' + esc(u) + '\u201d is not in our top-50 list</b><small>Try a ticker (MSTR, MPJPY, ASST) or a company name. Showing ' + esc(lbl(c)) + '.</small></div>'; return; }
     var mstr = c.t === 'MSTR', sh = c.bps ? c.btc / c.bps : null, shAsof = mstr && DESK && DESK.strategy.btc_as_of ? DESK.strategy.btc_as_of : String(asof).slice(0, 10), shSrc = mstr ? 'strategy.com, assumed diluted' : 'BitcoinTreasuries.NET, basic';
-    var spx = sq && sq.px != null ? (sq.ext && F.session() !== 'open' ? sq.ext.px : sq.px) : null, cur = sq ? sq.cur : c.cur, usdL = cur === 'USD' || !cur;
+    var spx = sq && sq.px != null ? sq.px : null, cur = sq ? sq.cur : c.cur, usdL = cur === 'USD' || !cur;
     var back = spx && usdL && b && c.bps ? c.bps * b.px / spx * 100 : null, lb2 = lastBuy(c), L = mstr && DESK && DESK.strategy.kpis ? DESK.strategy.kpis.ledger || {} : null; if (L && L.as_of && L.btc_acq) lb2 = [L.as_of, (L.btc_acq > 0 ? '+' : '') + n(L.btc_acq) + ' BTC \u00b7 strategy.com ledger'];
     var kv = [['BTC held', n(c.btc) + ' BTC <small>#' + c.rank + ' by holdings</small>'],
       ['Shares outstanding', sh ? n(sh) + ' <small>as of ' + esc(shAsof) + ' \u00b7 ' + shSrc + '</small>' : '<small>data coming soon</small>'],
       ['BTC per share', c.bps ? c.bps.toFixed(8) + ' BTC' : '\u2014'], ['Sats per share', c.bps ? n(Math.round(c.bps * 1e8)) + ' sats' : '\u2014'],
-      ['Share price (live)', spx ? (usdL ? '$' + n(spx, 2) : n(spx, 2) + ' ' + esc(cur)) + (sq.ext && F.session() !== 'open' ? ' <small>' + (sq.ext.kind === 'pre' ? 'pre-market' : 'after hours') + '</small>' : '') : '<small>no live quote</small>'],
+      ['Share price (live)', spx ? (usdL ? '$' + n(spx, 2) : n(spx, 2) + ' ' + esc(cur)) + (sq.ext && F.session() !== 'open' && F.xh ? ' <small>regular-session close</small>' + F.xh(sq, { cls: 'xh-yb' }) : '') : '<small>no live quote</small>'],
       ['BTC behind each share', back != null ? '$' + n(c.bps * b.px, 2) + ' <small>= ' + back.toFixed(0) + '% of the share price</small>' : '<small>' + (spx && !usdL ? 'shown for US-dollar listings only' : 'needs a live share price') + '</small>'],
       ['BTC Yield YTD', L && L.btc_yield_ytd_pct != null ? (L.btc_yield_ytd_pct >= 0 ? '+' : '') + L.btc_yield_ytd_pct + '% <small>Strategy KPI, strategy.com</small>' : '<small>n/a (not reported in a standard way)</small>'],
       ['Last purchase', lb2 ? esc(lb2[0]) + ' <small>' + esc(lb2[1]) + '</small>' : '<small>n/a</small>']];
@@ -79,7 +79,7 @@
     if (!c.bps) { ['btc', 'usd', 'stk'].forEach(function (k) { set(k, '\u2014'); }); set('sats', 'Share-count data coming soon for ' + c.t); set('prem', ''); set('btcpx', b ? 'BTC ' + usd(b.px) + ' \u00b7 Coinbase live' : ''); set('note', c.name + ' is on our top-50 list (' + n(c.btc) + ' BTC), but we don\u2019t have a reliable share count yet, so per-share figures are not shown.'); trend(c); return; }
     var btc = S.sh * c.bps, sats = btc * 1e8;
     set('btc', btcF(btc) + ' BTC'); set('sats', n(sats) + ' sats · ' + n(c.bps * 1e8) + ' sats per share'); set('usd', b ? usd(btc * b.px) : '…'); set('btcpx', b ? 'BTC ' + usd(b.px) + ' · Coinbase live' : 'loading live BTC…');
-    var spx = sq && sq.px != null ? (sq.ext && F.session() !== 'open' ? sq.ext.px : sq.px) : null, cur = sq ? sq.cur : c.cur;
+    var spx = sq && sq.px != null ? sq.px : null, cur = sq ? sq.cur : c.cur;
     if (spx && (cur === 'USD' || !cur)) { var sv = spx * S.sh; set('stk', usd(sv)); if (b) { var m = sv / (btc * b.px); set('prem', 'You pay ' + m.toFixed(2) + 'x the bitcoin inside (' + (m >= 1 ? 'premium' : 'discount') + ') · ' + c.t + ' $' + n(spx, 2)); } }
     else { set('stk', spx ? n(spx * S.sh, 2) + ' ' + (cur || '') : '—'); set('prem', spx ? 'Share price in ' + cur + '; premium shown only for US-dollar listings' : 'No live share price for this listing'); }
     set('note', 'Each of your ' + n(S.sh, S.sh % 1 ? 2 : 0) + ' ' + c.t + ' shares is backed by ' + n(c.bps * 1e8) + ' sats, so together they represent ' + btcF(btc) + ' BTC of the company\u2019s ' + n(c.btc) + ' BTC. This is your proportional claim on paper; shareholders do not own the coins directly, and debt and preferred stock rank ahead of common.');
