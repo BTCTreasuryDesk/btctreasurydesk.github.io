@@ -753,6 +753,14 @@
     var s = Math.max(0, Math.round((nxt - now) / 1e3)), hh = Math.floor(s / 3600), mm = Math.floor(s % 3600 / 60), ss = s % 60;
     $('[data-mkt-cd]').textContent = nxt ? lbl + (hh >= 24 ? Math.floor(hh / 24) + 'd ' + (hh % 24) + 'h' : hh + 'h ' + String(mm).padStart(2, '0') + 'm ' + String(ss).padStart(2, '0') + 's') : '';
     $('[data-ny]').textContent = new Date(now).toISOString().slice(11, 16) + ' ET';
+    /* futures (CME Globex equity index: Sun 6 PM - Fri 5 PM ET, daily 5-6 PM break) + weekend BTC since Friday's 4 PM ET close */
+    var fe = $('[data-ms-fut]'); if (fe) { var w = new Date(now), wd2 = w.getUTCDay(), hm = w.getUTCHours() + w.getUTCMinutes() / 60, fo = !(wd2 === 6 || (wd2 === 5 && hm >= 17) || (wd2 === 0 && hm < 18) || (hm >= 17 && hm < 18));
+      var fn = 0; if (!fo) { fn = wd2 === 6 ? (24 - hm) * 36e5 + 18 * 36e5 : wd2 === 5 ? (24 - hm + 24 + 18) * 36e5 : wd2 === 0 ? (18 - hm) * 36e5 : (18 - hm) * 36e5; }
+      fe.innerHTML = 'Futures <b class="' + (fo ? 'up' : 'dn') + '">' + (fo ? 'open' : 'closed') + '</b>' + (!fo && fn ? ' <small>opens in ' + (fn >= 864e5 ? Math.floor(fn / 864e5) + 'd ' : '') + Math.floor(fn % 864e5 / 36e5) + 'h ' + Math.floor(fn % 36e5 / 6e4) + 'm</small>' : ''); }
+    var be = $('[data-ms-btcf]'); if (be) { var wdx = new Date(now).getUTCDay(), hx = new Date(now).getUTCHours(), wk = wdx === 6 || wdx === 0 || (wdx === 5 && hx >= 16) || (wdx === 1 && hx < 9) || (wdx === 1 && hx === 9 && new Date(now).getUTCMinutes() < 30);
+      if (!wk) { be.hidden = true; } else { be.hidden = false; if (!clock.fri && !clock.friL) { clock.friL = 1; var d0 = new Date(now), back = (d0.getUTCDay() + 2) % 7, fri = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), d0.getUTCDate() - back, 16) - (now - Date.now()); /* ET wall -> real UTC */
+          fetch('https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=60&start=' + new Date(fri - 6e4).toISOString() + '&end=' + new Date(fri + 4 * 6e4).toISOString()).then(function (r) { return r.json(); }).then(function (a) { if (Array.isArray(a) && a.length) { a.sort(function (x, y) { return x[0] - y[0]; }); var c = a.filter(function (x) { return x[0] * 1e3 <= fri; }).pop() || a[0]; clock.fri = c[4]; } }).catch(function () {}); }
+        var bq = window.BTD_FEED && window.BTD_FEED.get('BTC'); if (clock.fri && bq && bq.px) { var ch = (bq.px / clock.fri - 1) * 100; be.innerHTML = 'BTC since Fri close <b class="' + (ch >= 0 ? 'up' : 'dn') + '">' + (ch >= 0 ? '+' : '\u2212') + Math.abs(ch).toFixed(2) + '%</b>'; } } }
   }
   clock(); setInterval(clock, 1000);
 
@@ -801,7 +809,7 @@
   var TK_ID = /^[SPDCM]:[A-Z0-9.\-]{1,15}$/, TK_CN = /^[A-Z0-9.@=\-]{1,15}$/;
   var TKM = { SPX: ['S&P 500', '.SPX', '@SP.1', 'ix', 'SPX S&P 500', 'ES=F S&P fut'], IXIC: ['Nasdaq', '.IXIC', '@ND.1', 'ix', 'IXIC Nasdaq', 'NQ=F Nasdaq fut'], DJI: ['Dow', '.DJI', '@DJ.1', 'ix', 'DJI Dow', 'YM=F Dow fut'], GOLD: ['Gold', '@GC.1', null, 'cm', 'GC=F Gold fut'], OIL: ['WTI oil', '@CL.1', null, 'cm', 'CL=F WTI fut'], US10Y: ['US 10Y', 'US10Y', null, 'yd', 'US10Y'], DXY: ['DXY', '.DXY', null, 'ix', 'DXY'], VIX: ['VIX', '.VIX', null, 'ix', 'VIX'], SILVER: ['Silver', '@SI.1', null, 'cm', 'SI=F Silver fut'], US2Y: ['US 2Y', 'US2Y', null, 'yd', 'US2Y'] };
   var TK_LBL = { MPJPY: 'MPJPY', MTPLF: 'MTPLF', '3350.T': '3350.T' };
-  var TKM_DEF = ['SPX', 'IXIC', 'GOLD', 'US10Y', 'DXY', 'VIX'], TKC = {};
+  var TKM_DEF = ['SPX', 'IXIC', 'GOLD', 'OIL', 'US2Y', 'US10Y', 'DXY', 'VIX'], TKC = {};
   function tkCoinPx(v) { return v >= 1000 ? '$' + Math.round(v).toLocaleString('en-US') : v >= 1 ? '$' + v.toFixed(2) : '$' + v.toPrecision(4); }
   function cbStats(sym) { return fetch('https://api.exchange.coinbase.com/products/' + encodeURIComponent(sym) + '-USD/stats').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) { var l = parseFloat(j.last), o = parseFloat(j.open); if (!isFinite(l)) throw 0; TKC[sym] = { px: l, chp: o ? (l / o - 1) * 100 : null }; return TKC[sym]; }); }
   function tkMq(k) { var m = TKM[k], F = window.BTD_FEED; if (!m) return null; var open = F && F.session ? F.session() === 'open' : true, g = function (c) { return c ? (TKQ[c] || (F && F.get(c))) : null; }, fu = !open && m[2] ? g(m[2]) : null, q = fu && fu.px != null ? fu : g(m[1]); return q && q.px != null ? { q: q, fut: !!(fu && fu.px != null) } : null; }

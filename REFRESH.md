@@ -149,3 +149,4 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 
 - Context references for live tiles (5D sparklines, 1y avg / 1 mo ago / 52w range reads): `python3 tools/update_ctx.py` (writes assets/data/ctx.json).
 - `tools/update_prefs_kpi.py` (weekly): Strategy preferreds from strategy.com KPI JSON + effective-yield history -> assets/data/prefs_kpi.json (tokenized panel preferreds).
+- `tools/update_keydates.py` (weekly, after update_prefs_kpi.py): FOMC (Fed), CPI + jobs (BLS), Strategy preferred dividend dates -> assets/data/keydates.json (Key dates panel, strip headlines).

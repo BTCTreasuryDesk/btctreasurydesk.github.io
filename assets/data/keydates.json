@@ -1,0 +1,437 @@
+{
+ "as_of": "2026-10-18",
+ "note": "Official calendars only (Federal Reserve, BLS, strategy.com). Strategy earnings are added only once Strategy announces the date.",
+ "items": [
+  {
+   "date": "2026-10-28",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting October 27-28; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2026-10-31",
+   "kind": "dividend",
+   "title": "STRC dividend record date",
+   "detail": "STRC stated rate 12.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strc"
+  },
+  {
+   "date": "2026-11-06",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for October 2026",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2026-11-10",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for October 2026",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "dividend",
+   "title": "STRC dividend payment date",
+   "detail": "STRC stated rate 12.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strc"
+  },
+  {
+   "date": "2026-12-04",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for November 2026",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2026-12-09",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting December 8-9; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2026-12-10",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for November 2026",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "dividend",
+   "title": "STRD dividend record date",
+   "detail": "STRD stated rate 10.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strd"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "dividend",
+   "title": "STRE dividend record date",
+   "detail": "STRE stated rate 10.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/stre"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "dividend",
+   "title": "STRF dividend record date",
+   "detail": "STRF stated rate 10.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strf"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "dividend",
+   "title": "STRK dividend record date",
+   "detail": "STRK stated rate 8.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strk"
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "dividend",
+   "title": "STRD dividend payment date",
+   "detail": "STRD stated rate 10.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strd"
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "dividend",
+   "title": "STRE dividend payment date",
+   "detail": "STRE stated rate 10.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/stre"
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "dividend",
+   "title": "STRF dividend payment date",
+   "detail": "STRF stated rate 10.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strf"
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "dividend",
+   "title": "STRK dividend payment date",
+   "detail": "STRK stated rate 8.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strk"
+  },
+  {
+   "date": "2027-01-08",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for December 2026",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-01-13",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for December 2026",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-01-26",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting January 25-26; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-01-27",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting January 26-27; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-02-05",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for January 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-02-11",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for January 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-03-05",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for February 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-03-10",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for February 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-03-17",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting March 16-17; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-04-02",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for March 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-04-13",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for March 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-04-28",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting April 27-28; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-05-07",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for April 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-05-12",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for April 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-06-04",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for May 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-06-09",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting June 8-9; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-06-10",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for May 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-07-02",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for June 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-07-14",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for June 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-07-28",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting July 27-28; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-08-06",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for July 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-08-11",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for July 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-09-03",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for August 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-09-14",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for August 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-09-15",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting September 14-15; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-10-08",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for September 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-10-14",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for September 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-10-27",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting October 26-27; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-11-05",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for October 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-11-10",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for October 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  },
+  {
+   "date": "2027-12-03",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "Jobs report (nonfarm payrolls)",
+   "detail": "Employment Situation for November 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+  },
+  {
+   "date": "2027-12-08",
+   "time": "2:00 PM ET",
+   "kind": "macro",
+   "title": "FOMC rate decision",
+   "detail": "Meeting December 7-8; statement 2:00 PM ET, press conference 2:30 PM ET",
+   "source": "Federal Reserve FOMC calendar",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "date": "2027-12-10",
+   "time": "8:30 AM ET",
+   "kind": "macro",
+   "title": "CPI inflation report",
+   "detail": "Consumer Price Index for November 2027",
+   "source": "BLS release schedule",
+   "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+  }
+ ]
+}
