@@ -53,3 +53,16 @@
 .pl-lot{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:6px;margin:6px 0}.pl-lot input{font-size:14px;padding:7px 9px}
 .pl-s{overflow-x:auto}
 @media (max-width:760px){.pl-g{grid-template-columns:1fr 1fr}.pl-two{grid-template-columns:1fr}.pl-lot{grid-template-columns:1fr 1fr}.pl-t{font-size:12.5px}}
+/* Your Bitcoin: company combobox + recognition card */
+.yb-cb{position:relative}.yb-cb label{display:block}
+.yb-lb{position:absolute;z-index:30;left:0;right:0;top:100%;margin:2px 0 0;padding:4px;list-style:none;max-height:300px;overflow:auto;background:#0d0f12;border:1px solid #2a3039;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.yb-lb li{display:grid;grid-template-columns:auto 1fr;gap:0 8px;padding:8px;border-radius:4px;cursor:pointer;min-height:40px}
+.yb-lb li b{font-family:var(--mono);color:#fff}.yb-lb li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.yb-lb li small{grid-column:1/-1;color:#8a93a0;font-size:11px}
+.yb-lb li[aria-selected="true"],.yb-lb li:hover{background:#1a1f26}.yb-lb .yb-none{color:#e7a3a3;cursor:default}
+.yb-card{border:1px solid var(--ln);border-radius:8px;padding:10px 12px;margin:10px 0;background:#090b0e}
+.yb-card.yb-ok{border-color:#1f5c3a}.yb-card.yb-warn{border-color:#5a4a12}.yb-card.yb-bad{border-color:#5c1f1f;display:flex;gap:10px;align-items:flex-start}
+.yb-ch{display:flex;gap:10px;align-items:center;margin-bottom:6px}.yb-ch small,.yb-bad small{display:block;color:#8a93a0;font-size:12px}
+.yb-ck{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;flex:0 0 26px;font-size:15px}
+.yb-ok .yb-ck{background:#16a34a;color:#fff}.yb-warn .yb-ck{background:#a16207;color:#fff}.yb-bad .yb-ck{background:#b91c1c;color:#fff}
+.yb-card dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;margin:6px 0}.yb-card dt{font-size:11px;color:#8a93a0;text-transform:uppercase;letter-spacing:.04em}.yb-card dd{margin:0;font:700 14px var(--mono)}.yb-card dd small{display:block;font:400 11px var(--sans,inherit);color:#8a93a0}
+@media (max-width:760px){.yb-card dl{grid-template-columns:1fr 1fr}.yb-card dd{font-size:13px}}

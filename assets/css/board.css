@@ -207,3 +207,6 @@ body:not(.dm) .p-live .lc-ft{display:none}
 .my-add{display:flex;gap:6px}.my-add input{flex:1;min-width:0;background:#0d0f12;color:var(--tx);border:1px solid #2a3039;border-radius:12px;font:600 13px var(--mono);padding:6px 9px}
 .my-msg{display:block;font-size:11px;color:#aab2bd;min-height:14px;margin:4px 0}
 .my-q{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:8px 0}.my-hint{font-size:12px}
+.lc-clr{background:none;border:0;color:#F7931A;font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+@media (max-width:760px){.p-live .lc-sym{flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none}.p-live .lc-sym::-webkit-scrollbar{display:none}.p-live .lc-sym>*{flex:0 0 auto}}
+@media (max-width:760px){.p-live .lc-r,.p-live .lc-add{flex:0 0 auto}.p-live .lc-sym{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);padding-right:14px}}
