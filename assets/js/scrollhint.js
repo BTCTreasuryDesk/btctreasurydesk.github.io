@@ -20,7 +20,7 @@
     try { localStorage.setItem(k, '1'); } catch (e) {} var el = t.el; setTimeout(function () { el.scrollBy({ left: 56, behavior: 'smooth' }); setTimeout(function () { el.scrollBy({ left: -56, behavior: 'smooth' }); }, 650); }, 400); }
   var nT = null;
   function scan() { if (!MQ.matches) { list.forEach(function (o) { o.el.classList.remove('hsc-l', 'hsc-r'); if (o.ch) o.ch.hidden = true; }); return; }
-    var all = document.querySelectorAll('main *, header *, .tk *, [class*="strip"] *'); for (var i = 0; i < all.length; i++) { var el = all[i]; if (el.classList.contains('hsc') || isScroller(el)) { if (!el.classList.contains('hsc')) add(el); } }
+    var all = document.querySelectorAll('body *'); for (var i = 0; i < all.length; i++) { var el = all[i]; if (el.classList.contains('hsc') || isScroller(el)) { if (!el.classList.contains('hsc')) add(el); } }
     list.forEach(upd); if (!nT) nT = setTimeout(nudge, 1200); }
   var sT = null; function soon() { clearTimeout(sT); sT = setTimeout(scan, 300); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', soon); else soon();
@@ -41,6 +41,6 @@
       var n = cols(g); if (n < 2) continue; var r = kids.length % n; if (!r) continue; var last = kids[kids.length - 1]; last.style.gridColumn = 'span ' + (n - r + 1); last.setAttribute('data-gf', '1'); } }
   var T = null; function soon() { if (T) return; T = setTimeout(function () { T = null; fill(); }, 600); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', soon); else soon();
-  window.addEventListener('load', soon); window.addEventListener('resize', soon);
+  window.addEventListener('load', soon); window.addEventListener('resize', soon); setInterval(function () { if (!document.hidden) fill(); }, 3000);
   if (window.MutationObserver) new MutationObserver(function (m) { if (m.some(function (x) { return x.type === 'childList' && x.target.children && x.target.children.length > 1 || x.attributeName === 'hidden'; })) soon(); }).observe(document.body || document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
 })();
