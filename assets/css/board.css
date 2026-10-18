@@ -140,3 +140,8 @@ body.dm .mk-ed,body.dm .p-wl .p-h .chip{display:none}
 .p-ep .ep-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:6px;display:block;background:#000}
 .p-ep .tbtn-sub{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:4px;background:#c00;color:#fff;font:700 12px var(--mono);text-decoration:none;margin-left:6px}.p-ep .tbtn-sub:hover{background:#e00}
 .p-ep .ep-tools{font-size:13px;line-height:1.6;margin:10px 0 4px;color:var(--mu)}.p-ep .ep-tools b{color:#fff;font-weight:600}.p-ep .ep-tools a{color:var(--o,#F7931A)}
+/* Phone: live BTC chart is the first panel on the first screen; markets board follows */
+@media (max-width:760px){body:not(.dm) main.grid>.p-live{order:-1!important}main.grid>.p-live .lc-cv{height:240px}}
+/* Desktop: live chart (with the treasury window beside it) leads the first screen; markets board follows */
+body:not(.dm) main.grid>.p-live{order:-1}
+@media (min-width:1101px){body:not(.dm) main.grid>.p-wl{order:-1}}
