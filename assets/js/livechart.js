@@ -144,7 +144,7 @@
     if (s0.length) { var hi = -Infinity, lo = Infinity; s0.forEach(function (p) { hi = Math.max(hi, p.h || p.c); lo = Math.min(lo, p.l || p.c); }); $('[data-lc-hl]').textContent = S.r + ' range ' + fp(lo, q && q.cur) + ' – ' + fp(hi, q && q.cur); }
     if (pct) sets.forEach(function (st, i) { var e = box.querySelector('[data-lc-lgv="' + i + '"]'); if (e && st.v && st.v.length) { var v = st.v[st.v.length - 1]; e.textContent = sg(v, 1); e.className = v >= 0 ? 'up' : 'dn'; } });
     var notes = list.map(function (t, i) { return DATA[i] && DATA[i].note && t !== 'BTC' ? t + ': ' + DATA[i].note : null; }).filter(Boolean);
-    $('[data-lc-ft]').innerHTML = (S.s === 'BTC' || S.cmp.indexOf('BTC') >= 0 ? 'BTC: Coinbase live feed (same feed as the price board). ' : '') + esc(notes.join(' · ')) + ' · Times ET. Education only.';
+    $('[data-lc-ft]').innerHTML = (S.s === 'BTC' || S.cmp.indexOf('BTC') >= 0 ? 'BTC: Coinbase live feed (same feed as the price board). ' : '') + esc(notes.join(' · ')) + ' · Times ET. Education only.'; var lnm = $('[data-lc-name]'); if (lnm) lnm.title = $('[data-lc-ft]').textContent;
   }
   function soon() { if (!raf) raf = requestAnimationFrame(paint); }
   /* BTC: every tick updates the last candle (1H = 1-minute candles) */

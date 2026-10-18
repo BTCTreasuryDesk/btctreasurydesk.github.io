@@ -771,7 +771,7 @@
   }
 
   /* ---------- optional thin ticker (off by default) ---------- */
-  var tk = $('[data-ticker]'), tkBtn = $('[data-ticker-toggle]');
+  var tk = $('[data-ticker]'), tkBtn = $('[data-ticker-toggle]'); if (tk) tk.title = 'Crypto: Coinbase. Stocks, indexes and macro: CNBC quote service (some delayed). Hover any item for its source.';
   var MET = null; fetch('/assets/data/metrics.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (m) { MET = m; ticker(); }).catch(function () {});
   /* Price scroll: top 20 by BTC held (+ Strive and Smarter Web), preferreds, key data, then BTC vs alts. Live via CNBC (same feed as the tiles), last close as fallback. */
   var TKQ = {}, TKP = ['STRC', 'STRF', 'STRK', 'STRD', 'SATA'];
@@ -868,7 +868,7 @@
   function ticker() {
     dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
     var items = tkShown(); tkViewBtn();
-    var seq = items.map(function (x) { return '<span class="tk-i" title="' + esc(/-USD$/.test(x[0]) ? 'Source: Coinbase spot' : /mNAV|BTC\.D|Gain|ATH|Halving|Power|Fear|\//.test(x[0]) ? 'Desk data item' : 'Source: CNBC quote service (may be delayed)') + '"><b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : '') + '</span>'; }).join('') + '<span class="tk-i tk-src">Stocks via CNBC (some delayed) · "close" = last close</span>';
+    var seq = items.map(function (x) { return '<span class="tk-i" title="' + esc(/-USD$/.test(x[0]) ? 'Source: Coinbase spot' : /mNAV|BTC\.D|Gain|ATH|Halving|Power|Fear|\//.test(x[0]) ? 'Desk data item' : 'Source: CNBC quote service (may be delayed)') + '"><b>' + esc(x[0]) + '</b>' + (x[3] ? '<span class="' + x[3] + '">' + esc(x[1]) + '</span>' : esc(x[1])) + (x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : '') + '</span>'; }).join('');
     /* seamless loop: two identical halves, each at least as wide as the strip; the track slides exactly one half (-50%) and wraps with no gap or jump */
     var halves = inn.querySelectorAll('.tk-seq'); if (halves.length !== 2) { inn.innerHTML = '<span class="tk-seq"></span><span class="tk-seq" aria-hidden="true"></span>'; halves = inn.querySelectorAll('.tk-seq'); }
     halves[0].innerHTML = seq; var w1 = halves[0].scrollWidth || 1, rep = Math.max(1, Math.ceil((tk.clientWidth || 1200) / w1)); if (rep > 1) halves[0].innerHTML = new Array(rep + 1).join(seq);
