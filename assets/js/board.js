@@ -9,7 +9,11 @@
 /* BTD_CTX: context for live tiles. 5D sparkline (last daily closes + live), explicit change timeframe, and short reads vs a labelled reference
    (1y average, 1 month ago, 52-week range) from assets/data/ctx.json (weekly, Yahoo daily closes). */
 (function () {
-  var D = null, subs = [];
+  var D = null, subs = [], rsubs = [], RG = {}, TB = {}, CC = {};
+  /* Coinbase hourly candles for the native coins' 1D sparkline */
+  function cbc() { ['BTC', 'ETH', 'SOL'].forEach(function (c) { fetch('https://api.exchange.coinbase.com/products/' + c + '-USD/candles?granularity=3600').then(function (r) { return r.json(); }).then(function (a) { if (Array.isArray(a) && a.length > 6) { CC[c] = a.slice(0, 24).reverse().map(function (x) { return x[4]; }); subs.forEach(function (f) { try { f(); } catch (e) {} }); } }).catch(function () {}); }); }
+  setTimeout(cbc, 2500); setInterval(cbc, 300e3);
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-spk]'); if (!b) return; e.preventDefault(); e.stopPropagation(); var k = b.getAttribute('data-spk'), F = window.BTD_FEED, q = F && F.get(k); window.BTD_CTX.cycle(k, q && q.px, q && q.chp); }, true);
   fetch('/assets/data/ctx.json?v=' + Math.floor(Date.now() / 36e5)).then(function (r) { return r.json(); }).then(function (j) { D = j.k || {}; subs.forEach(function (f) { try { f(); } catch (e) {} }); }).catch(function () { D = {}; });
   function et() { var o = {}; new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'short', hour: 'numeric', hourCycle: 'h23' }).formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; }); return o; }
   function lastSess() { var e = et(), d = e.weekday, h = +e.hour, W = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']; if (W.indexOf(d) >= 0 && h >= 16) return 'today'; if (d === 'Sat' || d === 'Sun' || d === 'Mon') return 'Fri'; return W[W.indexOf(d) - 1]; }
@@ -20,10 +24,22 @@
     /* timeframe label for a quote's % change */
     tf: function (k, q, session, ext) { if (CRY.test(k)) return '24h'; if (ext) return 'vs close'; if (/^@/.test(k)) return 'vs settle'; if (q && q.yld) return 'vs prior close';
       if (session === 'open') return 'today'; var l = lastSess(); return l === 'today' ? 'today' : 'on ' + l; },
-    spark: function (k, live) { var c = D && D[k]; if (!c || !c.c5 || c.c5.length < 3) return ''; var v = c.c5.slice(); if (live != null && isFinite(live)) v.push(live);
-      var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), w = 44, h = 14, rg = hi - lo || 1, up = v[v.length - 1] >= v[0];
+    /* sparkline with a tappable range pill (1D -> 1W -> 1M -> 1Y). 1D = prior close + live ticks while the page is open (coins: Coinbase hourly candles). */
+    ranges: ['1D', '1W', '1M', '1Y'],
+    rng: function (k) { return RG[k] || '1D'; },
+    series: function (k, r, live, chp) { var c = D && D[k], v = null;
+      if (r === '1D') { var cc = CC[k]; if (cc && cc.length > 3) v = cc.slice(); else { var b = TB[k]; if (!b && live != null && chp != null && isFinite(chp)) b = TB[k] = [live / (1 + chp / 100)]; if (b) { if (live != null && b[b.length - 1] !== live) { b.push(live); if (b.length > 240) b.splice(1, 1); } v = b.slice(); } } }
+      else if (c) { var base = r === '1W' ? c.c5 : r === '1M' ? c.c22 : r === '1Y' ? c.w : null; if (base && base.length > 2) v = base.slice(); }
+      if (!v) return null; if (r !== '1D' && live != null && isFinite(live)) v.push(live); else if (r === '1D' && CC[k] && live != null) v.push(live);
+      return v.length > 1 ? { v: v, ch: (v[v.length - 1] / v[0] - 1) * 100 } : null; },
+    spark: function (k, live, chp) { var r = this.rng(k), S = this.series(k, r, live, chp); if (!S && r !== '1D') { RG[k] = '1D'; r = '1D'; S = this.series(k, r, live, chp); } if (!S) return '';
+      var v = S.v, lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), w = 44, h = 14, rg = hi - lo || 1, up = v[v.length - 1] >= v[0];
       var pts = v.map(function (x, i) { return (i / (v.length - 1) * w).toFixed(1) + ',' + (h - 1 - (x - lo) / rg * (h - 2)).toFixed(1); }).join(' ');
-      return '<svg class="spk ' + (up ? 'up' : 'dn') + '" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" aria-hidden="true"><polyline points="' + pts + '"/></svg><small class="spk-l" title="Last 5 daily closes + live">5D</small>'; },
+      return '<button type="button" class="spk-b" data-spk="' + k.replace(/"/g, '') + '" aria-label="Sparkline range ' + r + ', tap to change" title="' + (r === '1D' ? 'Today: prior close to live' : r === '1W' ? 'Last 5 daily closes + live' : r === '1M' ? 'Last month of daily closes + live' : 'Last year (weekly) + live') + ' \u00b7 tap to change range"><svg class="spk ' + (up ? 'up' : 'dn') + '" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" aria-hidden="true"><polyline points="' + pts + '"/></svg><small class="spk-l">' + r + '</small></button>'; },
+    /* change % for the tile's chosen range; null on 1D (tile keeps its own live change + timeframe label) */
+    chg: function (k, live, chp) { var r = this.rng(k); if (r === '1D') return null; var S = this.series(k, r, live, chp); return S ? { ch: S.ch, r: r } : null; },
+    cycle: function (k, live, chp) { var R = this.ranges, i = R.indexOf(this.rng(k)); for (var n = 1; n <= R.length; n++) { var r = R[(i + n) % R.length]; if (this.series(k, r, live, chp)) { RG[k] = r; break; } } rsubs.forEach(function (f) { try { f(k); } catch (e) {} }); },
+    onRange: function (f) { rsubs.push(f); },
     /* short read vs a labelled reference for gauges / levels */
     read: function (k, px) { var c = D && D[k]; if (!c || px == null) return ''; var y = c.y;
       if (k === '.VIX') { var lv = px < y[0] * 0.85 ? 'calm' : px > y[0] * 1.25 ? 'elevated' : 'normal'; return lv + ' (1y avg ' + y[0].toFixed(1) + ')'; }
@@ -105,8 +121,8 @@
   document.addEventListener('keydown', function (e) { if (mke && e.key === 'Escape') mkEdit(); });
   function setT(k, v, chg, x, title) { if (/\.T$/.test(k) && v && v[0] !== '¥' && v !== '…') v = '¥' + v; var el = mk && mk.querySelector('[data-mt="' + k + '"]'); if (!el) return; var vb = el.querySelector('.mk-v'), old = vb.textContent;
     vb.textContent = v; if (old !== '…' && old !== v) flash(vb, parseFloat(v.replace(/[^0-9.\-]/g, '')) > parseFloat(old.replace(/[^0-9.\-]/g, '')) ? 1 : -1);
-    var c = el.querySelector('.mk-c'), X = window.BTD_CTX, q = F.get(k), ses = F.session(); c.innerHTML = chg ? esc(chg[0]) + (X && chg[0] && !/^(MNAV|T10|STREET)$/.test(k) ? ' <small class="mk-tf">' + X.tf(k, q, ses) + '</small>' : '') : ''; c.className = 'mk-c ' + (chg ? chg[1] : ''); el.querySelector('.mk-x').innerHTML = x || ''; if (title) el.title = title;
-    if (X) { var kx = el.querySelector('.mk-k'); if (!kx) { kx = document.createElement('span'); kx.className = 'mk-k'; el.appendChild(kx); } var live = q && q.px != null ? q.px : null, rd = X.read(k, live), sp = X.spark(k, live);
+    var c = el.querySelector('.mk-c'), X = window.BTD_CTX, q = F.get(k), ses = F.session(); c.innerHTML = chg ? esc(chg[0]) + (X && chg[0] && !/^(MNAV|T10|STREET)$/.test(k) ? ' <small class="mk-tf">' + X.tf(k, q, ses) + '</small>' : '') : ''; c.className = 'mk-c ' + (chg ? chg[1] : ''); var ov = X && q && q.px != null ? X.chg(k, q.px, q.chp) : null; if (ov) { c.innerHTML = esc(pc(ov.ch)) + ' <small class="mk-tf">' + ov.r + '</small>'; c.className = 'mk-c ' + cls(ov.ch); } el.querySelector('.mk-x').innerHTML = x || ''; if (title) el.title = title;
+    if (X) { var kx = el.querySelector('.mk-k'); if (!kx) { kx = document.createElement('span'); kx.className = 'mk-k'; el.appendChild(kx); } var live = q && q.px != null ? q.px : null, rd = X.read(k, live), sp = X.spark(k, live, q && q.chp);
       if (k === 'MNAV' && DESK && DESK.strategy) rd = 'vs ' + DESK.strategy.mnav.toFixed(2) + 'x official close' + (DESK.strategy.mnav_date ? ' (' + esc(DESK.strategy.mnav_date) + ')' : '');
       kx.innerHTML = (sp || (X.get(k) ? '' : '')) + (rd ? '<small class="mk-rd">' + rd + '</small>' : (/^(\.VIX|\.DXY|US\d+Y)$/.test(k) ? X.range(k, live) : '')); } }
   function qTile(sym, opt) { opt = opt || {}; var q = F.get(sym); if (!q || q.px == null) return; var s = F.session(), main = q.px, ch = q.chp, x = '';
@@ -129,6 +145,7 @@
   function mkTok() { var T = F.get('tok'); if (!T || !mk) return; var tg = mk.querySelector('[data-mk-tok]'); if (tg) tg.hidden = false; ['MSTR', 'COIN', 'SPY', 'QQQ', 'NVDA'].forEach(function (t) { var x = T[t]; if (!x) return; var st = F.get(t === 'SPY' ? '.SPX' : t === 'QQQ' ? '@ND.1' : t), ref = null;
       if (st && st.px && (t === 'MSTR' || t === 'COIN' || t === 'NVDA')) ref = (x.px / st.px - 1) * 100; setT('X:' + t, px(x.px), [pc(x.chp), cls(x.chp)], ref != null ? '<small>vs close ' + pc(ref, 1) + '</small>' : '<small>24h</small>'); }); }
   if (window.BTD_CTX) window.BTD_CTX.on(function () { try { mkAll(); } catch (e) {} });
+  if (window.BTD_CTX) window.BTD_CTX.onRange(function () { try { mkAll(); } catch (e) {} });
   function mkAll() { if (!mk) return; mkDesk(); MKL.forEach(function (x) { if (['BTC', 'ETH', 'SOL', 'MNAV', 'T10', 'STREET', 'MSTR'].indexOf(x[0]) < 0) qTile(x[0], x[2] === 'tc' ? { usd: 1 } : undefined); }); mkTok();
     var s = F.session(), lab = { open: 'US market open · live', pre: 'Pre-market · 4:00–9:30 AM ET', post: 'After hours · 4:00–8:00 PM ET', closed: 'US market closed · futures & 24/7 tokenized shown' }[s];
     var se = mk.querySelector('[data-mk-sess]'); se.textContent = lab; se.className = 'mk-sess s-' + s; }
@@ -212,7 +229,7 @@
       read(); };
     var cP = function () { var b = F.get('BTC'), e = F.get('ETH'), s = F.get('SOL');
       if (e && e.px) { set('eth', px(e.px)); set('eth-s', pc(e.chp) + ' 24h', cls(e.chp)); } if (s && s.px) { set('sol', px(s.px)); set('sol-s', pc(s.chp) + ' 24h', cls(s.chp)); }
-      var X = window.BTD_CTX; if (X) { [['eth', 'ETH', e], ['sol', 'SOL', s]].forEach(function (z) { var sp = cx.querySelector('[data-cx-sp="' + z[0] + '"]'); if (sp && z[2] && z[2].px) sp.innerHTML = X.spark(z[1], z[2].px); }); }
+      var X = window.BTD_CTX; if (X) { [['eth', 'ETH', e], ['sol', 'SOL', s]].forEach(function (z) { var sp = cx.querySelector('[data-cx-sp="' + z[0] + '"]'); if (sp && z[2] && z[2].px) { sp.innerHTML = X.spark(z[1], z[2].px, z[2].chp); var ov = X.chg(z[1], z[2].px, z[2].chp); if (ov) set(z[0] + '-s', pc(ov.ch) + ' ' + ov.r, cls(ov.ch)); } }); }
       if (b && b.px && e && e.px) { set('eb', (e.px / b.px).toFixed(5)); if (e.chp != null && b.chp != null) { var r = ((1 + e.chp / 100) / (1 + b.chp / 100) - 1) * 100; set('eb-s', pc(r) + ' 24h', cls(r)); } } };
     var S7 = null; try { S7 = JSON.parse(LS.get('btd_stb7b') || 'null'); } catch (e) {}
     if (!S7 || Date.now() - S7.t > 20 * 36e5) fetch('https://stablecoins.llama.fi/stablecoincharts/all').then(function (r) { return r.json(); }).then(function (a) { if (!Array.isArray(a) || a.length < 9) return; var v = (a[a.length - 8].totalCirculatingUSD || {}).peggedUSD, v1 = (a[a.length - 1].totalCirculatingUSD || {}).peggedUSD; if (!v || !v1) return; S7 = { ch: (v1 / v - 1) * 100, t: Date.now() }; /* same series both ends (DefiLlama daily totals) */ LS.set('btd_stb7b', JSON.stringify(S7)); var st = F.get('stable'); if (st) sP(st); }).catch(function () {});
@@ -221,7 +238,7 @@
     F.on('breadth', function (b) { gP(); SZ = b.score; set('szn', b.score + ' \u00b7 ' + (b.score >= 75 ? 'Altcoin season' : b.score <= 25 ? 'Bitcoin season' : 'Neutral') + ' (' + b.beat + '/' + b.n + ' beat BTC)'); var i = cx.querySelector('[data-cx="szn-i"]'); if (i) i.style.left = b.score + '%'; read(); });
     var cxT = 0; var tick = function () { if (Date.now() - cxT > 3000) { cxT = Date.now(); gP(); cP(); } }; F.on('BTC', tick); F.on('ETH', tick); F.on('SOL', tick);
     gP(); cP(); if (F.get('stable')) sP(F.get('stable'));
-    if (window.BTD_CTX) window.BTD_CTX.on(cP);
+    if (window.BTD_CTX) window.BTD_CTX.on(cP); if (window.BTD_CTX) window.BTD_CTX.onRange(function () { cxT = 0; cP(); });
     fetch('https://api.alternative.me/fng/?limit=31').then(function (r) { return r.json(); }).then(function (j) { var d = (j && j.data || []).map(function (x) { return +x.value; }); if (d.length < 10) return; var avg = d.reduce(function (a, b) { return a + b; }, 0) / d.length, now = d[0];
       set('fng-r', (now > avg + 3 ? '\u2191 above' : now < avg - 3 ? '\u2193 below' : '\u2248 near') + ' its 30d avg ' + avg.toFixed(0)); }).catch(function () {});
   }
@@ -322,8 +339,8 @@
     return { px: q2.px, chp: q2.chp, tag: fut && !/fut/.test(x.nm || '') ? 'fut' : (s !== 'open' && !/^US\d/.test(x.k) ? 'close' : ''), src: 'CNBC quote service (may be delayed)', yd: /^US\d/.test(x.k) }; };
   el.insertAdjacentHTML('afterend', '<div class="my-edp" data-my-edp hidden></div>');
   var edp = sec.querySelector('[data-my-edp]');
-  function tile(x) { var q = quote(x), tk = q && q.tk || x.tk, nm = q && q.nm || x.nm || '', ok = q && q.px != null, X = window.BTD_CTX, I = IX[x.k], cm = /^C:(.+)$/.exec(x.k), ck = I ? (q && q.tk === I[4] ? I[1] : I[0]) : cm ? cm[1] : x.k;
-    return '<div class="hs-t" title="' + esc(tk + (nm ? ' \u00b7 ' + nm : '') + ' \u00b7 source: ' + (q ? q.src : 'loading')) + '"><span class="hs-l"><b class="hs-tk">' + esc(tk) + '</b>' + (nm ? ' ' + esc(nm) : '') + (q && q.tag && q.tag !== 'close' ? ' <em title="' + ({ Pre: 'Pre = pre-market trading, 4:00\u20139:30 AM ET', AH: 'AH = after-hours trading, 4:00\u20138:00 PM ET', '24/7': 'Trades 24/7', fut: 'Futures (front-month contract)' }[q.tag] || '') + '">' + q.tag + '</em>' : '') + '</span><b>' + (ok ? (q.yd ? q.px.toFixed(3) + '%' : f2(q.px)) : '\u2026') + '</b><span class="hs-c ' + (ok ? cl(q.chp) : '') + '">' + (ok ? pc(q.chp) : '') + (ok && X ? ' <small class="hs-tf">' + X.tf(ck, null, F.session(), q.tag === 'Pre' ? 'pre' : q.tag === 'AH' ? 'post' : '') + '</small>' : '') + '</span>' + (ok && X ? '<span class="hs-k">' + X.spark(ck, q.px) + '</span>' : '') + '</div>'; }
+  function tile(x) { var q = quote(x), tk = q && q.tk || x.tk, nm = q && q.nm || x.nm || '', ok = q && q.px != null, X = window.BTD_CTX, I = IX[x.k], cm = /^C:(.+)$/.exec(x.k), ck = I ? (q && q.tk === I[4] ? I[1] : I[0]) : cm ? cm[1] : x.k; var ov = ok && X ? X.chg(ck, q.px, q.chp) : null;
+    return '<div class="hs-t" title="' + esc(tk + (nm ? ' \u00b7 ' + nm : '') + ' \u00b7 source: ' + (q ? q.src : 'loading')) + '"><span class="hs-l"><b class="hs-tk">' + esc(tk) + '</b>' + (nm ? ' ' + esc(nm) : '') + (q && q.tag && q.tag !== 'close' ? ' <em title="' + ({ Pre: 'Pre = pre-market trading, 4:00\u20139:30 AM ET', AH: 'AH = after-hours trading, 4:00\u20138:00 PM ET', '24/7': 'Trades 24/7', fut: 'Futures (front-month contract)' }[q.tag] || '') + '">' + q.tag + '</em>' : '') + '</span><b>' + (ok ? (q.yd ? q.px.toFixed(3) + '%' : f2(q.px)) : '\u2026') + '</b>' + (ov ? '<span class="hs-c ' + cl(ov.ch) + '">' + pc(ov.ch) + ' <small class="hs-tf">' + ov.r + '</small></span>' : '<span class="hs-c ' + (ok ? cl(q.chp) : '') + '">' + (ok ? pc(q.chp) : '') + (ok && X ? ' <small class="hs-tf">' + X.tf(ck, null, F.session(), q.tag === 'Pre' ? 'pre' : q.tag === 'AH' ? 'post' : '') + '</small>' : '') + '</span>') + (ok && X ? '<span class="hs-k">' + X.spark(ck, q.px, q.chp) + '</span>' : '') + '</div>'; }
   function paint() { el.innerHTML = L.map(tile).join('') + '<button type="button" class="hs-t hs-ed" data-my-ed aria-expanded="' + !edp.hidden + '" aria-label="Edit My Watchlist" title="My Watchlist: add any ticker, remove, reorder, reset">\u270e<small>Edit</small></button>'; edPaint(); }
   function edPaint() { var e = edp; if (e.hidden) return;
     e.innerHTML = '<div class="my-eh"><b>My Watchlist</b> <span class="muted">saved on this device \u00b7 indexes and futures stay on the Markets board below</span></div>' + (L.length < MAX ? '<form class="my-add" data-my-form><input data-my-in maxlength="16" placeholder="Type a ticker" aria-label="Add a ticker (stocks, ETFs, indexes, futures; coins as TICKER-USD)" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="submit" class="chip">\uff0b Add</button></form>' : '') + '<small class="my-msg" data-my-msg>' + esc(msg) + '</small><ol class="cz-l">' + L.map(function (x, i) { return '<li><span><b>' + esc((quote(x) || {}).tk || x.tk) + '</b> <small class="muted">' + esc(x.nm || (IX[x.k] ? 'index, futures off-hours' : '')) + '</small></span><button type="button" data-my-up="' + i + '" aria-label="Move up">\u2191</button><button type="button" data-my-dn="' + i + '" aria-label="Move down">\u2193</button><button type="button" data-my-rm="' + i + '" aria-label="Remove">\u00d7</button></li>'; }).join('') + '</ol>' +
@@ -347,6 +364,7 @@
     else if (d.myRm != null) L.splice(+d.myRm, 1); else if (b.hasAttribute('data-my-reset')) L = DEF.slice(); else return; save(); msg = ''; watch(); paint(); });
   watch(); paint(); cbPoll(); setInterval(cbPoll, 30000);
   if (window.BTD_CTX) window.BTD_CTX.on(function () { if (edp.hidden) paint(); });
+  if (window.BTD_CTX) window.BTD_CTX.onRange(function () { el.innerHTML = L.map(tile).join('') + '<button type="button" class="hs-t hs-ed" data-my-ed aria-expanded="' + !edp.hidden + '" aria-label="Edit My Watchlist" title="My Watchlist: add any ticker, remove, reorder, reset">\u270e<small>Edit</small></button>'; });
   var pt = 0; var soft = function () { if (Date.now() - pt > 2000 && !edp.contains(document.activeElement)) { pt = Date.now(); el.innerHTML = L.map(tile).join('') + el.querySelector('[data-my-ed]').outerHTML; } };
   F.on('quotes', soft); F.on('BTC', soft); F.on('ETH', soft); F.on('SOL', soft); F.on('session', paint);
 })();
