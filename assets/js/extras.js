@@ -46,7 +46,7 @@
     if (G.btc_yield_ytd_pct != null) t.push(['BTC Yield YTD', pct(G.btc_yield_ytd_pct), ld, G.btc_yield_ytd_pct, '', 'BTC Yield: Strategy KPI. Change in BTC per assumed diluted share since Dec 31.']);
     if (L.sats_per_share) t.push(['Sats per share', fmt(L.sats_per_share), 'strategy.com', null, '', 'BTC per assumed diluted share, in sats (1 BTC = 100M sats), per strategy.com. Change vs the prior ledger row.', 'sps']);
     if (ac) t.push(['BTC vs avg cost · live', '…', 'vs $' + fmt(ac) + ' avg cost', null, '', 'Live BTC price compared with Strategy’s average cost per BTC (strategy.com ledger totals).', 'vac']);
-    if (s.mnav) t.push(['mNAV', s.mnav.toFixed(2) + 'x', 'official · ' + (lv || 'strategy.com') + ' · live on Markets board']);
+    if (s.mnav) t.push(['mNAV', s.mnav.toFixed(2) + 'x', 'official · ' + (lv || 'strategy.com') + ' · live on Markets board', null, '', 'mNAV (multiple of net asset value): Strategy\u2019s enterprise value divided by the market value of its bitcoin. 1.0x = the company is valued at exactly its BTC; above 1 = premium, below 1 = discount. Strategy method, 8-K Ex. 99.2.']);
     if (T.avg_cost || s.avg_cost) t.push(['Avg cost / BTC', '$' + fmt(T.avg_cost || s.avg_cost), 'ledger totals']);
     if (G.btc_gain_ytd != null) t.push(['BTC Gain YTD', sgn(G.btc_gain_ytd) + ' ₿', ld, G.btc_gain_ytd, '', 'BTC Gain: Strategy KPI. BTC Yield YTD x BTC held at the start of the year.']);
     if (G.usd_gain_ytd_musd != null) t.push(['BTC $ Gain YTD', musd(G.usd_gain_ytd_musd), ld, G.usd_gain_ytd_musd, '', 'BTC $ Gain: Strategy KPI. BTC Gain x the bitcoin price.']);
