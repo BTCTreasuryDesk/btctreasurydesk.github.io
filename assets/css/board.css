@@ -272,3 +272,4 @@ body:not(.dm) .p-live .lc-ft{display:none}
 @media (max-width:899px){.sec-ed-tip{display:none}}
 @media (max-width:600px){.wl td,.wl th{padding:5px 3px}.wl{font-size:12px}.wl td small{overflow:hidden;text-overflow:ellipsis;display:block;max-width:96px}.wx .xh{max-width:132px;margin-left:auto}}
 @media (max-width:600px){body.desk:not(.dm) .deskbar{flex-wrap:wrap!important;overflow-x:visible;row-gap:6px}body.desk:not(.dm) .deskbar .clock{flex:1 1 100%!important}}
+.mk-k:empty{display:none}
