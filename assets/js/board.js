@@ -199,3 +199,10 @@
     addEventListener('resize', function () { for (var i = 0; i < 5; i++) paint(i); });
     lP.then(build); }
 })();
+/* Latest episode: click-to-play embed (loads YouTube only when asked; privacy-enhanced domain) */
+(function () {
+  var a = document.querySelector('.p-ep [data-ep-link]'); if (!a) return;
+  a.addEventListener('click', function (e) { var m = /(?:youtu\.be\/|v=)([\w-]{11})/.exec(a.href); if (!m) return; e.preventDefault();
+    var f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0'; f.title = document.querySelector('[data-ep-title]').textContent || 'Latest episode';
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; f.allowFullscreen = true; f.className = 'ep-frame'; a.replaceWith(f); });
+})();

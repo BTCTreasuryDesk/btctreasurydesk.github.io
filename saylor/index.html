@@ -294,7 +294,7 @@
     </div>
   </footer>
   <script src="/assets/js/app.js?v=202610042208" defer></script>
-  <script src="/assets/js/extras.js?v=r1018" defer></script>
+  <script src="/assets/js/extras.js?v=r1018b" defer></script>
 <script>(function(){var b=document.querySelector('[data-sv]');if(!b)return;fetch('/assets/data/desk.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(d){var v=d.video_of_week;if(!v)return;var e=function(x){return String(x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 b.innerHTML='<div style="display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:18px;align-items:start" class="sv-g"><a href="'+e(v.url)+'" target="_blank" rel="noopener" style="display:block;aspect-ratio:16/9;background:#000 url(https://i.ytimg.com/vi/'+e(v.id)+'/hqdefault.jpg) center/cover;border-radius:10px;border:1px solid var(--line,#1e232b)" aria-label="Watch on YouTube"></a><div><h3 style="margin:0 0 6px">'+e(v.title)+'</h3><p class="muted">'+e(v.channel)+' · '+e(v.date)+'</p><p><a href="'+e(v.url)+'" target="_blank" rel="noopener">Watch on YouTube &#8599;</a>'+(v.more||[]).map(function(m){return ' · <a href="'+e(m.url)+'" target="_blank" rel="noopener">'+e(m.label)+'</a>'}).join('')+'</p></div></div><style>@media(max-width:720px){.sv-g{grid-template-columns:1fr!important}}</style>';}).catch(function(){b.innerHTML='<p class="muted">Video unavailable right now.</p>'});})();</script>
 </body>

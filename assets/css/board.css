@@ -137,3 +137,6 @@ body.dm main.grid>.slow,body.dm main.grid>.slow-h{display:none!important}
 body.dm .lc-cv{height:calc(100vh - 470px);min-height:300px}
 body.dm .mk-ed,body.dm .p-wl .p-h .chip{display:none}
 .wl td.wl-mu{color:var(--mu,#8a8f98);font-size:12px;white-space:normal;padding:10px 6px}
+.p-ep .ep-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:6px;display:block;background:#000}
+.p-ep .tbtn-sub{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:4px;background:#c00;color:#fff;font:700 12px var(--mono);text-decoration:none;margin-left:6px}.p-ep .tbtn-sub:hover{background:#e00}
+.p-ep .ep-tools{font-size:13px;line-height:1.6;margin:10px 0 4px;color:var(--mu)}.p-ep .ep-tools b{color:#fff;font-weight:600}.p-ep .ep-tools a{color:var(--o,#F7931A)}
