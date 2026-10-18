@@ -151,36 +151,82 @@
     var wlT = 0; F.on('quotes', function () { if (!WE) wlPaint(); }); F.on('BTC', function () { if (Date.now() - wlT > 2000) { wlT = Date.now(); var r = wl.querySelector('[data-wr="BTC"] [data-wpx]'), q = F.get('BTC'); if (r && q) { var o = r.textContent; r.textContent = px(q.px); if (o !== r.textContent) flash(r, q.dir); } } }); }
 
   /* ---------- Crypto market ---------- */
+  /* Crypto overall impression: compact, BTC-first context (no coin lists, no gainers). All feeds are 24/7. */
   var cx = document.querySelector('[data-cx]');
   if (cx) {
-    cx.innerHTML = '<div class="p-h"><span class="p-t">Crypto market</span><span class="tag">BTC-first · live</span></div><div class="cx">' +
-      '<div class="cx-k"><span>BTC dominance</span><b data-cx="dom">…</b><small data-cx="dom-s"></small></div>' +
-      '<div class="cx-k"><span>Total crypto cap</span><b data-cx="tot">…</b><small data-cx="tot-s"></small></div>' +
-      '<div class="cx-k" title="Total crypto market value excluding bitcoin (TOTAL2-style). Desk altcoin index."><span>Alt index (ex-BTC)</span><b data-cx="alt">…</b><small data-cx="alt-s"></small></div>' +
-      '<div class="cx-k" title="All USD-pegged stablecoins across chains (DefiLlama). More stablecoin supply means more dollars held on-chain that can move into crypto quickly; it is context, not a forecast."><span>Stablecoins</span><b data-cx="stb">…</b><small data-cx="stb-s"></small></div>' +
-      '<div class="cx-k"><span>BTC from ATH</span><b data-cx="ath">…</b><small data-cx="ath-s"></small></div>' +
+    var K = function (k, lab, tip) { return '<div class="cx-k"' + (tip ? ' title="' + tip + '"' : '') + '><span>' + lab + '</span><b data-cx="' + k + '">…</b><small data-cx="' + k + '-s"></small></div>'; };
+    cx.innerHTML = '<div class="p-h"><span class="p-t">Crypto at a glance</span><span class="tag">BTC-first · live 24/7</span></div>' +
+      '<p class="cx-read" data-cx="read">Reading the market…</p><div class="cx">' +
+      K('dom', 'BTC dominance', 'Bitcoin\u2019s share of total crypto market value (CoinGecko). 24h change is a Desk calc from BTC and total-cap moves.') +
+      K('tot', 'Total crypto cap', 'All crypto market value in USD (CoinGecko).') +
+      K('alt', 'Alt cap (ex-BTC)', 'Total crypto market value excluding bitcoin (TOTAL2-style). Desk calc from CoinGecko.') +
+      K('eth', 'ETH-USD', 'Ether spot price, Coinbase live feed.') + K('sol', 'SOL-USD', 'Solana spot price, Coinbase live feed.') +
+      K('eb', 'ETH/BTC', 'Ether priced in bitcoin (ETH-USD \u00f7 BTC-USD, Coinbase). Rising = ether outperforming bitcoin.') +
+      K('stb', 'Stablecoin supply', 'All USD-pegged stablecoins across chains (DefiLlama). Growing supply = more on-chain dollars that can move into crypto quickly; context, not a forecast.') +
       '<div class="cx-k"><span>Fear &amp; Greed</span><b data-live="fng">…</b><small data-live="fng-cls"></small></div>' +
-      '</div><div class="cx-m" title="Desk calc: share of the top 50 altcoins (ex-stablecoins and wrapped tokens) beating BTC over 30 days. 75+ = altcoin season, 25 or less = bitcoin season."><div class="cx-mh"><span>Season gauge (30d)</span><b data-cx="szn">…</b></div><div class="cx-bar"><i data-cx="szn-i"></i></div><div class="cx-sc"><span>Bitcoin season</span><span>Altcoin season</span></div></div>' +
-      '<div data-sent-mini class="cx-sent"></div>' +
-      '<p class="p-f">CoinGecko (cap, dominance, alts), DefiLlama (stablecoins), Coinbase (BTC), alternative.me (Fear &amp; Greed). Alt panels are context for a Bitcoin desk.</p>';
+      '</div><div class="cx-m" title="Desk calc (our own gauge): share of the top 50 altcoins (ex-stablecoins and wrapped tokens) beating BTC over 30 days. 75+ = altcoin season, 25 or less = bitcoin season."><div class="cx-mh"><span>Altcoin-season gauge \u00b7 Desk calc (30d)</span><b data-cx="szn">…</b></div><div class="cx-bar"><i data-cx="szn-i"></i></div><div class="cx-sc"><span>Bitcoin season</span><span>Altcoin season</span></div></div>' +
+      '<p class="p-f">CoinGecko (caps, dominance, breadth), Coinbase (BTC, ETH, SOL), DefiLlama (stablecoins), alternative.me (Fear &amp; Greed). Context for a Bitcoin desk, not a coin list. Education only.</p>';
     var set = function (k, v, c) { var e = cx.querySelector('[data-cx="' + k + '"]'); if (e) { e.textContent = v; if (c != null) e.className = c; } };
-    var ATH = null; J('/assets/data/btc_daily.json').then(function (j) { ATH = Math.max.apply(null, j.closes); athP(); }).catch(function () {});
-    var athP = function () { var b = F.get('BTC'); if (!ATH || !b) return; var a = Math.max(ATH, b.px), d = (b.px / a - 1) * 100; set('ath', d > -0.05 ? 'At ATH' : pc(d, 1), cls(d)); set('ath-s', 'ATH close $' + n(a, 0)); };
-    var gP = function () { var g = F.get('global'), b = F.get('BTC'); if (!g) return; set('dom', g.dom.toFixed(2) + '%'); set('dom-s', 'ETH ' + g.edom.toFixed(1) + '%'); set('tot', big(g.tot)); set('tot-s', pc(g.chp) + ' 24h', 'up' === cls(g.chp) ? 'up' : 'dn');
-      var ach = null; if (b && b.chp != null) { var tp = g.tot / (1 + g.chp / 100), bc = g.tot * g.dom / 100, bp = bc / (1 + b.chp / 100), ap = tp - bp; ach = (g.alt / ap - 1) * 100; } set('alt', big(g.alt)); set('alt-s', ach == null ? '' : pc(ach) + ' 24h', cls(ach)); };
-    F.on('global', gP); F.on('stable', function (s) { set('stb', big(s.tot)); set('stb-s', s.ch != null ? pc(s.ch, 2) + ' since ' + Math.round(s.ago / 36e5) + 'h ago' : 'USD-pegged, all chains'); });
-    F.on('breadth', function (b) { set('szn', b.score + ' · ' + (b.score >= 75 ? 'Altcoin season' : b.score <= 25 ? 'Bitcoin season' : 'Neutral') + ' (' + b.beat + '/' + b.n + ' beat BTC)'); var i = cx.querySelector('[data-cx="szn-i"]'); if (i) i.style.left = b.score + '%'; });
-    var cxT = 0; F.on('BTC', function () { if (Date.now() - cxT > 5000) { cxT = Date.now(); athP(); gP(); } });
+    var DD = null, ST = null, SZ = null;
+    var read = function () { var parts = [];
+      if (DD != null) parts.push(DD > 0.15 ? 'BTC dominance rising: money concentrating in Bitcoin.' : DD < -0.15 ? 'BTC dominance slipping: alts outpacing Bitcoin today.' : 'BTC dominance steady: crypto moving largely together.');
+      if (ST != null) parts.push(ST > 0.5 ? 'Stablecoin supply growing (more dollars on-chain).' : ST < -0.5 ? 'Stablecoin supply shrinking.' : 'Stablecoin supply flat on the week.');
+      if (SZ != null && (SZ >= 75 || SZ <= 25)) parts.push(SZ >= 75 ? 'Most large alts beating BTC over 30 days.' : 'Few large alts beating BTC over 30 days.');
+      if (parts.length) set('read', parts.join(' ')); };
+    var gP = function () { var g = F.get('global'), br = F.get('breadth'); if (!g) return; set('dom', g.dom.toFixed(2) + '%'); set('tot', big(g.tot)); set('alt', big(g.alt));
+      /* 24h changes from the top-80 coins' own market-cap changes (CoinGecko's global 24h figure can be badly off) */
+      if (br && br.tchp != null && br.achp != null) { set('tot-s', pc(br.tchp) + ' 24h', cls(br.tchp)); set('alt-s', pc(br.achp) + ' 24h', cls(br.achp));
+        var altSh = 1 - g.dom / 100, prevAltSh = altSh * (1 + br.tchp / 100) / (1 + br.achp / 100); DD = (prevAltSh - altSh) * 100; set('dom-s', (DD >= 0 ? '+' : '\u2212') + Math.abs(DD).toFixed(2) + ' pt 24h', cls(DD)); }
+      read(); };
+    var cP = function () { var b = F.get('BTC'), e = F.get('ETH'), s = F.get('SOL');
+      if (e && e.px) { set('eth', px(e.px)); set('eth-s', pc(e.chp) + ' 24h', cls(e.chp)); } if (s && s.px) { set('sol', px(s.px)); set('sol-s', pc(s.chp) + ' 24h', cls(s.chp)); }
+      if (b && b.px && e && e.px) { set('eb', (e.px / b.px).toFixed(5)); if (e.chp != null && b.chp != null) { var r = ((1 + e.chp / 100) / (1 + b.chp / 100) - 1) * 100; set('eb-s', pc(r) + ' 24h', cls(r)); } } };
+    var S7 = null; try { S7 = JSON.parse(LS.get('btd_stb7b') || 'null'); } catch (e) {}
+    if (!S7 || Date.now() - S7.t > 20 * 36e5) fetch('https://stablecoins.llama.fi/stablecoincharts/all').then(function (r) { return r.json(); }).then(function (a) { if (!Array.isArray(a) || a.length < 9) return; var v = (a[a.length - 8].totalCirculatingUSD || {}).peggedUSD, v1 = (a[a.length - 1].totalCirculatingUSD || {}).peggedUSD; if (!v || !v1) return; S7 = { ch: (v1 / v - 1) * 100, t: Date.now() }; /* same series both ends (DefiLlama daily totals) */ LS.set('btd_stb7b', JSON.stringify(S7)); var st = F.get('stable'); if (st) sP(st); }).catch(function () {});
+    var sP = function (s) { set('stb', big(s.tot)); if (S7 && S7.ch != null) { ST = S7.ch; set('stb-s', pc(ST, 2) + ' 7d', cls(ST)); } else set('stb-s', 'USD-pegged, all chains'); read(); };
+    F.on('global', gP); F.on('stable', sP);
+    F.on('breadth', function (b) { gP(); SZ = b.score; set('szn', b.score + ' \u00b7 ' + (b.score >= 75 ? 'Altcoin season' : b.score <= 25 ? 'Bitcoin season' : 'Neutral') + ' (' + b.beat + '/' + b.n + ' beat BTC)'); var i = cx.querySelector('[data-cx="szn-i"]'); if (i) i.style.left = b.score + '%'; read(); });
+    var cxT = 0; var tick = function () { if (Date.now() - cxT > 3000) { cxT = Date.now(); gP(); cP(); } }; F.on('BTC', tick); F.on('ETH', tick); F.on('SOL', tick);
+    gP(); cP(); if (F.get('stable')) sP(F.get('stable'));
   }
 
   /* ---------- Tokenized stocks ---------- */
+  /* Tokenized stocks: after-hours / weekend price discovery. Curated default (treasury names, index tokens, Mag 7), customizable (✎ add/remove/reorder, saved, reset), sortable. */
   var tk = document.querySelector('[data-tok]');
-  if (tk) { var TL = [['MSTR', 'Strategy'], ['COIN', 'Coinbase'], ['CRCL', 'Circle'], ['HOOD', 'Robinhood'], ['NVDA', 'Nvidia'], ['TSLA', 'Tesla'], ['AAPL', 'Apple'], ['MSFT', 'Microsoft'], ['GOOGL', 'Alphabet'], ['AMZN', 'Amazon'], ['META', 'Meta'], ['SPY', 'S&P 500'], ['QQQ', 'Nasdaq 100']];
-    F.watch(TL.map(function (t) { return t[0]; }).filter(function (t) { return t !== 'SPY' && t !== 'QQQ'; }));
-    tk.innerHTML = '<div class="p-h"><span class="p-t">Tokenized stocks</span><span class="tag">24/7 onchain</span></div><div class="wl-wrap tk-wrap"><table class="wl"><thead><tr><th>Token</th><th class="r">Price</th><th class="r">24h</th><th class="r" title="Token price vs the stock\u2019s latest price (regular or extended hours). Outside market hours this hints at where the stock may open; it can also just be drift.">vs stock</th></tr></thead><tbody data-tok-b><tr><td colspan="4" class="wl-mu">Loading tokenized prices from CoinGecko… (free feed, refreshes every 2 min; if it stays empty the feed is rate-limited, try again shortly)</td></tr></tbody></table></div><p class="p-f">xStocks tokens (Backed Finance, on Solana and other chains) via CoinGecko. Tokens track the stock but are separate products with their own risks. Not available to US persons on most platforms. Education only.</p>';
-    var tp = function () { var T = F.get('tok'); if (!T) return; var s = F.session(); tk.querySelector('[data-tok-b]').innerHTML = TL.filter(function (t) { return T[t[0]]; }).map(function (t) { var x = T[t[0]], q = F.get(t[0]), ref = q && q.px ? (q.ext && s !== 'open' ? q.ext.px : q.px) : null, d = ref ? (x.px / ref - 1) * 100 : null;
-        return '<tr><td><b>' + t[0] + 'x</b><small>' + t[1] + '</small></td><td class="r">' + px(x.px) + '</td><td class="r ' + cls(x.chp) + '">' + pc(x.chp) + '</td><td class="r ' + cls(d) + '">' + (d == null ? '—' : pc(d, 2)) + '</td></tr>'; }).join(''); };
-    F.on('tok', tp); F.on('quotes', tp); }
+  if (tk) { var TN = { MSTR: 'Strategy', STRC: 'Strategy STRC pref', COIN: 'Coinbase', MARA: 'MARA Holdings', HOOD: 'Robinhood', CRCL: 'Circle', SPY: 'S&P 500 ETF', QQQ: 'Nasdaq 100 ETF', AAPL: 'Apple', MSFT: 'Microsoft', NVDA: 'Nvidia', AMZN: 'Amazon', GOOGL: 'Alphabet', META: 'Meta', TSLA: 'Tesla', GLD: 'Gold ETF', BMNR: 'BitMine', AVGO: 'Broadcom', AMD: 'AMD', ORCL: 'Oracle', INTC: 'Intel', GME: 'GameStop' };
+    var TZD = ['MSTR', 'COIN', 'MARA', 'HOOD', 'CRCL', 'SPY', 'QQQ', 'AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA'], TZ, TSORT = 'def', TED = false;
+    var tzGet = function () { var o = null; try { o = JSON.parse(LS.get('btd_tokl') || 'null'); } catch (e) {} return Array.isArray(o) && o.length ? o.filter(function (t) { return TN[t]; }).slice(0, 24) : TZD.slice(); };
+    var tzSave = function () { if (TZ.join() === TZD.join()) LS.del('btd_tokl'); else LS.set('btd_tokl', JSON.stringify(TZ)); };
+    TZ = tzGet(); F.watch(Object.keys(TN));
+    var etParts = function () { var o = {}; new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'short', hour: 'numeric', hourCycle: 'h23' }).formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; }); return o; };
+    var closeLbl = function () { var e = etParts(), d = e.weekday, h = +e.hour, W = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']; if (W.indexOf(d) >= 0 && h >= 16) return 'today\u2019s close'; if (d === 'Sat' || d === 'Sun' || d === 'Mon') return 'Fri close'; return W[W.indexOf(d) - 1] + ' close'; };
+    var stateLbl = function () { var s = F.session(), d = etParts().weekday; return s === 'open' ? ['Market open: tokens vs stock', 'op'] : (d === 'Sat' || d === 'Sun') ? ['Weekend \u00b7 live 24/7', 'wk'] : s === 'pre' ? ['Pre-market \u00b7 live 24/7', 'ah'] : ['After hours \u00b7 live 24/7', 'ah']; };
+    var TIP = 'Source: xStocks tokens (Backed Finance) via CoinGecko, refreshed every 2 min. Weekend and overnight liquidity is thin: a token price is a hint, not the official stock price. Education only.';
+    tk.innerHTML = '<div class="p-h tz-h"><span class="p-t">Tokenized stocks</span><span class="tz-st" data-tz-st></span><span class="tz-up" data-tz-up></span>' +
+      '<span class="seg tz-sort" role="group" aria-label="Sort"><button type="button" data-tz-sort="def">Default</button><button type="button" data-tz-sort="prem">Premium</button><button type="button" data-tz-sort="move">Move</button></span><button type="button" class="chip" data-tz-ed aria-expanded="false">\u270e Customize</button></div>' +
+      '<p class="tz-x" title="' + TIP + '">Tokenized stocks trade 24/7, so off-hours they hint where shares may open. Thin liquidity: a hint, not the official price.</p><div class="tz-ed" data-tz-edp hidden></div>' +
+      '<div class="tz-g" data-tz-g><p class="wl-mu">Loading tokenized prices from CoinGecko\u2026 (free feed, refreshes every 2 min; if it stays empty the feed is rate-limited, try again shortly)</p></div>' +
+      '<p class="p-f">xStocks tokens (Backed Finance, on Solana and other chains) via CoinGecko; stock reference via CNBC quote service. Tokens track the stock but are separate products with their own risks, and are not available to US persons on most platforms. Education only.</p>';
+    var tp = function () { var T = F.get('tok'); var st = stateLbl(), sEl = tk.querySelector('[data-tz-st]'); sEl.textContent = st[0]; sEl.className = 'tz-st tz-' + st[1];
+      tk.classList.toggle('tz-open', st[1] === 'op'); tk.querySelectorAll('[data-tz-sort]').forEach(function (b) { b.classList.toggle('on', b.dataset.tzSort === TSORT); });
+      if (!T) return; var now = Date.now(), open = st[1] === 'op', cl = closeLbl(), newest = 0;
+      var rows = TZ.filter(function (t) { return T[t]; }).map(function (t, i) { var x = T[t], q = F.get(t), ref = q && q.px != null ? q.px : null, d = ref ? (x.px / ref - 1) * 100 : null, stale = !x.t || now - x.t > 30 * 6e4; if (!stale) newest = Math.max(newest, x.t); var off = !stale && d != null && Math.abs(d) > 5; return { t: t, x: x, d: stale || off ? null : d, off: off, stale: stale, i: i }; });
+      if (TSORT === 'prem') rows.sort(function (a, b) { return (b.d == null ? -1e9 : Math.abs(b.d)) - (a.d == null ? -1e9 : Math.abs(a.d)); }); else if (TSORT === 'move') rows.sort(function (a, b) { return (b.stale ? -1e9 : Math.abs(b.x.chp || 0)) - (a.stale ? -1e9 : Math.abs(a.x.chp || 0)); });
+      tk.querySelector('[data-tz-g]').innerHTML = rows.length ? rows.map(function (r) { var x = r.x, age = x.t ? Math.round((now - x.t) / 6e4) : null;
+        var tip = r.t + 'x tracks ' + r.t + ' (' + TN[r.t] + '). ' + (x.vol != null ? '24h token volume ≈ $' + n(x.vol, 0) + '. ' : '') + (r.stale ? 'Stale: no update for ' + age + ' min, so no price is shown. ' : r.off ? 'Token is more than 5% away from the stock\u2019s last close, so it may track differently (e.g. accrued dividends or a thin market); no implied-open hint shown. ' : '') + TIP;
+        return '<div class="tz-t' + (r.stale ? ' tz-stale' : '') + '" title="' + esc(tip) + '"><span class="tz-l"><b>' + r.t + 'x</b> <small>' + r.t + '</small>' + (r.stale ? ' <em class="tz-tag">stale</em>' : r.off ? ' <em class="tz-tag">off-track</em>' : '') + '</span>' +
+          '<b class="tz-p">' + (r.stale ? '—' : px(x.px)) + '</b><span class="tz-c ' + (r.stale ? '' : cls(x.chp)) + '">' + (r.stale ? 'no recent trades' : pc(x.chp) + ' 24h') + '</span>' +
+          '<span class="tz-v">' + (r.d == null ? (r.stale ? '' : '<span class="muted">vs ' + cl + ' ' + (r.off ? 'n/a' : '—') + '</span>') : '<b class="' + cls(r.d) + '">' + pc(r.d, 2) + '</b> ' + (open ? 'vs stock (live)' : 'vs ' + cl + ' <em class="tz-io">implied open</em>')) + '</span></div>'; }).join('') : '<p class="wl-mu">None of your picks have a token on the feed. ✎ Customize to add some.</p>';
+      tk.querySelector('[data-tz-up]').textContent = newest ? 'updated ' + new Date(newest).toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }) + ' ET' : ''; edPaint(); };
+    var edPaint = function () { var e = tk.querySelector('[data-tz-edp]'); if (e.hidden) return; var T = F.get('tok') || {};
+      e.innerHTML = '<ol class="cz-l">' + TZ.map(function (t, i) { return '<li><span><b>' + t + 'x</b> <small class="muted">' + esc(TN[t]) + (T[t] ? '' : ' · not on feed now') + '</small></span><button type="button" data-tz-up2="' + i + '" aria-label="Move up">↑</button><button type="button" data-tz-dn="' + i + '" aria-label="Move down">↓</button><button type="button" data-tz-rm="' + i + '" aria-label="Remove">×</button></li>'; }).join('') + '</ol>' +
+        '<div class="tz-add">' + Object.keys(TN).filter(function (t) { return TZ.indexOf(t) < 0; }).map(function (t) { return '<button type="button" class="chip" data-tz-add="' + t + '">＋ ' + t + 'x</button>'; }).join('') + '</div><button type="button" class="chip" data-tz-reset>Reset to default</button>'; };
+    tk.addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (!b) return; var d = b.dataset;
+      if (d.tzSort) TSORT = d.tzSort; else if (b.hasAttribute('data-tz-ed')) { var e = tk.querySelector('[data-tz-edp]'); e.hidden = !e.hidden; b.setAttribute('aria-expanded', !e.hidden); }
+      else if (d.tzUp2 != null) { var i = +d.tzUp2; if (i > 0) { TZ.splice(i - 1, 0, TZ.splice(i, 1)[0]); tzSave(); } }
+      else if (d.tzDn != null) { var k = +d.tzDn; if (k < TZ.length - 1) { TZ.splice(k + 1, 0, TZ.splice(k, 1)[0]); tzSave(); } }
+      else if (d.tzRm != null) { TZ.splice(+d.tzRm, 1); tzSave(); } else if (d.tzAdd) { TZ.push(d.tzAdd); tzSave(); } else if (b.hasAttribute('data-tz-reset')) { TZ = TZD.slice(); tzSave(); } else return; tp(); });
+    tp(); F.on('tok', tp); F.on('quotes', tp); F.on('session', tp); setInterval(tp, 6e4); }
 
   /* ---------- Live Wall ---------- */
   var wall = document.querySelector('[data-wall]');
@@ -227,4 +273,59 @@
       out.push(tile(t, '', ext ? ext.px : q && q.px, ext ? ext.chp : q && q.chp, ext ? (ext.kind === 'pre' ? 'Pre' : 'AH') : '', 2, t + (ext ? (ext.kind === 'pre' ? ' pre-market' : ' after-hours') : '') + ', CNBC quote service (may be delayed)')); });
     el.innerHTML = out.join(''); }
   paint(); F.on('quotes', paint); F.on('session', paint);
+})();
+
+/* My Watchlist: up to 8 visitor picks (any stock/ETF, index, future, commodity, or a coin typed as TICKER-USD). Own saved list (btd_my), separate from the price strip. */
+(function () {
+  var el = document.querySelector('[data-my]'), F = window.BTD_FEED; if (!el || !F) return;
+  var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var f2 = function (v) { if (v == null || !isFinite(v)) return '…'; var a = Math.abs(v), d = a >= 1000 ? 2 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var pc = function (v) { return v == null || !isFinite(v) ? '' : (v > 0 ? '+' : v < 0 ? '\u2212' : '') + Math.abs(v).toFixed(2) + '%'; };
+  var cl = function (v) { return v > 0 ? 'up' : v < 0 ? 'dn' : 'fl'; };
+  /* friendly names -> quote-service symbols, with the label shown on the tile */
+  var AL = { SPX: ['.SPX', 'SPX', 'S&P 500'], '^GSPC': ['.SPX', 'SPX', 'S&P 500'], IXIC: ['.IXIC', 'IXIC', 'Nasdaq'], NASDAQ: ['.IXIC', 'IXIC', 'Nasdaq'], DJI: ['.DJI', 'DJI', 'Dow'], DOW: ['.DJI', 'DJI', 'Dow'], RUT: ['.RUT', 'RUT', 'Russell 2000'], VIX: ['.VIX', 'VIX', 'Volatility'], DXY: ['.DXY', 'DXY', 'Dollar index'],
+    'ES=F': ['@SP.1', 'ES=F', 'S&P 500 fut'], 'NQ=F': ['@ND.1', 'NQ=F', 'Nasdaq fut'], 'YM=F': ['@DJ.1', 'YM=F', 'Dow fut'], 'GC=F': ['@GC.1', 'GC=F', 'Gold fut'], GOLD: ['@GC.1', 'GC=F', 'Gold fut'], 'SI=F': ['@SI.1', 'SI=F', 'Silver fut'], SILVER: ['@SI.1', 'SI=F', 'Silver fut'], 'CL=F': ['@CL.1', 'CL=F', 'WTI fut'], OIL: ['@CL.1', 'CL=F', 'WTI fut'], 'HG=F': ['@HG.1', 'HG=F', 'Copper fut'], 'NG=F': ['@NG.1', 'NG=F', 'Nat gas fut'],
+    US10Y: ['US10Y', 'US10Y', '10Y yield'], US2Y: ['US2Y', 'US2Y', '2Y yield'], US30Y: ['US30Y', 'US30Y', '30Y yield'], US5Y: ['US5Y', 'US5Y', '5Y yield'] };
+  var DEF = [{ k: 'C:BTC', tk: 'BTC-USD' }, { k: 'MSTR', tk: 'MSTR' }], MAX = 8, L, CB = {}, msg = '';
+  var get = function () { var o = null; try { o = JSON.parse(LS.get('btd_my') || 'null'); } catch (e) {} return Array.isArray(o) ? o.filter(function (x) { return x && typeof x.k === 'string' && typeof x.tk === 'string'; }).slice(0, MAX) : DEF.slice(); };
+  var save = function () { if (JSON.stringify(L) === JSON.stringify(DEF)) LS.del('btd_my'); else LS.set('btd_my', JSON.stringify(L)); };
+  L = get();
+  var native = { BTC: 1, ETH: 1, SOL: 1 };
+  var cbPoll = function () { L.forEach(function (x) { var m = /^C:(.+)$/.exec(x.k); if (!m || native[m[1]]) return; cbFetch(m[1]).then(function (o) { if (o) { CB[m[1]] = o; paint(); } }); }); };
+  var cbFetch = function (c) { return fetch('https://api.exchange.coinbase.com/products/' + encodeURIComponent(c) + '-USD/stats').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { if (!j || !j.last) return null; var l = +j.last, o = +j.open; return { px: l, chp: o ? (l / o - 1) * 100 : null }; }).catch(function () { return null; }); };
+  var watch = function () { F.watch(L.filter(function (x) { return !/^C:/.test(x.k); }).map(function (x) { return x.k; })); };
+  var quote = function (x) { var m = /^C:(.+)$/.exec(x.k), s = F.session();
+    if (m) { var q = native[m[1]] ? F.get(m[1]) : CB[m[1]]; return q && q.px != null ? { px: q.px, chp: q.chp, tag: '24/7', src: 'Coinbase spot' } : null; }
+    var q2 = F.get(x.k); if (!q2 || q2.px == null) return null; var fut = /^@/.test(x.k);
+    if (q2.ext && s !== 'open' && q2.ext.px != null) return { px: q2.ext.px, chp: q2.ext.chp, tag: q2.ext.kind === 'pre' ? 'Pre' : 'AH', src: 'CNBC quote service, extended hours (may be delayed)' };
+    return { px: q2.px, chp: q2.chp, tag: fut && !/fut/.test(x.nm || '') ? 'fut' : (s !== 'open' && !/^US\d/.test(x.k) ? 'close' : ''), src: 'CNBC quote service (may be delayed)', yd: /^US\d/.test(x.k) }; };
+  el.innerHTML = '<div class="p-h"><span class="p-t">My Watchlist</span><span class="tag">your picks \u00b7 saved on this device</span><button type="button" class="chip my-ed" data-my-ed aria-expanded="false">\u270e Edit</button></div><div class="my-g" data-my-g></div><div class="my-edp" data-my-edp hidden></div>';
+  function paint() { var g = el.querySelector('[data-my-g]');
+    g.innerHTML = L.map(function (x) { var q = quote(x); return '<div class="my-t" title="' + esc(x.tk + (x.nm ? ' \u00b7 ' + x.nm : '') + ' \u00b7 source: ' + (q ? q.src : 'loading')) + '"><span class="my-l"><b>' + esc(x.tk) + '</b>' + (x.nm ? ' <small>' + esc(x.nm) + '</small>' : '') + (q && q.tag ? ' <em>' + q.tag + '</em>' : '') + '</span><b class="my-p">' + (q ? (q.yd ? q.px.toFixed(3) + '%' : f2(q.px)) : '\u2026') + '</b><span class="my-c ' + (q ? cl(q.chp) : '') + '">' + (q ? pc(q.chp) : '') + '</span></div>'; }).join('') +
+      (L.length < MAX ? '<form class="my-t my-add" data-my-form><input data-my-in maxlength="16" placeholder="Type a ticker" aria-label="Add a ticker (stocks, ETFs, indexes, futures; coins as TICKER-USD)" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="submit" class="chip">\uff0b Add</button><small data-my-msg>' + esc(msg) + '</small></form>' : '');
+    edPaint(); }
+  function edPaint() { var e = el.querySelector('[data-my-edp]'); if (e.hidden) return;
+    e.innerHTML = '<ol class="cz-l">' + L.map(function (x, i) { return '<li><span><b>' + esc(x.tk) + '</b></span><button type="button" data-my-up="' + i + '" aria-label="Move up">\u2191</button><button type="button" data-my-dn="' + i + '" aria-label="Move down">\u2193</button><button type="button" data-my-rm="' + i + '" aria-label="Remove">\u00d7</button></li>'; }).join('') + '</ol>' +
+      '<div class="my-q"><span class="muted">Quick add:</span> ' + ['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'COIN', 'ASST', 'MPJPY', 'MARA', 'IBIT', 'SPX', 'ES=F', 'GOLD', 'US10Y', 'DXY', 'VIX'].filter(function (t) { return !L.some(function (x) { return x.tk === t || x.tk === (AL[t] || [])[1]; }); }).map(function (t) { return '<button type="button" class="chip" data-my-add="' + t + '">\uff0b ' + t + '</button>'; }).join('') + '</div>' +
+      '<p class="muted my-hint">Type any stock or ETF ticker, an index (SPX, VIX, DXY), a future (ES=F, GC=F, CL=F), a yield (US10Y), or a coin as TICKER-USD. Up to ' + MAX + '.</p><button type="button" class="chip" data-my-reset>Reset to default</button>'; }
+  function add(raw) { var t = String(raw || '').trim().toUpperCase().replace(/\s+/g, ''); if (!t) return; if (L.length >= MAX) { msg = 'Watchlist is full (' + MAX + '). Remove one first.'; return paint(); }
+    var cm = /^([A-Z0-9]{2,10})-USD$/.exec(t);
+    if (cm) { if (L.some(function (x) { return x.k === 'C:' + cm[1]; })) { msg = t + ' is already on your list.'; return paint(); } msg = 'Checking ' + t + ' on Coinbase\u2026'; paint();
+      if (native[cm[1]]) { L.push({ k: 'C:' + cm[1], tk: t }); save(); msg = ''; return paint(); }
+      return cbFetch(cm[1]).then(function (o) { if (!o) { msg = '\u201c' + t + '\u201d isn\u2019t a Coinbase USD pair. Check the spelling.'; return paint(); } CB[cm[1]] = o; L.push({ k: 'C:' + cm[1], tk: t }); save(); msg = ''; paint(); }); }
+    var a = AL[t], k = a ? a[0] : (F.cn ? F.cn(t) : t) || t, tk = a ? a[1] : t, nm = a ? a[2] : '';
+    if (!/^[.@A-Z0-9][A-Z0-9.\-=:]{0,15}$/.test(k)) { msg = 'That doesn\u2019t look like a ticker.'; return paint(); }
+    if (L.some(function (x) { return x.k === k; })) { msg = tk + ' is already on your list.'; return paint(); }
+    msg = 'Checking ' + tk + '\u2026'; paint(); F.watch([k]); var t0 = Date.now();
+    (function wait() { var q = F.get(k); if (q && q.px != null) { L.push({ k: k, tk: tk, nm: nm }); save(); msg = ''; return paint(); } if (Date.now() - t0 > 7000) { msg = '\u201c' + tk + '\u201d wasn\u2019t found on the quote feed. Coins: type TICKER-USD.'; return paint(); } setTimeout(wait, 500); })(); }
+  el.addEventListener('submit', function (e) { if (!e.target.matches('[data-my-form]')) return; e.preventDefault(); add(el.querySelector('[data-my-in]').value); });
+  el.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.type === 'submit') return; var d = b.dataset;
+    if (b.hasAttribute('data-my-ed')) { var p = el.querySelector('[data-my-edp]'); p.hidden = !p.hidden; b.setAttribute('aria-expanded', !p.hidden); edPaint(); return; }
+    if (d.myAdd) return add(d.myAdd);
+    if (d.myUp != null) { var i = +d.myUp; if (i > 0) L.splice(i - 1, 0, L.splice(i, 1)[0]); } else if (d.myDn != null) { var j = +d.myDn; if (j < L.length - 1) L.splice(j + 1, 0, L.splice(j, 1)[0]); }
+    else if (d.myRm != null) L.splice(+d.myRm, 1); else if (b.hasAttribute('data-my-reset')) L = DEF.slice(); else return; save(); msg = ''; watch(); paint(); });
+  watch(); paint(); cbPoll(); setInterval(cbPoll, 30000);
+  var pt = 0; var soft = function () { if (Date.now() - pt > 2000 && !el.contains(document.activeElement)) { pt = Date.now(); paint(); } };
+  F.on('quotes', soft); F.on('BTC', soft); F.on('ETH', soft); F.on('SOL', soft); F.on('session', paint);
 })();

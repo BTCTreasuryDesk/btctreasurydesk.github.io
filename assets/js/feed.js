@@ -64,17 +64,18 @@
     if (!Array.isArray(a)) return; var b = a.filter(function (c) { return c.symbol === 'btc'; })[0]; if (!b) return; var bt = b.price_change_percentage_30d_in_currency;
     var alts = a.filter(function (c) { return c.symbol !== 'btc' && !STABLE.test(c.symbol) && !WRAP.test(c.symbol) && c.price_change_percentage_30d_in_currency != null; }).slice(0, 50);
     var beat = alts.filter(function (c) { return c.price_change_percentage_30d_in_currency > bt; }).length;
-    G.breadth = { n: alts.length, beat: beat, score: alts.length ? Math.round(beat / alts.length * 100) : null, btc30: bt, t: Date.now() }; emit('breadth', G.breadth); }).catch(function () {}); }
+    var cn = 0, cp = 0, an = 0, ap = 0; a.forEach(function (c) { if (WRAP.test(c.symbol) || !c.market_cap || c.market_cap_change_percentage_24h == null) return; var pv = c.market_cap / (1 + c.market_cap_change_percentage_24h / 100); cn += c.market_cap; cp += pv; if (c.symbol !== 'btc') { an += c.market_cap; ap += pv; } });
+    G.breadth = { n: alts.length, beat: beat, score: alts.length ? Math.round(beat / alts.length * 100) : null, btc30: bt, tchp: cp ? (cn / cp - 1) * 100 : null, achp: ap ? (an / ap - 1) * 100 : null, t: Date.now() }; emit('breadth', G.breadth); }).catch(function () {}); }
   function gStable() { fetch('https://stablecoins.llama.fi/stablecoinchains').then(function (r) { return r.json(); }).then(function (a) { var s = 0;
     (a || []).forEach(function (c) { s += ((c.totalCirculatingUSD || {}).peggedUSD) || 0; }); if (!s) return;
     var h = null; try { h = JSON.parse(LS.get('btd_stb') || 'null'); } catch (e) {} var ch = null, now = Date.now();
     if (h && now - h.t >= 20 * 36e5) { ch = (s / h.v - 1) * 100; if (now - h.t > 48 * 36e5) LS.set('btd_stb', JSON.stringify({ v: s, t: now })); h.ago = now - h.t; } else if (!h) LS.set('btd_stb', JSON.stringify({ v: s, t: now }));
     G.stable = { tot: s, ch: ch, ago: h && h.ago, t: now }; emit('stable', G.stable); }).catch(function () {}); }
   /* tokenized stocks (xStocks on Solana and other chains) */
-  var XS = { MSTR: 'microstrategy-xstock', COIN: 'coinbase-xstock', NVDA: 'nvidia-xstock', AAPL: 'apple-xstock', MSFT: 'microsoft-xstock', GOOGL: 'alphabet-xstock', AMZN: 'amazon-xstock', META: 'meta-xstock', TSLA: 'tesla-xstock', CRCL: 'circle-xstock', HOOD: 'robinhood-xstock', SPY: 'sp500-xstock', QQQ: 'nasdaq-xstock', GLD: 'gold-xstock' };
+  var XS = { MSTR: 'microstrategy-xstock', COIN: 'coinbase-xstock', NVDA: 'nvidia-xstock', AAPL: 'apple-xstock', MSFT: 'microsoft-xstock', GOOGL: 'alphabet-xstock', AMZN: 'amazon-xstock', META: 'meta-xstock', TSLA: 'tesla-xstock', CRCL: 'circle-xstock', HOOD: 'robinhood-xstock', SPY: 'sp500-xstock', QQQ: 'nasdaq-xstock', GLD: 'gold-xstock', MARA: 'mara-xstock', STRC: 'strategy-pp-variable-xstock', BMNR: 'bitmine-xstock', AVGO: 'broadcom-xstock', AMD: 'amd-xstock', ORCL: 'oracle-xstock', INTC: 'intel-xstock', GME: 'gamestop-xstock' };
   function gTok() { if (document.hidden && G.tok) return; var ids = Object.keys(XS).map(function (k) { return XS[k]; }).join(',');
-    fetch(CG + '/simple/price?ids=' + ids + '&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true').then(function (r) { return r.json(); }).then(function (j) { var o = {};
-      Object.keys(XS).forEach(function (k) { var x = j[XS[k]]; if (x && x.usd) o[k] = { px: x.usd, chp: x.usd_24h_change, t: x.last_updated_at * 1e3 }; }); if (Object.keys(o).length) { G.tok = o; emit('tok', o); } }).catch(function () {}); }
+    fetch(CG + '/simple/price?ids=' + ids + '&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true&include_24hr_vol=true').then(function (r) { return r.json(); }).then(function (j) { var o = {};
+      Object.keys(XS).forEach(function (k) { var x = j[XS[k]]; if (x && x.usd) o[k] = { px: x.usd, chp: x.usd_24h_change, t: x.last_updated_at * 1e3, vol: x.usd_24h_vol }; }); if (Object.keys(o).length) { G.tok = o; emit('tok', o); } }).catch(function () {}); }
 
   window.BTD_FEED = { on: on, get: function (k) { return Q[k] || G[k] || null; }, watch: watch, session: session, num: num, XS: XS, all: Q, g: G,
     /* treasury ticker -> CNBC symbol (null if the feed has no listing) */
