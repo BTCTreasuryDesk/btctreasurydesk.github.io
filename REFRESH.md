@@ -146,3 +146,5 @@ Strategy is the benchmark, but cover other treasury companies sitewide wherever 
 - Library: after desk.json updates run `python3 tools/build_library.py`; for the static PDFs edit `downloads/src/build_*.py`, run `render.py <name>` and copy to `library-files/f31a01ec624a/<name>-<hash>.pdf`.
 - Music: set `"ready": true` in `assets/audio/tracks.json` only after the MP3 is uploaded to assets/audio/.
 - Live data is client-side only (Coinbase WS, CNBC quote service, CoinGecko, DefiLlama). No API keys, no AI credits.
+
+- Context references for live tiles (5D sparklines, 1y avg / 1 mo ago / 52w range reads): `python3 tools/update_ctx.py` (writes assets/data/ctx.json).
