@@ -157,9 +157,11 @@ body.dm main.grid>.p-hs{display:none}
 @media (prefers-reduced-motion:reduce){.lc-dot{animation:none}}
 /* Phone hero: just the big price, % change, minimal 1H/1D/1W tabs and the chart */
 @media (max-width:760px){
-  body:not(.dm) .p-live .lc-sym,body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-add,body:not(.dm) .p-live .lc-hl,body:not(.dm) .p-live .lc-ft,body:not(.dm) .p-live .lc-cmp{display:none!important}
+  body:not(.dm) .p-live .lc-m,body:not(.dm) .p-live .lc-hl,body:not(.dm) .p-live .lc-ft{display:none!important}
   body:not(.dm) .p-live [data-lc-r="1M"],body:not(.dm) .p-live [data-lc-r="1Y"],body:not(.dm) .p-live [data-lc-r="All"]{display:none}
-  body:not(.dm) .p-live .lc-h{justify-content:flex-end;margin-bottom:0}
+  body:not(.dm) .p-live .lc-h{justify-content:space-between;flex-wrap:nowrap;gap:6px;margin-bottom:0}
+  .p-live .lc-sym{flex-wrap:nowrap;gap:4px}.p-live .lc-sym .chip{padding:4px 8px;font-size:11px}.p-live .lc-sel{display:none}.p-live .lc-topbtn{display:inline-flex}
+  .p-live .lc-r button{padding:4px 8px}
   body:not(.dm) .p-live .lc-px{font-size:38px}
   main.grid>.p-live .lc-cv{height:180px}
   .hs-t{min-width:88px;flex:0 0 auto}
@@ -177,3 +179,8 @@ body.dm main.grid>.p-hs{display:none}
 .lc-name{font:700 12px var(--mono);color:#cfd5dd;letter-spacing:.04em}
 /* Hero stays live-only: the chart's source note lives in the tooltip on the ticker label, not as a footer line */
 body:not(.dm) .p-live .lc-ft{display:none}
+/* Phone symbol picker: Top 50 button opens a chip list (desktop keeps the select) */
+.lc-topbtn{display:none}
+.lc-tops{max-height:190px}
+.lc-adds{display:none}
+@media (max-width:760px){.p-live .lc-add{order:1;padding:4px 8px;font-size:11px;margin-left:0}.p-live .lc-sym{order:0}.p-live .lc-r{order:2}.lc-addl{display:none}.lc-adds{display:inline}.p-live .lc-cmp{gap:6px;font-size:11px;margin:2px 0}.p-live .lc-cmp small:not(.lc-cn){display:none}.p-live .lc-cn{flex-basis:100%;color:var(--mut,#8a93a0)}}

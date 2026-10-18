@@ -98,36 +98,42 @@
   /* ---------- the main chart card ---------- */
   var box = document.querySelector('[data-lc]'); if (!box) return;
   var COLS = ['#F7931A', '#4ea1ff', '#c58bff', '#2fd17c', '#ffd166', '#ff6b9a'];
-  var S = { s: 'BTC', r: '1D', m: 'area', cmp: [] }; try { var so = JSON.parse(LS.get('btd_lc') || '{}'); if (so.s) S.s = String(so.s).slice(0, 12); /* timeframe is never restored: the hero always opens on 1D (older builds saved 1H) */ if (['area', 'line', 'candle'].indexOf(so.m) >= 0) S.m = so.m; if (Array.isArray(so.cmp)) S.cmp = so.cmp.slice(0, 5).map(String); } catch (e) {}
+  var MAXC = function () { return innerWidth <= 760 ? 2 : 5; };
+  var S = { s: 'BTC', r: '1D', m: 'area', cmp: [] }; try { var so = JSON.parse(LS.get('btd_lc') || '{}'); /* symbol is never restored either: every visit opens on BTC-USD 1D */ /* timeframe is never restored: the hero always opens on 1D (older builds saved 1H) */ if (['area', 'line', 'candle'].indexOf(so.m) >= 0) S.m = so.m; if (Array.isArray(so.cmp) && innerWidth > 760) S.cmp = so.cmp.slice(0, 5).map(String); } catch (e) {}
   function save() { LS.set('btd_lc', JSON.stringify({ s: S.s, m: S.m, cmp: S.cmp })); }
   box.innerHTML = '<div class="lc-h"><div class="lc-sym" role="group" aria-label="Symbol" data-lc-syms></div>' +
     '<div class="seg lc-r" role="tablist" aria-label="Time range">' + RANGES.map(function (r) { return '<button type="button" role="tab" data-lc-r="' + r + '">' + r + '</button>'; }).join('') + '</div>' +
     '<div class="seg lc-m" role="group" aria-label="Chart style"><button type="button" data-lc-m="area">Area</button><button type="button" data-lc-m="line">Line</button><button type="button" data-lc-m="candle" title="Candles (BTC)">Candles</button></div>' +
-    '<button type="button" class="chip lc-add" data-lc-cmpbtn aria-expanded="false">＋ Compare</button></div>' +
+    '<button type="button" class="chip lc-add" data-lc-cmpbtn aria-expanded="false" aria-label="Compare: overlay other symbols">＋ <span class="lc-addl">Compare</span><span class="lc-adds">vs</span></button></div>' +
     '<div class="lc-read"><span class="lc-name" data-lc-name></span><b class="lc-px" data-lc-px>…</b><span class="lc-ch" data-lc-ch></span><span class="lc-sess" data-lc-sess></span><span class="lc-hl" data-lc-hl></span></div>' +
-    '<div class="lc-cmp" data-lc-legend></div><div class="lc-pick" data-lc-pick hidden></div>' +
+    '<div class="lc-cmp" data-lc-legend></div><div class="lc-pick" data-lc-pick hidden></div><div class="lc-pick lc-tops" data-lc-tops hidden></div>' +
     '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><span class="lc-dot" data-lc-dot hidden></span><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div>' +
     '<p class="lc-ft" data-lc-ft></p>';
   var $ = function (q) { return box.querySelector(q); }, cv = $('[data-lc-cv]'), hov = null, DATA = [], tok = 0, raf = 0;
   function symsBar() { var base = ['BTC', 'MSTR']; if (base.indexOf(S.s) < 0) base.push(S.s);
     $('[data-lc-syms]').innerHTML = base.map(function (t) { return '<button type="button" class="chip' + (t === S.s ? ' on' : '') + '" data-lc-s="' + esc(t) + '">' + esc(t === '3350.T' ? 'Metaplanet' : t) + '</button>'; }).join('') +
-      '<label class="lc-sel"><span class="sr">More symbols</span><select data-lc-more aria-label="Pick any top-50 treasury company"><option value="">Top 50 ▾</option>' + (LB || []).map(function (c) { return '<option value="' + esc(c.ticker) + '">#' + esc(c.rank) + ' ' + esc(c.ticker) + ' · ' + esc(c.name.slice(0, 26)) + '</option>'; }).join('') + '</select></label>'; }
+      '<label class="lc-sel"><span class="sr">More symbols</span><select data-lc-more aria-label="Pick any top-50 treasury company"><option value="">Top 50 ▾</option>' + (LB || []).map(function (c) { return '<option value="' + esc(c.ticker) + '">#' + esc(c.rank) + ' ' + esc(c.ticker) + ' · ' + esc(c.name.slice(0, 26)) + '</option>'; }).join('') + '</select></label><button type="button" class="chip lc-topbtn" data-lc-top aria-expanded="false" aria-label="Pick any top-50 treasury company">Top 50 ▾</button>'; }
+  function topsPaint() { $('[data-lc-tops]').innerHTML = '<span class="lc-pt">Chart a top-50 treasury company</span><button type="button" class="chip' + (S.s === 'BTC' ? ' on' : '') + '" data-lc-s="BTC">BTC-USD</button>' + (LB || []).map(function (c) { return '<button type="button" class="chip' + (c.ticker === S.s ? ' on' : '') + '" data-lc-s="' + esc(c.ticker) + '" title="#' + esc(c.rank) + ' ' + esc(c.name) + '">' + esc(c.ticker === '3350.T' ? 'Metaplanet' : c.ticker) + '</button>'; }).join(''); }
   function ui() { symsBar(); box.querySelectorAll('[data-lc-r]').forEach(function (b) { var on = b.dataset.lcR === S.r; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
     box.querySelectorAll('[data-lc-m]').forEach(function (b) { b.classList.toggle('on', b.dataset.lcM === S.m); b.disabled = b.dataset.lcM === 'candle' && (S.s !== 'BTC' || S.cmp.length > 0); });
     $('[data-lc-legend]').innerHTML = S.cmp.length ? [S.s].concat(S.cmp).map(function (t, i) { return '<span class="lc-lg" style="--c:' + COLS[i] + '"><i></i>' + esc(t) + ' <b data-lc-lgv="' + i + '"></b>' + (i ? '<button type="button" data-lc-rm="' + esc(t) + '" aria-label="Remove ' + esc(t) + '">×</button>' : '') + '</span>'; }).join('') + '<small>% change over the window</small>' : ''; }
-  function pickPaint() { var p = $('[data-lc-pick]'); var have = [S.s].concat(S.cmp), opts = ['BTC', 'SPX', 'IXIC', 'GOLD'].concat((LB || []).map(function (c) { return c.ticker; })).filter(function (t, i, a) { return a.indexOf(t) === i && have.indexOf(t) < 0; });
-    p.innerHTML = '<span class="lc-pt">Overlay up to 5 (' + (5 - S.cmp.length) + ' left)</span>' + opts.slice(0, 54).map(function (t) { return '<button type="button" class="chip" data-lc-addt="' + esc(t) + '"' + (S.cmp.length >= 5 ? ' disabled' : '') + '>' + esc(t === '3350.T' ? 'Metaplanet' : t) + '</button>'; }).join(''); }
+  function pickPaint() { var p = $('[data-lc-pick]'); var have = [S.s].concat(S.cmp), opts = ['MSTR', 'BTC', 'SPX', 'IXIC', 'GOLD'].concat((LB || []).map(function (c) { return c.ticker; })).filter(function (t, i, a) { return a.indexOf(t) === i && have.indexOf(t) < 0; });
+    p.innerHTML = '<span class="lc-pt">Overlay up to ' + MAXC() + ' (' + Math.max(0, MAXC() - S.cmp.length) + ' left) · axis switches to % change</span>' + opts.slice(0, 54).map(function (t) { return '<button type="button" class="chip" data-lc-addt="' + esc(t) + '"' + (S.cmp.length >= MAXC() ? ' disabled' : '') + '>' + esc(t === '3350.T' ? 'Metaplanet' : t) + '</button>'; }).join(''); }
   box.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return;
-    if (b.dataset.lcS) { S.s = b.dataset.lcS; S.cmp = S.cmp.filter(function (t) { return t !== S.s; }); if (S.s !== 'BTC' && S.m === 'candle') S.m = 'area'; }
+    if (b.hasAttribute('data-lc-top')) { var tp = $('[data-lc-tops]'); tp.hidden = !tp.hidden; $('[data-lc-pick]').hidden = true; if (!tp.hidden) topsPaint(); box.querySelectorAll('[data-lc-top]').forEach(function (x) { x.setAttribute('aria-expanded', !tp.hidden); }); return; }
+    if (b.dataset.lcS) { $('[data-lc-tops]').hidden = true; S.s = b.dataset.lcS; S.cmp = S.cmp.filter(function (t) { return t !== S.s; }); if (S.s !== 'BTC' && S.m === 'candle') S.m = 'area'; }
     else if (b.dataset.lcR) S.r = b.dataset.lcR; else if (b.dataset.lcM) S.m = b.dataset.lcM;
     else if (b.dataset.lcRm) S.cmp = S.cmp.filter(function (t) { return t !== b.dataset.lcRm; });
-    else if (b.dataset.lcAddt) { if (S.cmp.length < 5) S.cmp.push(b.dataset.lcAddt); pickPaint(); }
-    else if (b.hasAttribute('data-lc-cmpbtn')) { var p = $('[data-lc-pick]'); p.hidden = !p.hidden; b.setAttribute('aria-expanded', !p.hidden); if (!p.hidden) pickPaint(); return; }
+    else if (b.dataset.lcAddt) { if (S.cmp.length < MAXC()) S.cmp.push(b.dataset.lcAddt); pickPaint(); if (S.cmp.length >= MAXC() || innerWidth <= 760) { $('[data-lc-pick]').hidden = true; box.querySelector('[data-lc-cmpbtn]').setAttribute('aria-expanded', 'false'); } }
+    else if (b.hasAttribute('data-lc-cmpbtn')) { var p = $('[data-lc-pick]'); p.hidden = !p.hidden; $('[data-lc-tops]').hidden = true; b.setAttribute('aria-expanded', !p.hidden); if (!p.hidden) pickPaint(); return; }
     else return; save(); ui(); load(); });
   box.addEventListener('change', function (e) { if (e.target.matches('[data-lc-more]') && e.target.value) { S.s = e.target.value; S.cmp = S.cmp.filter(function (t) { return t !== S.s; }); if (S.m === 'candle') S.m = 'area'; save(); ui(); load(); } });
   function watchAll() { if (F) F.watch([S.s].concat(S.cmp).map(cnOf).filter(Boolean)); }
   function load() { var my = ++tok; watchAll(); var list = [S.s].concat(S.cmp); $('[data-lc-msg]').hidden = false; $('[data-lc-msg]').textContent = 'Loading ' + S.r + '…';
-    Promise.all(list.map(function (t) { return series(t, S.r).catch(function () { return []; }); })).then(function (arr) { if (my !== tok) return; DATA = arr; paint(); }); }
+    Promise.all(list.map(function (t) { return series(t, S.r).catch(function () { return []; }); })).then(function (arr) { if (my !== tok) return;
+      /* overlays need one common window: if a stock only has daily closes (market closed), compare everything over 1W instead of squeezing BTC's 24h into a corner */
+      if (list.length > 1 && (S.r === '1H' || S.r === '1D') && arr.some(function (a) { return a && a.daily; })) return Promise.all(list.map(function (t) { return series(t, '1W').catch(function () { return []; }); })).then(function (a2) { if (my !== tok) return; DATA = a2; DATA.wk = 1; paint(); var sm = $('[data-lc-legend] small'); if (sm) { sm.textContent = 'Market closed: overlay shown over 1W, % change'; sm.className = 'lc-cn'; } });
+      DATA = arr; paint(); }); }
   function paint() { raf = 0; var list = [S.s].concat(S.cmp), pct = list.length > 1, s0 = DATA[0] || [];
     var sets = list.map(function (t, i) { return { s: DATA[i] || [], col: COLS[i], lab: t, w: i ? 1.5 : 2 }; });
     var q = S.s === 'BTC' ? (F && F.get('BTC')) : liveQ(S.s);
@@ -138,7 +144,7 @@
     // readout
     var px = S.s === 'BTC' ? (q && q.px) : curPx(q) || (s0.length ? s0[s0.length - 1].c : null); $('[data-lc-name]').textContent = S.s === 'BTC' ? 'BTC-USD' : (S.s === 'GOLD' ? 'GC=F' : S.s) + ' · ' + nameOf(S.s);
     var pe = $('[data-lc-px]'), old = +pe.dataset.v; pe.textContent = fp(px, q && q.cur); if (px && old && px !== old) { pe.classList.remove('fl-up', 'fl-dn'); void pe.offsetWidth; pe.classList.add(px > old ? 'fl-up' : 'fl-dn'); } pe.dataset.v = px || '';
-    var wch = s0.length && px ? (px / s0[0].c - 1) * 100 : null, ce = $('[data-lc-ch]'); ce.textContent = sg(wch) + ' ' + S.r; ce.className = 'lc-ch ' + (wch >= 0 ? 'up' : 'dn');
+    var wch = s0.length && px ? (px / s0[0].c - 1) * 100 : null, ce = $('[data-lc-ch]'); ce.textContent = sg(wch) + ' ' + (DATA.wk ? '1W' : S.r); ce.className = 'lc-ch ' + (wch >= 0 ? 'up' : 'dn');
     var sess = S.s === 'BTC' ? 'Live 24/7 · Coinbase' : (function () { var s = F ? F.session() : 'closed'; if (!q) return 'Last close'; if (s === 'open') return q.rt ? 'Live' : 'Live (may be delayed)'; if (q.ext) return q.ext.kind === 'pre' ? 'Pre-market' : 'After hours'; return 'Market closed · last ' + fp(q.px, q.cur); })();
     $('[data-lc-sess]').textContent = sess; $('[data-lc-sess]').className = 'lc-sess' + (/Live|Pre|After/.test(sess) ? ' on' : '');
     if (s0.length) { var hi = -Infinity, lo = Infinity; s0.forEach(function (p) { hi = Math.max(hi, p.h || p.c); lo = Math.min(lo, p.l || p.c); }); $('[data-lc-hl]').textContent = S.r + ' range ' + fp(lo, q && q.cur) + ' – ' + fp(hi, q && q.cur); }
