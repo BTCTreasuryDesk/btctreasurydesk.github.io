@@ -6,7 +6,11 @@
   var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   function fmt(n, d) { return Number(n).toLocaleString('en-US', { maximumFractionDigits: d || 0, minimumFractionDigits: d || 0 }); }
   function J(u) { return fetch(u, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(u); return r.json(); }); }
-  var MODES = [['btc', 'BTC'], ['mstr', 'MSTR'], ['cmp', 'BTC vs MSTR']];
+  var MODES = [['btc', 'BTC'], ['mstr', 'MSTR'], ['cmp', 'Compare']];
+  /* compare overlays (growth of 100 from the start of the period): MSTR from the Members daily file, the rest from stocks_hist.json (Yahoo daily closes) */
+  var CMPS = [['mstr', 'MSTR', '#F7931A'], ['spx', 'S&P 500', '#5aa9ff'], ['gold', 'Gold', '#e5c15a'], ['dxy', 'DXY (dollar)', '#c77dff']];
+  var cmpSel = null; try { cmpSel = JSON.parse(LS.get('btd_pcmp') || 'null'); } catch (e) {} if (!Array.isArray(cmpSel) || !cmpSel.length) cmpSel = ['mstr']; cmpSel = cmpSel.filter(function (k) { return CMPS.some(function (c) { return c[0] === k; }); });
+  var EVTS = [['2017-12-16', '2017 top'], ['2018-12-15', '2018 bottom'], ['2020-08-11', 'Strategy first buy'], ['2021-11-08', '2021 top'], ['2022-11-21', '2022 bottom'], ['2024-01-11', 'Spot ETFs launch'], ['2025-10-06', 'Oct 2025 high']];
   /* Overlays + long-term sub-panels. Tier: 'pub' = standard, well-known (home, everyone); 'mem' = free Members set (email unlock). Modes each works in. */
   var LAYS = [
     ['wma', '200W MA', 'pub', 'btc mstr', 'Average of the last 200 weekly closes (about 4 years). Over BTC\'s history, weekly closes far below it have been rare, so many treat it as the long-run floor line.'],
@@ -14,6 +18,7 @@
     ['pl', 'Power Law', 'pub', 'btc', 'Long-run log-log trend of BTC vs time since 2009, with a 0.5x–2x band. Over time price has swung around the line: low in the band in bear markets, high near tops.'],
     ['s2f', 'Stock-to-Flow', 'pub', 'btc', 'PlanB\'s scarcity model: a price implied by existing supply vs new supply, stepping up at each halving. Price has run far below it since 2022, so read it as history, not a target.'],
     ['halv', 'Halvings', 'pub', 'btc mstr cmp', 'Dates when new BTC issuance was cut in half (about every 4 years). Past cycle peaks came roughly 12–18 months after each halving.'],
+    ['ev', 'Events', 'pub', 'btc mstr cmp', 'Marked dates: prior cycle tops and bottoms (daily closes), Strategy\'s first bitcoin purchase (Aug 2020) and the US spot bitcoin ETF launch (Jan 2024).'],
     ['buys', 'Strategy buys', 'pub', 'btc mstr cmp', 'Each dot is a Strategy BTC purchase from the strategy.com ledger, sized by BTC bought. Shows when the biggest buyer added over time.'],
     ['zones', 'Model Zones', 'mem', 'btc', 'Shades the periods when the Desk composite of models (Power Law, 200W MA, Mayer, MVRV proxy, Pi Cycle) read historically cool (blue) or hot (red).']];
   var SUBS = [
@@ -47,11 +52,12 @@
       var x = (j.FormattedQuoteResult || {}).FormattedQuote; x = Array.isArray(x) ? x[0] : x; var px = parseFloat(String(x.last).replace(/,/g, '')); if (isFinite(px)) LIVE.mstr = { px: px, chp: parseFloat(String(x.change_pct).replace(/[%+,]/g, '')) }; }).catch(function () {});
     return Promise.all([a, b]);
   }
-  function load() { return loading || (loading = Promise.all([J('/assets/data/btc_daily.json'), J('/members/data/stocks_daily.json'), J('/assets/data/strategy.json').catch(function () { return null; }), live()]).then(function (r) {
-    D = { btc: r[0], stocks: r[1], strat: r[2] }; setInterval(function () { if (document.hidden) return; live().then(function () { mounts = mounts.filter(function (m) { return document.body.contains(m.body); }); mounts.forEach(function (m) { paint(m); }); }); }, 60000); return D; })); }
+  function load() { return loading || (loading = Promise.all([J('/assets/data/btc_daily.json'), J('/members/data/stocks_daily.json'), J('/assets/data/strategy.json').catch(function () { return null; }), live(), J('/assets/data/stocks_hist.json').catch(function () { return null; })]).then(function (r) {
+    D = { btc: r[0], stocks: r[1], strat: r[2], hist: r[4] }; setInterval(function () { if (document.hidden) return; live().then(function () { mounts = mounts.filter(function (m) { return document.body.contains(m.body); }); mounts.forEach(function (m) { paint(m); }); }); }, 60000); return D; })); }
   function series(k) {
     var T = [], C = [];
     if (k === 'btc') { var s0 = Date.parse(D.btc.start + 'T00:00:00Z'); D.btc.closes.forEach(function (v, i) { T.push(s0 + i * DAY); C.push(v); }); }
+    else if (k !== 'mstr') { var H = D.hist && D.hist.series[{ spx: 'SPX', gold: 'GOLD', dxy: 'DXY' }[k]]; if (H) { var h0 = Date.parse(H.d0 + 'T00:00:00Z'); H.o.forEach(function (o, i) { T.push(h0 + o * DAY); C.push(H.c[i]); }); } return { T: T, C: C }; }
     else { var M = D.stocks.series.MSTR; M.d.forEach(function (d, i) { T.push(Date.parse(d + 'T00:00:00Z')); C.push(M.c[i]); }); }
     var lv = LIVE[k]; if (lv && lv.px) { if (Date.now() - T[T.length - 1] > DAY * 0.5) { T.push(Date.now()); C.push(lv.px); } else C[C.length - 1] = lv.px; }
     return { T: T, C: C };
@@ -64,15 +70,15 @@
     var w = cv.clientWidth || 600, h = cv.clientHeight || 300, r = window.devicePixelRatio || 1; cv.width = w * r; cv.height = h * r; var g = cv.getContext('2d'); g.scale(r, r);
     var on = function (x) { return lay.indexOf(x) >= 0 && okIn(x); };
     var main = series(mode === 'mstr' ? 'mstr' : 'btc'), end = main.T[main.T.length - 1], f = m.from(end);
-    if (mode === 'cmp') { var ms = series('mstr'); f = Math.max(f, ms.T[0]); }
+    var CS = []; if (mode === 'cmp') { cmpSel.forEach(function (k) { var sr = series(k); if (sr.T.length > 2) { CS.push({ k: k, s: sr }); f = Math.max(f, sr.T[0]); } }); }
     var i0 = idxAt(main.T, f), P = []; for (var i = i0; i < main.T.length; i++) P.push([main.T[i], main.C[i]]); if (P.length < 2) return;
-    var Q = null; if (mode === 'cmp') { var j0 = idxAt(ms.T, f); Q = []; for (i = j0; i < ms.T.length; i++) Q.push([ms.T[i], ms.C[i]]); var b0 = P[0][1], q0 = Q[0][1]; P = P.map(function (p) { return [p[0], p[1] / b0 * 100]; }); Q = Q.map(function (p) { return [p[0], p[1] / q0 * 100]; }); }
+    var Q = null, QS = []; if (mode === 'cmp') { var b0 = P[0][1]; P = P.map(function (p) { return [p[0], p[1] / b0 * 100]; }); CS.forEach(function (c) { var j0 = idxAt(c.s.T, f), a = []; for (var ii = j0; ii < c.s.T.length; ii++) a.push([c.s.T[ii], c.s.C[ii]]); if (a.length < 2) return; var q0 = a[0][1]; QS.push({ k: c.k, p: a.map(function (p) { return [p[0], p[1] / q0 * 100]; }), col: CMPS.filter(function (x) { return x[0] === c.k; })[0][2], nm: CMPS.filter(function (x) { return x[0] === c.k; })[0][1] }); }); Q = QS.length ? QS[0].p : null; }
     var W = on('wma') ? wma(main, mode === 'btc' ? 7 : 5).filter(function (p) { return p[0] >= f; }) : [];
     var PL = [], PLlo = [], PLhi = []; if (on('pl')) P.forEach(function (p) { var v = 1.0117e-17 * Math.pow((p[0] - GEN) / DAY, 5.82); PL.push([p[0], v]); PLlo.push([p[0], v * 0.5]); PLhi.push([p[0], v * 2]); });
     var M50 = [], M200 = [], SF = []; if (on('ma')) { var a50 = sma(main.C, 50), a200 = sma(main.C, 200); for (i = i0; i < main.T.length; i++) { if (a50[i]) M50.push([main.T[i], a50[i]]); if (a200[i]) M200.push([main.T[i], a200[i]]); } }
     if (on('s2f')) P.forEach(function (p, k) { if (k % 3 === 0 || k === P.length - 1) SF.push([p[0], s2f(p[0])]); });
     var log = mode !== 'cmp' || m.per === '5Y' || m.per === 'All', x0 = P[0][0], x1 = end, vals = P.map(function (p) { return p[1]; });
-    (Q || []).concat(W, PL, M50, M200).forEach(function (p) { vals.push(p[1]); }); if (SF.length) { var pmx = Math.max.apply(0, vals) * 3; SF.forEach(function (p) { if (p[1] < pmx) vals.push(p[1]); }); }
+    [].concat.apply([], QS.map(function (q) { return q.p; })).concat(W, PL, M50, M200).forEach(function (p) { vals.push(p[1]); }); if (SF.length) { var pmx = Math.max.apply(0, vals) * 3; SF.forEach(function (p) { if (p[1] < pmx) vals.push(p[1]); }); }
     var lo = Math.min.apply(0, vals), hi = Math.max.apply(0, vals); if (log) { lo /= 1.1; hi *= 1.1; } else { var pd = (hi - lo) * 0.08; lo -= pd; hi += pd; }
     var pl = 54, pr = 10, pt = 8, pb = 20, F = function (v) { return log ? Math.log(Math.max(v, 1e-9)) : v; };
     var X = function (t) { return pl + (t - x0) / (x1 - x0 || 1) * (w - pl - pr); }, Y = function (v) { return pt + (F(hi) - F(v)) / (F(hi) - F(lo)) * (h - pt - pb); };
@@ -86,6 +92,7 @@
     else for (var t2 = x0 + 7 * DAY; t2 < x1 - 2 * DAY; t2 += 7 * DAY) g.fillText(new Date(t2).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }), X(t2), h - 5);
     if (mode === 'cmp') { var y100 = Y(100); g.strokeStyle = '#39414c'; g.setLineDash([3, 3]); g.beginPath(); g.moveTo(pl, y100); g.lineTo(w - pr, y100); g.stroke(); g.setLineDash([]); }
     if (on('halv')) HALV.forEach(function (hv) { var t = Date.parse(hv[0] + 'T00:00:00Z'); if (t <= x0 || t > x1) return; var xx = X(t); g.strokeStyle = '#4a525d'; g.setLineDash([2, 4]); g.beginPath(); g.moveTo(xx, pt); g.lineTo(xx, h - pb); g.stroke(); g.setLineDash([]); g.fillStyle = '#8a939e'; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillText(hv[1], xx + 3, pt + 1); });
+    if (on('ev')) EVTS.forEach(function (ev, n) { var t = Date.parse(ev[0] + 'T00:00:00Z'); if (t <= x0 || t > x1) return; var xx = X(t); g.strokeStyle = /top|high/.test(ev[1]) ? 'rgba(255,90,95,.55)' : /bottom/.test(ev[1]) ? 'rgba(47,209,124,.55)' : 'rgba(247,147,26,.6)'; g.setLineDash([1, 3]); g.beginPath(); g.moveTo(xx, pt + 12); g.lineTo(xx, h - pb); g.stroke(); g.setLineDash([]); g.fillStyle = g.strokeStyle.replace(/[\d.]+\)$/, '1)'); g.save(); g.translate(xx - 3, h - pb - 4); g.rotate(-Math.PI / 2); g.textAlign = 'left'; g.textBaseline = 'bottom'; g.font = '10px ui-monospace, Menlo, monospace'; g.fillText(ev[1], 0, 0); g.restore(); });
     function ln(a, col, wd, dash) { if (a.length < 2) return; g.strokeStyle = col; g.lineWidth = wd; g.setLineDash(dash || []); g.beginPath(); a.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])); }); g.stroke(); g.setLineDash([]); g.lineWidth = 1; }
     g.save(); g.beginPath(); g.rect(pl, pt, w - pl - pr, h - pt - pb); g.clip();
     if (on('zones')) { var Z = zones(); if (Z) { var zi0 = Math.max(0, Math.round((x0 - Z.t0) / DAY)), cur = null, st = 0;
@@ -93,8 +100,8 @@
     if (PL.length) { g.fillStyle = 'rgba(247,147,26,.07)'; g.beginPath(); PLhi.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])); }); for (var j = PLlo.length - 1; j >= 0; j--) g.lineTo(X(PLlo[j][0]), Y(PLlo[j][1])); g.closePath(); g.fill(); ln(PL, '#F7931A', 1.2, [5, 4]); }
     ln(W, '#2fd17c', 1.6); ln(M200, '#5aa9ff', 1.3); ln(M50, '#c77dff', 1.1); ln(SF, '#9aa3ad', 1.1, [2, 3]);
     if (mode !== 'cmp') { var up = P[P.length - 1][1] >= P[0][1]; g.fillStyle = up ? 'rgba(47,209,124,.06)' : 'rgba(255,90,95,.06)'; g.beginPath(); P.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])); }); g.lineTo(X(x1), h - pb); g.lineTo(X(x0), h - pb); g.closePath(); g.fill(); }
-    ln(P, mode === 'cmp' ? '#c9ced6' : '#e9edf2', 1.5); if (Q) ln(Q, '#F7931A', 1.6);
-    var buys = []; if (on('buys') && D.strat) { var tgt = mode === 'cmp' ? Q : P, TT = tgt.map(function (p) { return p[0]; }); D.strat.purchases.forEach(function (b) { if (!(b.btc > 0)) return; var t = Date.parse(b.date + 'T00:00:00Z'); if (t < x0) return; var ix = idxAt(TT, t); if (Math.abs(TT[ix] - t) < 6 * DAY) buys.push([TT[ix], tgt[ix][1], b]); });
+    ln(P, mode === 'cmp' ? '#c9ced6' : '#e9edf2', 1.5); QS.forEach(function (q) { ln(q.p, q.col, 1.5); });
+    var buys = []; if (on('buys') && D.strat) { var tgt = P, TT = tgt.map(function (p) { return p[0]; }); D.strat.purchases.forEach(function (b) { if (!(b.btc > 0)) return; var t = Date.parse(b.date + 'T00:00:00Z'); if (t < x0) return; var ix = idxAt(TT, t); if (Math.abs(TT[ix] - t) < 6 * DAY) buys.push([TT[ix], tgt[ix][1], b]); });
       var mx = Math.max.apply(0, buys.map(function (b) { return b[2].btc; }).concat([1])); buys.forEach(function (b) { g.fillStyle = 'rgba(247,147,26,.9)'; g.strokeStyle = '#000'; g.beginPath(); g.arc(X(b[0]), Y(b[1]), 2.2 + Math.sqrt(b[2].btc / mx) * 6, 0, 7); g.fill(); g.stroke(); }); }
     g.restore();
     var lp = P[P.length - 1]; g.fillStyle = '#fff'; g.beginPath(); g.arc(X(lp[0]), Y(lp[1]), 3, 0, 7); g.fill();
@@ -103,7 +110,7 @@
     // headline numbers + foot
     var hd = body.querySelector('[data-pc-hd]'), pc = function (a) { return (a[a.length - 1][1] / a[0][1] - 1) * 100; }, cl = function (v) { return v >= 0 ? 'up' : 'dn'; }, sp = function (v) { return (v >= 0 ? '+' : '−') + fmt(Math.abs(v), Math.abs(v) < 100 ? 1 : 0) + '%'; };
     var plbl = m.per === 'All' ? (mode === 'cmp' ? 'since ' + new Date(x0).getUTCFullYear() : 'all') : m.per;
-    if (mode === 'cmp') hd.innerHTML = '<span><i class="pc-k" style="background:#c9ced6"></i>BTC <b class="' + cl(pc(P)) + '">' + sp(pc(P)) + '</b></span><span><i class="pc-k" style="background:#F7931A"></i>MSTR <b class="' + cl(pc(Q)) + '">' + sp(pc(Q)) + '</b></span><span class="muted">' + plbl + '</span>';
+    if (mode === 'cmp') hd.innerHTML = '<span><i class="pc-k" style="background:#c9ced6"></i>BTC <b class="' + cl(pc(P)) + '">' + sp(pc(P)) + '</b></span>' + QS.map(function (q) { return '<span><i class="pc-k" style="background:' + q.col + '"></i>' + q.nm + ' <b class="' + cl(pc(q.p)) + '">' + sp(pc(q.p)) + '</b></span>'; }).join('') + '<span class="muted">' + plbl + '</span>';
     else { var lv = LIVE[mode]; hd.innerHTML = '<b class="pc-px">$' + fmt(lp[1], lp[1] < 1000 ? 2 : 0) + '</b>' + (lv && lv.chp != null && isFinite(lv.chp) ? '<span class="' + cl(lv.chp) + '">' + sp(lv.chp).replace('%', '') + (Math.abs(lv.chp) < 100 ? '' : '') + '% today</span>' : '') + '<span class="' + cl(pc(P)) + '">' + sp(pc(P)) + ' ' + plbl + '</span>' + (W.length ? '<span class="muted">' + (lp[1] / W[W.length - 1][1]).toFixed(2) + 'x 200W MA</span>' : '') + (PL.length ? '<span class="muted">' + (lp[1] / PL[PL.length - 1][1]).toFixed(2) + 'x Power Law</span>' : '') + (M200.length ? '<span class="muted">' + (lp[1] / M200[M200.length - 1][1]).toFixed(2) + 'x 200D</span>' : ''); }
     m.foot.innerHTML = (mode === 'cmp' ? 'Growth of 100 from the start of the period, ' + (log ? 'log scale, ' : '') : (mode === 'btc' ? 'BTC daily closes (Coinbase), ' : 'MSTR daily closes (Yahoo Finance, split-adjusted), ') + 'log scale, ') + 'plus a live last point. ' +
       (on('wma') ? '200W MA = average of the last 200 weekly closes. ' : '') + (on('pl') ? 'Power Law trend = 1.0117e-17 × days since genesis^5.82, band 0.5x–2x. ' : '') + (on('ma') ? 'Purple = 50-day, blue = 200-day average. ' : '') + (on('s2f') ? 'Grey dotted = Stock-to-Flow model price (PlanB, 2019 fit). ' : '') + (on('zones') ? 'Shading = Desk Model Zones composite (blue cool, red hot). ' : '') + (on('buys') ? 'Dots: Strategy BTC purchases from the strategy.com ledger, sized by BTC bought. ' : '') + 'Intraday: <a href="https://www.tradingview.com/chart/?symbol=' + (mode === 'mstr' ? 'NASDAQ%3AMSTR' : 'BITSTAMP%3ABTCUSD') + '" target="_blank" rel="noopener">TradingView &#8599;</a>.';
@@ -111,7 +118,7 @@
     var tip = body.querySelector('.pc-tip');
     cv.onpointermove = function (ev) { var rc = cv.getBoundingClientRect(), cx = ev.clientX - rc.left; if (cx < pl) { tip.hidden = true; return; } var t = x0 + (cx - pl) / (w - pl - pr) * (x1 - x0), ix = idxAt(P.map(function (p) { return p[0]; }), t), p = P[ix];
       var near = function (a) { for (var q = a.length - 1; q >= 0; q--) if (a[q][0] <= p[0] + 3 * DAY) return a[q][1]; return null; }, L = ['<b>' + new Date(p[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) + '</b>'];
-      if (mode === 'cmp') { var qv = near(Q); L.push('BTC ' + sp(p[1] - 100) + (qv ? ' · MSTR ' + sp(qv - 100) : '')); } else L.push((mode === 'btc' ? 'BTC' : 'MSTR') + ' $' + fmt(p[1], p[1] < 1000 ? 2 : 0));
+      if (mode === 'cmp') { L.push('BTC ' + sp(p[1] - 100) + QS.map(function (q) { var qv = near(q.p); return qv ? ' · ' + q.nm + ' ' + sp(qv - 100) : ''; }).join('')); } else L.push((mode === 'btc' ? 'BTC' : 'MSTR') + ' $' + fmt(p[1], p[1] < 1000 ? 2 : 0));
       if (W.length) { var wv = near(W); if (wv) L.push('<i style="color:#2fd17c">200W MA</i> $' + fmt(wv) + ' (' + (p[1] / wv).toFixed(2) + 'x)'); }
       if (M50.length) { var a5 = near(M50), a2 = near(M200); L.push('<i style="color:#c77dff">50D</i> $' + fmt(a5) + (a2 ? ' · <i style="color:#5aa9ff">200D</i> $' + fmt(a2) : '')); }
       if (SF.length) { var sv = near(SF); if (sv) L.push('<i style="color:#9aa3ad">S2F</i> $' + fmt(sv)); }
@@ -147,7 +154,8 @@
   }
   function controls() {
     return '<div class="pc-ctl"><span class="seg pc-mode" role="group" aria-label="Chart">' + MODES.map(function (x) { return '<button type="button" data-pc-mode="' + x[0] + '" aria-pressed="' + (x[0] === mode) + '"' + (x[0] === mode ? ' class="on"' : '') + '>' + x[1] + '</button>'; }).join('') + '</span>' +
-      chips(LAYS, 'Overlays') + chips(SUBS, 'Panels below') + '</div><p class="pc-info" data-pc-info aria-live="polite"></p>' +
+      (mode === 'cmp' ? '<span class="pc-chips" role="group" aria-label="Compare with"><span class="pc-gl">Compare with</span>' + CMPS.map(function (c) { var o = cmpSel.indexOf(c[0]) >= 0; return '<button type="button" class="pc-chip' + (o ? ' on' : '') + '" data-pc-cmp="' + c[0] + '" aria-pressed="' + o + '" style="' + (o ? 'border-color:' + c[2] + ';color:' + c[2] : '') + '"><i style="background:' + c[2] + '"></i>' + c[1] + '</button>'; }).join('') + '</span>' : '') +
+      chips(LAYS, 'Overlays') + chips(SUBS, 'Panels below') + '<button type="button" class="pc-chip pc-reset" data-pc-reset title="Clear all overlays, panels and compares">Reset</button></div><p class="pc-info" data-pc-info aria-live="polite"></p>' +
       '<p class="pc-more">' + (isMem() ? 'Members set unlocked (M). ' : '<a href="/members/">More in Members (free with email)</a>: Model Zones, mNAV, sats per share, MVRV proxy. ') + '<a href="/members/">Pro (free for now)</a>: Chart Builder, multi-timeframe confluence, alerts &rarr;</p>';
   }
   function chips(list, lbl) { return '<span class="pc-chips" role="group" aria-label="' + lbl + '"><span class="pc-gl">' + lbl + '</span>' + list.map(function (l) { var o = lay.indexOf(l[0]) >= 0, inMode = l[3].split(' ').indexOf(mode) >= 0, lock = l[2] === 'mem' && !isMem();
@@ -160,6 +168,8 @@
       body.innerHTML = '<div class="ch-sub">' + ctx.seg + controls() + '</div><div class="pc-hd" data-pc-hd></div><div class="pc-w"><canvas class="ch-cv pc-cv" aria-label="Main price chart"></canvas><div class="pc-tip" hidden></div></div><div class="pc-subs" data-pc-subs></div>';
       body.onclick = function (e) { var b = e.target.closest && e.target.closest('button'); if (!b) return;
         if (b.dataset.pcMode) { mode = b.dataset.pcMode; LS.set('btd_pmode', mode); window.BTDPrice.render(body, foot, ctx); }
+        else if (b.dataset.pcCmp) { var ck = b.dataset.pcCmp, ci = cmpSel.indexOf(ck); if (ci >= 0) { if (cmpSel.length > 1) cmpSel.splice(ci, 1); } else cmpSel.push(ck); LS.set('btd_pcmp', JSON.stringify(cmpSel)); window.BTDPrice.render(body, foot, ctx); }
+        else if (b.hasAttribute('data-pc-reset')) { lay = []; cmpSel = ['mstr']; mode = 'btc'; ['btd_play', 'btd_pcmp', 'btd_pmode'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); window.BTDPrice.render(body, foot, ctx); }
         else if (b.dataset.pcLay) { var l = b.dataset.pcLay, d = ALL.filter(function (x) { return x[0] === l; })[0], info = body.querySelector('[data-pc-info]');
           if (d[2] === 'mem' && !isMem()) { info.innerHTML = '<b>' + d[1] + '</b> is in the free Members set: <a href="/members/">unlock it with your email &rarr;</a> ' + d[4]; return; }
           var ix = lay.indexOf(l); if (ix >= 0) lay.splice(ix, 1); else lay.push(l); LS.set('btd_play', JSON.stringify(lay)); b.classList.toggle('on', ix < 0); b.setAttribute('aria-pressed', ix < 0);

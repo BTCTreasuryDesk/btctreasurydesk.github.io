@@ -191,7 +191,7 @@
     inGrid = true; $$('.ch-cell', gw).forEach(function (cell, i) { R[grid[i]]($('.ch-cb', cell), $('.ch-cf', cell)); }); inGrid = false;
   }
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  box.innerHTML = '<div class="p-h"><span class="p-t">Chart <b class="ch-nm" data-ch-name></b></span><span class="seg ch-view" role="group" aria-label="View"><button type="button" data-cview="one">Single</button><button type="button" data-cview="grid">Grid</button></span></div>' +
+  box.innerHTML = '<div class="p-h"><span class="p-t">Chart <b class="ch-nm" data-ch-name></b></span><span class="seg ch-view" role="group" aria-label="View"><button type="button" data-cview="one">Single</button><button type="button" data-cview="grid">Grid</button></span><a class="lt-go" href="/long-term-chart/">Long-term chart &rarr;</a></div>' +
     '<div data-ch-one><div data-ch-body></div>' + lib() + '<p class="p-f"><span data-ch-foot></span> <b>Education only, not investment advice.</b></p></div><div data-ch-grid hidden></div>';
   box.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('button'); if (!b || !box.contains(b)) return;
     if (b.dataset.crng) { rng = b.dataset.crng; LS.set('btd_cper', rng); show(); }
