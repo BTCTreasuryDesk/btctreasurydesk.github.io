@@ -934,7 +934,7 @@
   // Off by default; a visitor's On/Off click is saved as their default. Reduced-motion visitors always start Off (and it never animates for them).
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function setTicker(on, save) { tk.hidden = !on; tkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); tkBtn.textContent = 'Price scroll: ' + (on ? 'On' : 'Off'); if (save) LS.set('btd_ticker', on ? '1' : '0'); ticker(); if (on) tkFetch(); }
-  if (tk && tkBtn) { setTicker(!RM && LS.get('btd_ticker') === '1', false); tkBtn.addEventListener('click', function () { setTicker(tk.hidden, true); }); }
+  if (tk && tkBtn) { setTicker(LS.get('btd_ticker') !== '0', false); tkBtn.addEventListener('click', function () { setTicker(tk.hidden, true); }); }
 
   /* ---------- Desk Mode ---------- */
   var mmT = null, cycT = null;
