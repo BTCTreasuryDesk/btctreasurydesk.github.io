@@ -129,7 +129,7 @@
   function forget() { REC = []; try { localStorage.removeItem('btd_lc_rec'); } catch (e) {} }
   function lbl(t) { return t === '3350.T' ? 'Metaplanet' : t; }
   /* Symbol row: BTC, MSTR, the current other pick (desktop also shows 2 recent), then '＋ Pick' (sheet on phone, popover on desktop) */
-  function symsBar() { var wide = innerWidth > 760, base = ['BTC', 'MSTR'].concat(wide ? REC : []); if (base.indexOf(S.s) < 0) base.push(S.s);
+  function symsBar() { var base = ['BTC', 'MSTR']; if (base.indexOf(S.s) < 0) base.push(S.s);
     $('[data-lc-syms]').innerHTML = base.map(function (t) { return '<button type="button" class="chip lc-sc' + (t === S.s ? ' on' : '') + '" data-lc-s="' + esc(t) + '" aria-pressed="' + (t === S.s) + '">' + esc(lbl(t)) + '</button>'; }).join('') +
       '<button type="button" class="chip lc-pk" data-lc-pk aria-haspopup="dialog" aria-expanded="false" title="Chart any symbol: search, treasury companies, crypto, macro, your watchlist">\uff0b Pick</button>'; return;
     $('[data-lc-syms]').innerHTML += '<label class="lc-sel"><span class="sr">More symbols</span><select data-lc-more aria-label="Pick any top-50 treasury company"><option value="">Top 50 ▾</option>' + (REC.length ? '<option value="__clr">\u2715 Clear recent picks</option>' : '') + (LB || []).map(function (c) { return '<option value="' + esc(c.ticker) + '">#' + esc(c.rank) + ' ' + esc(c.ticker) + ' · ' + esc(c.name.slice(0, 26)) + '</option>'; }).join('') + '</select></label><button type="button" class="chip lc-topbtn" data-lc-top aria-expanded="false" aria-label="Pick any top-50 treasury company">Top 50 ▾</button>'; }

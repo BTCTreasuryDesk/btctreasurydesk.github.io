@@ -73,3 +73,8 @@
 @media (max-width:899px){.xh-v{display:none}}
 .xh-ls{display:none}
 @media (max-width:760px){.yb-card dd{min-width:0}.xh-yb{white-space:normal}.yb-card dd small{overflow-wrap:anywhere}}
+.yb-est{margin:6px 0 0;font-size:12px;color:var(--mu,#8b949e)}
+.yb-how{margin-top:12px;border:1px solid var(--ln,#22272e);border-radius:8px;padding:8px 12px}
+.yb-how>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:32px;display:flex;align-items:center}
+.yb-how .yb-card{margin-top:8px}
+@media (max-width:760px){.hero2.slim{padding-top:14px;padding-bottom:6px}.hero2.slim h1{margin-bottom:4px}}
