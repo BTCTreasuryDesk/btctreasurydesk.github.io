@@ -63,7 +63,7 @@
   function gBreadth() { fetch(CG + '/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=80&page=1&price_change_percentage=24h,7d,30d').then(function (r) { return r.json(); }).then(function (a) {
     if (!Array.isArray(a)) return; var b = a.filter(function (c) { return c.symbol === 'btc'; })[0]; if (!b) return; var bt = b.price_change_percentage_30d_in_currency;
     var alts = a.filter(function (c) { return c.symbol !== 'btc' && !STABLE.test(c.symbol) && !WRAP.test(c.symbol) && c.price_change_percentage_30d_in_currency != null; }).slice(0, 50);
-    var beat = alts.filter(function (c) { return c.price_change_percentage_30d_in_currency > bt; }).length;
+    G.top = alts.slice(0, 10).map(function (c) { return String(c.symbol).toUpperCase(); }); var beat = alts.filter(function (c) { return c.price_change_percentage_30d_in_currency > bt; }).length;
     var cn = 0, cp = 0, an = 0, ap = 0; a.forEach(function (c) { if (WRAP.test(c.symbol) || !c.market_cap || c.market_cap_change_percentage_24h == null) return; var pv = c.market_cap / (1 + c.market_cap_change_percentage_24h / 100); cn += c.market_cap; cp += pv; if (c.symbol !== 'btc') { an += c.market_cap; ap += pv; } });
     G.breadth = { n: alts.length, beat: beat, score: alts.length ? Math.round(beat / alts.length * 100) : null, btc30: bt, tchp: cp ? (cn / cp - 1) * 100 : null, achp: ap ? (an / ap - 1) * 100 : null, t: Date.now() }; emit('breadth', G.breadth); }).catch(function () {}); }
   function gStable() { fetch('https://stablecoins.llama.fi/stablecoinchains').then(function (r) { return r.json(); }).then(function (a) { var s = 0;

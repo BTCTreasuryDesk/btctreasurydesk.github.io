@@ -165,3 +165,30 @@ main.grid>*{min-width:0;max-width:100%}
 }
 @media (min-width:601px){.sh-nav .sh-lay{display:none}}
 @media (max-width:600px){.p-live .lc-read .lc-name{flex:0 1 auto!important;width:auto!important;max-width:calc(100% - 140px)}}
+/* Desktop (>=1024px): two hero charts side by side, each with ranges, price, key-numbers row */
+@media (min-width:1024px){
+  body:not(.dm) main.grid>.p-live1{grid-column:1/7!important;order:-2}
+  body:not(.dm) main.grid>.p-live2{grid-column:7/13!important;order:-2}
+  .p-live1 .lc-cv,.p-live2 .lc-cv{height:300px!important}
+  .p-live1 .lc-kn:not([hidden]),.p-live2 .lc-kn:not([hidden]){display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:6px;margin:6px 0 2px}
+  .p-live1 .kn-c,.p-live2 .kn-c{display:flex;flex-direction:column;min-width:0;padding:6px 8px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:rgba(255,255,255,.025);cursor:help}
+  .p-live1 .lc-kn em,.p-live2 .lc-kn em{font-style:normal;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#8b93a1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-live1 .lc-kn b,.p-live2 .lc-kn b{font:600 13px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:#e8eaee;border-radius:3px;transition:background .9s}
+  .p-live1 .lc-kn b.up,.p-live2 .lc-kn b.up{color:#22c55e}.p-live1 .lc-kn b.dn,.p-live2 .lc-kn b.dn{color:#ef4444}
+  .p-live1 .lc-kn b.kn-fl,.p-live2 .lc-kn b.kn-fl{background:rgba(247,147,26,.28);transition:none}
+  .p-live1 .lc-h,.p-live2 .lc-h{flex-wrap:wrap;row-gap:6px}
+}
+@media (min-width:1024px){.p-live2 .lc-co{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 12px!important;border:1px solid #F7931A!important;color:#F7931A!important;background:rgba(247,147,26,.08)!important;font-size:13px!important;border-radius:8px;cursor:pointer;max-width:320px}.p-live2 .lc-co b{color:#fff}.p-live2 .lc-con{color:#c9ced6;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}.p-live2 .lc-co:hover{background:rgba(247,147,26,.18)!important}}
+@media (min-width:1024px){body:not(.dm) .p-live1.has-rail{display:block!important}body:not(.dm) .p-live1>.lc-rail{display:none!important}
+  .p-live1 .lc-vs,.p-live2 .lc-vs{font:600 12px ui-monospace,Menlo,monospace;padding:2px 7px;border-radius:6px;background:rgba(255,255,255,.05);align-self:center}
+  .p-live2 .lc-sync{min-height:36px;padding:6px 10px!important;font-size:12px!important}.p-live2 .lc-sync.on{color:#F7931A!important;border-color:rgba(247,147,26,.6)!important}
+  .p-live2 .lc-sym{display:flex;gap:8px;align-items:center;flex-wrap:wrap}}
+.lc-vs[hidden]{display:none!important}
+/* Phone: Key metrics fit (2 columns, no clipped tiles); session row shows exactly two whole tiles, swipe for more (chevron cue) */
+@media (max-width:600px){
+  .n5-r{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow:visible!important}
+  .n5-c{flex:none!important}.n5-r>.n5-c:last-child:nth-child(odd){grid-column:1/-1}
+  .p-hs .hs{padding-right:0!important;scroll-padding:0}
+  .p-hs .hs>*{flex:0 0 calc(50% - 3px)!important;max-width:calc(50% - 3px);min-width:0!important;scroll-snap-align:start;box-sizing:border-box}
+}
+.n5-rot{position:relative}.n5-rot::after{content:attr(data-n5-rot);position:absolute;top:6px;right:8px;font:600 9px ui-monospace,monospace;color:#6b7480}
