@@ -51,6 +51,7 @@
   window.addEventListener('click', function (e) {
     var g = e.target.closest && e.target.closest('.gl');
     if (g) { e.preventDefault(); e.stopPropagation(); if (cur === g) hide(); else show(g); return; }
+    var cp = e.target.closest && e.target.closest('.spk-cp'); if (cp) { e.preventDefault(); e.stopPropagation(); cp.classList.toggle('sh'); return; }
     var s = e.target.closest && e.target.closest('[data-shr]');
     if (s) { e.preventDefault(); e.stopPropagation(); var u = location.origin + location.pathname + '#' + s.getAttribute('data-shr'); copy(u).then(function () { toast('Link copied'); }, function () { toast(u); }); return; }
     if (tip && !tip.hidden && !(e.target.closest && e.target.closest('.gl-tip'))) hide();
