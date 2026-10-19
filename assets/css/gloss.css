@@ -106,3 +106,7 @@ main.grid>*{min-width:0;max-width:100%}
 }
 @media (max-width:600px){.ticker .tk-i{gap:2px;padding-right:6px;margin-right:6px}.tk-wrap [class*="hint"]{display:none}}
 @media (max-width:600px){.tk-wrap .strip-pp,.tk-wrap .tk-edit{width:40px!important;min-width:40px!important;min-height:40px;height:40px;border-radius:8px}.tk-wrap .strip-pp{margin:0 4px 0 4px}.tk-wrap{align-items:center}}
+/* hero extended-hours lines: stacked, wrapping, never cut off on phone */
+.lc-xh{flex-basis:100%;min-width:0;white-space:normal}
+.lc-xh .xh{white-space:normal;overflow-wrap:anywhere;max-width:100%;overflow:visible;text-overflow:clip}
+@media (max-width:600px){.lc-xh .xh .xh-lf{display:none!important}.lc-xh .xh .xh-ls{display:inline!important}.lc-xh .xh-v{display:none}.lc-xh .xh:not(.xh-ov){font-size:12.5px}.lc-xh .xh-src{display:block;margin:1px 0 0}}
