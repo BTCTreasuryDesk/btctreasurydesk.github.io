@@ -60,3 +60,14 @@
   document.addEventListener('keydown', function (e) { var g = document.activeElement; if ((e.key === 'Enter' || e.key === ' ') && g && g.classList && g.classList.contains('gl')) { e.preventDefault(); cur === g ? hide() : show(g); } else if (e.key === 'Escape') hide(); });
   window.addEventListener('scroll', function () { if (cur && !coarse) hide(); }, { passive: true });
 })();
+/* Scrolling strips (price scroll, headlines): static and swipeable by default; a play button starts auto-scroll ('btd_scroll'='play', new key so every existing visitor starts paused). Hover or touch pauses while playing. Reduced motion: always static. */
+(function () {
+  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, H = document.documentElement;
+  function playing() { try { return !RM && localStorage.getItem('btd_scroll') === 'play'; } catch (e) { return false; } }
+  function apply() { var p = playing(); H.classList.toggle('strips-paused', !p); document.querySelectorAll('.strip-pp').forEach(function (b) { b.setAttribute('aria-pressed', p ? 'true' : 'false'); b.setAttribute('aria-label', p ? 'Pause scrolling' : 'Play scrolling'); b.title = p ? 'Pause (stays paused next visit)' : 'Auto-scroll (remembered)'; b.innerHTML = p ? '&#10074;&#10074;' : '&#9654;'; }); }
+  function ensure() { if (RM) { H.classList.add('strips-paused'); return; } document.querySelectorAll('.ticker, .tk-hl').forEach(function (s) { if (s.querySelector(':scope > .strip-pp')) return; var b = document.createElement('button'); b.type = 'button'; b.className = 'strip-pp'; s.appendChild(b);
+      s.addEventListener('touchstart', function () { if (!playing()) return; s.classList.add('strip-hold'); clearTimeout(s._ht); s._ht = setTimeout(function () { s.classList.remove('strip-hold'); }, 4000); }, { passive: true }); }); apply(); }
+  H.classList.add('strips-paused');
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.strip-pp'); if (!b) return; e.preventDefault(); e.stopPropagation(); try { localStorage.setItem('btd_scroll', playing() ? 'pause' : 'play'); } catch (x) {} apply(); }, true);
+  setTimeout(ensure, 500); setInterval(ensure, 3000);
+})();

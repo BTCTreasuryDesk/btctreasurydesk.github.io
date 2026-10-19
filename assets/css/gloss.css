@@ -47,3 +47,15 @@ abbr.gl:focus-visible{outline:2px solid #F7931A;outline-offset:1px}
 .spk-nr::after{content:'details \203A';margin-left:auto;color:#6b7280;font:600 9.5px var(--mono,ui-monospace,monospace);letter-spacing:.04em;align-self:flex-end}
 @media (hover:hover){.spk-nr::after{content:'hover for details'}}
 .spk-nrb small{white-space:nowrap;font-size:9.5px}.spk-nr .w52n{margin:0}
+/* strips: static + swipeable unless played */
+.ticker,.tk-hl{position:relative}
+.strip-pp{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:3;width:30px;height:100%;min-height:24px;border:0;border-left:1px solid #1f2937;background:#0b0f14;color:#F7931A;font-size:10px;cursor:pointer;padding:0;letter-spacing:-2px}
+.strip-pp:hover,.strip-pp:focus-visible{background:#1a1206}
+@media (hover:none){.strip-pp{width:40px}}
+html.strips-paused .ticker-in,html.strips-paused .tk-hl-in{animation:none!important;transform:none!important;padding-left:12px!important;padding-right:44px}
+html.strips-paused .ticker-in .tk-seq+.tk-seq,html.strips-paused .tk-hl-in .tk-seq+.tk-seq{display:none}
+html.strips-paused .ticker-in{display:block!important;width:100%;box-sizing:border-box}
+html.strips-paused .ticker-in,html.strips-paused .tk-hl-v{overflow-x:auto!important;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x}
+html.strips-paused .ticker-in::-webkit-scrollbar,html.strips-paused .tk-hl-v::-webkit-scrollbar{display:none}
+.ticker.strip-hold .ticker-in,.tk-hl.strip-hold .tk-hl-in{animation-play-state:paused}
+.ticker{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 100%)!important;mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 100%)!important}
