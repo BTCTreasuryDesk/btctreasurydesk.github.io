@@ -7,13 +7,15 @@
   function fmt(n, d) { return Number(n).toLocaleString('en-US', { maximumFractionDigits: d || 0, minimumFractionDigits: d || 0 }); }
   function J(u) { return fetch(u, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(u); return r.json(); }); }
   function O(u) { return J(u).catch(function () { return null; }); }
-  var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
   var t0 = function (d) { return Date.parse(d + 'T00:00:00Z'); };
   var TABS = [['mnav', 'mNAV history'], ['hold', 'Strategy holdings'], ['bps', 'BTC per share'], ['top', 'Treasury BTC'], ['prefs', 'Preferred yields'], ['perf', 'MSTR vs BTC'], ['cmpco', 'Company compare']]; // long-term BTC/models, dominance and ratios live in the top chart + Quick glance (no duplicates)
-  var NOPER = { top: 1 }, GDEF = ['mnav', 'hold', 'bps', 'perf'];
+  var NOPER = { top: 1 }, GDEF = ['mnav', 'hold', 'perf', 'bps'];
   var cur = LS.get('btd_ctab'); if (!TABS.some(function (t) { return t[0] === cur; })) cur = 'mnav';
   var hm = /^#chart-(\w+)$/.exec(location.hash); if (hm && TABS.some(function (t) { return t[0] === hm[1]; })) { cur = hm[1]; LS.set('btd_ctab', cur); LS.set('btd_cview', 'one'); setTimeout(function () { var c = document.getElementById('charts'); c && c.scrollIntoView({ block: 'start' }); }, 400); } // deep links from /strategy/
   var view = LS.get('btd_cview') === 'grid' ? 'grid' : 'one', grid = null; try { grid = JSON.parse(LS.get('btd_cgrid') || 'null'); } catch (e) {} if (!Array.isArray(grid) || grid.length !== 4) grid = GDEF.slice(); grid = grid.map(function (k, i) { return TABS.some(function (t) { return t[0] === k; }) ? k : GDEF[i]; });
+  /* unique chart per cell: drop repeats (old saved layouts could hold the same chart twice) and refill from the defaults, then the rest of the library */
+  (function () { var seen = {}, pool = GDEF.concat(TABS.map(function (t) { return t[0]; })); grid = grid.map(function (k) { if (seen[k]) return null; seen[k] = 1; return k; }); grid = grid.map(function (k) { if (k) return k; var n = pool.filter(function (x) { return !seen[x]; })[0]; seen[n] = 1; return n; }); LS.set('btd_cgrid', JSON.stringify(grid)); if (grid.join() === GDEF.join()) LS.del('btd_cgrid'); })();
   var PERS = ['1M', '3M', 'YTD', '1Y', '5Y', 'All'], rng = LS.get('btd_cper'); if (PERS.indexOf(rng) < 0) rng = '1Y'; var DATA = {};
   function fromT(endT) { var e = new Date(endT), y = e.getUTCFullYear(), m = e.getUTCMonth(), d = e.getUTCDate(); return rng === '1M' ? Date.UTC(y, m - 1, d) : rng === '3M' ? Date.UTC(y, m - 3, d) : rng === '5Y' ? Date.UTC(y - 5, m, d) : rng === 'YTD' ? Date.UTC(y, 0, 1) : rng === '1Y' ? Date.UTC(y - 1, m, d) : -Infinity; }
   function perTxt() { return rng === 'All' ? 'full history' : rng === 'YTD' ? 'year to date' : 'past ' + rng; }
@@ -197,7 +199,7 @@
     if (b.dataset.crng) { rng = b.dataset.crng; LS.set('btd_cper', rng); show(); }
     else if (b.dataset.ctab) { cur = b.dataset.ctab; LS.set('btd_ctab', cur); show(); }
     else if (b.dataset.cview) { view = b.dataset.cview; LS.set('btd_cview', view); show(); } });
-  box.addEventListener('change', function (e) { var s = e.target; if (s.dataset.cg == null) return; grid[+s.dataset.cg] = s.value; LS.set('btd_cgrid', JSON.stringify(grid)); show(); });
+  box.addEventListener('change', function (e) { var s = e.target; if (s.dataset.cg == null) return; var ci = +s.dataset.cg, was = grid[ci], o = grid.indexOf(s.value); if (o >= 0 && o !== ci) grid[o] = was; /* already in another cell: swap instead of showing it twice */ grid[ci] = s.value; if (grid.join() === GDEF.join()) LS.del('btd_cgrid'); else LS.set('btd_cgrid', JSON.stringify(grid)); show(); });
   document.addEventListener('btd:chart', function (e) { var k = e.detail; if (!R[k] || !TABS.some(function (t) { return t[0] === k; })) return; cur = k; LS.set('btd_ctab', k); if (view === 'grid') { view = 'one'; LS.set('btd_cview', 'one'); } show(); box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   var rt, lw = box.clientWidth; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (box.clientWidth !== lw) { lw = box.clientWidth; show(); } }, 200); });
   show();
