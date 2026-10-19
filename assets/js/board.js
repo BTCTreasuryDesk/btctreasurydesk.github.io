@@ -353,7 +353,7 @@
     gP(); cP(); if (F.get('stable')) sP(F.get('stable'));
     if (window.BTD_CTX) window.BTD_CTX.on(cP); if (window.BTD_CTX) window.BTD_CTX.onRange(function () { cxT = 0; cP(); });
     fetch('https://api.alternative.me/fng/?limit=31').then(function (r) { return r.json(); }).then(function (j) { var d = (j && j.data || []).map(function (x) { return +x.value; }); if (d.length < 10) return; var avg = d.reduce(function (a, b) { return a + b; }, 0) / d.length, now = d[0];
-      set('fng-r', (now > avg + 3 ? '\u2191 above' : now < avg - 3 ? '\u2193 below' : '\u2248 near') + ' its 30d avg ' + avg.toFixed(0) + ' \u00b7 Yday ' + d[1] + ' \u00b7 1W ' + d[7] + (d[30] != null ? ' \u00b7 1M ' + d[30] : '') + ' \u00b7 scale 0 Extreme Fear \u2192 100 Extreme Greed'); }).catch(function () {});
+      set('fng-r', (now > avg + 3 ? '\u2191 above' : now < avg - 3 ? '\u2193 below' : '\u2248 near') + ' its 30d avg ' + avg.toFixed(0) + ' \u00b7 Yday ' + d[1] + ' \u00b7 1W ' + d[7] + (d[30] != null ? ' \u00b7 1M ' + d[30] : '')); }).catch(function () {});
   }
 
   /* ---------- Tokenized stocks ---------- */
