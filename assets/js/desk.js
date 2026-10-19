@@ -818,9 +818,28 @@
      the others + current view + sort live in 'btd_tk3' {v, sort, L:{view:[items]}}. Items may carry h:1 (hidden, kept in the list). */
   /* Altcoins preset: BTC first, then the top 10 (or 20, btd_tk_altn) altcoins by market cap from CoinGecko, no stablecoins or wrapped tokens */
   var ALTS = [], altAt = 0, AST = /^(usdt|usdc|usde|dai|usds|fdusd|pyusd|tusd|usdd|usd1|frax|busd|usdtb|rlusd|gusd|usdp|susde|bsc-usd|usdf|usdg|eurc|xaut|paxg)$/i, AWR = /^(wbtc|weth|steth|wsteth|cbbtc|weeth|reth|wbeth|lbtc|solvbtc|btcb|bnsol|jitosol|msol|meth|ezeth|rseth|tbtc|leo|figr_heloc|wbnb|hbtc|clbtc|bbtc)$/i;
-  function altTop() { if (Date.now() - altAt < 5 * 60e3) return; altAt = Date.now(); var N = (function () { try { return localStorage.getItem('btd_tk_altn') === '20' ? 20 : 10; } catch (e) { return 10; } })();
+  /* Altcoins config 'btd_alts' {n:10|20, add:[typed coins, max 10], rm:[top-N coins removed]}; migrates the old 'btd_tk_altn' key and any frozen saved Altcoins list */
+  var ALLA = [];
+  function altCfg() { var o = null; try { o = JSON.parse(localStorage.getItem('btd_alts') || 'null'); } catch (e) {}
+    if (!o || typeof o !== 'object') { o = { n: 10, add: [], rm: [] }; try { if (localStorage.getItem('btd_tk_altn') === '20') o.n = 20; localStorage.removeItem('btd_tk_altn');
+      var t3 = JSON.parse(localStorage.getItem('btd_tk3') || 'null'); if (t3 && t3.L && t3.L.alts) { delete t3.L.alts; localStorage.setItem('btd_tk3', JSON.stringify(t3)); } } catch (e) {} }
+    var ok = function (a) { return (Array.isArray(a) ? a : []).filter(function (x) { return typeof x === 'string' && /^[A-Z0-9]{2,10}$/.test(x); }); };
+    return { n: o.n === 20 ? 20 : 10, add: ok(o.add).slice(0, 10), rm: ok(o.rm).slice(0, 20) }; }
+  function altCfgSave(c) { LS.set('btd_alts', JSON.stringify(c)); }
+  function altBase() { ALTS = ALLA.slice(0, altCfg().n); return ALTS; }
+  function altCoins() { var c = altCfg(), B = (ALLA.length ? altBase() : ['ETH', 'SOL']).filter(function (x) { return c.rm.indexOf(x) < 0; }); c.add.forEach(function (x) { if (B.indexOf(x) < 0) B.push(x); }); return B; }
+  function altTop() { if (Date.now() - altAt < 5 * 60e3) return; altAt = Date.now();
     fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&price_change_percentage=24h').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (a) { if (!Array.isArray(a)) return;
-      var L = a.filter(function (c) { return c.symbol !== 'btc' && !AST.test(c.symbol) && !AWR.test(c.symbol) && c.current_price; }).slice(0, N); ALTS = L.map(function (c) { var S = c.symbol.toUpperCase(); if (S !== 'ETH' && S !== 'SOL') TKC[S] = { px: c.current_price, chp: c.price_change_percentage_24h }; return S; }); ticker(); }).catch(function () { altAt = 0; }); }
+      var L = a.filter(function (c) { return c.symbol !== 'btc' && !AST.test(c.symbol) && !AWR.test(c.symbol) && c.current_price; }).slice(0, 20); ALLA = L.map(function (c) { var S = c.symbol.toUpperCase(); if (S !== 'ETH' && S !== 'SOL') TKC[S] = { px: c.current_price, chp: c.price_change_percentage_24h }; return S; }); altBase(); ticker(); }).catch(function () { altAt = 0; }); }
+  function altPx(c) { if (c === 'ETH') return live.eth ? [live.eth, live.eth24] : null; if (c === 'SOL') return live.sol ? [live.sol, live.sol24] : null; return TKC[c] ? [TKC[c].px, TKC[c].chp] : null; }
+  /* My Alts ribbon (off by default, 'btd_myalts'='1'): your Altcoins list with price and 24h change; swipe on phone, scroll on desktop */
+  var maEl = null;
+  function myAlts() { var on = LS.get('btd_myalts') === '1';
+    if (!maEl) { if (!on || !tk) return; maEl = document.createElement('div'); maEl.className = 'myalts'; maEl.setAttribute('aria-label', 'My Alts: price and 24h change'); tk.parentNode.insertBefore(maEl, tk.nextSibling); }
+    maEl.hidden = !on; if (!on) return; altTop(); var C = altCoins(), c = altCfg();
+    C.forEach(function (k) { if (k !== 'ETH' && k !== 'SOL' && !TKC[k] && !myAlts.q[k]) { myAlts.q[k] = 1; cbStats(k).then(function () { myAlts(); }).catch(function () {}); } });
+    maEl.innerHTML = '<span class="ma-l">MY ALTS<small>' + (c.add.length || c.rm.length ? 'custom' : 'top ' + c.n) + '</small></span><div class="ma-s">' + C.map(function (k) { var q = altPx(k); return '<span class="ma-i"><b>' + esc(k) + '</b>' + (q ? tkCoinPx(q[0]) + (q[1] != null && isFinite(q[1]) ? ' <span class="' + (q[1] >= 0 ? 'up' : 'dn') + '">' + pct(q[1], 1) + '</span>' : '') : '<span class="muted">…</span>') + '</span>'; }).join('') + '</div><button type="button" class="ma-e" data-tk-edit aria-label="Edit My Alts">&#9998;</button>'; }
+  myAlts.q = {}; setInterval(function () { if (LS.get('btd_myalts') === '1' && !document.hidden) { myAlts.q = {}; myAlts(); } }, 60000);
   var TKV = [['desk', 'Bitcoin Desk'], ['stocks', 'Treasury Companies'], ['macro', 'Macro'], ['fut', 'Futures & Indexes'], ['alts', 'Altcoins'], ['movers', 'Biggest Movers'], ['prefs', 'Preferreds'], ['keys', 'Key numbers'], ['mine', 'My Mix']];
   var TKS = [['desk', 'Desk order'], ['movers', 'Biggest movers'], ['cat', 'By category'], ['az', 'A–Z']];
   function tkV() { var o = null; try { o = JSON.parse(LS.get('btd_tk3') || 'null'); } catch (e) {} o = o && typeof o === 'object' ? o : {};
@@ -833,7 +852,7 @@
     if (v === 'movers') { var mv = [{ id: 'D:BTC', tk: 'BTC' }, { id: 'C:ETH', tk: 'ETH' }, { id: 'C:SOL', tk: 'SOL' }]; (DESK ? DESK.treasuries.rows.slice().sort(function (a, b) { return b.btc - a.btc; }) : []).filter(function (r) { return tkCn(r); }).slice(0, 15).forEach(function (r) { mv.push({ id: 'S:' + r.tk.toUpperCase(), tk: r.tk }); }); ['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'COIN', 'HOOD'].forEach(function (t) { if (!mv.some(function (y) { return y.id === 'S:' + t; })) mv.push({ id: 'S:' + t, tk: t, cn: t }); }); return mv; }
     if (v === 'prefs') return D0.filter(function (x) { return x.id[0] === 'P'; });
     if (v === 'keys') return ['BTC', 'MNAV', 'GAIN', 'ATH', 'PLAW', 'HALV', 'FNG', 'DOM'].map(function (k) { return { id: 'D:' + k, tk: TKDL[k] }; });
-    if (v === 'alts') { altTop(); var AL = [{ id: 'D:BTC', tk: 'BTC' }]; (ALTS.length ? ALTS : ['ETH', 'SOL']).forEach(function (c) { AL.push({ id: 'C:' + c, tk: c }); }); return AL.concat([{ id: 'D:BTCETH', tk: 'BTC/ETH' }, { id: 'D:BTCSOL', tk: 'BTC/SOL' }, { id: 'D:DOM', tk: TKDL.DOM }]); }
+    if (v === 'alts') { altTop(); var AL = [{ id: 'D:BTC', tk: 'BTC' }]; altCoins().forEach(function (c) { AL.push({ id: 'C:' + c, tk: c }); }); return AL.concat([{ id: 'D:BTCETH', tk: 'BTC/ETH' }, { id: 'D:BTCSOL', tk: 'BTC/SOL' }, { id: 'D:DOM', tk: TKDL.DOM }]); }
     if (v === 'mine') return [{ id: 'D:BTC', tk: 'BTC' }, { id: 'S:MSTR', tk: 'MSTR' }, { id: 'D:MNAV', tk: TKDL.MNAV }, { id: 'S:ASST', tk: 'ASST' }, { id: 'D:DOM', tk: TKDL.DOM }, { id: 'D:GAIN', tk: TKDL.GAIN }];
     return D0; }
   function tkDesk() { // Desk default order: BTC, ETH, SOL, treasury + major stocks, Mag 7, US indexes (futures outside regular hours), macro
@@ -843,14 +862,16 @@
   function tkClean(o) { if (!Array.isArray(o) || !o.length) return null;
     var out = o.filter(function (x) { return x && typeof x.id === 'string' && TK_ID.test(x.id); }).slice(0, 80).map(function (x) { var y = { id: x.id, tk: String(x.tk || x.id.slice(2)).slice(0, 24), cn: x.cn && TK_CN.test(x.cn) ? x.cn : null }; if (x.h) y.h = 1; return y; });
     return out.length ? out : null; }
-  function tkSaved(v) { v = v || tkV().v; if (v === 'desk') { var o = null; try { o = JSON.parse(LS.get('btd_tk2') || 'null'); } catch (e) {} return tkClean(o); } return tkClean(tkV().L[v]); }
+  function tkSaved(v) { v = v || tkV().v; if (v === 'alts') return null; if (v === 'desk') { var o = null; try { o = JSON.parse(LS.get('btd_tk2') || 'null'); } catch (e) {} return tkClean(o); } return tkClean(tkV().L[v]); }
   function tkList(v) { return tkSaved(v) || tkDefault(v); }
-  function tkKey(L) { return L.map(function (x) { return x.id + (x.h ? '~' : ''); }).join(','); }
-  function tkSave(L, v) { var V = tkV(); v = v || V.v; var same = tkKey(L) === tkKey(tkDefault(v));
+  function tkListKey(L) { return L.map(function (x) { return x.id + (x.h ? '~' : ''); }).join(','); }
+  function tkSave(L, v) { var V = tkV(); v = v || V.v; if (v === 'alts') { var ac = altCfg(), base = ALLA.length ? altBase() : ['ETH', 'SOL'], cs = L.filter(function (x) { return x.id[0] === 'C' && !x.h; }).map(function (x) { return x.id.slice(2); });
+      ac.rm = base.filter(function (x) { return cs.indexOf(x) < 0; }); ac.add = cs.filter(function (x) { return base.indexOf(x) < 0; }).slice(0, 10); altCfgSave(ac); myAlts(); if (tke && L.some(function (x) { return x.h; })) tkeMsg('Hidden coins are removed from Altcoins; re-add them from the list.'); return; }
+    var same = tkListKey(L) === tkListKey(tkDefault(v));
     if (v !== 'mine' && !same) { V.L.mine = L; V.v = 'mine'; tkVSave(V); tkViewBtn(); if (tke) tkeMsg('Edited: saved as My Mix (the preset itself is unchanged).'); return; } /* editing any preset turns it into My Mix */
     if (v === 'desk') { if (same) { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else LS.set('btd_tk2', JSON.stringify(L)); return; }
     if (same) delete V.L[v]; else V.L[v] = L; tkVSave(V); }
-  function tkReset() { var V = tkV(); if (V.v === 'desk') { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else { delete V.L[V.v]; tkVSave(V); } }
+  function tkReset() { var V = tkV(); if (V.v === 'alts') { var c = altCfg(); altCfgSave({ n: c.n, add: [], rm: [] }); return; } if (V.v === 'desk') { try { localStorage.removeItem('btd_tk2'); } catch (e) {} } else { delete V.L[V.v]; tkVSave(V); } }
   function tkShown() { var V = tkV(), CO = { D: 0, C: 1, S: 2, M: 3, P: 4 }, L = tkList().filter(function (x) { return !x.h; }), R = L.map(function (x, i) { return { x: x, it: tkItem(x), i: i }; }).filter(function (r) { return r.it; });
     R.forEach(function (r) { r.it.id = r.x.id; r.it.cn = r.x.cn || null; });
     if (V.v === 'movers') { R.sort(function (a, b) { var A = a.it[2], B = b.it[2], ha = A != null && isFinite(A), hb = B != null && isFinite(B); return ha && hb ? Math.abs(B) - Math.abs(A) : ha ? -1 : hb ? 1 : a.i - b.i; }); return R.slice(0, 15).map(function (r) { return r.it; }); }
@@ -898,7 +919,7 @@
     var fq = q ? X.fmt(k, q) : null; if (!fq) return plain;
     return ' <span class="tk-ch ' + (fq.v >= 0 ? 'up' : 'dn') + '" data-spk="' + esc(k) + '" role="button" title="' + X.tip + '">' + esc(fq.t) + '<small>' + fq.r + '</small></span>'; }
   function ticker() {
-    dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
+    dataTiles(); try { myAlts(); } catch (e) {} var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
     var items = tkShown(); tkViewBtn();
     var SEG = function (x) { var t = x.id ? x.id[0] : 'D', k = x.id ? x.id.slice(2) : ''; if (t === 'C' || (t === 'D' && /^(BTC|BTCETH|BTCSOL|DOM|FNG)$/.test(k))) return 'CRYPTO'; if (t === 'S') return /^(AAPL|MSFT|NVDA|GOOGL|AMZN|META|TSLA|HOOD|CRCL|AVGO|IBIT|GLD)$/.test(k) ? 'STOCKS' : 'TREASURY'; if (t === 'P') return 'PREFERREDS'; if (t === 'M') { var mm = TKM[k]; return mm && mm[3] === 'cm' ? 'COMMODITIES' : mm && (mm[3] === 'yd' || mm[3] === 'fx' || k === 'DXY' || k === 'VIX') ? 'MACRO' : 'INDEXES'; } if (k === 'S2S10') return 'MACRO'; return 'DESK DATA'; };
     var segOn = tkV().sort === 'desk' || tkV().sort === 'cat', lastSeg = null, PV = ticker.pv || (ticker.pv = {});
@@ -918,6 +939,7 @@
   /* Ribbon editor: grouped options + type any ticker (validated via the quote feed), up/down, remove, reset */
   var tke = null, tkeBtn = null, TKE_G = {};
   function tkePool() { var have = {}; tkList().forEach(function (x) { have[x.id] = 1; }); var out = [];
+    if (tkV().v === 'alts') { (ALLA.length ? altBase() : ['ETH', 'SOL']).forEach(function (c) { if (!have['C:' + c]) out.push({ id: 'C:' + c, tk: c, name: 'Top ' + altCfg().n + ' by market cap', g: 'Top ' + altCfg().n + ' altcoins' }); }); return out; }
     var GT = 'BTC treasury companies'; [['MSTR', 'Strategy'], ['MPJPY', 'Metaplanet (US ADR)'], ['ASST', 'Strive'], ['MARA', 'MARA Holdings'], ['COIN', 'Coinbase']].forEach(function (a) { out.push({ id: 'S:' + a[0], tk: a[0], name: a[1], g: GT, cn: a[0] }); });
     (DESK ? DESK.treasuries.rows.slice().sort(function (a, b) { return b.btc - a.btc; }) : []).forEach(function (r) { var id = 'S:' + r.tk.toUpperCase(); if ((tkCn(r) || (LAST && LAST.q[r.tk])) && !out.some(function (y) { return y.id === id; })) out.push({ id: id, tk: r.tk, name: '#' + r.rank + ' ' + r.name + ' · ' + fmt(r.btc) + ' ₿', g: GT }); });
     [['C:ETH', 'ETH', 'Ether · Coinbase'], ['C:SOL', 'SOL', 'Solana · Coinbase'], ['D:BTCETH', 'BTC/ETH', 'ratio'], ['D:BTCSOL', 'BTC/SOL', 'ratio'], ['D:DOM', TKDL.DOM, 'BTC dominance'], ['D:FNG', TKDL.FNG, 'Crypto Fear & Greed']].forEach(function (a) { out.push({ id: a[0], tk: a[1], name: a[2], g: 'Crypto' }); });
@@ -932,7 +954,8 @@
   function tkePaint() {
     if (!tke) return; var L = tkList(), q = ($('[data-tke-in]', tke).value || '').trim().toUpperCase(), g = '', h = '';
     var V = tkV(); $('[data-tke-views]', tke).innerHTML = TKV.map(function (x) { return '<button type="button" class="chip' + (x[0] === V.v ? ' on' : '') + '" data-tke-v="' + x[0] + '" aria-pressed="' + (x[0] === V.v) + '">' + esc(x[1]) + (tkSaved(x[0]) ? ' ✎' : '') + '</button>'; }).join('');
-    $('[data-tke-sort]', tke).value = V.sort;
+    $('[data-tke-sort]', tke).value = V.sort; var ax = $('[data-tke-alts]', tke); if (ax) { var acf = altCfg(); ax.hidden = V.v !== 'alts'; ax.innerHTML = '<span class="tke-s">Altcoins</span><span class="seg" role="group" aria-label="Top altcoins"><button type="button" data-tke-an="10" class="' + (acf.n === 10 ? 'on' : '') + '" aria-pressed="' + (acf.n === 10) + '">Top 10</button><button type="button" data-tke-an="20" class="' + (acf.n === 20 ? 'on' : '') + '" aria-pressed="' + (acf.n === 20) + '">Top 20</button></span><small class="muted">by market cap, no stablecoins · typed coins ' + acf.add.length + '/10 · order follows market cap</small>'; }
+    var mab = $('[data-tke-ma]', tke); if (mab) mab.checked = LS.get('btd_myalts') === '1';
     $('[data-tke-cur]', tke).innerHTML = L.map(function (x, i) { return '<li' + (x.h ? ' class="tke-h"' : '') + '><b>' + esc(x.tk) + '</b><span>' + esc(x.id[0] === 'D' ? 'data' : x.id[0] === 'P' ? 'preferred' : x.id[0] === 'C' ? 'crypto' : x.cn ? 'your ticker' : 'stock') + '</span>' +
       '<button type="button" data-tke-hd="' + i + '" aria-pressed="' + (x.h ? 'true' : 'false') + '" class="' + (x.h ? 'off' : '') + '" aria-label="' + (x.h ? 'Show ' : 'Hide ') + esc(x.tk) + '" title="' + (x.h ? 'Hidden: tap to show' : 'Tap to hide (keeps it in the list)') + '">' + (x.h ? '&#9675;' : '&#9679;') + '</button><button type="button" data-tke-up="' + i + '"' + (i ? '' : ' disabled') + ' aria-label="Move ' + esc(x.tk) + ' up">&#9650;</button><button type="button" data-tke-dn="' + i + '"' + (i < L.length - 1 ? '' : ' disabled') + ' aria-label="Move ' + esc(x.tk) + ' down">&#9660;</button><button type="button" data-tke-rm="' + i + '" aria-label="Remove ' + esc(x.tk) + '">&times;</button></li>'; }).join('');
     tkePool().filter(function (r) { return !q || r.tk.toUpperCase().indexOf(q) >= 0 || r.name.toUpperCase().indexOf(q) >= 0; }).forEach(function (r) {
@@ -945,6 +968,9 @@
   function tkeMsg(t) { var m = $('[data-tke-msg]', tke); if (m) m.textContent = t || ''; }
   function tkeAddTyped() { var v = ($('[data-tke-in]', tke).value || '').trim().toUpperCase().replace(/\s+/g, ''); if (!v) return;
     if (!/^[A-Z0-9:._\-]{1,24}$/.test(v)) { tkeMsg('Use letters and numbers, optionally EXCHANGE:SYMBOL (e.g. NASDAQ:COIN).'); return; }
+    if (tkV().v === 'alts') { var cc0 = v.replace(/-USD$/, ''), ac0 = altCfg(); if (!/^[A-Z0-9]{2,10}$/.test(cc0)) { tkeMsg('Type a coin ticker, e.g. HYPE or HYPE-USD.'); return; } if (AST.test(cc0) || AWR.test(cc0)) { tkeMsg(cc0 + ' is a stablecoin or wrapped token; the Altcoins preset leaves those out.'); return; }
+      if ((ALLA.length ? altBase() : []).indexOf(cc0) < 0 && ac0.add.indexOf(cc0) < 0 && ac0.add.length >= 10) { tkeMsg('Up to 10 typed coins. Remove one first.'); return; } tkeMsg('Checking ' + cc0 + '-USD on Coinbase…');
+      (cc0 === 'ETH' || cc0 === 'SOL' ? Promise.resolve() : cbStats(cc0)).then(function () { if (!tke) return; tkeAdd({ id: 'C:' + cc0, tk: cc0 }); tkeMsg('Added ' + cc0 + '-USD (Coinbase price).'); ticker(); }).catch(function () { if (tke) tkeMsg('Not found: “' + cc0 + '” is not a coin pair on Coinbase.'); }); return; }
     var pool = tkePool(), hit = pool.filter(function (r) { return r.tk.toUpperCase() === v || r.id.slice(2) === v; })[0]; if (hit) { tkeAdd({ id: hit.id, tk: hit.tk }); return; }
     tkeMsg('Checking ' + v + ' on the quote feed…');
     if (/^[A-Z0-9]{2,10}-USD$/.test(v)) { var cc = v.slice(0, -4); tkeMsg('Checking ' + v + '…'); cbStats(cc).then(function () { if (!tke) return; tkeAdd({ id: 'C:' + cc, tk: cc }); tkeMsg('Added ' + v + ' (Coinbase price).'); ticker(); }).catch(function () { if (tke) tkeMsg('Not found: “' + v + '” is not a coin pair on Coinbase.'); }); return; }
@@ -956,8 +982,9 @@
   function tkeOpen(btn) {
     tkeClose(false); pkClose(false); tkeBtn = btn; tke = document.createElement('div'); tke.className = 'pk tke'; tke.setAttribute('role', 'dialog'); tke.setAttribute('aria-label', 'Customize the price scroll');
     tke.innerHTML = '<div class="pk-h"><b>Price scroll</b><span class="muted" data-tke-custom></span><button type="button" class="pk-x" data-tke-close aria-label="Close">&times;</button></div>' +
-      '<p class="tke-s">Presets <span class="muted">(editing one saves it as My Mix)</span></p><div class="tke-views" data-tke-views role="group" aria-label="Price scroll views"></div>' +
+      '<p class="tke-s">Presets <span class="muted">(editing one saves it as My Mix; Altcoins keeps its own edits)</span></p><div class="tke-views" data-tke-views role="group" aria-label="Price scroll views"></div>' +
       '<div class="tke-row tke-sortr"><label for="tke-sort" class="tke-s">Sort by</label><select id="tke-sort" data-tke-sort>' + TKS.map(function (x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join('') + '</select></div>' +
+      '<div class="tke-row tke-alts" data-tke-alts hidden></div><label class="tke-row tke-ma"><input type="checkbox" data-tke-ma> <span>My Alts ribbon <small class="muted">(your Altcoins list under the strip, price + 24h)</small></span></label>' +
       '<p class="tke-s">This view, in order <span class="muted">(&#9679; shown · &#9675; hidden)</span></p><ol class="tke-l" data-tke-cur></ol>' +
       '<p class="tke-s">Add</p><div class="tke-row"><input type="text" class="pk-in" data-tke-in placeholder="Search, or type any ticker" autocomplete="off" spellcheck="false" aria-label="Search or type a ticker"><button type="button" class="chip" data-tke-go>Add</button></div>' +
       '<p class="tke-s muted" style="margin:4px 0">Stocks: type the ticker. Coins: type the ticker followed by -USD.</p><ul class="pk-l" data-tke-pool></ul><p class="pk-msg" data-tke-msg></p><div class="pk-f"><button type="button" class="chip" data-tke-reset>Reset to Bitcoin Desk</button><button type="button" class="chip" data-tke-resetall>Reset all</button><button type="button" class="chip on" data-tke-close>Done</button></div>';
@@ -965,6 +992,7 @@
     tke.style.width = w + 'px'; tke.style.left = Math.max(8, Math.min(r.right - w, window.innerWidth - w - 8)) + 'px'; tke.style.top = Math.min(r.bottom + 4, Math.max(8, window.innerHeight - 560)) + 'px';
     tkePaint(); var inp = $('[data-tke-in]', tke);
     inp.addEventListener('input', function () { tkeMsg(''); tkePaint(); });
+    $('[data-tke-ma]', tke).addEventListener('change', function (e) { LS.set('btd_myalts', e.target.checked ? '1' : '0'); myAlts(); tkeMsg(e.target.checked ? 'My Alts ribbon on.' : 'My Alts ribbon off.'); });
     $('[data-tke-sort]', tke).addEventListener('change', function (e) { var V = tkV(); V.sort = e.target.value; tkVSave(V); ticker(); tkeMsg(V.sort === 'desk' ? 'Shown in your list order.' : 'Sorted: ' + e.target.options[e.target.selectedIndex].text + ' (your list order is kept).'); });
     inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); var only = $$('[data-tke-add]', tke); if (only.length === 1) tkeAdd({ id: only[0].dataset.tkeAdd, tk: only[0].dataset.tkeTk, cn: only[0].dataset.tkeCn || null }); else tkeAddTyped(); } });
   }
@@ -976,6 +1004,7 @@
     var L = tkList(), i;
     if (b.dataset.tkeUp != null) { i = +b.dataset.tkeUp; if (i > 0) { L.splice(i - 1, 0, L.splice(i, 1)[0]); tkSave(L); tkePaint(); ticker(); var f = $('[data-tke-up="' + (i - 1) + '"]', tke); if (f && !f.disabled) f.focus(); } }
     else if (b.dataset.tkeDn != null) { i = +b.dataset.tkeDn; if (i < L.length - 1) { L.splice(i + 1, 0, L.splice(i, 1)[0]); tkSave(L); tkePaint(); ticker(); var f2 = $('[data-tke-dn="' + (i + 1) + '"]', tke); if (f2 && !f2.disabled) f2.focus(); } }
+    else if (b.dataset.tkeAn) { var acn = altCfg(); acn.n = b.dataset.tkeAn === '20' ? 20 : 10; acn.rm = []; altCfgSave(acn); altBase(); tkePaint(); ticker(); tkFetch(); tkeMsg('Altcoins: top ' + acn.n + ' by market cap.'); }
     else if (b.dataset.tkeG) { var gk = b.dataset.tkeG, wasOpen = b.getAttribute('aria-expanded') === 'true'; TKE_G[gk] = !wasOpen; tkePaint(); }
     else if (b.dataset.tkeV) { tkSetView(b.dataset.tkeV); tkeMsg('View: ' + tkViewName() + (tk.hidden ? '. Turn the Price scroll on to see it.' : '.')); }
     else if (b.dataset.tkeHd != null) { i = +b.dataset.tkeHd; if (L[i].h) delete L[i].h; else { if (L.filter(function (y) { return !y.h; }).length < 2) { tkeMsg('Keep at least one item visible.'); return; } L[i].h = 1; } tkSave(L); tkePaint(); ticker(); var f3 = $('[data-tke-hd="' + i + '"]', tke); if (f3) f3.focus(); }
