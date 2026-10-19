@@ -11,8 +11,12 @@ MIN_ANALYSTS = 3
 # Curated notable notes (public reports only). Keep ~3-6 recent per company; drop ones older than ~2 months.
 NOTES = {
   'MSTR': [
+    {'date': '2026-10-16', 'firm': 'Cantor Fitzgerald', 'action': 'Price target raised', 'rating': 'Overweight', 'from': 186, 'to': 208, 'note': 'Q3 preview: says FinTech and digital asset companies have largely calibrated Q3 expectations well.',
+     'src': 'TipRanks (TheFly)', 'url': 'https://www.tipranks.com/news/the-fly/strategy-price-target-raised-to-208-from-186-at-cantor-fitzgerald-thefly-news'},
     {'date': '2026-10-09', 'firm': 'Barclays', 'action': 'Price target raised', 'rating': 'Overweight', 'from': 160, 'to': 175, 'note': 'Part of its Q3 fintech earnings preview.',
      'src': 'TipRanks', 'url': 'https://www.tipranks.com/news/strategy-stock-mstr-rises-as-barclays-raises-price-target-to-175-heres-why'},
+    {'date': '2026-10-08', 'firm': 'TD Cowen', 'action': 'Target kept', 'rating': 'Buy', 'from': 260, 'to': 260, 'note': 'Raised its bitcoin forecasts but kept the $260 target, citing dilution and financial obligations as limits on upside for shareholders.',
+     'src': 'The Block', 'url': 'https://www.theblock.co/news/markets/2026-10-08-strategy-shareholders-face-dilution-drag-despite-brighter-bitcoin-forecasts-td-cowen-418066'},
     {'date': '2026-10-01', 'firm': 'Citigroup', 'action': 'Price target raised', 'rating': 'Buy', 'from': 136, 'to': 240, 'note': 'After lifting its 12-month bitcoin forecast to about $113K.',
      'src': 'The Crypto Times (Citi note summary)', 'url': 'https://www.cryptotimes.io/2026/10/02/citigroup-raises-strategy-mstr-price-target-to-240-on-higher-bitcoin-forecast/'},
   ],

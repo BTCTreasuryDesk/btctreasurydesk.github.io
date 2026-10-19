@@ -1,5 +1,5 @@
 {
- "as_of": "2026-10-11",
+ "as_of": "2026-10-18",
  "items": [
   {
    "date": "2026-10-05",
@@ -35,29 +35,22 @@
    ]
   },
   {
-   "date": "2026-10-12",
-   "title": "Smarter Web: results of the \"MORE\" preferred IPO (expected)",
-   "company": "The Smarter Web Company",
+   "date": "2026-10-20",
+   "title": "Strive SATS preferred IPO scheduled to settle (7,000,000 shares at $90)",
+   "company": "Strive",
    "kind": "offering",
-   "url": "https://www.smarterwebcompany.co.uk/smarterweb-co-uk/_img/pdf/more-prospectus/MORE-retail-investor-summary-document.pdf",
-   "source": "SWC retail summary document, Sep 29, 2026"
+   "detail": "15.00% Series A Perpetual SATS Preferred; dividends each business day from Nov 9, 2026.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm",
+   "source": "Strive 8-K, Oct 16, 2026"
   },
   {
-   "date": "2026-10-14",
-   "title": "Smarter Web \"MORE\" preferred: expected LSE Main Market admission, 8:00 AM UK",
+   "date": "2026-10-22",
+   "title": "Smarter Web \"MORE\" preferred: first ex-dividend date (£0.2301/share; record date Oct 23)",
    "company": "The Smarter Web Company",
-   "kind": "listing",
-   "detail": "Subject to offer conditions. Initial rate 12% a year on £100, paid weekly, cumulative.",
-   "url": "https://www.investegate.co.uk/index.php/announcement/rns/the-smarter-web-company-plc--swc/publication-of-prospectus-and-intention-to-float/9796685",
-   "source": "SWC RNS, Sep 29, 2026"
-  },
-  {
-   "date": "2026-10-15",
-   "title": "STRC record date for the Oct 31 dividend ($0.50/share)",
-   "company": "Strategy",
    "kind": "record",
-   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
-   "source": "Strategy 8-K, Oct 1, 2026"
+   "detail": "Weekly dividend; latest payment date for the first one is Nov 9, 2026.",
+   "url": "https://www.investegate.co.uk/announcement/rns/the-smarter-web-company-plc--swc/results-of-offer-and-preferred-dividend-timetable/9816797",
+   "source": "SWC RNS, Oct 12, 2026"
   },
   {
    "date": "2026-10-28",
@@ -77,6 +70,15 @@
    "source": "Strategy press release, Oct 8, 2026"
   },
   {
+   "date": "2026-10-29",
+   "title": "Metaplanet ¥52B zero-coupon convertible bonds due 2031: scheduled closing date",
+   "company": "Metaplanet",
+   "kind": "offering",
+   "detail": "Conversion price ¥339; about ¥23.6B to repay part of the bitcoin-backed credit facility in November.",
+   "url": "https://japanir.jp/en/company/company-3350/ir/3350-20261014-01_wp_capital_policy/",
+   "source": "Metaplanet TSE notice, Oct 14, 2026 (via Japan IR)"
+  },
+  {
    "date": "2026-10-31",
    "title": "STRC dividend payable ($0.50/share, 12.00% annual rate)",
    "company": "Strategy",
@@ -85,12 +87,30 @@
    "source": "Strategy 8-K, Oct 1, 2026"
   },
   {
+   "date": "2026-11-02",
+   "title": "STRC first daily dividend payment ($0.03/share, record Nov 1) — only if the daily-dividend amendments pass Oct 28",
+   "company": "Strategy",
+   "kind": "payment",
+   "detail": "Daily dividends declared for every calendar day Nov 1–30 ($1.00/share in total), each paid the next business day.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526423400/mstr-20261015.htm",
+   "source": "Strategy 8-K, Oct 16, 2026"
+  },
+  {
+   "date": "2026-11-09",
+   "title": "Strive SATS: first regular dividend date (then each business day)",
+   "company": "Strive",
+   "kind": "payment",
+   "detail": "First payment includes dividends accrued from the Oct 20 closing, if declared.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm",
+   "source": "Strive 8-K, Oct 16, 2026"
+  },
+  {
    "date": "2026-11-15",
    "title": "STRC dividend payable ($0.50/share; record Oct 31) — only if the daily-dividend amendments do not take effect by Nov 1",
    "company": "Strategy",
    "kind": "payment",
-   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm",
-   "source": "Strategy 8-K, Oct 1, 2026"
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526423400/mstr-20261015.htm",
+   "source": "Strategy 8-K, Oct 16, 2026"
   },
   {
    "date": "2026-12-31",

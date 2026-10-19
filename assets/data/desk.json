@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-11",
+  "updated": "2026-10-18",
   "refresh": "Weekly (Sunday). Live prices load in your browser; everything here is a dated snapshot.",
   "episode": {
     "n": 13,
@@ -8,14 +8,31 @@
     "date": "2026-10-18",
     "length": "11:24",
     "url": "https://youtu.be/gKnIdcQJp1k",
-    "shorts": []
+    "shorts": [
+      {
+        "t": "How much bitcoin do your MSTR shares own?",
+        "url": "https://youtube.com/shorts/Ayo6WQppLzw"
+      },
+      {
+        "t": "Strive passes MARA",
+        "url": "https://youtube.com/shorts/0KobvJt1S5M"
+      },
+      {
+        "t": "Dividends every day?",
+        "url": "https://youtube.com/shorts/tMifipyJrDA"
+      },
+      {
+        "t": "MSCI's new rule",
+        "url": "https://youtube.com/shorts/lbCkE-BC29E"
+      }
+    ]
   },
   "video_of_week": {
-    "id": "kerfDFUdFXk",
-    "title": "Are We Still Early to Bitcoin? Michael Saylor's “Gold Rush” Through 2035",
-    "channel": "Binance",
-    "date": "2026-09-28",
-    "url": "https://www.youtube.com/watch?v=kerfDFUdFXk",
+    "id": "_524Bq_ew5k",
+    "title": "Michael Saylor on Bloomberg Crypto (10/13/2026)",
+    "channel": "Strategy (Bloomberg Crypto interview)",
+    "date": "2026-10-13",
+    "url": "https://www.youtube.com/watch?v=_524Bq_ew5k",
     "more": [
       {
         "label": "More Saylor interviews on michael.com",
@@ -26,7 +43,7 @@
       "label": "Strategy data: strategy.com",
       "url": "https://www.strategy.com/"
     },
-    "note": "No new official Saylor interview found for Oct 4-11, 2026; newest unfeatured Saylor interview from a reputable channel used (rule in REFRESH.md)."
+    "note": "Latest official major-outlet interview: Saylor with Tim Stenovec and Carol Massar on Bloomberg Crypto, recorded Oct 13, 2026 in Washington, D.C., posted on Strategy's official YouTube channel. His newer ParaFi Investor Day fireside (Oct 17) is a conference talk, which ranks below a major-outlet interview under the Desk's rule."
   },
   "strategy": {
     "btc_held": 848250,
@@ -39,27 +56,27 @@
       "name": "Strategy 8-K Ex. 99.1, Oct 12, 2026",
       "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526419726/mstr-ex99_1.htm"
     },
-    "mnav": 1.1975,
+    "mnav": 1.0767,
     "sats_per_share": 187750,
-    "net_sats_per_share": 157322,
-    "kpi_as_of": "2026-10-11 17:00 ET",
+    "net_sats_per_share": 156284,
+    "kpi_as_of": "2026-10-18 20:20 ET (MSTR close Oct 16)",
     "kpi_src": {
       "name": "strategy.com dashboard",
       "url": "https://www.strategy.com/"
     },
     "kpis": {
       "live": {
-        "as_of_btc": "2026-10-18 06:57 PM ET",
+        "as_of_btc": "2026-10-18 08:20 PM ET",
         "as_of_securities": "10/16/2026 04:00 PM ET",
         "btc_held": 848250.0,
         "mnav": 1.0767,
-        "btc_nav_musd": 69289,
-        "total_reserve_musd": 74807,
-        "net_reserve_musd": 54345,
-        "amplification": 1.275,
+        "btc_nav_musd": 69550,
+        "total_reserve_musd": 75068,
+        "net_reserve_musd": 54606,
+        "amplification": 1.2737,
         "sats_per_share": 187750,
         "btc_acquired_ytd": 175750,
-        "dividend_coverage_yrs": 48.04,
+        "dividend_coverage_yrs": 48.2073,
         "market_cap_musd": 57769.0,
         "ev_musd": 72713.0,
         "debt_musd": 6714.0,
@@ -106,20 +123,20 @@
       "t": "STRC",
       "issuer": "Strategy",
       "rate": 12.0,
-      "price": 99.66,
-      "price_as_of": "2026-10-09",
-      "pay": "Semi-monthly (daily proposed, vote Oct 28)",
+      "price": 97.72,
+      "price_as_of": "2026-10-16",
+      "pay": "Semi-monthly (daily for Nov 1–30 conditionally declared, vote Oct 28)",
       "src": {
-        "name": "Strategy 8-K, Oct 1, 2026",
-        "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm"
+        "name": "Strategy 8-K, Oct 16, 2026",
+        "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526423400/mstr-20261015.htm"
       }
     },
     {
       "t": "SATA",
       "issuer": "Strive",
       "rate": 13.0,
-      "price": 99.1,
-      "price_as_of": "2026-10-09",
+      "price": 96.89,
+      "price_as_of": "2026-10-16",
       "pay": "Each business day",
       "src": {
         "name": "Strive 8-K, Sep 15, 2026",
@@ -128,21 +145,21 @@
     }
   ],
   "onchain": {
-    "realized_price": 49269,
-    "as_of": "2026-10-11",
+    "realized_price": 49245,
+    "as_of": "2026-10-18",
     "src": {
       "name": "strategy.com KPI feed (realized price)",
       "url": "https://www.strategy.com/"
     }
   },
   "treasuries": {
-    "as_of": "2026-10-11",
-    "holdings_note": "BTC held as shown on BitcoinTreasuries.NET on Oct 11, 2026 (includes Oct 5 filings: Strategy 848,000, Metaplanet 44,000, Strive 29,462). Updated Oct 18, 2026 for Strategy (848,250, 8-K Oct 12) and Strive (35,595, 8-Ks Oct 13–14).",
+    "as_of": "2026-10-18",
+    "holdings_note": "BTC held as shown on BitcoinTreasuries.NET on Oct 18, 2026 (Strategy 848,250 per its Oct 12 8-K; Strive 35,595 per its Oct 13–14 8-Ks; Smarter Web 2,830 per its Oct 15 RNS).",
     "src": {
-      "name": "BitcoinTreasuries.NET (viewed Oct 11, 2026) + company filings",
+      "name": "BitcoinTreasuries.NET (viewed Oct 18, 2026) + company filings",
       "url": "https://bitcointreasuries.net/"
     },
-    "mnav_note": "mNAV: Strategy from strategy.com; Metaplanet, Twenty One and Strive as shown on BitcoinTreasuries.NET (Oct 11). Methods differ by source. '—' where no reliable figure.",
+    "mnav_note": "mNAV: Strategy from strategy.com; other companies as shown on BitcoinTreasuries.NET (Oct 18). Methods differ by source. '—' where no reliable figure.",
     "last_add_note": "Last add = latest reported increase in BTC held (a buy, or mined BTC for miners), from filings or BitcoinTreasuries.NET holdings history.",
     "excluded": "Bitcoin Standard Treasury Co. (BSTR, 30,021 BTC) is listed unranked on BitcoinTreasuries.NET and is not included.",
     "prices": "Live price and day % via TradingView (delayed per exchange rules; non-US listings quote in local currency). Metaplanet via its US ADR ticker MPJPY (OTC). No verified TradingView symbol for Treasury (TRSR) and Ming Shing (MSW), so no live quote for those.",
@@ -155,8 +172,8 @@
         "btc": 848250,
         "flag": "US",
         "type": "treasury",
-        "mnav": 1.2,
-        "mnav_src": "strategy.com, Oct 11",
+        "mnav": 1.08,
+        "mnav_src": "strategy.com, Oct 18",
         "last_add": "2026-10-12",
         "last_add_src": "Strategy 8-K, Oct 12 (+250 BTC)"
       },
@@ -169,7 +186,7 @@
         "flag": "JP",
         "type": "treasury",
         "mnav": 0.72,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": "2026-10-05",
         "last_add_src": "TSE notice, Oct 5 (net +1,000 BTC in Q3, holdings as of Sep 30)"
       },
@@ -181,8 +198,8 @@
         "btc": 43514,
         "flag": "US",
         "type": "treasury",
-        "mnav": 0.71,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 0.68,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": "2025-07-30",
         "last_add_src": "BitcoinTreasuries.NET history"
       },
@@ -194,10 +211,10 @@
         "btc": 35595,
         "flag": "US",
         "type": "treasury",
-        "mnav": 1.46,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 1.1,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": "2026-10-14",
-        "last_add_src": "Strive 8-K, Oct 5 (+2,000 BTC)"
+        "last_add_src": "Strive 8-K, Oct 14 (+2,822 BTC; +6,133 since Oct 5)"
       },
       {
         "rank": 5,
@@ -256,7 +273,7 @@
         "name": "CleanSpark",
         "tk": "CLSK",
         "tv": "NASDAQ:CLSK",
-        "btc": 13703,
+        "btc": 13530,
         "flag": "US",
         "type": "miner",
         "mnav": null,
@@ -428,8 +445,8 @@
         "btc": 4467,
         "flag": "US",
         "type": "treasury",
-        "mnav": 0.85,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 0.84,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": null,
         "last_add_src": "Not tracked in our dataset yet"
       },
@@ -441,8 +458,8 @@
         "btc": 3950,
         "flag": "BR",
         "type": "treasury",
-        "mnav": 0.71,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 0.73,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": null,
         "last_add_src": "Not tracked in our dataset yet"
       },
@@ -467,8 +484,8 @@
         "btc": 3538,
         "flag": "FR",
         "type": "treasury",
-        "mnav": 1.18,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 1.19,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": null,
         "last_add_src": "Not tracked in our dataset yet"
       },
@@ -493,8 +510,8 @@
         "btc": 2899,
         "flag": "US",
         "type": "treasury",
-        "mnav": 0.32,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 0.31,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": null,
         "last_add_src": "Not tracked in our dataset yet"
       },
@@ -516,13 +533,13 @@
         "name": "The Smarter Web Co.",
         "tk": "SWC",
         "tv": "LSE:SWC",
-        "btc": 2747,
+        "btc": 2830,
         "flag": "GB",
         "type": "treasury",
-        "mnav": null,
-        "mnav_src": null,
-        "last_add": null,
-        "last_add_src": "Not tracked in our dataset yet"
+        "mnav": 1.06,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
+        "last_add": "2026-10-15",
+        "last_add_src": "SWC RNS, Oct 15 (+83 BTC)"
       },
       {
         "rank": 30,
@@ -646,7 +663,7 @@
         "name": "BitFuFu",
         "tk": "FUFU",
         "tv": "NASDAQ:FUFU",
-        "btc": 1373,
+        "btc": 1388,
         "flag": "SG",
         "type": "miner",
         "mnav": null,
@@ -701,8 +718,8 @@
         "btc": 1046,
         "flag": "IL",
         "type": "treasury",
-        "mnav": 0.89,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 0.91,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": null,
         "last_add_src": "Not tracked in our dataset yet"
       },
@@ -740,8 +757,8 @@
         "btc": 1000,
         "flag": "US",
         "type": "treasury",
-        "mnav": 0.09,
-        "mnav_src": "BitcoinTreasuries.NET, Oct 11",
+        "mnav": 0.08,
+        "mnav_src": "BitcoinTreasuries.NET, Oct 18",
         "last_add": null,
         "last_add_src": "Not tracked in our dataset yet"
       },
@@ -798,30 +815,30 @@
         "last_add_src": "Not tracked in our dataset yet"
       }
     ],
-    "pool_note": "Top 50 ranked public companies by BTC held, BitcoinTreasuries.NET, viewed Oct 11, 2026. Types: our classification (pure-play treasury / miner / operating company), based on BitcoinTreasuries.NET categories.",
+    "pool_note": "Top 50 ranked public companies by BTC held, BitcoinTreasuries.NET, viewed Oct 18, 2026. Types: our classification (pure-play treasury / miner / operating company), based on BitcoinTreasuries.NET categories.",
     "prev": {
-      "as_of": "2026-10-04",
-      "src": "BitcoinTreasuries.NET ranked list, retrieved 2026-10-04",
+      "as_of": "2026-10-11",
+      "src": "BitcoinTreasuries.NET ranked list as published on the Desk Oct 11, 2026 (includes Oct 5 filings)",
       "_note": "Sunday refresh: BEFORE updating rows, copy each row's current btc and rank here and set as_of to the old treasuries.as_of. Used for week-over-week board movers.",
       "rows": {
         "MSTR": {
-          "btc": 847666.0,
+          "btc": 848000.0,
           "rank": 1
         },
         "MPJPY": {
-          "btc": 43000.0,
-          "rank": 3
+          "btc": 44000.0,
+          "rank": 2
         },
         "XXI": {
           "btc": 43514.0,
-          "rank": 2
+          "rank": 3
         },
         "MARA": {
           "btc": 35577.0,
           "rank": 4
         },
         "ASST": {
-          "btc": 27462.0,
+          "btc": 29462.0,
           "rank": 5
         },
         "BLSH": {
@@ -841,7 +858,7 @@
           "rank": 9
         },
         "DJT": {
-          "btc": 12061.66,
+          "btc": 12062.0,
           "rank": 10
         },
         "TSLA": {
@@ -881,7 +898,7 @@
           "rank": 19
         },
         "SVIA": {
-          "btc": 5130.0,
+          "btc": 4965.0,
           "rank": 20
         },
         "0434.HK": {
@@ -905,7 +922,7 @@
           "rank": 25
         },
         "H100": {
-          "btc": 3506.4,
+          "btc": 3506.0,
           "rank": 26
         },
         "DDC": {
@@ -921,7 +938,7 @@
           "rank": 29
         },
         "DEFT": {
-          "btc": 2596.96,
+          "btc": 2597.0,
           "rank": 30
         },
         "BTGO": {
@@ -949,11 +966,11 @@
           "rank": 36
         },
         "3825.T": {
-          "btc": 1501.27,
+          "btc": 1509.0,
           "rank": 37
         },
         "3189.T": {
-          "btc": 1422.79,
+          "btc": 1423.0,
           "rank": 38
         },
         "FUFU": {
@@ -969,7 +986,7 @@
           "rank": 41
         },
         "CANG": {
-          "btc": 1065.11,
+          "btc": 1065.0,
           "rank": 42
         },
         "ZOOZ": {
@@ -993,7 +1010,7 @@
           "rank": 47
         },
         "CIMG": {
-          "btc": 937.7,
+          "btc": 938.0,
           "rank": 48
         },
         "CORZ": {
@@ -1007,45 +1024,58 @@
       }
     },
     "public": {
-      "total_btc": 1275684,
+      "total_btc": 1285230,
       "count": 197,
-      "strategy_btc": 847666,
-      "as_of": "2026-10-04",
+      "strategy_btc": 848250,
+      "as_of": "2026-10-18",
       "src": {
         "name": "BitcoinTreasuries.NET public-company total",
         "url": "https://bitcointreasuries.net/"
       },
-      "_note": "Sunday refresh: total BTC held by all public companies and the number listed, from the BitcoinTreasuries.NET headline, same retrieval date."
+      "_note": "Sunday refresh: total BTC held by all public companies and the number listed, from the BitcoinTreasuries.NET headline, same retrieval date. Company count (197) is from Oct 4; the Oct 18 page did not show a count.",
+      "count_as_of": "2026-10-04"
     }
   },
   "week_ahead": [
     {
-      "d": "Mon Oct 12",
-      "e": "Columbus Day: SEC closed, US stocks open. Strategy's weekly filing likely Tue. Smarter Web: results of its \"MORE\" preferred IPO expected."
+      "d": "Tue Oct 20",
+      "e": "Strive SATS preferred offering scheduled to settle (7M shares at $90; 15% on $100 stated amount)"
     },
     {
-      "d": "Wed Oct 14",
-      "e": "Smarter Web \"MORE\" preferred expected to list on the LSE Main Market, 8:00 AM UK (12% initial rate, paid weekly)"
-    },
-    {
-      "d": "Wed Oct 14",
-      "e": "US September CPI, 8:30 AM ET"
-    },
-    {
-      "d": "Thu Oct 15",
-      "e": "STRC record date (Oct 31, $0.50/share)"
+      "d": "Thu Oct 22",
+      "e": "Smarter Web \"MORE\" preferred: first ex-dividend date (£0.2301/share; record date Fri Oct 23)"
     },
     {
       "d": "Wed Oct 28",
       "e": "Strategy special meeting: daily preferred dividends vote, 10:00 AM ET"
     },
     {
+      "d": "Wed Oct 28",
+      "e": "FOMC rate decision, 2:00 PM ET (meeting Oct 27–28)"
+    },
+    {
       "d": "Thu Oct 29",
       "e": "Strategy Q3 2026 earnings after close; live Video Webinar 5:00 PM ET"
     },
     {
+      "d": "Thu Oct 29",
+      "e": "Metaplanet ¥52B zero-coupon convertible bonds scheduled to close"
+    },
+    {
       "d": "Fri Oct 31",
-      "e": "STRC monthly dividend payable ($0.50/share, record date Oct 15)"
+      "e": "STRC dividend payable ($0.50/share, record date Oct 15)"
+    },
+    {
+      "d": "Mon Nov 2",
+      "e": "First daily STRC dividend payment, only if the Oct 28 vote passes (record date Nov 1)"
+    },
+    {
+      "d": "Mon Nov 9",
+      "e": "Strive SATS: first regular dividend date (then each business day)"
+    },
+    {
+      "d": "Tue Nov 10",
+      "e": "US October CPI, 8:30 AM ET"
     },
     {
       "d": "Wed Nov 11",
@@ -1066,11 +1096,16 @@
       "id": "kerfDFUdFXk",
       "title": "Are We Still Early to Bitcoin? Michael Saylor's “Gold Rush” Through 2035",
       "week": "2026-10-11"
+    },
+    {
+      "id": "_524Bq_ew5k",
+      "title": "Michael Saylor on Bloomberg Crypto (10/13/2026)",
+      "week": "2026-10-18"
     }
   ],
   "prefs_desk": {
-    "as_of": "2026-10-11",
-    "price_as_of": "2026-10-09",
+    "as_of": "2026-10-18",
+    "price_as_of": "2026-10-16",
     "price_src": "Yahoo Finance daily close (live price and day change in each row from TradingView)",
     "note": "Effective yield = stated annual rate on $100 ÷ last close. Ex-dividend date equals the record date under T+1 settlement. Seniority is the issuer's liquidation order among its own preferreds.",
     "rows": [
@@ -1081,19 +1116,19 @@
         "name": "Stretch",
         "rate": 12.0,
         "rate_kind": "Variable",
-        "close": 99.65,
-        "prev": 99.45,
+        "close": 97.72,
+        "prev": 99.53,
         "pay": "Semi-monthly",
-        "pay_note": "Record dates the 15th and month-end; daily dividends proposed from Nov 2 (vote Oct 28)",
+        "pay_note": "Record dates the 15th and month-end; daily dividends for Nov 1–30 conditionally declared at 12.00% ($1.00/share in total), payable only if the Oct 28 vote passes",
         "par": 100,
         "type": "Cumulative · variable rate",
         "rank": "2nd of 5 (after STRF)",
-        "next_ex": "2026-10-15",
-        "next_ex_note": "Record date for the Oct 31 payment ($0.50/share)",
-        "explain": "Strategy's variable-rate preferred: Strategy resets the rate to keep the price near $100 (12.00% for periods from Oct 16, 2026, per its Oct 1 8-K). Dividends are cumulative.",
+        "next_ex": "2026-10-31",
+        "next_ex_note": "Record date for the Nov 15 payment ($0.50/share), which applies only if the Oct 28 daily-dividend vote fails; if it passes, daily record dates start Nov 1 (first payment Nov 2)",
+        "explain": "Strategy's variable-rate preferred: Strategy resets the rate to keep the price near $100 (12.00% for periods from Oct 16, 2026, and for November record dates, per its Oct 1 and Oct 16 8-Ks). Dividends are cumulative.",
         "src": {
-          "name": "Strategy 8-K, Oct 1, 2026; 10-Q Q2 2026",
-          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526409863/mstr-20260930.htm"
+          "name": "Strategy 8-Ks, Oct 1 & Oct 16, 2026; 10-Q Q2 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526423400/mstr-20261015.htm"
         }
       },
       {
@@ -1103,8 +1138,8 @@
         "name": "Strife",
         "rate": 10.0,
         "rate_kind": "Fixed",
-        "close": 103.21,
-        "prev": 103.04,
+        "close": 103.6,
+        "prev": 103.81,
         "pay": "Quarterly",
         "pay_note": "Mar 31 / Jun 30 / Sep 30 / Dec 31, when declared",
         "par": 100,
@@ -1125,8 +1160,8 @@
         "name": "Strike",
         "rate": 8.0,
         "rate_kind": "Fixed",
-        "close": 76.2,
-        "prev": 75.33,
+        "close": 71.24,
+        "prev": 73.85,
         "pay": "Quarterly",
         "pay_note": "Mar 31 / Jun 30 / Sep 30 / Dec 31, when declared; cash, MSTR stock or both",
         "par": 100,
@@ -1147,8 +1182,8 @@
         "name": "Stride",
         "rate": 10.0,
         "rate_kind": "Fixed",
-        "close": 72.86,
-        "prev": 72.2,
+        "close": 70.86,
+        "prev": 71.83,
         "pay": "Quarterly",
         "pay_note": "Mar 31 / Jun 30 / Sep 30 / Dec 31, when declared",
         "par": 100,
@@ -1169,15 +1204,15 @@
         "name": "SATA",
         "rate": 13.0,
         "rate_kind": "Variable",
-        "close": 99.1,
-        "prev": 98.82,
+        "close": 96.89,
+        "prev": 97.85,
         "pay": "Daily",
         "pay_note": "Each business day in October ($0.0516/share), record date the prior business day",
         "par": 100,
         "type": "Cumulative (unpaid amounts compound monthly) · variable rate",
         "rank": "Ahead of Strive common stock",
         "next_ex": "daily",
-        "next_ex_note": "Every business day in October",
+        "next_ex_note": "Every business day in October; November rate not announced as of Oct 18",
         "explain": "Strive's variable-rate preferred: 13.00% for October 2026 (Strive 8-K, Sep 15), paid each business day; Strive aims for it to trade between $99 and $101. Dividends are cumulative.",
         "src": {
           "name": "Strive 8-K, Sep 15, 2026",
@@ -1187,21 +1222,32 @@
     ],
     "upcoming": [
       {
+        "date": "2026-10-15",
+        "company": "Strive (ASST)",
+        "item": "SATS: 15.00% Series A Perpetual Preferred, IPO priced",
+        "detail": "7,000,000 shares (upsized from 5,000,000) at $90, about $630M gross. Cumulative dividends at 15.00% a year on the $100 stated amount, paid each business day from Nov 9, 2026; an 18-month dividend reserve ($22.50/share) is funded at closing. Settlement scheduled Oct 20. The pricing release does not name the listing venue.",
+        "status": "Priced, settles Oct 20",
+        "src": {
+          "name": "Strive 8-K (pricing release), Oct 16, 2026",
+          "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm"
+        }
+      },
+      {
         "date": "2026-10-14",
         "company": "The Smarter Web Company (SWC)",
-        "item": "\"MORE\" preferred shares IPO, London Stock Exchange Main Market",
-        "detail": "Up to 277,777 shares at £90 (target £15–25M gross). Cumulative variable-rate dividend paid weekly, initially 12% a year on £100; £100 liquidation preference; redeemable by SWC; non-voting. Applications closed Oct 9; results expected around Oct 12; admission expected 8:00 AM UK on Oct 14, if conditions are met (≥£10M raised, 3 market makers, ≥50% in public hands). An ATM facility is planned.",
-        "status": "Offer closed, listing pending",
+        "item": "\"MORE\" preferred shares listed on the London Stock Exchange Main Market (ticker MORE)",
+        "detail": "211,112 shares admitted Oct 14 (111,112 sold in the IPO at £90, £10.0M gross, plus 100,000 issued into the ATM facility held by Tennyson Capital). Cumulative variable-rate dividend paid weekly, initially 12% a year on £100. First ex-dividend date Oct 22, record date Oct 23 (£0.2301/share), paid by Nov 9. Quoted in pounds on the LSE, so it is listed here rather than in the US-dollar table.",
+        "status": "Listed Oct 14",
         "src": {
-          "name": "SWC RNS + retail summary document, Sep 29, 2026",
-          "url": "https://www.investegate.co.uk/index.php/announcement/rns/the-smarter-web-company-plc--swc/publication-of-prospectus-and-intention-to-float/9796685"
+          "name": "SWC RNS, Oct 12 & Oct 14, 2026",
+          "url": "https://www.investegate.co.uk/announcement/rns/the-smarter-web-company-plc--swc/first-day-of-dealings-in-preferred-shares/9821366"
         }
       },
       {
         "date": "2026-10-28",
         "company": "Strategy",
         "item": "Daily dividends for STRF, STRC, STRK and STRD",
-        "detail": "Stockholder vote Oct 28. If approved: STRC pays each business day from Nov 2 (record dates from Nov 1); STRF, STRK and STRD from Jan 4, 2027. Rates and total dividends unchanged.",
+        "detail": "Stockholder vote Oct 28. If approved: STRC pays each business day from Nov 2 (record dates from Nov 1); STRF, STRK and STRD from Jan 4, 2027. Rates and total dividends unchanged. STRC daily dividends for Nov 1–30 were conditionally declared at 12.00% on Oct 15 (8-K Oct 16).",
         "status": "Pending vote",
         "src": {
           "name": "Strategy DEF 14A, Oct 5, 2026",
@@ -1233,91 +1279,87 @@
     ]
   },
   "dominance": {
-    "as_of": "2026-10-11",
+    "as_of": "2026-10-18",
     "weekly": [
       [
-        "2025-10-12",
-        59.94
-      ],
-      [
         "2025-10-19",
-        58.81
+        58.79
       ],
       [
         "2025-10-26",
-        59.13
+        59.08
       ],
       [
         "2025-11-02",
-        59.25
-      ],
-      [
-        "2025-11-09",
         59.24
       ],
       [
+        "2025-11-09",
+        59.28
+      ],
+      [
         "2025-11-16",
-        58.85
+        58.83
       ],
       [
         "2025-11-23",
-        58.42
+        58.43
       ],
       [
         "2025-11-30",
-        58.7
+        58.72
       ],
       [
         "2025-12-07",
-        58.52
+        58.54
       ],
       [
         "2025-12-14",
-        58.6
-      ],
-      [
-        "2025-12-21",
-        58.95
-      ],
-      [
-        "2025-12-28",
-        58.99
-      ],
-      [
-        "2026-01-04",
         58.61
       ],
       [
-        "2026-01-11",
-        58.48
-      ],
-      [
-        "2026-01-18",
+        "2025-12-21",
         58.97
       ],
       [
+        "2025-12-28",
+        58.96
+      ],
+      [
+        "2026-01-04",
+        58.64
+      ],
+      [
+        "2026-01-11",
+        58.49
+      ],
+      [
+        "2026-01-18",
+        58.92
+      ],
+      [
         "2026-01-25",
-        59.15
+        59.13
       ],
       [
         "2026-02-01",
-        58.98
+        59.05
       ],
       [
         "2026-02-08",
-        58.31
+        58.3
       ],
       [
         "2026-02-15",
-        58.12
+        58.07
       ],
       [
         "2026-02-22",
-        58.32
+        58.26
       ],
       [
         "2026-03-01",
-        57.97
+        58.15
       ],
       [
         "2026-03-08",
@@ -1329,87 +1371,87 @@
       ],
       [
         "2026-03-22",
-        58.22
+        58.21
       ],
       [
         "2026-03-29",
-        57.93
+        57.87
       ],
       [
         "2026-04-05",
-        58.11
+        58.08
       ],
       [
         "2026-04-12",
-        58.99
+        59.03
       ],
       [
         "2026-04-19",
-        59.37
+        59.31
       ],
       [
         "2026-04-26",
-        59.98
+        59.95
       ],
       [
         "2026-05-03",
-        60.35
+        60.38
       ],
       [
         "2026-05-10",
-        60.2
+        60.16
       ],
       [
         "2026-05-17",
-        60.18
+        60.2
       ],
       [
         "2026-05-24",
-        59.89
+        59.91
       ],
       [
         "2026-05-31",
-        59.27
+        59.25
       ],
       [
         "2026-06-07",
-        58.18
+        58.19
       ],
       [
         "2026-06-14",
-        58.7
+        58.68
       ],
       [
         "2026-06-21",
-        58.43
+        58.44
       ],
       [
         "2026-06-28",
-        58.15
+        58.13
       ],
       [
         "2026-07-05",
-        57.99
+        57.95
       ],
       [
         "2026-07-12",
-        58.52
+        58.53
       ],
       [
         "2026-07-19",
-        58.77
+        58.78
       ],
       [
         "2026-07-26",
-        58.72
+        58.69
       ],
       [
         "2026-08-02",
-        58.5
+        58.54
       ],
       [
         "2026-08-09",
-        58.85
+        58.88
       ],
       [
         "2026-08-16",
@@ -1417,35 +1459,39 @@
       ],
       [
         "2026-08-23",
-        59.28
+        59.3
       ],
       [
         "2026-08-30",
-        59.53
+        59.49
       ],
       [
         "2026-09-06",
-        59.17
+        59.31
       ],
       [
         "2026-09-13",
-        58.71
+        58.72
       ],
       [
         "2026-09-20",
-        58.77
+        58.75
       ],
       [
         "2026-09-27",
-        58.57
+        58.6
       ],
       [
         "2026-10-04",
-        58.93
+        58.91
       ],
       [
         "2026-10-11",
-        59.47
+        59.46
+      ],
+      [
+        "2026-10-18",
+        60.08
       ]
     ],
     "src": {
@@ -1454,69 +1500,69 @@
     },
     "check": {
       "points": 52,
-      "max_gap_pp": 1.12,
-      "median_gap_pp": 0.1,
+      "max_gap_pp": 0.38,
+      "median_gap_pp": 0.05,
       "method": "CoinGecko BTC market cap / CMC total market cap vs CMC btcDominance"
     },
     "_note": "Sunday refresh: python3 tools/update_dominance.py. Live value on the site is CoinGecko /global; changes compare it with these weekly points."
   },
   "news_week": {
     "_note": "Sunday refresh: News of the Week. Max 8 material items from the past Mon-Sun, grouped in this order: strategy (Strategy & Saylor), treasury (other big treasury companies: Strive/ASST, Metaplanet...), industry (index/regulatory/capital-markets news for the sector, other companies), bitcoin (price milestones, network, ETFs, adoption, crypto regulation) (omit a group with nothing material). One line each, date, official source preferred (SEC/TSE filing, company press release, regulator, index provider, Farside for ETF flows). BEFORE replacing, append the old news_week object to assets/data/news_archive.json weeks[] (newest first). Mark the 3 most material items with \"top\": 1 (shown when the card is collapsed). Each item also gets \"why\": one line, 'Why it matters for holders' (plain, factual, no advice). Mark the week's single biggest item \"lead\": 1 (the bold Top story; any group). 'On deck next week' is built automatically from desk.json week_ahead.",
-    "week_of": "2026-10-05",
-    "label": "Oct 5 – 11, 2026",
-    "as_of": "2026-10-11",
+    "week_of": "2026-10-12",
+    "label": "Oct 12 – 18, 2026",
+    "as_of": "2026-10-18",
     "items": [
       {
         "cat": "strategy",
-        "date": "2026-10-05",
-        "text": "Bought 334 BTC (~$28.7M, avg $85,839) to reach 848,000 BTC; estimates a $20.91B Q3 gain on digital assets.",
+        "date": "2026-10-15",
+        "text": "Conditionally declared daily STRC dividends for every calendar day Nov 1–30 at a 12.00% rate ($0.03–$0.04/share a day, $1.00 in total), payable only if stockholders approve the daily-dividend amendments on Oct 28.",
         "src": {
           "name": "Strategy 8-K",
-          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm"
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526423400/mstr-20261015.htm"
         },
         "top": 1,
-        "why": "Small buy funded by MSTR sales and cash; the Q3 mark-to-market gain is non-cash but sets the tone for Oct 29 earnings.",
-        "lead": 1
+        "why": "If the vote passes, every calendar day becomes a STRC record date and the Nov 15 semi-monthly payment falls away; if it fails, the semi-monthly schedule stays."
       },
       {
         "cat": "strategy",
-        "date": "2026-10-05",
-        "text": "Repurchased $176.3M of STRC (1.77M shares) Sep 28 – Oct 4; $547.2M left in the preferred buyback program, no preferred ATM sales.",
+        "date": "2026-10-12",
+        "text": "Bought 250 BTC (~$21.5M, avg $86,194) to reach 848,250 BTC, funded by $21.0M of MSTR sales; repurchased $192.4M of STRC (1.93M shares). No preferred ATM sales.",
         "src": {
-          "name": "Strategy 8-K",
-          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413164/mstr-20261005.htm"
+          "name": "Strategy 8-K Ex. 99.1",
+          "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526419726/mstr-ex99_1.htm"
         },
-        "why": "Bought back near $99.4/share, under $100 par, which supports STRC's price and uses cash instead of new issuance."
-      },
-      {
-        "cat": "strategy",
-        "date": "2026-10-08",
-        "text": "Q3 2026 results set for Thu Oct 29 after the close, live Video Webinar 5:00 PM ET (stockholder vote on daily preferred dividends Oct 28).",
-        "src": {
-          "name": "Strategy press release",
-          "url": "https://www.nasdaq.com/press-release/strategy-announces-earnings-release-date-and-live-video-webinar-third-quarter-2026"
-        },
-        "why": "First full look at Q3: BTC Yield, USD Reserve coverage of dividends, and any update on the capital plan."
+        "why": "STRC was bought back at about $99.58 a share, just under $100 par, using cash rather than new issuance; average BTC cost is $75,444."
       },
       {
         "cat": "treasury",
-        "date": "2026-10-05",
-        "text": "Strive bought 2,000 BTC (avg ~$84,422) to reach 29,462 BTC and set up a repurchase facility of up to $500M for SATA.",
+        "date": "2026-10-14",
+        "text": "Strive bought 6,133 BTC in two weeks (3,311 Oct 5–9, 2,822 Oct 12–13) to reach 35,595 BTC, passing MARA (35,577) for #4 among public companies; warrant exercises brought in $369.2M.",
         "src": {
           "name": "Strive 8-K",
-          "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026064753/asst-20261005.htm"
+          "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026065816/asst-20261014.htm"
         },
-        "why": "More BTC per ASST share is the KPI; the SATA buyback gives Strive a tool to support its preferred's price."
+        "top": 1,
+        "why": "Strive is now the fourth-largest public bitcoin holder; the warrant cash funded the buys, but it also adds about 13.7M Class A shares."
       },
       {
         "cat": "treasury",
-        "date": "2026-10-05",
-        "text": "Metaplanet ended Q3 at 44,000 BTC (net +1,000) after selling 10,000 and buying back 11,000 to show liquidity; plans 10-15% of assets in treasury-company preferreds.",
+        "date": "2026-10-15",
+        "text": "Strive priced an upsized IPO of its new 15.00% SATS perpetual preferred: 7M shares at $90 (~$630M gross), dividends each business day from Nov 9, settling Oct 20.",
+        "src": {
+          "name": "Strive 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm"
+        },
+        "why": "A second, higher-rate preferred next to SATA; at $90 on a $100 stated amount the starting yield is about 16.7%."
+      },
+      {
+        "cat": "treasury",
+        "date": "2026-10-13",
+        "text": "Metaplanet set ¥52B of zero-coupon convertible bonds due 2031 (conversion price ¥339): about ¥23.6B to repay part of its bitcoin-backed loan and up to ¥28.3B for share buybacks under a new ¥60B program.",
         "src": {
           "name": "Metaplanet TSE notice (via Japan IR)",
-          "url": "https://japanir.jp/en/company/company-3350/ir/3350-20261005-04_wp_financial_summary/"
+          "url": "https://japanir.jp/en/company/company-3350/ir/3350-20261014-01_wp_capital_policy/"
         },
-        "why": "Proves it can turn BTC into cash to cover debt, a step toward a credit rating and cheaper funding; adds a buyer for treasury preferreds."
+        "why": "Swaps secured, interest-bearing BTC-backed debt for unsecured debt with no coupon and frees pledged BTC; potential dilution is about 11.24% if the bonds convert."
       },
       {
         "cat": "industry",
@@ -1527,60 +1573,60 @@
           "url": "https://app2.msci.com/webapp/index_ann/DocGet?lang=en&pub_key=aq0wbkjxPgo%3D"
         },
         "top": 1,
-        "why": "Current constituents are removed only if they fail the screen in each of their two most recent annual filings. Funds tracking MSCI hold about 13M MSTR shares (~3.1% of basic shares)."
+        "why": "Current constituents are removed only if they fail the screen in each of their two most recent annual filings. Funds tracking MSCI hold about 13M MSTR shares (~3.1% of basic shares).",
+        "lead": 1
+      },
+      {
+        "cat": "industry",
+        "date": "2026-10-14",
+        "text": "Smarter Web (SWC) listed its \"MORE\" preferred on the LSE Main Market (12% initial variable rate, paid weekly; £10.0M raised) and bought 83 BTC to reach 2,830 BTC.",
+        "src": {
+          "name": "SWC RNS",
+          "url": "https://www.investegate.co.uk/announcement/rns/the-smarter-web-company-plc--swc/first-day-of-dealings-in-preferred-shares/9821366"
+        },
+        "why": "A UK-listed take on the Strategy-style preferred model; SWC used part of the proceeds to cut its Coinbase credit line to about £16M."
       },
       {
         "cat": "bitcoin",
-        "date": "2026-10-07",
-        "text": "US spot bitcoin ETFs saw $484.9M of net outflows, the largest day since June 25, erasing October's early inflows; BTC dipped toward $82K.",
+        "date": "2026-10-16",
+        "text": "US spot bitcoin ETFs had $228.4M of net outflows over Oct 12–16, including −$261.4M on Oct 14, the day September CPI came in at 3.7% a year.",
         "src": {
           "name": "Farside Investors",
           "url": "https://farside.co.uk/btc/"
         },
-        "top": 1,
-        "why": "ETF flows are a big source of marginal BTC demand; sustained outflows can weigh on price and on treasury-stock premiums."
-      },
-      {
-        "cat": "bitcoin",
-        "date": "2026-10-05",
-        "text": "CFTC opened rulemaking (Regulation CTX and CAM) for leveraged and margined retail crypto trading, after the CLARITY Act stalled in the Senate.",
-        "src": {
-          "name": "CFTC press release",
-          "url": "https://www.cftc.gov/PressRoom/PressReleases/9307-26"
-        },
-        "why": "Early step toward onshore federal rules for leveraged crypto trading; no direct change for spot BTC or treasury stocks yet."
+        "why": "ETF flows are a big source of marginal BTC demand; the Fed’s next rate decision is Oct 28, after the hotter CPI print."
       }
     ]
   },
   "movers_week": {
     "_note": "Written by tools/movers.py each Sunday: the top 3 Movers & Makers for the episode segment. Descriptive, no advice.",
-    "as_of": "2026-10-11",
+    "as_of": "2026-10-18",
     "items": [
       {
-        "tk": "3189.T",
-        "name": "Anap Holdings",
-        "why": "−17% in a week (BTC −2%)",
+        "tk": "FUFU",
+        "name": "BitFuFu",
+        "why": "−34% in a week (BTC +0%)",
         "also": [
           "At a new 52-week low",
-          "Lagged BTC by 30 pts over a month"
+          "−27% in a month (BTC +1%)"
         ]
       },
       {
-        "tk": "CLSK",
-        "name": "CleanSpark",
-        "why": "−18% in a week (BTC −2%)",
+        "tk": "KEEL",
+        "name": "Keel Infrastructure",
+        "why": "−24% in a week (BTC +0%)",
         "also": [
-          "Crossed below its 200-day average this week",
-          "Lagged BTC by 27 pts over a month"
+          "−32% in a month (BTC +1%)",
+          "Lagged BTC by 33 pts over a month"
         ]
       },
       {
-        "tk": "RIOT",
-        "name": "Riot Platforms",
-        "why": "−14% in a week (BTC −2%)",
+        "tk": "GLXY",
+        "name": "Galaxy Digital",
+        "why": "−21% in a week (BTC +0%)",
         "also": [
-          "Crossed below its 200-day average this week",
-          "Lagged BTC by 29 pts over a month"
+          "At a new 52-week low",
+          "−28% in a month (BTC +1%)"
         ]
       }
     ]

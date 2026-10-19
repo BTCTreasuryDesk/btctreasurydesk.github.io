@@ -1,33 +1,24 @@
 {
- "week": "2026-10-11",
+ "week": "2026-10-18",
  "note": "Edited at the Sunday refresh. Items with new:true get a NEW badge. Auto zone/badge/momentum changes are computed in the browser.",
  "items": [
   {
-   "t": "Members toolkit v1 is open: Signal Zones, Model Builder, Entry & Exit Planner, Strategy Lab, Freedom Plan, Momentum & Trend, TA Overlays, mNAV Radar, BTC Yield and the Cycle Clock.",
+   "t": "Ep. 13 recap: MSCI’s new rule puts Strategy on notice, STRC daily dividends conditionally declared for November, and Strive passes MARA at 35,595 BTC.",
    "new": true
   },
   {
-   "t": "Ep. 12 recap: Strategy at 848,000 BTC, a $21B Q3 gain and the STRC daily-dividend vote on Oct 28.",
+   "t": "New Short: how much bitcoin do your MSTR shares own? Try it on the Your Bitcoin calculator.",
+   "new": true
+  },
+  {
+   "t": "Members toolkit v1 is open: Signal Zones, Model Builder, Entry & Exit Planner, Strategy Lab, Freedom Plan, Momentum & Trend, TA Overlays, mNAV Radar, BTC Yield and the Cycle Clock.",
    "new": false
   }
  ],
  "fresh": {
-  "tools": [
-   "zones",
-   "builder",
-   "planner",
-   "lab",
-   "freedom",
-   "momentum",
-   "ta",
-   "radar",
-   "yield",
-   "clock"
-  ],
+  "tools": [],
   "library": [
-   "tcs",
-   "pguide",
-   "cycle"
+   "pguide"
   ],
   "_note": "Sunday refresh: list tab ids and Library keys (tcs, pguide, cycle, numbers, cheat, data, quotes, whitepaper, glossary) that are new or materially updated this week; clear them the next week."
  }

@@ -1,5 +1,5 @@
 {
- "as_of": "2026-10-04",
+ "as_of": "2026-10-18",
  "note": "Verbatim quotes only, each linked to its source: his posts on X, his official keynote slides and essays on michael.com, the official Lex Fridman transcript, and Strategy press releases filed with the SEC. Predictions are his view, not ours, shown with the date he made them.",
  "items": [
   {
@@ -883,6 +883,48 @@
    "excerpt": false,
    "speaker": "Michael Saylor",
    "verified": "2026-10-04 (checked word for word against the linked source)"
+  },
+  {
+   "text": "The way to think of our company is we’re a structured finance company.",
+   "theme": "strategy",
+   "theme_label": "Strategy",
+   "excerpt": false,
+   "date": "2026-10-13",
+   "date_label": "Oct 13, 2026",
+   "type": "interview",
+   "type_label": "Interview",
+   "context": "Interview on Bloomberg Crypto with Tim Stenovec and Carol Massar, Washington, D.C. (video on Strategy’s official YouTube channel)",
+   "url": "https://www.youtube.com/watch?v=_524Bq_ew5k",
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-18 (checked word for word against the Bloomberg Crypto video transcript published on Yahoo Finance, Oct 13, 2026)"
+  },
+  {
+   "text": "You should expect that we will increase our Bitcoin holdings over time.",
+   "theme": "strategy",
+   "theme_label": "Strategy",
+   "excerpt": true,
+   "date": "2026-10-13",
+   "date_label": "Oct 13, 2026",
+   "type": "interview",
+   "type_label": "Interview",
+   "context": "Interview on Bloomberg Crypto with Tim Stenovec and Carol Massar, Washington, D.C. (video on Strategy’s official YouTube channel)",
+   "url": "https://www.youtube.com/watch?v=_524Bq_ew5k",
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-18 (checked word for word against the Bloomberg Crypto video transcript published on Yahoo Finance, Oct 13, 2026)"
+  },
+  {
+   "text": "I think that it should definitely move back into the six figures, back beyond $100,000 and our long-term forecast is Bitcoin grows 20 to 30% a year over the next 20 years.",
+   "theme": "predictions",
+   "theme_label": "Predictions",
+   "excerpt": true,
+   "date": "2026-10-13",
+   "date_label": "Oct 13, 2026",
+   "type": "interview",
+   "type_label": "Interview",
+   "context": "Interview on Bloomberg Crypto with Tim Stenovec and Carol Massar, Washington, D.C. (video on Strategy’s official YouTube channel)",
+   "url": "https://www.youtube.com/watch?v=_524Bq_ew5k",
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-18 (checked word for word against the Bloomberg Crypto video transcript published on Yahoo Finance, Oct 13, 2026)"
   }
  ],
  "other_speakers": [
