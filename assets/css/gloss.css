@@ -1,0 +1,38 @@
+/* glossary tips */
+abbr.gl{text-decoration:none;border-bottom:1px dotted rgba(247,147,26,.75);cursor:help;color:inherit}
+abbr.gl:focus-visible{outline:2px solid #F7931A;outline-offset:1px}
+.gl-tip{position:fixed;z-index:1000;background:#0d1117;color:#d1d5db;border:1px solid rgba(247,147,26,.5);border-radius:6px;padding:9px 11px;font:12.5px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.55)}
+.gl-tip b{display:block;color:#F7931A;font-size:12px;margin-bottom:3px;letter-spacing:.02em}
+.gl-tip a{color:#9ca3af;font-size:11px;margin-left:2px}
+/* copy-link */
+.shr{background:transparent;border:0;color:#6b7280;padding:2px 4px;margin-left:4px;cursor:pointer;vertical-align:middle;line-height:0;opacity:.6;border-radius:3px}
+.shr:hover,.shr:focus-visible{color:#F7931A;opacity:1}
+@media (hover:none){.shr{padding:8px;margin:-6px 0 -6px 0}}
+.shr-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1001;background:#111827;color:#f3f4f6;border:1px solid rgba(247,147,26,.55);border-radius:20px;padding:7px 14px;font:600 12.5px system-ui,sans-serif;transition:opacity .35s;max-width:90vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shr-toast.out{opacity:0}
+/* My Alts ribbon */
+.myalts{display:flex;align-items:center;gap:8px;background:#0b0f14;border-bottom:1px solid #1f2937;padding:0 6px 0 10px;min-height:36px;font:600 12px var(--mono,ui-monospace,monospace)}
+.myalts[hidden]{display:none}
+.myalts .ma-l{color:#F7931A;font-size:10px;letter-spacing:.08em;white-space:nowrap;display:flex;flex-direction:column;line-height:1.1}.myalts .ma-l small{color:#6b7280;font-size:9px;letter-spacing:0}
+.myalts .ma-s{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex:1;padding:4px 0;scroll-snap-type:x proximity}
+.myalts .ma-s::-webkit-scrollbar{display:none}
+.myalts .ma-i{white-space:nowrap;background:#111827;border:1px solid #1f2937;border-radius:16px;padding:5px 10px;color:#e5e7eb;scroll-snap-align:start;min-height:26px;display:inline-flex;align-items:center;gap:5px}
+.myalts .ma-i b{color:#9ca3af;font-weight:700}
+.myalts .up{color:#22c55e}.myalts .dn{color:#ef4444}
+.myalts .ma-e{background:transparent;border:1px solid #374151;color:#9ca3af;border-radius:50%;width:30px;height:30px;flex:none;cursor:pointer}
+.tke-alts{flex-wrap:wrap;gap:6px;align-items:center}.tke-alts[hidden]{display:none}.tke-alts small{flex-basis:100%}
+.tke-ma{display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;font-size:12.5px}
+.tke-ma input{width:18px;height:18px;accent-color:#F7931A}
+/* no-history tiles: day range + change instead of a flat sparkline */
+.spk-nr{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:32px;padding:2px 0;font:11px var(--mono,ui-monospace,monospace)}
+.spk-nr small{color:#6b7280;font-size:10px}
+.spk-nrb{display:flex;align-items:center;gap:6px;flex:1;min-width:0}.spk-nrb .rng{flex:1;max-width:none;width:auto;height:5px}
+.spk-nrc{display:flex;align-items:baseline;gap:4px;white-space:nowrap}.spk-nrc b{font-size:12px}.spk-nrc .up{color:#22c55e}.spk-nrc .dn{color:#ef4444}
+/* clear range and view controls (all charts) */
+.seg,.x-seg{border-color:#374151!important;border-radius:6px!important;background:#0b0f14}
+.seg button,.x-seg button{color:#cbd5e1!important;font-weight:700!important;padding:6px 10px!important;min-height:30px}
+.seg button.on,.seg button[aria-pressed="true"],.seg button[aria-selected="true"],.x-seg button.on,.x-seg button[aria-pressed="true"]{background:#F7931A!important;color:#000!important;border-color:#F7931A!important}
+.seg button:hover:not(.on):not([aria-pressed="true"]){background:rgba(247,147,26,.12)}
+.lc-r::before,.ch-gbar .seg::before,.p-charts .ch-sub .seg::before{content:'Range';align-self:center;padding:0 6px 0 8px;color:#6b7280;font:600 9.5px var(--mono,ui-monospace,monospace);letter-spacing:.06em;text-transform:uppercase}
+.lc-m::before,.ch-view::before,.pc-mode::before{content:'View';align-self:center;padding:0 6px 0 8px;color:#6b7280;font:600 9.5px var(--mono,ui-monospace,monospace);letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:700px){.seg button,.x-seg button{min-height:36px!important;min-width:36px;padding:6px 9px!important}.myalts .ma-i{min-height:30px}}
