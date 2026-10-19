@@ -27,18 +27,26 @@
   window.addEventListener('load', soon); window.addEventListener('resize', soon); setTimeout(scan, 4000); setTimeout(scan, 10000);
   var mT = null; if (window.MutationObserver) new MutationObserver(function () { if (mT) return; mT = setTimeout(function () { mT = null; scan(); }, 1500); }).observe(document.body || document.documentElement, { childList: true, subtree: true });
 })();
-/* Grid filler: in any tile grid (phone and desktop), the last orphan tile spans the remaining columns, so odd counts
-   (including after user customization or hidden tiles) never leave a hole. */
+/* Grid balance (r1019y): tiles always stay equal size and rows stay full. In a tile grid with an uneven last row we
+   (1) switch to the largest column count that divides the tile count evenly (never below 2, never above the design count),
+   else (2) put dashed equal-size '＋ Add tile' slots in the gap that open that section's ✎ Edit picker. No tile is stretched. */
 (function () {
   'use strict';
   function cols(g) { var t = getComputedStyle(g).gridTemplateColumns; return t && t !== 'none' ? t.split(' ').filter(function (x) { return x && x !== '0px'; }).length : 1; }
   function vis(e) { return !e.hidden && getComputedStyle(e).display !== 'none'; }
+  function edBtn(g) { var sec = g.closest('section,.mk-g,[data-mk],.p') || g.parentNode, b = null; while (sec && !b) { b = sec.querySelector('[data-mk-edit],[data-cx-ed],[data-dv-ed],[data-ed],.mk-ed,[class*="-ed"][aria-haspopup],button[data-edit]'); if (!b) sec = sec.parentElement && sec.parentElement.closest('section,[data-mk],.p'); } return b; }
   function fill() {
-    var gs = document.querySelectorAll('main *'); for (var i = 0; i < gs.length; i++) { var g = gs[i]; if (g.children.length < 3) continue; var cs = getComputedStyle(g); if (cs.display !== 'grid' || g.closest('canvas')) continue;
-      var kids = []; for (var j = 0; j < g.children.length; j++) { var k = g.children[j]; if (k.hasAttribute('data-gf')) { k.style.gridColumn = ''; k.removeAttribute('data-gf'); } if (vis(k)) kids.push(k); }
-      if (kids.length < 2) continue; var c0 = kids[0].className.split(' ')[0]; if (!c0 || !kids.every(function (k) { return k.className.split(' ')[0] === c0; })) continue; /* tile grids only */
-      if (kids.some(function (k) { return /span|-1/.test(k.style.gridColumn || '') || getComputedStyle(k).gridColumnEnd !== 'auto'; })) continue;
-      var n = cols(g); if (n < 2) continue; var r = kids.length % n; if (!r) continue; var last = kids[kids.length - 1]; last.style.gridColumn = 'span ' + (n - r + 1); last.setAttribute('data-gf', '1'); } }
+    var gs = document.querySelectorAll('main *'); for (var i = 0; i < gs.length; i++) { var g = gs[i]; if (g.children.length < 2) continue; var cs = getComputedStyle(g); if (cs.display !== 'grid' || g.closest('canvas')) continue;
+      var kids = [], slots = []; for (var j = 0; j < g.children.length; j++) { var k = g.children[j]; if (k.hasAttribute('data-gf')) { k.style.gridColumn = ''; k.removeAttribute('data-gf'); } if (k.classList.contains('gf-add')) { slots.push(k); continue; } if (vis(k)) kids.push(k); }
+      var want = 0, tpl = '';
+      if (kids.length >= 2 && cs.gridAutoFlow.indexOf('column') < 0) { var c0 = kids[0].className.split(' ')[0];
+        if (c0 && kids.every(function (k) { return k.className.split(' ')[0] === c0; }) && !kids.some(function (k) { return /span|-1/.test(k.style.gridColumn || '') || getComputedStyle(k).gridColumnEnd !== 'auto'; })) {
+          var prev = g.style.gridTemplateColumns; if (g.hasAttribute('data-gfc')) g.style.gridTemplateColumns = ''; var n = cols(g); g.style.gridTemplateColumns = prev;
+          if (n >= 2 && kids.length % n) { var c = 0; for (var x = n - 1; x >= Math.max(2, Math.ceil(n / 2)); x--) if (kids.length % x === 0) { c = x; break; }
+            if (c) tpl = 'repeat(' + c + ',minmax(0,1fr))'; else if (edBtn(g)) want = n - kids.length % n; } } }
+      if (tpl) { if (g.style.gridTemplateColumns !== tpl) { g.style.gridTemplateColumns = tpl; g.setAttribute('data-gfc', '1'); } } else if (g.hasAttribute('data-gfc')) { g.style.gridTemplateColumns = ''; g.removeAttribute('data-gfc'); }
+      if (slots.length !== want) { slots.forEach(function (sl) { sl.remove(); }); for (var a = 0; a < want; a++) { var sl = document.createElement('button'); sl.type = 'button'; sl.className = 'gf-add'; sl.textContent = '\uff0b Add tile'; sl.title = 'Fill this row: opens the ✎ Edit picker'; g.appendChild(sl); } } } }
+  document.addEventListener('click', function (e) { var sl = e.target.closest && e.target.closest('.gf-add'); if (!sl) return; var b = edBtn(sl.parentNode); if (b) b.click(); });
   var T = null; function soon() { if (T) return; T = setTimeout(function () { T = null; fill(); }, 600); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', soon); else soon();
   window.addEventListener('load', soon); window.addEventListener('resize', soon); setInterval(function () { if (!document.hidden) fill(); }, 3000);

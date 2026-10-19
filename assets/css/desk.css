@@ -271,3 +271,4 @@ body.dm.dml-wall .p-tboard [data-tb-scroll],body.dm.dml-wall .p-tboard .tb-wrap{
 .mu-cr{margin:6px 0 0;color:#7d8590;font-size:10px}
 .mu-c+.mu-c{margin-top:8px}.mu-s{padding:3px 8px}.mu-m button{font-size:10px;padding:3px 7px}.mu-m button.on{color:#F7931A;border-color:rgba(247,147,26,.5)}
 .tb-sm{display:none}@media (max-width:600px){.tb-lg{display:none}.tb-sm{display:inline}.deskbar{flex-wrap:wrap;row-gap:6px}}
+.pk-gb{display:block;width:100%;text-align:left;min-height:40px;background:none;border:0;border-bottom:1px solid var(--ln);color:var(--o);font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;padding:6px 2px}.tke-views{display:flex;flex-wrap:wrap;gap:6px}.tke-views .chip{min-height:36px}

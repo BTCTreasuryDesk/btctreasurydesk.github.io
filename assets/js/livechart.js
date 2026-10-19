@@ -11,33 +11,36 @@
   function fp(v, cur) { if (v == null || !isFinite(v)) return '—'; var a = Math.abs(v), d = a >= 1000 ? 0 : a >= 100 ? 2 : a >= 1 ? 2 : 4; var s = v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); return cur === 'pct' ? s + '%' : cur && cur !== 'USD' ? s : '$' + s; }
   function sg(v, d) { return v == null || !isFinite(v) ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d == null ? 2 : d) + '%'; }
   var RANGES = ['1H', '1D', '1W', '1M', '3M', '1Y', 'All'];
-  var IDX = { SPX: ['.SPX', 'S&P 500'], IXIC: ['.IXIC', 'Nasdaq'], GOLD: ['@GC.1', 'Gold'] };
+  var IDX = { SPX: ['.SPX', 'S&P 500'], IXIC: ['.IXIC', 'Nasdaq'], GOLD: ['@GC.1', 'Gold'], DXY: ['.DXY', 'US dollar index'] };
+  var CBP = { BTC: 'BTC-USD', ETH: 'ETH-USD', SOL: 'SOL-USD', 'ETH/BTC': 'ETH-BTC', 'SOL/BTC': 'SOL-BTC' }; function isC(t) { return !!CBP[t]; } /* Coinbase pairs, 24/7 */
 
   /* ---------- names (top 50 from the weekly leaderboard) ---------- */
   var LB = null, lbP = J('/assets/data/leaderboard.json').then(function (j) { LB = (j.public_companies || []).filter(function (c) { return c.ticker && c.btc && c.stock_price; }).slice(0, 50); return LB; }).catch(function () { LB = []; return LB; });
-  function nameOf(t) { if (t === 'BTC') return 'Bitcoin'; if (IDX[t]) return IDX[t][1]; var c = (LB || []).filter(function (x) { return x.ticker === t; })[0]; return c ? c.name : t; }
+  function nameOf(t) { if (t === 'BTC') return 'Bitcoin'; if (t === 'ETH') return 'Ether'; if (t === 'SOL') return 'Solana'; if (/\/BTC$/.test(t)) return t.split('/')[0] + ' priced in BTC'; if (IDX[t]) return IDX[t][1]; var c = (LB || []).filter(function (x) { return x.ticker === t; })[0]; return c ? c.name : t; }
   function cnOf(t) { return IDX[t] ? IDX[t][0] : F ? F.cn(t) : null; }
 
   /* ---------- series ---------- */
   var HIST = null, histP = null; function hist() { return histP || (histP = J('/assets/data/stocks_hist.json').then(function (j) { HIST = j; return j; }).catch(function () { HIST = { series: {} }; return HIST; })); }
   var BTCD = null; function btcDaily() { return BTCD ? Promise.resolve(BTCD) : J('/assets/data/btc_daily.json').then(function (j) { var t0 = Date.parse(j.start + 'T00:00:00Z'); BTCD = j.closes.map(function (c, i) { return { t: t0 + i * DAY, c: c }; }); return BTCD; }); }
   var CBU = 'https://api.exchange.coinbase.com/products/BTC-USD/candles', GR = { '1H': [60, 1 / 24], '1D': [300, 1], '1W': [3600, 7], '1M': [3600, 30], '3M': [86400, 92], '1Y': [86400, 366] }, cache = {};
-  function btcSeries(r) {
+  function btcSeries(r, t) { t = t || 'BTC'; var CU = 'https://api.exchange.coinbase.com/products/' + CBP[t] + '/candles';
+    if (r === 'All' && t !== 'BTC') r = '1Y';
     if (r === 'All') return btcDaily().then(function (d) { var w = d.filter(function (p, i) { return i % 7 === 0 || i === d.length - 1; }); return w.map(function (p) { return { t: p.t, c: p.c }; }); });
-    var k = 'BTC' + r; if (cache[k] && Date.now() - cache[k].at < 120e3) return Promise.resolve(cache[k].s);
+    var k = t + r; if (cache[k] && Date.now() - cache[k].at < 120e3) return Promise.resolve(cache[k].s);
     var g = GR[r][0], now = Date.now(), from = now - GR[r][1] * DAY, parts = [];
     for (var a = from; a < now; a += g * 299e3) parts.push([a, Math.min(now, a + g * 299e3)]);
-    return Promise.all(parts.map(function (p) { return J(CBU + '?granularity=' + g + '&start=' + new Date(p[0]).toISOString() + '&end=' + new Date(p[1]).toISOString()).catch(function () { return []; }); }))
+    return Promise.all(parts.map(function (p) { return J(CU + '?granularity=' + g + '&start=' + new Date(p[0]).toISOString() + '&end=' + new Date(p[1]).toISOString()).catch(function () { return []; }); }))
       .then(function (arrs) { var m = {}; arrs.forEach(function (x) { (x || []).forEach(function (q) { m[q[0]] = { t: q[0] * 1e3, l: +q[1], h: +q[2], o: +q[3], c: +q[4] }; }); });
         var s = Object.keys(m).map(function (q) { return m[q]; }).sort(function (x, y) { return x.t - y.t; }); s.g = g * 1e3; cache[k] = { at: Date.now(), s: s }; return s; });
   }
   /* intraday buffer per symbol, kept for today (ET) in this browser */
+  function etTs(d, hh, mm) { var y = +d.slice(0, 4), mo = +d.slice(5, 7) - 1, da = +d.slice(8, 10), h12 = +new Date(Date.UTC(y, mo, da, 12)).toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', hourCycle: 'h23' }); return Date.UTC(y, mo, da, hh + (12 - h12), mm); } /* ET wall-clock time on date d -> ms */
   function etDay(t) { return new Date(t).toLocaleDateString('en-CA', { timeZone: 'America/New_York' }); }
   var IB = {}; function ibGet(t) { if (IB[t]) return IB[t]; var o = null; try { o = JSON.parse(LS.get('btd_ib_' + t) || 'null'); } catch (e) {} IB[t] = o && o.d === etDay(Date.now()) ? o.p : []; return IB[t]; }
   function ibPush(t, px) { if (px == null) return; var a = ibGet(t), now = Date.now(); if (a.length && now - a[a.length - 1][0] < 14e3) { a[a.length - 1][1] = px; } else a.push([now, px]); if (a.length > 2000) a.splice(0, a.length - 2000); LS.set('btd_ib_' + t, JSON.stringify({ d: etDay(now), p: a })); }
   var XSD = {}; function xsIntra(t) { var id = F && F.XS[t]; if (!id) return Promise.resolve(null); var c = XSD[t]; if (c && Date.now() - c.at < 300e3) return Promise.resolve(c.s);
     return J('https://api.coingecko.com/api/v3/coins/' + id + '/market_chart?vs_currency=usd&days=1').then(function (j) { var s = (j.prices || []).map(function (p) { return { t: p[0], c: p[1] }; }); XSD[t] = { at: Date.now(), s: s }; return s; }).catch(function () { return null; }); }
-  function liveQ(t) { var c = cnOf(t); var q = c && F ? F.get(c) : null; return q && q.px != null ? q : null; }
+  function liveQ(t) { if (t === 'ETH' || t === 'SOL') { var cq = F && F.get(t); return cq && cq.px != null ? cq : null; } if (/\//.test(t)) return null; var c = cnOf(t); var q = c && F ? F.get(c) : null; return q && q.px != null ? q : null; }
   function curPx(q) { return q ? (q.ext && F.session() !== 'open' ? q.ext.px : q.px) : null; }
   function stockSeries(t, r) {
     var q = liveQ(t), now = Date.now();
@@ -46,9 +49,16 @@
       return xsIntra(t).then(function (xs) { var s, note = '';
         if (own.length >= 8) { s = own; note = 'Live quotes collected while this page is open'; }
         else if (xs && xs.length > 4) { s = xs.filter(function (p) { return p.t >= now - span; }); note = 'Intraday shape from the tokenized ' + t + ' (xStocks, trades 24/7); last point = live quote'; if (q) s.push({ t: now, c: curPx(q) }); }
-        else { return hist().then(function () { var h = histOf(t), base = q && q.prev ? q.prev : h && h.length ? h[h.length - 1].c : null; var s2 = [];
+        else { var ses = F ? F.session() : 'closed';
+          if (q && q.px != null && q.lt && /^\d{4}-\d{2}-\d{2}$/.test(q.lt) && ses !== 'open') { /* market not in its regular session and no intraday detail: show the last regular session as real points (open -> close -> extended last), on that session's own clock */
+            var d = q.lt, s3 = [], dn = new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' });
+            if (q.prev != null) s3.push({ t: etTs(d, 9, 25), c: q.prev }); if (q.open != null) s3.push({ t: etTs(d, 9, 30), c: q.open }); s3.push({ t: etTs(d, 16, 0), c: q.px });
+            if (q.ext && q.ext.px != null && q.ext.kind === 'post') s3.push({ t: Math.min(Date.now(), etTs(d, 20, 0)), c: q.ext.px });
+            if (q.ext && q.ext.px != null && q.ext.kind === 'pre' && etDay(Date.now()) !== d) s3.push({ t: Math.min(Date.now(), etTs(etDay(Date.now()), 9, 29)), c: q.ext.px });
+            s3.sess = (etDay(Date.now()) === d ? 'Today' : dn) + ' session'; s3.note = s3.sess + ' (' + d + '): prior close, open, close' + (q.ext ? ' and extended-hours last trade' : '') + ' from the CNBC quote; no free intraday detail for ' + t + ' outside market hours'; s3.flat = 1; return Promise.resolve(s3); }
+          return hist().then(function () { var h = histOf(t), base = q && q.prev ? q.prev : h && h.length ? h[h.length - 1].c : null; var s2 = [];
           if (own.length < 3 && h && h.length >= 4) { s2 = h.slice(-6).map(function (p) { return { t: p.t, c: p.c }; }); if (q) s2.push({ t: now, c: curPx(q) }); s2.note = 'No free intraday history for ' + t + ': last 5 daily closes + live quote; the intraday line fills in while this page is open in market hours'; s2.daily = 1; return s2; }
-          if (base) s2.push({ t: now - span, c: base }); own.forEach(function (p) { s2.push(p); }); if (q) s2.push({ t: now, c: curPx(q) });
+          var st0 = etTs(etDay(now), ses === 'pre' ? 4 : 9, ses === 'pre' ? 0 : 30); if (base) s2.push({ t: Math.min(st0, own.length ? own[0].t : now - 6e4), c: base }); own.forEach(function (p) { s2.push(p); }); if (q) s2.push({ t: now, c: curPx(q) }); s2.sess = 'Today';
           s2.note = 'Prior close → live quote. Intraday line fills in as live quotes arrive (no free intraday history for ' + t + ')'; s2.flat = 1; return s2; }); }
         s.note = note; return s; });
     }
@@ -58,7 +68,7 @@
       else s.note = 'Daily closes (weekly before the last ~18 months) + live quote'; return s; });
   }
   function histOf(t) { var x = HIST && HIST.series[t]; if (!x) return null; var b = Date.parse(x.d0 + 'T20:00:00Z'); return x.o.map(function (o, i) { return { t: b + o * DAY, c: x.c[i] }; }); }
-  function series(t, r) { return t === 'BTC' ? btcSeries(r) : stockSeries(t, r); }
+  function series(t, r) { return isC(t) ? btcSeries(r, t) : stockSeries(t, r); }
   /* feed every watched stock into its intraday buffer */
   if (F) F.on('*', function (v, k) { if (!v || v.px == null || ['BTC', 'ETH', 'SOL', 'global', 'breadth', 'stable', 'tok', 'quotes', 'session'].indexOf(k) >= 0 || v.cached) return; var s = F.session(); if (s === 'closed') return; ibPush(k, curPx(v)); });
 
@@ -108,7 +118,7 @@
   box.innerHTML = '<div class="lc-h"><div class="lc-sym" role="group" aria-label="Symbol" data-lc-syms></div>' +
     '<div class="seg lc-r" role="tablist" aria-label="Time range">' + RANGES.map(function (r) { return '<button type="button" role="tab" data-lc-r="' + r + '">' + r + '</button>'; }).join('') + '</div>' +
     '<div class="seg lc-m" role="group" aria-label="Chart style"><button type="button" data-lc-m="area">Area</button><button type="button" data-lc-m="line">Line</button><button type="button" data-lc-m="candle" title="Candles (BTC)">Candles</button></div>' +
-    '<button type="button" class="chip lc-add" data-lc-cmpbtn aria-expanded="false" aria-label="Compare: overlay other symbols">＋ <span class="lc-addl">Compare</span><span class="lc-adds">vs</span></button></div>' +
+    '<button type="button" class="chip lc-add" data-lc-cmpbtn aria-expanded="false" aria-label="Compare: overlay other symbols">＋ Compare</button></div>' +
     '<div class="lc-read"><span class="lc-name" data-lc-name></span><b class="lc-px" data-lc-px>…</b><span class="lc-ch" data-lc-ch></span><span class="lc-sess" data-lc-sess></span><span class="lc-xh" data-lc-xh hidden></span><span class="lc-hl" data-lc-hl></span></div>' +
     '<div class="lc-cmp" data-lc-legend></div><div class="lc-pick" data-lc-pick hidden></div><div class="lc-pick lc-tops" data-lc-tops hidden></div>' +
     '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><span class="lc-dot" data-lc-dot hidden></span><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div>' +
@@ -117,9 +127,34 @@
   var REC = []; try { REC = (JSON.parse(LS.get('btd_lc_rec') || '[]') || []).filter(function (t) { return typeof t === 'string' && t !== 'BTC' && t !== 'MSTR'; }).slice(0, 2); } catch (e) {}
   function remember(t) { if (!t || t === 'BTC' || t === 'MSTR' || ['SPX', 'IXIC', 'GOLD'].indexOf(t) >= 0) return; REC = [t].concat(REC.filter(function (x) { return x !== t; })).slice(0, 2); LS.set('btd_lc_rec', JSON.stringify(REC)); }
   function forget() { REC = []; try { localStorage.removeItem('btd_lc_rec'); } catch (e) {} }
-  function symsBar() { var base = ['BTC', 'MSTR'].concat(REC); if (base.indexOf(S.s) < 0) base.push(S.s);
-    $('[data-lc-syms]').innerHTML = base.map(function (t) { return '<button type="button" class="chip' + (t === S.s ? ' on' : '') + '" data-lc-s="' + esc(t) + '">' + esc(t === '3350.T' ? 'Metaplanet' : t) + '</button>'; }).join('') +
-      '<label class="lc-sel"><span class="sr">More symbols</span><select data-lc-more aria-label="Pick any top-50 treasury company"><option value="">Top 50 ▾</option>' + (REC.length ? '<option value="__clr">\u2715 Clear recent picks</option>' : '') + (LB || []).map(function (c) { return '<option value="' + esc(c.ticker) + '">#' + esc(c.rank) + ' ' + esc(c.ticker) + ' · ' + esc(c.name.slice(0, 26)) + '</option>'; }).join('') + '</select></label><button type="button" class="chip lc-topbtn" data-lc-top aria-expanded="false" aria-label="Pick any top-50 treasury company">Top 50 ▾</button>'; }
+  function lbl(t) { return t === '3350.T' ? 'Metaplanet' : t; }
+  /* Symbol row: BTC, MSTR, the current other pick (desktop also shows 2 recent), then '＋ Pick' (sheet on phone, popover on desktop) */
+  function symsBar() { var wide = innerWidth > 760, base = ['BTC', 'MSTR'].concat(wide ? REC : []); if (base.indexOf(S.s) < 0) base.push(S.s);
+    $('[data-lc-syms]').innerHTML = base.map(function (t) { return '<button type="button" class="chip lc-sc' + (t === S.s ? ' on' : '') + '" data-lc-s="' + esc(t) + '" aria-pressed="' + (t === S.s) + '">' + esc(lbl(t)) + '</button>'; }).join('') +
+      '<button type="button" class="chip lc-pk" data-lc-pk aria-haspopup="dialog" aria-expanded="false" title="Chart any symbol: search, treasury companies, crypto, macro, your watchlist">\uff0b Pick</button>'; return;
+    $('[data-lc-syms]').innerHTML += '<label class="lc-sel"><span class="sr">More symbols</span><select data-lc-more aria-label="Pick any top-50 treasury company"><option value="">Top 50 ▾</option>' + (REC.length ? '<option value="__clr">\u2715 Clear recent picks</option>' : '') + (LB || []).map(function (c) { return '<option value="' + esc(c.ticker) + '">#' + esc(c.rank) + ' ' + esc(c.ticker) + ' · ' + esc(c.name.slice(0, 26)) + '</option>'; }).join('') + '</select></label><button type="button" class="chip lc-topbtn" data-lc-top aria-expanded="false" aria-label="Pick any top-50 treasury company">Top 50 ▾</button>'; }
+  var SH = null, shQ = '';
+  function shGroups() { var G = [], lb = LB || [], F2 = F, mv = lb.slice(0, 15).map(function (c) { var cn = F2 && F2.cn(c.ticker), q = cn && F2.get(cn); return { t: c.ticker, v: q && q.chp != null ? q.chp : null, n: c.name }; }).filter(function (x) { return x.v != null; }).sort(function (a, b) { return Math.abs(b.v) - Math.abs(a.v); }).slice(0, 3);
+    G.push(['Suggested', REC.map(function (t) { return [t, 'recently viewed']; }).concat(mv.map(function (x) { return [x.t, (x.v >= 0 ? '+' : '\u2212') + Math.abs(x.v).toFixed(1) + '% today \u00b7 big mover']; }))]);
+    G.push(['Top treasury companies', lb.slice(0, 50).map(function (c) { return [c.ticker, '#' + c.rank + ' ' + c.name]; })]);
+    G.push(['Bitcoin', [['BTC', 'Bitcoin \u00b7 Coinbase live']]]);
+    G.push(['Macro \u00b7 futures', [['SPX', 'S&P 500'], ['IXIC', 'Nasdaq'], ['GOLD', 'Gold futures'], ['DXY', 'US dollar index']]]);
+    var wl = []; try { wl = JSON.parse(LS.get('btd_my2') || '[]') || []; } catch (e) {} wl = (Array.isArray(wl) ? wl : []).map(function (x) { return typeof x === 'string' ? x : x && (x.tk || x.k); }).filter(function (x) { return x && /^[A-Z0-9.]{1,12}$/.test(x); });
+    if (wl.length) G.push(['My Watchlist', wl.map(function (t) { return [t, 'from your watchlist']; })]);
+    return G; }
+  function shPaint() { if (!SH) return; var q = shQ.trim().toUpperCase(), h = '', seen = {};
+    shGroups().forEach(function (g) { var it = g[1].filter(function (x) { var k = g[0] + x[0]; if (seen[k]) return false; seen[k] = 1; return !q || x[0].toUpperCase().indexOf(q) >= 0 || x[1].toUpperCase().indexOf(q) >= 0; }); if (!it.length) return;
+      h += '<p class="lc-shg">' + esc(g[0]) + (g[0] === 'Suggested' && REC.length && !q ? ' <button type="button" class="lc-shc" data-lc-shclr>Clear recent</button>' : '') + '</p><div class="lc-shl">' + it.map(function (x) { return '<button type="button" class="lc-sho' + (x[0] === S.s ? ' on' : '') + '" data-lc-s="' + esc(x[0]) + '"><b>' + esc(lbl(x[0])) + '</b><small>' + esc(x[1]) + '</small></button>'; }).join('') + '</div>'; });
+    if (q && /^[A-Z0-9.]{1,10}$/.test(q)) h += '<p class="lc-shg">Any symbol</p><div class="lc-shl"><button type="button" class="lc-sho" data-lc-s="' + esc(q) + '"><b>' + esc(q) + '</b><small>' + (CBP[q] ? 'Coinbase ' + CBP[q] + ' (24/7)' : 'chart ' + esc(q) + ' from the CNBC quote service (if it has it)') + '</small></button></div>';
+    SH.querySelector('[data-lc-shb]').innerHTML = h || '<p class="lc-shg">No match</p>'; }
+  function shOpen(btn) { shClose(); SH = document.createElement('div'); SH.className = 'lc-sh' + (innerWidth > 760 ? ' lc-pop' : ''); SH.setAttribute('role', 'dialog'); SH.setAttribute('aria-label', 'Pick a symbol to chart');
+    SH.innerHTML = '<div class="lc-shh"><b>Chart a symbol</b><button type="button" class="lc-shx" data-lc-shx aria-label="Close">\u00d7</button></div><input type="search" class="lc-shi" data-lc-shi placeholder="Search or type any ticker (e.g. COIN, ETH, SPX)" autocomplete="off" spellcheck="false" aria-label="Search symbols"><div class="lc-shb" data-lc-shb></div>';
+    var bd = document.createElement('div'); bd.className = 'lc-shbd'; bd.setAttribute('data-lc-shbd', ''); document.body.appendChild(bd); document.body.appendChild(SH);
+    if (innerWidth > 760) { var r = btn.getBoundingClientRect(); SH.style.top = (r.bottom + scrollY + 6) + 'px'; SH.style.left = Math.max(8, Math.min(r.left + scrollX, innerWidth - 420)) + 'px'; }
+    shQ = ''; shPaint(); btn.setAttribute('aria-expanded', 'true'); var inp = SH.querySelector('[data-lc-shi]'); inp.addEventListener('input', function () { shQ = inp.value; shPaint(); }); inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { var f = SH.querySelector('[data-lc-s]'); if (f) f.click(); } if (e.key === 'Escape') shClose(); });
+    if (innerWidth > 760) inp.focus();
+    SH.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; if (b.hasAttribute('data-lc-shx')) { shClose(); return; } if (b.hasAttribute('data-lc-shclr')) { forget(); if (S.s !== 'BTC' && S.s !== 'MSTR') S.s = 'BTC'; save(); ui(); load(); shPaint(); return; } if (b.dataset.lcS) { var t = b.dataset.lcS; shClose(); window.BTD_LC.open(t, 1); } }); bd.addEventListener('click', shClose); }
+  function shClose() { if (SH) { SH.remove(); SH = null; } var bd = document.querySelector('[data-lc-shbd]'); if (bd) bd.remove(); var pb = box.querySelector('[data-lc-pk]'); if (pb) pb.setAttribute('aria-expanded', 'false'); }
   function topsPaint() { $('[data-lc-tops]').innerHTML = '<span class="lc-pt">Chart a top-50 treasury company' + (REC.length ? ' \u00b7 <button type="button" class="lc-clr" data-lc-clr>clear recent</button>' : '') + '</span><button type="button" class="chip' + (S.s === 'BTC' ? ' on' : '') + '" data-lc-s="BTC">BTC-USD</button>' + (LB || []).map(function (c) { return '<button type="button" class="chip' + (c.ticker === S.s ? ' on' : '') + '" data-lc-s="' + esc(c.ticker) + '" title="#' + esc(c.rank) + ' ' + esc(c.name) + '">' + esc(c.ticker === '3350.T' ? 'Metaplanet' : c.ticker) + '</button>'; }).join(''); }
   function ui() { symsBar(); box.querySelectorAll('[data-lc-r]').forEach(function (b) { var on = b.dataset.lcR === S.r; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
     box.querySelectorAll('[data-lc-m]').forEach(function (b) { b.classList.toggle('on', b.dataset.lcM === S.m); b.disabled = b.dataset.lcM === 'candle' && (S.s !== 'BTC' || S.cmp.length > 0); });
@@ -127,6 +162,7 @@
   function pickPaint() { var p = $('[data-lc-pick]'); var have = [S.s].concat(S.cmp), opts = REC.concat(['MSTR', 'BTC', 'SPX', 'IXIC', 'GOLD']).concat((LB || []).map(function (c) { return c.ticker; })).filter(function (t, i, a) { return a.indexOf(t) === i && have.indexOf(t) < 0; });
     p.innerHTML = '<span class="lc-pt">Overlay up to ' + MAXC() + ' (' + Math.max(0, MAXC() - S.cmp.length) + ' left) · axis switches to % change</span>' + opts.slice(0, 54).map(function (t) { return '<button type="button" class="chip" data-lc-addt="' + esc(t) + '"' + (S.cmp.length >= MAXC() ? ' disabled' : '') + '>' + esc(t === '3350.T' ? 'Metaplanet' : t) + '</button>'; }).join(''); }
   box.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-lc-pk')) { if (SH) shClose(); else shOpen(b); return; }
     if (b.hasAttribute('data-lc-top')) { var tp = $('[data-lc-tops]'); tp.hidden = !tp.hidden; $('[data-lc-pick]').hidden = true; if (!tp.hidden) topsPaint(); box.querySelectorAll('[data-lc-top]').forEach(function (x) { x.setAttribute('aria-expanded', !tp.hidden); }); return; }
     if (b.hasAttribute('data-lc-clr')) { forget(); $('[data-lc-tops]').hidden = true; if (S.s !== 'BTC' && S.s !== 'MSTR') S.s = 'BTC'; save(); ui(); load(); return; }
     if (b.dataset.lcS) { $('[data-lc-tops]').hidden = true; S.s = b.dataset.lcS; remember(S.s); S.cmp = S.cmp.filter(function (t) { return t !== S.s; }); if (S.s !== 'BTC' && S.m === 'candle') S.m = 'area'; }
@@ -139,7 +175,7 @@
   var lcReg = 0;
   box.addEventListener('change', function (e) { if (e.target.matches('[data-lc-more]') && e.target.value === '__clr') { forget(); if (S.s !== 'BTC' && S.s !== 'MSTR') S.s = 'BTC'; save(); ui(); load(); return; } if (e.target.matches('[data-lc-more]') && e.target.value) { remember(e.target.value); S.s = e.target.value; S.cmp = S.cmp.filter(function (t) { return t !== S.s; }); if (S.m === 'candle') S.m = 'area'; save(); ui(); load(); } });
   function watchAll() { if (F) F.watch([S.s].concat(S.cmp).map(cnOf).filter(Boolean)); }
-  function load() { var my = ++tok; watchAll(); var list = [S.s].concat(S.cmp); $('[data-lc-msg]').hidden = false; $('[data-lc-msg]').textContent = 'Loading ' + S.r + '…';
+  function load() { var my = ++tok; watchAll(); var hle = $('[data-lc-hl]'); if (hle) hle.textContent = ''; var list = [S.s].concat(S.cmp); $('[data-lc-msg]').hidden = false; $('[data-lc-msg]').textContent = 'Loading ' + S.r + '…';
     Promise.all(list.map(function (t) { return series(t, S.r).catch(function () { return []; }); })).then(function (arr) { if (my !== tok) return;
       /* overlays need one common window: if a stock only has daily closes (market closed), compare everything over 1W instead of squeezing BTC's 24h into a corner */
       if (list.length > 1 && (S.r === '1H' || S.r === '1D') && arr.some(function (a) { return a && a.daily; })) return Promise.all(list.map(function (t) { return series(t, '1W').catch(function () { return []; }); })).then(function (a2) { if (my !== tok) return; DATA = a2; DATA.wk = 1; paint(); var sm = $('[data-lc-legend] small'); if (sm) { sm.textContent = 'Market closed: overlay shown over 1W, % change'; sm.className = 'lc-cn'; } });
@@ -148,16 +184,16 @@
     var sets = list.map(function (t, i) { return { s: DATA[i] || [], col: COLS[i], lab: t, w: i ? 1.5 : 2 }; });
     var q = S.s === 'BTC' ? (F && F.get('BTC')) : liveQ(S.s);
     var res = draw(cv, sets, { pct: pct, candle: S.m === 'candle' && S.s === 'BTC', area: S.m === 'area', hover: hov, base: !pct && s0.length && (S.r === '1H' || S.r === '1D') ? s0[0].c : null, cur: q && q.cur, rth: !pct && S.s !== 'BTC' && S.s !== 'GOLD' && !S.cmp.length && (S.r === '1H' || S.r === '1D') && q && 'ext' in q && !q.yld && !/^[.@]/.test(cnOf(S.s) || '') });
-    var dot = $('[data-lc-dot]'); if (dot) { if (res !== null && cv._last && !pct && S.s === 'BTC' && S.m !== 'candle') { dot.style.left = cv._last.x + 'px'; dot.style.top = cv._last.y + 'px'; dot.hidden = false; } else dot.hidden = true; }
+    var dot = $('[data-lc-dot]'); if (dot) { if (res !== null && cv._last && !pct && isC(S.s) && S.m !== 'candle') { dot.style.left = cv._last.x + 'px'; dot.style.top = cv._last.y + 'px'; dot.hidden = false; } else dot.hidden = true; }
     var msg = $('[data-lc-msg]'); msg.hidden = !!(s0.length > 1); if (!msg.hidden) msg.textContent = s0.length ? 'Waiting for more data…' : 'No data from the free feed right now. Retrying…';
     var tip = $('[data-lc-tip]'); if (res && res.rows) { tip.hidden = false; tip.innerHTML = '<b>' + esc(new Date(res.t).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + ' ET</b>' + res.rows.map(function (r) { return '<span>' + esc(r[0]) + ' ' + (pct ? sg(r[1]) : fp(r[1], q && q.cur)) + '</span>'; }).join(''); tip.style.left = Math.min(Math.max(hov - 70, 4), cv.clientWidth - 150) + 'px'; } else tip.hidden = true;
     // readout
-    var xhS = S.s !== 'BTC' && q && q.ext && F && F.session() !== 'open' && F.xh ? F.xh(q, { cls: 'xh-lc' }) : '', px = S.s === 'BTC' ? (q && q.px) : (xhS ? q.px : curPx(q)) || (s0.length ? s0[s0.length - 1].c : null); var xe = $('[data-lc-xh]'); if (xe) { xe.innerHTML = xhS; xe.hidden = !xhS; } $('[data-lc-name]').textContent = S.s === 'BTC' ? 'BTC-USD' : (S.s === 'GOLD' ? 'GC=F' : S.s) + ' · ' + nameOf(S.s);
-    var pe = $('[data-lc-px]'), old = +pe.dataset.v; pe.textContent = fp(px, q && q.cur); if (px && old && px !== old) { pe.classList.remove('fl-up', 'fl-dn'); void pe.offsetWidth; pe.classList.add(px > old ? 'fl-up' : 'fl-dn'); } pe.dataset.v = px || '';
+    var xhS = !isC(S.s) && q && q.ext && F && F.session() !== 'open' && F.xh ? F.xh(q, { cls: 'xh-lc' }) : '', px = isC(S.s) ? (q && q.px) || (s0.length ? s0[s0.length - 1].c : null) : (xhS ? q.px : curPx(q)) || (s0.length ? s0[s0.length - 1].c : null); var xe = $('[data-lc-xh]'); if (xe) { xe.innerHTML = xhS; xe.hidden = !xhS; } $('[data-lc-name]').textContent = isC(S.s) ? (CBP[S.s].replace('-', S.s.indexOf('/') > 0 ? '/' : '-')) + ' \u00b7 ' + nameOf(S.s) : (S.s === 'GOLD' ? 'GC=F' : S.s) + ' · ' + nameOf(S.s);
+    var pe = $('[data-lc-px]'), old = +pe.dataset.v; pe.textContent = /\/BTC$/.test(S.s) && px ? px.toFixed(px < 0.01 ? 6 : 5) + ' BTC' : fp(px, q && q.cur); if (px && old && px !== old) { pe.classList.remove('fl-up', 'fl-dn'); void pe.offsetWidth; pe.classList.add(px > old ? 'fl-up' : 'fl-dn'); } pe.dataset.v = px || '';
     var wch = s0.length && px ? (px / s0[0].c - 1) * 100 : null, ce = $('[data-lc-ch]'); var XU = window.BTD_CTX; if (XU && !lcReg) { lcReg = 1; XU.onRange(function (k) { if (k === 'LC' || k == null) paint(); }); } var amtM = XU && XU.unit('LC') === 'amt' && S.cmp.length === 0 && s0.length && px, dv = amtM ? px - s0[0].c : 0; ce.textContent = (amtM ? (dv >= 0 ? '+' : '\u2212') + '$' + Math.abs(dv).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : sg(wch)) + ' ' + (DATA.wk ? '1W' : S.r); if (xhS && S.r === '1D' && !amtM && q.chp != null) { wch = q.chp; ce.textContent = sg(q.chp) + ' ' + (XU ? XU.tf(S.s, q, F.session()) : 'day'); } ce.className = 'lc-ch ' + (wch >= 0 ? 'up' : 'dn'); ce.setAttribute('data-spk', 'LC'); ce.setAttribute('role', 'button'); ce.title = 'Tap: timeframe \u00b7 Hold: % / $';
-    var sess = S.s === 'BTC' ? 'Live 24/7 · Coinbase' : (function () { var s = F ? F.session() : 'closed'; if (!q) return 'Last close'; if (s === 'open') return q.rt ? 'Live' : 'Live (may be delayed)'; if (q.ext) return 'Regular-session close'; return 'Market closed · last ' + fp(q.px, q.cur); })();
+    var sess = isC(S.s) ? 'Live 24/7 · Coinbase' : (function () { var s = F ? F.session() : 'closed'; if (!q) return 'Last close'; if (s === 'open') return q.rt ? 'Live' : 'Live (may be delayed)'; if (q.ext) return 'Regular-session close'; return 'Market closed · last ' + fp(q.px, q.cur); })();
     $('[data-lc-sess]').textContent = sess; $('[data-lc-sess]').className = 'lc-sess' + (/Live|Pre|After/.test(sess) ? ' on' : '');
-    if (s0.length) { var hi = -Infinity, lo = Infinity; s0.forEach(function (p) { hi = Math.max(hi, p.h || p.c); lo = Math.min(lo, p.l || p.c); }); $('[data-lc-hl]').textContent = (DATA.wk ? '1W' : S.r) + ' range ' + fp(lo, q && q.cur) + ' – ' + fp(hi, q && q.cur); }
+    if (s0.length) { var hi = -Infinity, lo = Infinity; s0.forEach(function (p) { hi = Math.max(hi, p.h || p.c); lo = Math.min(lo, p.l || p.c); }); $('[data-lc-hl]').textContent = (DATA.wk ? '1W' : s0.sess && s0.sess !== 'Today' ? s0.sess : S.r) + ' range ' + fp(lo, q && q.cur) + ' – ' + fp(hi, q && q.cur); }
     if (pct) sets.forEach(function (st, i) { var e = box.querySelector('[data-lc-lgv="' + i + '"]'); if (e && st.v && st.v.length) { var v = st.v[st.v.length - 1]; e.textContent = sg(v, 1); e.className = v >= 0 ? 'up' : 'dn'; } });
     var notes = list.map(function (t, i) { return DATA[i] && DATA[i].note && t !== 'BTC' ? t + ': ' + DATA[i].note : null; }).filter(Boolean);
     $('[data-lc-ft]').innerHTML = (S.s === 'BTC' || S.cmp.indexOf('BTC') >= 0 ? 'BTC: Coinbase live feed (same feed as the price board). ' : '') + esc(notes.join(' · ')) + ' · Times ET. Education only.'; var lnm = $('[data-lc-name]'); if (lnm) lnm.title = $('[data-lc-ft]').textContent;
@@ -166,7 +202,10 @@
   /* BTC: every tick updates the last candle (1H = 1-minute candles) */
   if (F) F.on('BTC', function (v) { var s = DATA[0]; if (S.s !== 'BTC' || !s || !s.length || !s.g) { if (S.cmp.indexOf('BTC') >= 0) soon(); else if (S.s === 'BTC') soon(); return; }
     var k = s[s.length - 1], now = Date.now(); if (now - k.t >= s.g) { s.push({ t: k.t + s.g * Math.floor((now - k.t) / s.g), o: v.px, h: v.px, l: v.px, c: v.px }); var span = GR[S.r] ? GR[S.r][1] * DAY : 0; while (span && s.length > 2 && s[0].t < now - span) s.shift(); } else { k.c = v.px; k.h = Math.max(k.h, v.px); k.l = Math.min(k.l, v.px); } soon(); });
-  if (F) F.on('quotes', function () { if (S.s === 'BTC' && !S.cmp.length) return; var list = [S.s].concat(S.cmp); list.forEach(function (t, i) { if (t === 'BTC') return; var q = liveQ(t), s = DATA[i]; if (!q || !s || !s.length) return; var lp = curPx(q);
+  /* open a symbol in the hero chart (used by the price strip: tap an item) */
+  window.BTD_LC = { open: function (t, noScroll) { if (!t) return; S.s = t; remember(t); S.cmp = S.cmp.filter(function (x) { return x !== t; }); if (t !== 'BTC' && S.m === 'candle') S.m = 'area'; save(); ui(); load(); var sec = box.closest('section') || box; if (!noScroll && sec.scrollIntoView) sec.scrollIntoView({ behavior: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); } };
+  if (F) F.on('quotes', function () { if (S.s === 'BTC' && !S.cmp.length) return; var list = [S.s].concat(S.cmp); list.forEach(function (t, i) { if (t === 'BTC' || /\//.test(t)) return; var q = liveQ(t), s = DATA[i]; if (!q || !s || !s.length) return; var lp = curPx(q);
+      if (s.sess && s.sess !== 'Today') { s[s.length - 1].c = lp; return; } /* closed-session view: never stretch it to "now" */
       if (S.r === '1H' || S.r === '1D') { if (Date.now() - s[s.length - 1].t > 14e3) s.push({ t: Date.now(), c: lp }); else s[s.length - 1].c = lp; } else s[s.length - 1].c = lp; }); soon(); });
   function hv(e) { var r = cv.getBoundingClientRect(), p = e.touches ? e.touches[0] : e; hov = p.clientX - r.left; soon(); }
   cv.addEventListener('mousemove', hv); cv.addEventListener('touchstart', hv, { passive: true }); cv.addEventListener('touchmove', hv, { passive: true });

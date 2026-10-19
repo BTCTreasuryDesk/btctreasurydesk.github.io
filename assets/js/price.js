@@ -15,11 +15,16 @@
   var LAYS = [
     ['wma', '200W MA', 'pub', 'btc mstr', 'Average of the last 200 weekly closes (about 4 years). Over BTC\'s history, weekly closes far below it have been rare, so many treat it as the long-run floor line.'],
     ['ma', '50/200-day MA', 'pub', 'btc mstr', 'The 50-day (short) and 200-day (long) trend averages. While the 50-day sits above the 200-day the trend has been up; crossings mark changes in trend.'],
-    ['pl', 'Power Law', 'pub', 'btc', 'Long-run log-log trend of BTC vs time since 2009, with a 0.5x–2x band. Over time price has swung around the line: low in the band in bear markets, high near tops.'],
+    ['pl', 'Power Law corridor', 'pub', 'btc', 'Long-run log-log trend of BTC vs time since 2009, with a 0.5x–2x band. Over time price has swung around the line: low in the band in bear markets, high near tops.'],
     ['s2f', 'Stock-to-Flow', 'pub', 'btc', 'PlanB\'s scarcity model: a price implied by existing supply vs new supply, stepping up at each halving. Price has run far below it since 2022, so read it as history, not a target.'],
     ['halv', 'Halvings', 'pub', 'btc mstr cmp', 'Dates when new BTC issuance was cut in half (about every 4 years). Past cycle peaks came roughly 12–18 months after each halving.'],
     ['ev', 'Events', 'pub', 'btc mstr cmp', 'Marked dates: prior cycle tops and bottoms (daily closes), Strategy\'s first bitcoin purchase (Aug 2020) and the US spot bitcoin ETF launch (Jan 2024).'],
     ['buys', 'Strategy buys', 'pub', 'btc mstr cmp', 'Each dot is a Strategy BTC purchase from the strategy.com ledger, sized by BTC bought. Shows when the biggest buyer added over time.'],
+    ['sr', 'Support / resistance', 'pub', 'btc mstr', 'Auto levels: price zones where past swing highs and lows cluster in this period (green = below price, red = above). Mechanical reference lines from history, not predictions.'],
+    ['fib', 'Fibonacci', 'pub', 'btc mstr', 'Fibonacci retracements (23.6%, 38.2%, 50%, 61.8%, 78.6%) between the period low and high. Widely watched reference levels; they describe, they do not predict.'],
+    ['wmz', '200W MA zone', 'pub', 'btc mstr', 'Shaded zone from the 200-week average up to 1.2x it. In past BTC bear markets, weekly closes sat in or near this zone around cycle lows.'],
+    ['mayb', 'Mayer bands', 'pub', 'btc', 'The 200-day average x 0.8, x 1.0 and x 2.4. Above 2.4x has historically been stretched; below 0.8x has been rare and deep.'],
+    ['vp', 'Volume profile', 'pub', 'btc', 'Coinbase BTC-USD daily volume stacked by price for this period (bars on the right). Thick bars = prices where a lot traded; POC = the busiest price. Coinbase volume only, not the whole market.'],
     ['zones', 'Model Zones', 'mem', 'btc', 'Shades the periods when the Desk composite of models (Power Law, 200W MA, Mayer, MVRV proxy, Pi Cycle) read historically cool (blue) or hot (red).']];
   var SUBS = [
     ['rsi', 'Weekly RSI', 'pub', 'btc mstr', 'Momentum of weekly closes on a 0–100 scale (14 weeks). Above 70 has marked overheated stretches; below 30, washed-out ones.'],
@@ -34,6 +39,20 @@
   var HALV = [['2012-11-28', '1st halving'], ['2016-07-09', '2nd halving'], ['2020-05-11', '3rd halving'], ['2024-04-20', '4th halving']];
   var mode = LS.get('btd_pmode'); if (!MODES.some(function (m) { return m[0] === mode; })) mode = 'btc';
   var lay = null; try { lay = JSON.parse(LS.get('btd_play') || 'null'); } catch (e) {} if (!Array.isArray(lay)) lay = []; lay = lay.filter(function (x) { return ALL.some(function (l) { return l[0] === x; }); }); // default: clean, price only
+  var PRESETS = [['cycle', 'Cycle', ['wma', 'wmz', 'pl', 'halv', 'pi']], ['trend', 'Trend', ['ma', 'mayb', 'rsi', 'mayer']], ['levels', 'Levels', ['sr', 'fib', 'vp']]];
+  var HIDE = null; try { HIDE = JSON.parse(LS.get('btd_phide') || 'null'); } catch (e) {} if (!Array.isArray(HIDE)) HIDE = [];
+  var VOL = null, volP = null; /* Coinbase BTC-USD daily candles [t, low, high, open, close, volume], paged 300 days at a time, on demand for the volume profile */
+  function needVol(from) { if (VOL && VOL.from <= from) return Promise.resolve(VOL); if (volP) return volP; var out = [], end = Date.now(), pages = Math.min(14, Math.ceil((end - from) / (300 * DAY)) + 1), k = 0;
+    function pg() { var e = end - k * 300 * DAY, st = e - 299 * DAY; return fetch('https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=' + new Date(st).toISOString() + '&end=' + new Date(e).toISOString()).then(function (r) { return r.json(); }).then(function (a) { if (Array.isArray(a)) out = out.concat(a); k++; if (k < pages && Array.isArray(a) && a.length) return pg(); }); }
+    volP = pg().then(function () { out.sort(function (a, b) { return a[0] - b[0]; }); VOL = { from: out.length ? out[0][0] * 1e3 : from, c: out }; volP = null; return VOL; }).catch(function () { volP = null; return null; }); return volP; }
+  /* swing-point support/resistance: pivots over a window, clustered within ~3.5% (log), strongest + nearest kept */
+  function srLevels(P) { var n = P.length, k = Math.max(4, Math.round(n / 45)), piv = []; for (var i = k; i < n - k; i++) { var v = P[i][1], hi = true, lo = true; for (var j = i - k; j <= i + k; j++) { if (P[j][1] > v) hi = false; if (P[j][1] < v) lo = false; } if (hi || lo) piv.push([v, i]); }
+    piv.sort(function (a, b) { return a[0] - b[0]; }); var cl = []; piv.forEach(function (p) { var c = cl[cl.length - 1]; if (c && p[0] / c.lo < 1.035) { c.v.push(p[0]); c.n++; c.last = Math.max(c.last, p[1]); } else cl.push({ lo: p[0], v: [p[0]], n: 1, last: p[1] }); });
+    var cur = P[n - 1][1]; cl.forEach(function (c) { c.px = c.v.reduce(function (a, b) { return a + b; }, 0) / c.v.length; c.sc = c.n + c.last / n; });
+    var dn = cl.filter(function (c) { return c.px < cur * 0.995; }).sort(function (a, b) { return b.px - a.px; }).slice(0, 3), up = cl.filter(function (c) { return c.px > cur * 1.005; }).sort(function (a, b) { return a.px - b.px; }).slice(0, 3);
+    return dn.map(function (c) { return { px: c.px, t: 'S', n: c.n }; }).concat(up.map(function (c) { return { px: c.px, t: 'R', n: c.n }; })); }
+  function fibLevels(P) { var hi = -Infinity, lo = Infinity, ih = 0, il = 0; P.forEach(function (p, i) { if (p[1] > hi) { hi = p[1]; ih = i; } if (p[1] < lo) { lo = p[1]; il = i; } }); var upMove = il < ih;
+    return { hi: hi, lo: lo, up: upMove, L: [0.236, 0.382, 0.5, 0.618, 0.786].map(function (r) { return { r: r, px: upMove ? hi - (hi - lo) * r : lo + (hi - lo) * r }; }) }; }
   var ZM = null; // Model Zones (members-models.js, loaded on demand)
   function needZones() { if (ZM || window.BTDModels) return Promise.resolve(); return new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/members/members-models.js?v=pz1'; sc.onload = ok; sc.onerror = ok; document.head.appendChild(sc); }); }
   function zones() { if (ZM) return ZM; var B = window.BTDModels; if (!B || !D) return null; var M = B.compute(D.btc, null, 0), W = {}; B.MODELS.forEach(function (x) { W[x.k] = x.w; }); var C = B.composite(M, W);
@@ -77,8 +96,11 @@
     var PL = [], PLlo = [], PLhi = []; if (on('pl')) P.forEach(function (p) { var v = 1.0117e-17 * Math.pow((p[0] - GEN) / DAY, 5.82); PL.push([p[0], v]); PLlo.push([p[0], v * 0.5]); PLhi.push([p[0], v * 2]); });
     var M50 = [], M200 = [], SF = []; if (on('ma')) { var a50 = sma(main.C, 50), a200 = sma(main.C, 200); for (i = i0; i < main.T.length; i++) { if (a50[i]) M50.push([main.T[i], a50[i]]); if (a200[i]) M200.push([main.T[i], a200[i]]); } }
     if (on('s2f')) P.forEach(function (p, k) { if (k % 3 === 0 || k === P.length - 1) SF.push([p[0], s2f(p[0])]); });
+    var WZ = on('wmz') ? wma(main, mode === 'btc' ? 7 : 5).filter(function (p) { return p[0] >= f; }) : [];
+    var MB = []; if (on('mayb') && mode === 'btc') { var a2b = sma(main.C, 200); [0.8, 1, 2.4].forEach(function (mul) { var a = []; for (var ii = i0; ii < main.T.length; ii++) if (a2b[ii]) a.push([main.T[ii], a2b[ii] * mul]); MB.push({ m: mul, a: a }); }); }
+    var SR = mode !== 'cmp' && P.length > 30 ? srLevels(P) : [], FB = mode !== 'cmp' && P.length > 10 ? fibLevels(P) : null; m.lv = { SR: SR, FB: FB, P: P };
     var log = mode !== 'cmp' || m.per === '5Y' || m.per === 'All', x0 = P[0][0], x1 = end, vals = P.map(function (p) { return p[1]; });
-    [].concat.apply([], QS.map(function (q) { return q.p; })).concat(W, PL, M50, M200).forEach(function (p) { vals.push(p[1]); }); if (SF.length) { var pmx = Math.max.apply(0, vals) * 3; SF.forEach(function (p) { if (p[1] < pmx) vals.push(p[1]); }); }
+    [].concat.apply([], QS.map(function (q) { return q.p; })).concat(W, PL, M50, M200, WZ.map(function (p) { return [p[0], p[1] * 1.2]; }), MB.length ? MB[0].a.concat(MB[1].a) : []).forEach(function (p) { vals.push(p[1]); }); if (SF.length) { var pmx = Math.max.apply(0, vals) * 3; SF.forEach(function (p) { if (p[1] < pmx) vals.push(p[1]); }); }
     var lo = Math.min.apply(0, vals), hi = Math.max.apply(0, vals); if (log) { lo /= 1.1; hi *= 1.1; } else { var pd = (hi - lo) * 0.08; lo -= pd; hi += pd; }
     var pl = 54, pr = 10, pt = 8, pb = 20, F = function (v) { return log ? Math.log(Math.max(v, 1e-9)) : v; };
     var X = function (t) { return pl + (t - x0) / (x1 - x0 || 1) * (w - pl - pr); }, Y = function (v) { return pt + (F(hi) - F(v)) / (F(hi) - F(lo)) * (h - pt - pb); };
@@ -98,6 +120,16 @@
     if (on('zones')) { var Z = zones(); if (Z) { var zi0 = Math.max(0, Math.round((x0 - Z.t0) / DAY)), cur = null, st = 0;
       for (var zi = zi0; zi <= Z.z.length; zi++) { var zv = zi < Z.z.length ? Z.z[zi] : null; if (zv !== cur) { if (cur === -1 || cur === 1) { g.fillStyle = cur < 0 ? 'rgba(80,160,255,.13)' : 'rgba(255,90,95,.13)'; var xa = X(Math.max(x0, Z.t0 + st * DAY)), xb = X(Math.min(x1, Z.t0 + zi * DAY)); g.fillRect(xa, pt, Math.max(1, xb - xa), h - pt - pb); } cur = zv; st = zi; } } } }
     if (PL.length) { g.fillStyle = 'rgba(247,147,26,.07)'; g.beginPath(); PLhi.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])); }); for (var j = PLlo.length - 1; j >= 0; j--) g.lineTo(X(PLlo[j][0]), Y(PLlo[j][1])); g.closePath(); g.fill(); ln(PL, '#F7931A', 1.2, [5, 4]); }
+    if (WZ.length > 1) { g.fillStyle = 'rgba(47,209,124,.13)'; g.beginPath(); WZ.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1] * 1.2)) : g.moveTo(X(p[0]), Y(p[1] * 1.2)); }); for (var wj = WZ.length - 1; wj >= 0; wj--) g.lineTo(X(WZ[wj][0]), Y(WZ[wj][1])); g.closePath(); g.fill(); ln(WZ, 'rgba(47,209,124,.7)', 1); }
+    MB.forEach(function (b) { ln(b.a, b.m === 2.4 ? 'rgba(255,90,95,.8)' : b.m === 1 ? 'rgba(90,169,255,.8)' : 'rgba(47,209,124,.8)', 1, [4, 3]); var lb = b.a[b.a.length - 1]; if (lb) { g.fillStyle = '#8a939e'; g.textAlign = 'right'; g.textBaseline = 'bottom'; g.fillText('Mayer ' + b.m + 'x', w - pr - 2, Y(lb[1]) - 2); } });
+    var LBY = []; var hl = function (v, col, lbl, dash) { if (v < lo || v > hi) return; var y = Y(v); var clash = LBY.some(function (yy) { return Math.abs(yy - y) < 13; }); g.strokeStyle = col; g.setLineDash(dash || [6, 4]); g.lineWidth = 1; g.beginPath(); g.moveTo(pl, y); g.lineTo(w - pr, y); g.stroke(); g.setLineDash([]); if (clash) return; LBY.push(y); g.font = '10px ui-monospace,Menlo,monospace'; var tw2 = g.measureText(lbl).width + 6; g.fillStyle = 'rgba(11,13,16,.85)'; g.fillRect(pl + 2, y - 7, tw2, 14); g.fillStyle = col; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText(lbl, pl + 5, y); };
+    if (on('sr')) SR.forEach(function (L) { hl(L.px, L.t === 'S' ? 'rgba(47,209,124,.85)' : 'rgba(255,90,95,.85)', (L.t === 'S' ? 'Support ' : 'Resistance ') + yf(L.px), [6, 4]); });
+    if (on('fib') && FB) FB.L.forEach(function (L) { hl(L.px, 'rgba(199,125,255,.75)', 'Fib ' + (L.r * 100).toFixed(1) + '% ' + yf(L.px), [2, 3]); });
+    if (on('vp') && mode === 'btc') { if (VOL && VOL.from <= x0 + 5 * DAY) { var NB = 36, bins = new Array(NB).fill(0), Fl = F(lo), Fh = F(hi), mxv = 0, vsum = 0; VOL.c.forEach(function (c) { var t = c[0] * 1e3; if (t < x0 || t > x1) return; var bi = Math.floor((F(c[4]) - Fl) / (Fh - Fl) * NB); if (bi < 0 || bi >= NB) return; bins[bi] += c[5] * c[4]; vsum += c[5] * c[4]; });
+        bins.forEach(function (b) { mxv = Math.max(mxv, b); }); var poc = bins.indexOf(mxv), bw = (w - pl - pr) * 0.28, bh = (h - pt - pb) / NB;
+        bins.forEach(function (b, bi) { if (!b) return; var yb = h - pb - (bi + 1) * bh, len = b / mxv * bw; g.fillStyle = bi === poc ? 'rgba(247,147,26,.45)' : 'rgba(154,163,173,.22)'; g.fillRect(w - pr - len, yb + 1, len, Math.max(1, bh - 2)); });
+        if (mxv) { var pocPx = Math.exp(Fl + (poc + 0.5) / NB * (Fh - Fl)); if (!log) pocPx = lo + (poc + 0.5) / NB * (hi - lo); m.lv.POC = pocPx; g.fillStyle = '#F7931A'; g.textAlign = 'right'; g.textBaseline = 'bottom'; g.fillText('POC ~' + yf(pocPx), w - pr - 4, h - pb - (poc + 1) * bh - 1); } }
+      else needVol(x0).then(function (v) { if (v) paint(m); }); }
     ln(W, '#2fd17c', 1.6); ln(M200, '#5aa9ff', 1.3); ln(M50, '#c77dff', 1.1); ln(SF, '#9aa3ad', 1.1, [2, 3]);
     if (mode !== 'cmp') { var up = P[P.length - 1][1] >= P[0][1]; g.fillStyle = up ? 'rgba(47,209,124,.06)' : 'rgba(255,90,95,.06)'; g.beginPath(); P.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])); }); g.lineTo(X(x1), h - pb); g.lineTo(X(x0), h - pb); g.closePath(); g.fill(); }
     ln(P, mode === 'cmp' ? '#c9ced6' : '#e9edf2', 1.5); QS.forEach(function (q) { ln(q.p, q.col, 1.5); });
@@ -114,6 +146,10 @@
     else { var lv = LIVE[mode]; hd.innerHTML = '<b class="pc-px">$' + fmt(lp[1], lp[1] < 1000 ? 2 : 0) + '</b>' + (lv && lv.chp != null && isFinite(lv.chp) ? '<span class="' + cl(lv.chp) + '">' + sp(lv.chp).replace('%', '') + (Math.abs(lv.chp) < 100 ? '' : '') + '% today</span>' : '') + '<span class="' + cl(pc(P)) + '">' + sp(pc(P)) + ' ' + plbl + '</span>' + (W.length ? '<span class="muted">' + (lp[1] / W[W.length - 1][1]).toFixed(2) + 'x 200W MA</span>' : '') + (PL.length ? '<span class="muted">' + (lp[1] / PL[PL.length - 1][1]).toFixed(2) + 'x Power Law</span>' : '') + (M200.length ? '<span class="muted">' + (lp[1] / M200[M200.length - 1][1]).toFixed(2) + 'x 200D</span>' : ''); }
     m.foot.innerHTML = (mode === 'cmp' ? 'Growth of 100 from the start of the period, ' + (log ? 'log scale, ' : '') : (mode === 'btc' ? 'BTC daily closes (Coinbase), ' : 'MSTR daily closes (Yahoo Finance, split-adjusted), ') + 'log scale, ') + 'plus a live last point. ' +
       (on('wma') ? '200W MA = average of the last 200 weekly closes. ' : '') + (on('pl') ? 'Power Law trend = 1.0117e-17 × days since genesis^5.82, band 0.5x–2x. ' : '') + (on('ma') ? 'Purple = 50-day, blue = 200-day average. ' : '') + (on('s2f') ? 'Grey dotted = Stock-to-Flow model price (PlanB, 2019 fit). ' : '') + (on('zones') ? 'Shading = Desk Model Zones composite (blue cool, red hot). ' : '') + (on('buys') ? 'Dots: Strategy BTC purchases from the strategy.com ledger, sized by BTC bought. ' : '') + 'Intraday: <a href="https://www.tradingview.com/chart/?symbol=' + (mode === 'mstr' ? 'NASDAQ%3AMSTR' : 'BITSTAMP%3ABTCUSD') + '" target="_blank" rel="noopener">TradingView &#8599;</a>.';
+    m.map = { pl: pl, pr: pr, pt: pt, pb: pb, w: w, h: h, lo: lo, hi: hi, log: log, x0: x0, x1: x1, yf: yf };
+    levels(m, lp[1], W, PL, MB, yf);
+    if (on('vp') && mode === 'btc') m.foot.innerHTML += ' Volume profile: Coinbase BTC-USD daily candles (Coinbase volume only), traded value bucketed by daily close.';
+    if (on('sr') || on('fib')) m.foot.innerHTML += ' Support/resistance and Fibonacci lines are mechanical, from this period\u2019s daily closes.';
     // tooltip
     var tip = body.querySelector('.pc-tip');
     cv.onpointermove = function (ev) { var rc = cv.getBoundingClientRect(), cx = ev.clientX - rc.left; if (cx < pl) { tip.hidden = true; return; } var t = x0 + (cx - pl) / (w - pl - pr) * (x1 - x0), ix = idxAt(P.map(function (p) { return p[0]; }), t), p = P[ix];
@@ -124,8 +160,12 @@
       if (SF.length) { var sv = near(SF); if (sv) L.push('<i style="color:#9aa3ad">S2F</i> $' + fmt(sv)); }
       if (PL.length) { var pv = near(PL); L.push('<i style="color:#F7931A">Power Law</i> $' + fmt(pv) + ' (' + (p[1] / pv).toFixed(2) + 'x)'); }
       var bb = buys.filter(function (b) { return Math.abs(b[0] - p[0]) < 3.5 * DAY; })[0]; if (bb) L.push('<i style="color:#F7931A">Strategy bought</i> ' + fmt(bb[2].btc) + ' BTC (' + bb[2].date + ')');
+      var xc = body.querySelector('.pc-xh'); if (xc) { var cy = ev.clientY - rc.top, xr = window.devicePixelRatio || 1; xc.width = w * xr; xc.height = h * xr; var xg = xc.getContext('2d'); xg.scale(xr, xr); xg.clearRect(0, 0, w, h);
+        if (cy > pt && cy < h - pb) { var fr = (cy - pt) / (h - pt - pb), vv = log ? Math.exp(Math.log(hi) - fr * (Math.log(hi) - Math.log(lo))) : hi - fr * (hi - lo); xg.strokeStyle = 'rgba(200,206,214,.5)'; xg.setLineDash([3, 3]); xg.beginPath(); xg.moveTo(pl, cy); xg.lineTo(w - pr, cy); xg.moveTo(cx, pt); xg.lineTo(cx, h - pb); xg.stroke(); xg.setLineDash([]);
+          var lbl = yf(vv) + (mode !== 'cmp' ? ' (' + ((vv / lp[1] - 1) * 100 >= 0 ? '+' : '\u2212') + Math.abs((vv / lp[1] - 1) * 100).toFixed(1) + '% vs now)' : ''); xg.font = 'bold 10px ui-monospace,Menlo,monospace'; var lw = xg.measureText(lbl).width + 8; xg.fillStyle = '#d8dde4'; xg.fillRect(pl, cy - 8, lw, 16); xg.fillStyle = '#0b0d10'; xg.textAlign = 'left'; xg.textBaseline = 'middle'; xg.fillText(lbl, pl + 4, cy); }
+        if (mode !== 'cmp') L.push('<span class="muted">Crosshair: price level at your cursor vs now on the left axis</span>'); }
       tip.innerHTML = L.join('<br>'); tip.hidden = false; tip.style.left = Math.min(w - tip.offsetWidth - 2, Math.max(0, cx + 10)) + 'px'; tip.style.top = '4px'; };
-    cv.onpointerleave = function () { tip.hidden = true; };
+    cv.onpointerleave = function () { tip.hidden = true; var xc = body.querySelector('.pc-xh'); if (xc) xc.getContext('2d').clearRect(0, 0, xc.width, xc.height); };
     subs(m, main, x0, x1, pl, pr);
   }
   function subs(m, main, x0, x1, pl, pr) {
@@ -152,29 +192,45 @@
       g.strokeStyle = col; g.lineWidth = 1.4; g.beginPath(); inR.forEach(function (p, j) { j ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])); }); g.stroke();
     });
   }
+  function levels(m, cur, W, PL, MB, yf) { var box = m.body.querySelector('[data-pc-lv]'); if (!box) return; if (mode === 'cmp' || !m.lv) { box.innerHTML = ''; return; } var L = [];
+    m.lv.SR.forEach(function (x) { L.push([x.px, x.t === 'S' ? 'Support (swing lows)' : 'Resistance (swing highs)', x.t === 'S' ? 'up' : 'dn']); });
+    if (m.lv.FB) m.lv.FB.L.forEach(function (x) { if (x.r === 0.382 || x.r === 0.5 || x.r === 0.618) L.push([x.px, 'Fib ' + (x.r * 100).toFixed(1) + '% of the period range', 'fb']); });
+    var wv = wma(series(mode === 'mstr' ? 'mstr' : 'btc'), mode === 'btc' ? 7 : 5); if (wv.length) L.push([wv[wv.length - 1][1], '200-week average', 'up']);
+    if (mode === 'btc') { var C = series('btc').C, a2 = sma(C, 200), last = a2[a2.length - 1]; if (last) { L.push([last * 2.4, 'Mayer 2.4x (historically stretched)', 'dn']); L.push([last, '200-day average (Mayer 1.0x)', 'fb']); L.push([last * 0.8, 'Mayer 0.8x', 'up']); }
+      var t = Date.now(), plv = 1.0117e-17 * Math.pow((t - GEN) / DAY, 5.82); L.push([plv, 'Power Law trend line', 'fb']); L.push([plv * 2, 'Power Law corridor top (2x)', 'dn']); L.push([plv * 0.5, 'Power Law corridor floor (0.5x)', 'up']); }
+    if (m.lv.POC) L.push([m.lv.POC, 'Volume profile POC (Coinbase)', 'fb']);
+    L.sort(function (a, b) { return b[0] - a[0]; }); var above = L.filter(function (x) { return x[0] > cur; }).slice(-4), below = L.filter(function (x) { return x[0] <= cur; }).slice(0, 4);
+    var row = function (x) { var d = (x[0] / cur - 1) * 100; return '<li><span class="pc-lvp">' + yf(x[0]) + '</span><span class="pc-lvn">' + x[1] + '</span><span class="pc-lvd ' + (d >= 0 ? 'up' : 'dn') + '">' + (d >= 0 ? '+' : '\u2212') + Math.abs(d).toFixed(1) + '%</span></li>'; };
+    box.innerHTML = '<div class="pc-lvh"><b>Levels to watch</b><small>nearest reference levels above and below ' + yf(cur) + ' (' + (mode === 'btc' ? 'BTC' : 'MSTR') + ')</small></div><ol class="pc-lvl">' + above.map(row).join('') + '<li class="pc-lvnow"><span class="pc-lvp">' + yf(cur) + '</span><span class="pc-lvn">Now</span><span></span></li>' + below.map(row).join('') + '</ol><p class="pc-lvf">Reference levels computed from past prices and published models, for planning and education only. Not predictions, targets or advice.</p>'; }
   function controls() {
     return '<div class="pc-ctl"><span class="seg pc-mode" role="group" aria-label="Chart">' + MODES.map(function (x) { return '<button type="button" data-pc-mode="' + x[0] + '" aria-pressed="' + (x[0] === mode) + '"' + (x[0] === mode ? ' class="on"' : '') + '>' + x[1] + '</button>'; }).join('') + '</span>' +
       (mode === 'cmp' ? '<span class="pc-chips" role="group" aria-label="Compare with"><span class="pc-gl">Compare with</span>' + CMPS.map(function (c) { var o = cmpSel.indexOf(c[0]) >= 0; return '<button type="button" class="pc-chip' + (o ? ' on' : '') + '" data-pc-cmp="' + c[0] + '" aria-pressed="' + o + '" style="' + (o ? 'border-color:' + c[2] + ';color:' + c[2] : '') + '"><i style="background:' + c[2] + '"></i>' + c[1] + '</button>'; }).join('') + '</span>' : '') +
-      chips(LAYS, 'Overlays') + chips(SUBS, 'Panels below') + '<button type="button" class="pc-chip pc-reset" data-pc-reset title="Clear all overlays, panels and compares">Reset</button></div><p class="pc-info" data-pc-info aria-live="polite"></p>' +
+      '<span class="pc-chips" role="group" aria-label="Presets"><span class="pc-gl">Presets</span>' + PRESETS.map(function (p) { var o = p[2].every(function (x) { return lay.indexOf(x) >= 0; }); return '<button type="button" class="pc-chip pc-pre' + (o ? ' on' : '') + '" data-pc-pre="' + p[0] + '" aria-pressed="' + o + '" title="' + p[1] + ' preset: ' + p[2].map(function (x) { return ALL.filter(function (a) { return a[0] === x; })[0][1]; }).join(', ') + '">' + p[1] + '</button>'; }).join('') + '</span>' +
+      chips(LAYS, 'Overlays') + chips(SUBS, 'Panels below') + '<button type="button" class="pc-chip pc-reset" data-pc-reset title="Clear all overlays, panels and compares">Reset</button><button type="button" class="pc-chip pc-edb" data-pc-ed aria-expanded="false" title="Choose which overlay and panel chips appear">\u270e Edit</button></div><div class="sec-ed pc-ed" data-pc-edp hidden></div><p class="pc-info" data-pc-info aria-live="polite"></p>' +
       '<p class="pc-more">' + (isMem() ? 'Members set unlocked (M). ' : '<a href="/members/">More in Members (free with email)</a>: Model Zones, mNAV, sats per share, MVRV proxy. ') + '<a href="/members/">Pro (free for now)</a>: Chart Builder, multi-timeframe confluence, alerts &rarr;</p>';
   }
-  function chips(list, lbl) { return '<span class="pc-chips" role="group" aria-label="' + lbl + '"><span class="pc-gl">' + lbl + '</span>' + list.map(function (l) { var o = lay.indexOf(l[0]) >= 0, inMode = l[3].split(' ').indexOf(mode) >= 0, lock = l[2] === 'mem' && !isMem();
+  function chips(list, lbl) { return '<span class="pc-chips" role="group" aria-label="' + lbl + '"><span class="pc-gl">' + lbl + '</span>' + list.filter(function (l) { return HIDE.indexOf(l[0]) < 0 || lay.indexOf(l[0]) >= 0; }).map(function (l) { var o = lay.indexOf(l[0]) >= 0, inMode = l[3].split(' ').indexOf(mode) >= 0, lock = l[2] === 'mem' && !isMem();
       return '<button type="button" class="pc-chip pc-' + l[0] + (o && !lock ? ' on' : '') + (lock ? ' pc-lock' : '') + '" data-pc-lay="' + l[0] + '" aria-pressed="' + (o && !lock) + '"' + (!inMode ? ' disabled' : '') + ' title="' + (inMode ? '' : 'Not available in this view. ') + l[4].replace(/"/g, '&quot;') + '"><i></i>' + l[1] + (l[2] === 'mem' ? '<sup>M</sup>' : '') + '</button>'; }).join('') + '</span>'; }
   function noop() {
   }
   window.BTDPrice = {
     render: function (body, foot, ctx) { // ctx: { per, from(endT), seg }
       var m = { body: body, foot: foot, per: ctx.per, from: ctx.from };
-      body.innerHTML = '<div class="ch-sub">' + ctx.seg + controls() + '</div><div class="pc-hd" data-pc-hd></div><div class="pc-w"><canvas class="ch-cv pc-cv" aria-label="Main price chart"></canvas><div class="pc-tip" hidden></div></div><div class="pc-subs" data-pc-subs></div>';
+      body.innerHTML = '<div class="ch-sub">' + ctx.seg + controls() + '</div><div class="pc-hd" data-pc-hd></div><div class="pc-wrapx"><div class="pc-w"><canvas class="ch-cv pc-cv" aria-label="Main price chart"></canvas><canvas class="pc-xh" aria-hidden="true"></canvas><div class="pc-tip" hidden></div></div><div class="pc-lv" data-pc-lv></div></div><div class="pc-subs" data-pc-subs></div>';
       body.onclick = function (e) { var b = e.target.closest && e.target.closest('button'); if (!b) return;
         if (b.dataset.pcMode) { mode = b.dataset.pcMode; LS.set('btd_pmode', mode); window.BTDPrice.render(body, foot, ctx); }
         else if (b.dataset.pcCmp) { var ck = b.dataset.pcCmp, ci = cmpSel.indexOf(ck); if (ci >= 0) { if (cmpSel.length > 1) cmpSel.splice(ci, 1); } else cmpSel.push(ck); LS.set('btd_pcmp', JSON.stringify(cmpSel)); window.BTDPrice.render(body, foot, ctx); }
+        else if (b.dataset.pcPre) { var pr = PRESETS.filter(function (x) { return x[0] === b.dataset.pcPre; })[0], allOn = pr[2].every(function (x) { return lay.indexOf(x) >= 0; }); lay = allOn ? [] : pr[2].filter(function (x) { return okIn(x); }); LS.set('btd_play', JSON.stringify(lay)); window.BTDPrice.render(body, foot, ctx); }
+        else if (b.hasAttribute('data-pc-ed')) { var ep = body.querySelector('[data-pc-edp]'); ep.hidden = !ep.hidden; b.setAttribute('aria-expanded', String(!ep.hidden)); if (!ep.hidden) ep.innerHTML = '<p class="sec-ed-h">Choose which chips appear (switched-on overlays always show).</p><ol class="sec-ed-l">' + ALL.map(function (d) { return '<li><label><input type="checkbox" data-pc-hk="' + d[0] + '"' + (HIDE.indexOf(d[0]) < 0 ? ' checked' : '') + '> ' + d[1] + '</label></li>'; }).join('') + '</ol><p class="sec-ed-f"><button type="button" class="chip" data-pc-edreset>Reset to default</button><button type="button" class="chip" data-pc-eddone>Done</button></p>'; }
+        else if (b.hasAttribute('data-pc-edreset')) { HIDE = []; lay = []; try { localStorage.removeItem('btd_phide'); localStorage.removeItem('btd_play'); } catch (e) {} window.BTDPrice.render(body, foot, ctx); }
+        else if (b.hasAttribute('data-pc-eddone')) { window.BTDPrice.render(body, foot, ctx); }
         else if (b.hasAttribute('data-pc-reset')) { lay = []; cmpSel = ['mstr']; mode = 'btc'; ['btd_play', 'btd_pcmp', 'btd_pmode'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); window.BTDPrice.render(body, foot, ctx); }
         else if (b.dataset.pcLay) { var l = b.dataset.pcLay, d = ALL.filter(function (x) { return x[0] === l; })[0], info = body.querySelector('[data-pc-info]');
           if (d[2] === 'mem' && !isMem()) { info.innerHTML = '<b>' + d[1] + '</b> is in the free Members set: <a href="/members/">unlock it with your email &rarr;</a> ' + d[4]; return; }
           var ix = lay.indexOf(l); if (ix >= 0) lay.splice(ix, 1); else lay.push(l); LS.set('btd_play', JSON.stringify(lay)); b.classList.toggle('on', ix < 0); b.setAttribute('aria-pressed', ix < 0);
           info.innerHTML = ix < 0 ? '<b>' + d[1] + ':</b> ' + d[4] : '';
           if (l === 'zones' && ix < 0) needZones().then(function () { paint(m); }); else paint(m); } };
+      body.onchange = function (e) { var k = e.target.getAttribute && e.target.getAttribute('data-pc-hk'); if (!k) return; var i = HIDE.indexOf(k); if (e.target.checked) { if (i >= 0) HIDE.splice(i, 1); } else if (i < 0) HIDE.push(k); if (HIDE.length) LS.set('btd_phide', JSON.stringify(HIDE)); else { try { localStorage.removeItem('btd_phide'); } catch (x) {} } };
       mounts = mounts.filter(function (x) { return x.body !== body && document.body.contains(x.body); }); mounts.push(m);
       load().then(function () { return lay.indexOf('zones') >= 0 && isMem() ? needZones() : null; }).then(function () { paint(m); }).catch(function () { body.querySelector('[data-pc-hd]').textContent = 'Price history unavailable right now.'; });
     },
