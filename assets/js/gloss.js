@@ -60,15 +60,16 @@
   document.addEventListener('keydown', function (e) { var g = document.activeElement; if ((e.key === 'Enter' || e.key === ' ') && g && g.classList && g.classList.contains('gl')) { e.preventDefault(); cur === g ? hide() : show(g); } else if (e.key === 'Escape') hide(); });
   window.addEventListener('scroll', function () { if (cur && !coarse) hide(); }, { passive: true });
 })();
-/* Scrolling strips (price scroll, headlines): static and swipeable by default. A strip's play button starts it; at most one strip moves at a time (playing one stops the other), one shared speed. Saved in 'btd_scroll' = 'ticker' | 'hl' (new key: every existing visitor starts static). Hover or touch pauses while playing. Reduced motion: always static. My Alts is a static swipe row. */
+/* The one price strip: static and swipeable by default; a visible Play button starts a slow auto-scroll (40 px/s). Saved in 'btd_scroll' = 'ticker' (new key: every existing visitor starts static). Hover or touch pauses while playing. Reduced motion: always static. */
 (function () {
-  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, H = document.documentElement;
-  function which() { try { var v = localStorage.getItem('btd_scroll'); return !RM && (v === 'ticker' || v === 'hl') ? v : ''; } catch (e) { return ''; } }
-  function id(s) { return s.classList.contains('ticker') ? 'ticker' : 'hl'; }
-  function apply() { var w = which(); document.querySelectorAll('.ticker, .tk-hl').forEach(function (s) { var on = w === id(s); s.classList.toggle('strip-static', !on); var b = s.querySelector(':scope > .strip-pp'); if (!b) return;
-      b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.setAttribute('aria-label', on ? 'Pause scrolling' : 'Play scrolling'); b.title = on ? 'Pause (remembered)' : 'Auto-scroll this strip (only one strip moves at a time; remembered)'; b.innerHTML = on ? '&#10074;&#10074;' : '&#9654;'; }); }
-  function ensure() { document.querySelectorAll('.ticker, .tk-hl').forEach(function (s) { if (s.querySelector(':scope > .strip-pp')) return; if (!RM) { var b = document.createElement('button'); b.type = 'button'; b.className = 'strip-pp'; s.appendChild(b); }
-      s.addEventListener('touchstart', function () { if (which() !== id(s)) return; s.classList.add('strip-hold'); clearTimeout(s._ht); s._ht = setTimeout(function () { s.classList.remove('strip-hold'); }, 4000); }, { passive: true }); }); apply(); }
-  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.strip-pp'); if (!b) return; e.preventDefault(); e.stopPropagation(); var me = id(b.parentNode); try { localStorage.setItem('btd_scroll', which() === me ? 'off' : me); } catch (x) {} apply(); }, true);
-  ensure(); setTimeout(ensure, 500); setInterval(ensure, 3000);
+  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function on() { try { return !RM && localStorage.getItem('btd_scroll') === 'ticker'; } catch (e) { return false; } }
+  function apply() { var p = on(); document.querySelectorAll('.ticker').forEach(function (s) { s.classList.toggle('strip-play', p); }); document.querySelectorAll('.strip-pp').forEach(function (b) {
+      b.setAttribute('aria-pressed', p ? 'true' : 'false'); b.setAttribute('aria-label', p ? 'Pause the price strip' : 'Play the price strip'); b.title = p ? 'Pause (remembered)' : 'Auto-scroll slowly (remembered)'; b.innerHTML = p ? '&#10074;&#10074;<span class="pp-l"> Pause</span>' : '&#9654;<span class="pp-l"> Play</span>'; }); }
+  window.btdStripApply = apply;
+  function ensure() { document.querySelectorAll('.ticker').forEach(function (s) { var w = s.parentNode; if (!w || w.querySelector('.strip-pp') || s.dataset.pp) { return; } s.dataset.pp = 1;
+      if (!RM) { var b = document.createElement('button'); b.type = 'button'; b.className = 'strip-pp'; var ed = w.querySelector('.tk-edit'); if (w.classList.contains('tk-wrap') && ed) w.insertBefore(b, ed); else w.insertBefore(b, s.nextSibling); }
+      s.addEventListener('touchstart', function () { if (!on()) return; s.classList.add('strip-hold'); clearTimeout(s._ht); s._ht = setTimeout(function () { s.classList.remove('strip-hold'); }, 4000); }, { passive: true }); }); apply(); }
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.strip-pp'); if (!b) return; e.preventDefault(); e.stopPropagation(); try { localStorage.setItem('btd_scroll', on() ? 'off' : 'ticker'); } catch (x) {} apply(); }, true);
+  ensure(); setTimeout(ensure, 500); setTimeout(ensure, 2500);
 })();

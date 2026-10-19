@@ -36,7 +36,7 @@
   var MON = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
   function expT(s) { var m = /^(\d{1,2})([A-Z]{3})(\d{2})$/.exec(s); return m ? Date.UTC(2000 + +m[3], MON[m[2]], +m[1], 8) : null; }
   function load() { if (document.hidden) return;
-    J('get_book_summary_by_instrument?instrument_name=BTC-PERPETUAL').then(function (r) { var p = r[0]; if (!p) return; var f = p.funding_8h * 100, ann = p.funding_8h * 3 * 365 * 100;
+    J('get_book_summary_by_instrument?instrument_name=BTC-PERPETUAL').then(function (r) { var p = r[0]; if (!p) return; var f = p.funding_8h * 100, ann = p.funding_8h * 3 * 365 * 100; window.BTD_FUND = { f8: f, ann: ann };
       set('fund', sg(f, 4) + '%', 'annualized ' + sg(ann, 1) + '% \u00b7 ' + (f >= 0 ? 'longs pay shorts' : 'shorts pay longs'), f >= 0 ? 'up' : 'dn');
       var pr = (p.mark_price / p.estimated_delivery_price - 1) * 100; set('prem', sg(pr, 3) + '%', 'mark $' + Math.round(p.mark_price).toLocaleString('en-US') + ' vs index $' + Math.round(p.estimated_delivery_price).toLocaleString('en-US'), pr >= 0 ? 'up' : 'dn'); }).catch(function () { set('fund', 'n/a', 'Deribit unavailable'); });
     J('get_book_summary_by_currency?currency=BTC&kind=future').then(function (a) { var oi = 0; a.forEach(function (x) { oi += x.open_interest || 0; }); set('foi', usdB(oi), a.length + ' contracts (perp + dated) \u00b7 Deribit'); }).catch(function () { set('foi', 'n/a', ''); });
