@@ -51,3 +51,4 @@ abbr.gl:focus-visible{outline:2px solid #F7931A;outline-offset:1px}
 .ticker:not(.strip-play) .ticker-in::-webkit-scrollbar,.tk-hl.strip-static .tk-hl-v::-webkit-scrollbar{display:none}
 .ticker.strip-hold .ticker-in,.tk-hl.strip-hold .tk-hl-in{animation-play-state:paused}
 .ticker{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 100%)!important;mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 100%)!important}
+.tk-am{font-style:normal;opacity:.8;margin-left:3px;font-size:.92em}

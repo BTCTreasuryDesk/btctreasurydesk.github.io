@@ -924,9 +924,11 @@
   function tkKey(l) { var f = /^([A-Z]{2})=F/.exec(l); if (f) return TKF[f[1]] || null; if (TKX[l]) return TKX[l]; var w = l.split(' ')[0]; if (w === 'SPX' || w === 'IXIC' || w === 'DJI') return '.' + w; return /^[A-Z0-9.\-]{1,10}$/.test(w) ? w : null; }
   function tkChg(x) { var X = window.BTD_CTX, F = window.BTD_FEED, k = tkKey(x[0]); if (X && !tkReg) { tkReg = 1; X.onRange(function () { ticker(); }); X.on(function () { ticker(); }); }
     var plain = x[2] != null && isFinite(x[2]) ? ' <span class="' + (x[2] >= 0 ? 'up' : 'dn') + '">' + pct(x[2], 1) + '</span>' : '';
+    if (x.id && x.id[0] === 'D' && x.id !== 'D:BTC') return plain; /* desk data items (mNAV, holdings...) never borrow a ticker's change */
     if (!X || !k) return plain; var q = (F && F.get(k)) || null; if (!q || q.px == null) { var v = parseFloat(String(x[1]).replace(/[^0-9.\-]/g, '')); q = isFinite(v) ? { px: v, chp: x[2] } : null; }
     var fq = q ? X.fmt(k, q) : null; if (!fq) return plain;
-    return ' <span class="tk-ch ' + (fq.v >= 0 ? 'up' : 'dn') + '" data-spk="' + esc(k) + '" role="button" title="' + X.tip + '">' + esc(fq.t) + '<small>' + fq.r + '</small></span>'; }
+    var kd = X.kind ? X.kind(k) : 'px', am = ''; if (fq.r === '1D' && kd !== 'yd' && q.ch != null && isFinite(q.ch) && (!X.unit || X.unit(k) === 'pct')) { var A = Math.abs(q.ch), sg = q.ch >= 0 ? '+' : '\u2212'; am = ' <em class="tk-am">' + sg + (kd === 'ix' || /^@/.test(k) ? (A >= 100 ? Math.round(A).toLocaleString('en-US') : A.toFixed(2)) + ' pts' : kd === 'fx' ? A.toFixed(4) : '$' + (A >= 1000 ? Math.round(A).toLocaleString('en-US') : A.toFixed(2))) + '</em>'; }
+    return ' <span class="tk-ch ' + (fq.v >= 0 ? 'up' : 'dn') + '" data-spk="' + esc(k) + '" role="button" title="' + X.tip + '">' + esc(fq.t) + am + '<small>' + fq.r + '</small></span>'; }
   function ticker() {
     dataTiles(); var inn = $('[data-ticker-in]'); if (!inn || tk.hidden) return;
     var items = tkShown(); tkViewBtn();
