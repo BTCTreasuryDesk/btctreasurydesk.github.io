@@ -124,7 +124,7 @@
     '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><span class="lc-dot" data-lc-dot hidden></span><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div>' +
     '<p class="lc-ft" data-lc-ft></p>';
   var $ = function (q) { return box.querySelector(q); }, cv = $('[data-lc-cv]'), hov = null, DATA = [], tok = 0, raf = 0;
-  var REC = []; try { REC = (JSON.parse(LS.get('btd_lc_rec') || '[]') || []).filter(function (t) { return typeof t === 'string' && t !== 'BTC' && t !== 'MSTR'; }).slice(0, 2); } catch (e) {}
+  var REC = []; try { if (LS.get('btd_lc_v') !== '2') { LS.del ? LS.del('btd_lc_rec') : localStorage.removeItem('btd_lc_rec'); LS.set('btd_lc_v', '2'); } /* old builds showed recents as hero chips: clear once */ } catch (e) {} try { REC = (JSON.parse(LS.get('btd_lc_rec') || '[]') || []).filter(function (t) { return typeof t === 'string' && t !== 'BTC' && t !== 'MSTR'; }).slice(0, 2); } catch (e) {}
   function remember(t) { if (!t || t === 'BTC' || t === 'MSTR' || ['SPX', 'IXIC', 'GOLD'].indexOf(t) >= 0) return; REC = [t].concat(REC.filter(function (x) { return x !== t; })).slice(0, 2); LS.set('btd_lc_rec', JSON.stringify(REC)); }
   function forget() { REC = []; try { localStorage.removeItem('btd_lc_rec'); } catch (e) {} }
   function lbl(t) { return t === '3350.T' ? 'Metaplanet' : t; }
