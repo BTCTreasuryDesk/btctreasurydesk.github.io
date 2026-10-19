@@ -14,6 +14,7 @@
     mvrv: ['MVRV', 'Market value ÷ realized value (each coin valued at the price it last moved on-chain). A proxy for aggregate unrealized profit; high readings have coincided with cycle tops, below 1 with bottoms.'],
     pi: ['Pi Cycle', 'Pi Cycle Top indicator: fires when the 111-day SMA crosses above 2 × the 350-day SMA. It flagged the 2013, 2017 and April 2021 tops within days; it did not fire at the Nov 2021 high.'],
     fund: ['Funding rate', 'Periodic payment between longs and shorts on perpetual futures that tethers the perp to spot. Positive = longs pay shorts (leveraged long demand); here shown per 8h and annualized (Deribit).'],
+    xstock: ['Tokenized stock (xStocks)', 'e.g. MSTRx: a token issued by Backed (xStocks), backed 1:1 by the underlying share held with a custodian, trading 24/7 on-chain and on crypto venues. It tracks the stock but is not the official Nasdaq price; off-hours liquidity is thin, so it can trade at a premium or discount. % shown vs the last regular-session close.'],
     rvol: ['Relative volume', 'Today’s volume ÷ average daily volume (10-day on the Desk tiles). 2x = twice normal activity; intraday readings compare a partial day with a full-day average.']
   };
   var RX = [['mnav', /\bmNAV\b/], ['yield', /\bBTC Yield\b/i], ['gain', /\bBTC (?:\$ )?Gain\b/i], ['sats', /\bsats\b/i], ['strk', /\bSTRK\b/], ['strf', /\bSTRF\b/], ['strd', /\bSTRD\b/], ['strc', /\bSTRC\b/],
