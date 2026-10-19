@@ -46,3 +46,4 @@ abbr.gl:focus-visible{outline:2px solid #F7931A;outline-offset:1px}
 .w52n{margin-left:4px}
 .spk-nr::after{content:'details \203A';margin-left:auto;color:#6b7280;font:600 9.5px var(--mono,ui-monospace,monospace);letter-spacing:.04em;align-self:flex-end}
 @media (hover:hover){.spk-nr::after{content:'hover for details'}}
+.spk-nrb small{white-space:nowrap;font-size:9.5px}.spk-nr .w52n{margin:0}
