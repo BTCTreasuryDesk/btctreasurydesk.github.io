@@ -78,3 +78,8 @@
 .yb-how>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:32px;display:flex;align-items:center}
 .yb-how .yb-card{margin-top:8px}
 @media (max-width:760px){.hero2.slim{padding-top:14px;padding-bottom:6px}.hero2.slim h1{margin-bottom:4px}}
+.yb-cb{position:relative}.yb-cb input{padding-right:84px}
+.yb-dd{position:absolute;right:6px;bottom:6px;height:32px;padding:0 10px;border:1px solid #2a3039;border-radius:6px;background:#161a20;color:#c9d1d9;font:600 12px var(--mono,monospace);cursor:pointer}
+.yb-dd:hover{border-color:#f7931a}
+.yb-lb li{cursor:pointer}
+@media (max-width:760px){.yb-lb{max-height:55vh}.yb-lb li{min-height:44px}}
