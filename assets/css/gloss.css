@@ -192,3 +192,4 @@ main.grid>*{min-width:0;max-width:100%}
   .p-hs .hs>*{flex:0 0 calc(50% - 3px)!important;max-width:calc(50% - 3px);min-width:0!important;scroll-snap-align:start;box-sizing:border-box}
 }
 .n5-rot{position:relative}.n5-rot::after{content:attr(data-n5-rot);position:absolute;top:6px;right:8px;font:600 9px ui-monospace,monospace;color:#6b7480}
+.n5-rot{cursor:pointer}

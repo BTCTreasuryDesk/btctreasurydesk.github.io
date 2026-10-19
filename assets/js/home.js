@@ -13,7 +13,7 @@
   function cell(k, v, m, src, href, ctx) { return '<a class="n5-c" href="' + href + '" title="' + esc(m + ' Source: ' + src) + '"><span class="n5-k">' + k + '</span><b>' + v + '</b>' + (ctx ? '<span class="n5-x">' + ctx + '</span>' : '') + '<small>' + esc(m) + '</small><em>' + esc(src) + '</em></a>'; }
   function sgn(x, d) { return (x >= 0 ? '+' : '\u2212') + Math.abs(x).toFixed(d); } function cc(x) { return x >= 0 ? 'up' : 'dn'; }
   function heroHas(t) { var L = window.BTD_LC; return !!(L && ((L.left && L.left.cur() === t) || (L.right && L.right.cur() === t))); }
-  var ROT = 0, RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; if (!RM) setInterval(function () { if (!document.hidden) { ROT++; paint(); } }, 7000);
+  var ROT = 0, RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; box.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.n5-rot')) { e.preventDefault(); ROT++; paint(); } });
   var HK = ''; setInterval(function () { var k = heroHas('MSTR') ? 'm' : ''; if (k !== HK) { HK = k; paint(); } }, 1500);
   function paint() { var b = F && F.get('BTC'), kl = D && D.kpis && D.kpis.live, lg = D && D.kpis && D.kpis.ledger, h = '<p class="n5-h">Key metrics</p><div class="n5-r">';
     var bx = b && b.chp != null && isFinite(b.chp) ? '<i class="' + cc(b.chp) + '">' + sgn(b.chp, 2) + '% 24h</i>' + (b.hi && b.lo ? ' \u00b7 L ' + Math.round(b.lo).toLocaleString('en-US') + ' H ' + Math.round(b.hi).toLocaleString('en-US') : '') : '';
@@ -21,7 +21,7 @@
     var hm = heroHas('MSTR');
     /* Rotating slot (no dupes with the hero or the mNAV tile): live $ value of Strategy's BTC, MSTR vs BTC relative move, live sats per MSTR share. Real data only; a view without data is skipped. */
     var V = [];
-    if (kl && kl.btc_held && b && b.px) V.push(cell('Strategy BTC value', '$' + (kl.btc_held * b.px / 1e9).toFixed(2) + 'B', 'Strategy BTC holdings at the live BTC price.', 'strategy.com holdings x Coinbase live', '/strategy/', Math.round(kl.btc_held).toLocaleString('en-US') + ' \u20bf held'));
+    if (kl && kl.btc_held && b && b.px) V.push(cell('Strategy BTC value', '$' + (kl.btc_held * b.px / 1e9).toFixed(2) + 'B', 'Strategy BTC holdings at the live BTC price.', 'strategy.com holdings x Coinbase live', '/strategy/', (b.chp != null ? '<i class="' + cc(b.chp) + '">' + sgn(b.chp, 2) + '% today</i> \u00b7 ' : '') + Math.round(kl.btc_held).toLocaleString('en-US') + ' \u20bf \u00b7 tap for more'));
     if (mq && mq.chp != null && b && b.chp != null) { var ses = F.session && F.session(), rel = mq.chp - b.chp; V.push(cell('MSTR vs BTC', sgn(rel, 1) + ' pts', 'MSTR move minus BTC 24h move.', 'CNBC (MSTR) + Coinbase (BTC)', '/strategy/', 'MSTR <i class="' + cc(mq.chp) + '">' + sgn(mq.chp, 1) + '%</i>' + (ses === 'open' ? ' today' : ' last session') + ' \u00b7 BTC <i class="' + cc(b.chp) + '">' + sgn(b.chp, 1) + '%</i> 24h')); }
     if (!hm && D && D.sats_per_share && b && b.px) V.push(cell('Sats per MSTR share', D.sats_per_share.toLocaleString('en-US'), 'Sats per MSTR diluted share, valued live.', 'strategy.com + Coinbase live', '/your-bitcoin/#calculator', '\u2248 $' + (D.sats_per_share / 1e8 * b.px).toFixed(2) + ' of BTC per share'));
     if (V.length) h += V[ROT % V.length].replace('class="n5-c"', 'class="n5-c n5-rot" data-n5-rot="' + (ROT % V.length + 1) + '/' + V.length + '"');
