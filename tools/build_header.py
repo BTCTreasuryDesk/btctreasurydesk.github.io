@@ -5,7 +5,7 @@ import re, pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 NAV = [('/', 'Desk'), ('/strategy/', 'Strategy'), ('/companies/', 'Companies'), ('/your-bitcoin/', 'Your Bitcoin'), ('/preferreds/', 'Yield Desk'), ('/saylor/', 'Saylor'),
        ('/dashboard/', 'Dashboard'), ('/lab/', 'Math Lab'), ('/episodes/', 'Episodes'), ('/news/', 'News'), ('/members/', 'Members'),
-       ('/resources/', 'Resources'), ('/start/', 'Start here')]
+       ('/resources/', 'Resources')]
 # pages that live under a nav parent (for aria-current)
 PARENT = {'/glossary/': '/resources/', '/library-files/': '/resources/', '/tip/': '/members/', '/subscribe/': '/members/', '/members/pro/': '/members/',
           '/about/': None, '/privacy/': None, '/contact/': None, '/404.html': None}

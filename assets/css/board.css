@@ -400,3 +400,14 @@ body:not(.dm) .p-live .lc-ft{display:none}
 @media (min-width:761px){.m7b{height:40px}}
 @media (min-width:761px){.p-live .lc-h{flex-wrap:nowrap}.p-live .lc-sym{order:0;margin-right:auto;flex:0 1 auto}.p-live .lc-r{order:1}.p-live .lc-add{order:2;margin-left:0}.p-live .lc-m{order:3}
 .p-live .lc-sym .chip,.p-live .lc-add{height:28px;box-sizing:border-box;display:inline-flex;align-items:center;padding:0 10px;font-size:12px}}
+/* New here card + 5 numbers */
+.nh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;grid-column:1/-1;background:#14100a;border:1px solid rgba(247,147,26,.4);border-radius:8px;padding:8px 40px 8px 12px;position:relative;font-size:13px;margin-bottom:8px}
+.nh a{color:#f7931a;font-weight:600;text-decoration:none;white-space:nowrap}.nh a:hover{text-decoration:underline}
+.nh button{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;color:#9aa3ad;font-size:20px;min-width:36px;min-height:36px;cursor:pointer}
+.n5{margin-top:10px}.n5-h{margin:0 0 4px;font:700 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#9aa3ad}
+.n5-r{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.n5-c{display:flex;flex-direction:column;gap:2px;background:#0b0d10;border:1px solid #1c2129;border-radius:6px;padding:7px 9px;color:#c9d1d9;text-decoration:none;min-width:0}
+.n5-c:hover{border-color:#3a4250}.n5-k{font:600 10px var(--mono);color:#9aa3ad;text-transform:uppercase;letter-spacing:.04em}
+.n5-c b{font:700 18px var(--mono);color:#fff}.n5-w{font-size:11px;color:#f7931a}
+.n5-c small{font-size:11px;line-height:1.3;color:#9aa3ad}.n5-c em{font:normal 9.5px var(--mono);color:#6b7480}
+@media (max-width:760px){.n5-r{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.n5-r::-webkit-scrollbar{display:none}.n5-c{flex:0 0 62%;scroll-snap-align:start}}
