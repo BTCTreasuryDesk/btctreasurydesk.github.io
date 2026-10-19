@@ -121,7 +121,7 @@
     '<button type="button" class="chip lc-add" data-lc-cmpbtn aria-expanded="false" aria-label="Compare: overlay other symbols">＋ Compare</button></div>' +
     '<div class="lc-read"><span class="lc-name" data-lc-name></span><b class="lc-px" data-lc-px>…</b><span class="lc-ch" data-lc-ch></span><span class="lc-sess" data-lc-sess></span><span class="lc-xh" data-lc-xh hidden></span><span class="lc-hl" data-lc-hl></span></div>' +
     '<div class="lc-cmp" data-lc-legend></div><div class="lc-pick" data-lc-pick hidden></div><div class="lc-pick lc-tops" data-lc-tops hidden></div>' +
-    '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><span class="lc-dot" data-lc-dot hidden></span><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div>' +
+    '<div class="lc-cv"><canvas data-lc-cv aria-label="Live price chart"></canvas><span class="lc-dot" data-lc-dot hidden></span><div class="lc-tip" data-lc-tip hidden></div><div class="lc-msg" data-lc-msg hidden></div></div><div class="lc-kn" data-lc-kn aria-label="Key numbers for the selected asset" aria-live="off"></div>' +
     '<p class="lc-ft" data-lc-ft></p>';
   var $ = function (q) { return box.querySelector(q); }, cv = $('[data-lc-cv]'), hov = null, DATA = [], tok = 0, raf = 0;
   var REC = []; try { if (LS.get('btd_lc_v') !== '2') { LS.del ? LS.del('btd_lc_rec') : localStorage.removeItem('btd_lc_rec'); LS.set('btd_lc_v', '2'); } /* old builds showed recents as hero chips: clear once */ } catch (e) {} try { REC = (JSON.parse(LS.get('btd_lc_rec') || '[]') || []).filter(function (t) { return typeof t === 'string' && t !== 'BTC' && t !== 'MSTR'; }).slice(0, 2); } catch (e) {}
@@ -180,6 +180,31 @@
       /* overlays need one common window: if a stock only has daily closes (market closed), compare everything over 1W instead of squeezing BTC's 24h into a corner */
       if (list.length > 1 && (S.r === '1H' || S.r === '1D') && arr.some(function (a) { return a && a.daily; })) return Promise.all(list.map(function (t) { return series(t, '1W').catch(function () { return []; }); })).then(function (a2) { if (my !== tok) return; DATA = a2; DATA.wk = 1; paint(); var sm = $('[data-lc-legend] small'); if (sm) { sm.textContent = 'Market closed: overlay shown over 1W, % change'; sm.className = 'lc-cn'; } });
       DATA = arr; paint(); }); }
+
+  /* Key-numbers row under the hero (phone): live, around-the-clock metrics for the selected asset. Real data only; a cell is omitted when its source is missing. Refreshes with the hero (feed ticks) plus every 15 s; values flash on change. */
+  var KND = null; fetch('/assets/data/desk.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) { KND = d; kn(); }).catch(function () {});
+  function knCells() { var s = S.s, F2 = window.BTD_FEED, out = [], m2 = function (v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }, pc = function (v) { return (v >= 0 ? '+' : '\u2212') + Math.abs(v).toFixed(2) + '%'; };
+    var bq = F2 && F2.get('BTC'), btc = bq && bq.px;
+    if (s === 'BTC') { if (bq && bq.chp != null) out.push(['24h', pc(bq.chp), bq.chp >= 0 ? 'up' : 'dn', 'BTC change over the last 24 hours (Coinbase)']);
+      if (bq && bq.lo && bq.hi) out.push(['24h range', '$' + m2(bq.lo, 0) + '\u2013' + m2(bq.hi, 0), '', 'BTC-USD 24-hour low and high (Coinbase)']);
+      var FU = window.BTD_FUND; if (FU && FU.f8 != null) out.push(['Funding', (FU.f8 >= 0 ? '+' : '\u2212') + Math.abs(FU.f8).toFixed(4) + '%/8h', FU.f8 >= 0 ? 'up' : 'dn', 'BTC-PERPETUAL funding on Deribit (' + (FU.ann != null ? FU.ann.toFixed(1) + '% annualized; ' : '') + 'positive = longs pay shorts)']);
+      return out; }
+    if (isC(s) || /\//.test(s)) return out;
+    var q = liveQ(s), open = F2 && F2.session() === 'open';
+    if (q && q.px != null) { if (!open && q.ext && q.ext.px != null) { var d = (q.ext.px / q.px - 1) * 100; out.push([q.ext.kind === 'pre' ? 'Pre-mkt' : 'After hrs', '$' + m2(q.ext.px, 2) + ' ' + pc(d), d >= 0 ? 'up' : 'dn', 'Official extended-hours trade vs the regular close (CNBC, may be delayed)' + (q.ext.t ? '; ' + q.ext.t : '')]); }
+      else if (open && q.chp != null) out.push(['Today', pc(q.chp), q.chp >= 0 ? 'up' : 'dn', 'Regular-session change vs the previous close (CNBC)']);
+      var tk = F2.g && F2.g.tok && (F2.g.tok[q.sn] || F2.g.tok[String(q.sn || '').replace(/\..*$/, '')]); if (tk && tk.px && Date.now() - (tk.t || 0) < 3 * 3600e3 && (!q.cur || q.cur === 'USD')) { var dt = (tk.px / q.px - 1) * 100; out.push([q.sn + 'x 24/7', '$' + m2(tk.px, 2) + ' ' + pc(dt), dt >= 0 ? 'up' : 'dn', q.sn + 'x token (xStocks, on-chain, 24/7) vs the last regular close; not the official price and can deviate']); } }
+    if (s === 'MSTR' && KND && KND.strategy) { var K = KND.strategy.kpis, mp = q && q.px != null ? (open ? q.px : curPx(q)) : null, mn = window.btdLiveMnav && window.btdLiveMnav(K, mp, btc);
+      out.push(['mNAV', (mn ? m2(mn, 2) : m2(KND.strategy.mnav, 2)) + 'x' + (mn ? '' : ' close'), '', mn ? 'Live mNAV, strategy.com method: EV at the ' + (open ? 'live' : 'latest extended-hours') + ' MSTR price / BTC held x live BTC' : 'mNAV at the last close (strategy.com)']);
+      var sp = KND.strategy.sats_per_share; if (sp) out.push(['BTC/share', (sp / 1e8).toFixed(6) + ' \u20bf' + (btc ? ' \u00b7 $' + m2(sp / 1e8 * btc, 2) : ''), '', 'BTC per MSTR share (' + m2(sp, 0) + ' sats, strategy.com) valued at the live BTC price']); return out; }
+    if (KND && KND.treasuries && KND.treasuries.rows) { var r = KND.treasuries.rows.filter(function (x) { return x.tk === s || x.tv === s || x.tv === cnOf(s); })[0];
+      if (r && r.mnav != null) out.push(['mNAV', m2(r.mnav, 2) + 'x', '', 'mNAV' + (r.mnav_src ? ' (' + r.mnav_src + ')' : '')]);
+      if (r && r.btc) out.push(['BTC held', m2(r.btc, 0) + ' \u20bf' + (btc ? ' \u00b7 $' + (r.btc * btc / 1e9 >= 1 ? m2(r.btc * btc / 1e9, 2) + 'B' : m2(r.btc * btc / 1e6, 0) + 'M') : ''), '', 'Reported BTC holdings (Desk treasury table), valued at the live BTC price']); }
+    return out; }
+  function kn() { var el = box.querySelector('[data-lc-kn]'); if (!el) return; var c = []; try { c = knCells(); } catch (e) {} el.hidden = !c.length; if (!c.length) { el.innerHTML = ''; return; }
+    var key = S.s + c.map(function (x) { return x[0]; }).join('|'); if (el.dataset.k !== key) { el.dataset.k = key; el.innerHTML = c.map(function (x, i) { return '<span class="kn-c" title="' + esc(x[3]) + '"><em>' + esc(x[0]) + '</em><b data-kn="' + i + '"></b></span>'; }).join(''); }
+    c.forEach(function (x, i) { var b = el.querySelector('[data-kn="' + i + '"]'); if (!b || b.textContent === x[1]) return; var had = b.textContent; b.textContent = x[1]; b.className = x[2] || ''; if (had) { b.classList.add('kn-fl'); clearTimeout(b._f); b._f = setTimeout(function () { b.classList.remove('kn-fl'); }, 900); } }); }
+  setInterval(function () { if (!document.hidden) kn(); }, 15000);
   function paint() { raf = 0; var list = [S.s].concat(S.cmp), pct = list.length > 1, s0 = DATA[0] || [];
     var sets = list.map(function (t, i) { return { s: DATA[i] || [], col: COLS[i], lab: t, w: i ? 1.5 : 2 }; });
     var q = S.s === 'BTC' ? (F && F.get('BTC')) : liveQ(S.s);
@@ -196,7 +221,7 @@
     if (s0.length) { var hi = -Infinity, lo = Infinity; s0.forEach(function (p) { hi = Math.max(hi, p.h || p.c); lo = Math.min(lo, p.l || p.c); }); $('[data-lc-hl]').textContent = (DATA.wk ? '1W' : s0.sess && s0.sess !== 'Today' ? s0.sess : S.r) + ' range ' + fp(lo, q && q.cur) + ' – ' + fp(hi, q && q.cur); }
     if (pct) sets.forEach(function (st, i) { var e = box.querySelector('[data-lc-lgv="' + i + '"]'); if (e && st.v && st.v.length) { var v = st.v[st.v.length - 1]; e.textContent = sg(v, 1); e.className = v >= 0 ? 'up' : 'dn'; } });
     var notes = list.map(function (t, i) { return DATA[i] && DATA[i].note && t !== 'BTC' ? t + ': ' + DATA[i].note : null; }).filter(Boolean);
-    $('[data-lc-ft]').innerHTML = (S.s === 'BTC' || S.cmp.indexOf('BTC') >= 0 ? 'BTC: Coinbase live feed (same feed as the price board). ' : '') + esc(notes.join(' · ')) + ' · Times ET. Education only.'; var lnm = $('[data-lc-name]'); if (lnm) lnm.title = $('[data-lc-ft]').textContent;
+    $('[data-lc-ft]').innerHTML = (S.s === 'BTC' || S.cmp.indexOf('BTC') >= 0 ? 'BTC: Coinbase live feed (same feed as the price board). ' : '') + esc(notes.join(' · ')) + ' · Times ET. Education only.'; var lnm = $('[data-lc-name]'); if (lnm) lnm.title = $('[data-lc-ft]').textContent; kn();
   }
   function soon() { if (!raf) raf = requestAnimationFrame(paint); }
   /* BTC: every tick updates the last candle (1H = 1-minute candles) */

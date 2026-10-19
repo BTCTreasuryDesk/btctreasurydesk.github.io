@@ -119,3 +119,19 @@ main.grid>*{min-width:0;max-width:100%}
   .deskbar>.tbtn-o{grid-column:3;grid-row:2}
   .deskbar .tbtn-cz,.deskbar .tbtn-o{width:40px;min-width:40px!important;height:40px;min-height:40px!important;padding:0!important;margin:0!important;justify-self:end;font-size:15px;display:inline-flex!important;align-items:center;justify-content:center}
 }
+/* Hero key-numbers row (phone only; desktop unchanged) */
+.lc-kn{display:none}
+@media (max-width:600px){
+  .lc-kn:not([hidden]){display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:4px;margin:6px 0 0;min-width:0}
+  .lc-kn .kn-c{display:flex;flex-direction:column;min-width:0;padding:5px 6px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:rgba(255,255,255,.025);cursor:help}
+  .lc-kn em{font-style:normal;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:#8b93a1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lc-kn b{font:600 12px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;color:#e8eaee;overflow-wrap:anywhere;border-radius:3px;transition:background .9s}
+  .lc-kn b.up{color:#22c55e}.lc-kn b.dn{color:#ef4444}
+  .lc-kn b.kn-fl{background:rgba(247,147,26,.28);transition:none}
+  /* shorter hero (~17%) and tighter spacing above it */
+  .lc-cv{height:225px!important}
+  main.grid>.p-live .lc-cv{height:150px!important}
+  main.grid>.p-live{margin-top:0!important;padding-top:10px!important}
+  .p-live .lc-read{margin:6px 2px 2px}
+}
+@media (prefers-reduced-motion:reduce){.lc-kn b.kn-fl{background:none}}
