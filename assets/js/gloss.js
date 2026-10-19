@@ -74,3 +74,13 @@
   document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.strip-pp'); if (!b) return; e.preventDefault(); e.stopPropagation(); try { localStorage.setItem('btd_scroll', on() ? 'off' : 'ticker'); } catch (x) {} apply(); }, true);
   ensure(); setTimeout(ensure, 500); setTimeout(ensure, 2500);
 })();
+/* Phone: the hero's 'what matters now' line is hidden (it repeated the status bar); its Next key date joins the market-status line instead. */
+(function () { function nx() { var ms = document.querySelector('[data-mstat]'), a = document.querySelector('.p-live > .now a[href="#key-dates"]'); if (!ms) return; var s = ms.querySelector('[data-ms-next]'); if (!a) { if (s) s.remove(); return; } if (!s) { s = document.createElement('span'); s.setAttribute('data-ms-next', ''); s.className = 'ms-nx'; ms.appendChild(s); } if (s.innerHTML !== a.outerHTML) s.innerHTML = a.outerHTML; }
+  setTimeout(nx, 1500); setTimeout(nx, 5000); setInterval(nx, 20000); })();
+/* Phone ☰ menu for the header nav (CSS hides it on wider screens). */
+(function () { var h = document.querySelector('.sh'), inn = h && h.querySelector('.sh-in'), nav = h && h.querySelector('.sh-nav'); if (!inn || !nav || inn.querySelector('.sh-menu')) return;
+  var b = document.createElement('button'); b.type = 'button'; b.className = 'sh-menu'; b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-label', 'Menu: pages and page layout'); b.innerHTML = '&#9776;';
+  var yt = inn.querySelector('.sh-yt'); inn.insertBefore(b, yt || nav);
+  if (document.querySelector('.deskbar [data-customize]')) { var l = document.createElement('button'); l.type = 'button'; l.className = 'sh-lay'; l.setAttribute('data-customize', ''); l.setAttribute('aria-haspopup', 'dialog'); l.innerHTML = '&#9638; Page layout'; nav.appendChild(l); }
+  b.addEventListener('click', function () { var o = !h.classList.contains('sh-open'); h.classList.toggle('sh-open', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); b.innerHTML = o ? '&#10005;' : '&#9776;'; });
+  nav.addEventListener('click', function (e) { if (e.target.closest('a,.sh-lay')) { h.classList.remove('sh-open'); b.setAttribute('aria-expanded', 'false'); b.innerHTML = '&#9776;'; } }); })();

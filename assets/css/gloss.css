@@ -136,3 +136,32 @@ main.grid>*{min-width:0;max-width:100%}
 }
 @media (prefers-reduced-motion:reduce){.lc-kn b.kn-fl{background:none}}
 @media (max-width:600px){body:not(.dm) .p-live .lc-px{font-size:31px!important}} /* ~18% smaller hero price on phone; still the largest number */
+/* Above-the-fold pass (phone): status, strip, picker/ranges, price, key numbers, chart. No empty rows. */
+@media (max-width:600px){
+  .sh-nav{flex-wrap:nowrap!important;overflow-x:auto!important;height:32px!important;padding:0 0 2px!important;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+  .p-live>.now{display:none!important}
+  .deskbar .ms-c{display:none!important}
+  .deskbar [data-ms-next] a{color:#F7931A;text-decoration:none}
+  .p-live .lc-read{row-gap:2px;column-gap:8px;margin:4px 2px 0}
+  .p-live .lc-read::before{content:'';order:1;flex-basis:100%;height:0}
+  .p-live .lc-name,.p-live .lc-sess{order:0}
+  .p-live .lc-sess{font-size:10px;padding:1px 6px;line-height:14px}
+  .p-live .lc-px,.p-live .lc-ch{order:2}
+  .p-live .lc-xh{order:3}
+  .p-live .lc-hl{display:none!important}
+}
+@media (min-width:601px){.deskbar [data-ms-next]{display:none}}
+/* Phone top screen: nav wall collapses into a ☰ menu (page links + Page layout); Desk Mode (a desktop wall-screen feature) is not shown on phone. */
+.sh-menu{display:none}
+@media (max-width:600px){
+  .sh-in{flex-wrap:wrap}
+  .sh-menu{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin-left:auto;margin-right:6px;border:1px solid #2a2f37;border-radius:8px;background:#0e1115;color:#d8dde4;font-size:18px;cursor:pointer}
+  .sh-menu[aria-expanded="true"]{border-color:#F7931A;color:#F7931A}
+  .sh .sh-nav{display:none!important}
+  .sh.sh-open .sh-nav{display:flex!important;flex:0 0 100%;flex-wrap:wrap!important;height:auto!important;overflow:visible!important;-webkit-mask-image:none;mask-image:none;padding:4px 0 8px!important;row-gap:2px}
+  .sh-nav .sh-lay{flex:none;height:24px;padding:4px 8px;border:1px solid #2a2f37;border-radius:6px;background:none;color:#d8dde4;font:600 10.5px/12px ui-monospace,Menlo,monospace;text-transform:uppercase;cursor:pointer}
+  .deskbar>.tbtn-cz,.deskbar>.tbtn-o{display:none!important}
+  .deskbar>.mstat{grid-column:1/-1!important}
+}
+@media (min-width:601px){.sh-nav .sh-lay{display:none}}
+@media (max-width:600px){.p-live .lc-read .lc-name{flex:0 1 auto!important;width:auto!important;max-width:calc(100% - 140px)}}
