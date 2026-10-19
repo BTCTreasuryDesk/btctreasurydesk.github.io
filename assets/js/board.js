@@ -297,8 +297,8 @@
       var X = window.BTD_CTX; if (X) { [['eth', 'ETH', e], ['sol', 'SOL', s]].forEach(function (z) { var sp = cx.querySelector('[data-cx-sp="' + z[0] + '"]'); if (sp && z[2] && z[2].px) { sp.innerHTML = X.spark(z[1], z[2].px, z[2].chp); var fq = X.fmt(z[1], z[2]), es = cx.querySelector('[data-cx="' + z[0] + '-s"]'); if (es) { es.setAttribute('data-spk', z[1]); es.setAttribute('role', 'button'); es.title = X.tip; } if (fq) set(z[0] + '-s', fq.t + ' ' + (fq.r === '1D' ? '24h' : fq.r), cls(fq.v)); } }); }
       rtP(); };
     /* ETH/BTC and SOL/BTC ratio tiles: live = Coinbase ETH-USD / BTC-USD; history = Coinbase ETH-BTC / SOL-BTC daily closes (~600 days) + hourly (1D); All = full Coinbase daily history, loaded on demand (cached 24h).
-       Default change period 1M (ratios trend slowly); tap the change to cycle 1D/1W/1M/YTD/1Y (remembered). Label flips to BTC/ETH (remembered). Range bar 3M / 1Y / All (remembered, default 1Y). */
-    var RT = {}, RINV = {}, RRB = '1Y'; try { RINV = JSON.parse(LS.get('btd_cxinv') || '{}') || {}; RRB = LS.get('btd_cxrb') || '1Y'; } catch (e) {}
+       Default change period 1M (ratios trend slowly); tap the change to cycle 1D/1W/1M/YTD/1Y (remembered). Default BTC/ETH and BTC/SOL (BTC numerator); label taps to ETH/BTC (remembered). Range bar 3M / 1Y / All (remembered, default 1Y). */
+    var RT = {}, RINV = {}, RRB = '1Y'; try { var RALT = JSON.parse(LS.get('btd_cxalt') || '{}') || {}; /* default BTC/ETH, BTC/SOL (BTC numerator); btd_cxalt = user explicitly chose ETH/BTC or SOL/BTC. Old btd_cxinv (default ETH/BTC era) is dropped: true already meant BTC/x, false was the old default. */ LS.del('btd_cxinv'); RINV = { eth: !RALT.eth, sol: !RALT.sol }; RRB = LS.get('btd_cxrb') || '1Y'; } catch (e) {}
     var rkey = function (a) { return RINV[a] ? 'R:BTC' + a.toUpperCase() : 'R:' + a.toUpperCase() + 'BTC'; };
     ['ETH', 'SOL'].forEach(function (A) { if (window.BTD_CTX) { window.BTD_CTX.def('R:' + A + 'BTC', '1M', 1); window.BTD_CTX.def('R:BTC' + A, '1M', 1); } });
     var mkCtx = function (T, V) { var n = V.length, last = T[n - 1], y1 = V.filter(function (v, i) { return T[i] >= last - 365 * 864e5; }), yr = new Date(last).getUTCFullYear(), j = 0;
@@ -324,7 +324,7 @@
       if (!b || !b.px || !q || !q.px) return; var v = inv ? b.px / q.px : q.px / b.px, r = RT[A], c24 = q.chp != null && b.chp != null ? (((1 + q.chp / 100) / (1 + b.chp / 100)) - 1) * 100 : null; if (inv && c24 != null) c24 = (1 / (1 + c24 / 100) - 1) * 100;
       if (r && r.H && r.H.length > 3) c24 = (v / (inv ? 1 / r.H[0] : r.H[0]) - 1) * 100;
       el.querySelector('[data-rt-v]').textContent = fmtR(v);
-      el.querySelector('[data-rt-line]').textContent = inv ? '1 BTC buys ' + fmtR(v) + ' ' + A : '1 ' + A + ' = ' + fmtR(v) + ' BTC';
+      var bg = c24 == null || Math.abs(c24) < 0.05 ? null : inv ? c24 > 0 : c24 < 0; el.querySelector('[data-rt-line]').textContent = (inv ? '1 BTC buys ' + fmtR(v) + ' ' + A : '1 ' + A + ' = ' + fmtR(v) + ' BTC') + (bg == null ? '' : bg ? ' \u00b7 BTC gaining vs ' + A : ' \u00b7 ' + A + ' gaining vs BTC');
       var chE = el.querySelector('[data-rt-ch]'), qq = { px: v, chp: c24 }, fq = X && X.fmt(k, qq); if (fq) { chE.textContent = fq.t + ' ' + fq.r; chE.className = cls(fq.v); chE.setAttribute('data-spk', k); chE.setAttribute('role', 'button'); chE.title = 'Tap: change period (1D / 1W / 1M / YTD / 1Y) \u00b7 Hold: % / amount'; } else if (c24 != null) { chE.textContent = pc(c24) + ' 24h'; chE.className = cls(c24); }
       if (X) el.querySelector('[data-rt-sp]').innerHTML = X.spark(k, v, c24);
       var src = null; if (r) { if (RRB === 'All' && r.all) src = r.all.slice(); else if (r.V) src = r.V.slice(RRB === '3M' ? -90 : -365); if (src && inv) src = src.map(function (x) { return 1 / x; }); }
@@ -332,7 +332,7 @@
       if (src && src.length > 20) { var lo = Math.min.apply(null, src.concat(v)), hi = Math.max.apply(null, src.concat(v)), p = hi > lo ? (v - lo) / (hi - lo) * 100 : 50;
         rb.innerHTML = '<span class="rng" title="' + RRB + ' range ' + fmtR(lo) + ' \u2013 ' + fmtR(hi) + ', now ' + fmtR(v) + '"><i style="left:' + p.toFixed(0) + '%"></i></span><button type="button" class="spk-l cx-rbb" data-rt-rbb title="Range bar period: tap for ' + nx + '">' + RRB + ' range</button><small class="cx-rlh">' + fmtR(lo) + '\u2013' + fmtR(hi) + '</small>'; }
       else rb.innerHTML = RRB === 'All' ? '<small class="cx-rlh">Loading full history\u2026</small> <button type="button" class="spk-l cx-rbb" data-rt-rbb>All range</button>' : ''; }); };
-    cx.addEventListener('click', function (e) { var f = e.target.closest && e.target.closest('[data-rt-flip]'); if (f) { var a = f.getAttribute('data-rt-flip'); RINV[a] = !RINV[a]; LS.set('btd_cxinv', JSON.stringify(RINV)); rtP(); return; }
+    cx.addEventListener('click', function (e) { var f = e.target.closest && e.target.closest('[data-rt-flip]'); if (f) { var a = f.getAttribute('data-rt-flip'); RINV[a] = !RINV[a]; RALT[a] = !RINV[a]; if (!RALT[a]) delete RALT[a]; if (Object.keys(RALT).length) LS.set('btd_cxalt', JSON.stringify(RALT)); else LS.del('btd_cxalt'); rtP(); return; }
       if (e.target.closest && e.target.closest('[data-rt-rbb]')) { RRB = { '3M': '1Y', '1Y': 'All', All: '3M' }[RRB]; LS.set('btd_cxrb', RRB); rtP(); } });
     rtLoad('ETH'); rtLoad('SOL');
     var S7 = null; try { S7 = JSON.parse(LS.get('btd_stb7b') || 'null'); } catch (e) {}

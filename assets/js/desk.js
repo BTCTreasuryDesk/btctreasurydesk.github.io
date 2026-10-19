@@ -878,7 +878,10 @@
       case 'DOM': return live.dom ? ['BTC.D', live.dom.toFixed(1) + '%'] : null;
       case 'BTCETH': case 'BTCSOL': var alt = k === 'BTCETH' ? 'ETH' : 'SOL', ap = k === 'BTCETH' ? live.eth : live.sol, a24 = k === 'BTCETH' ? live.eth24 : live.sol24, bq = window.BTD_FEED && window.BTD_FEED.get('BTC'), b24 = bq && bq.chp != null ? bq.chp : null;
         if (!live.btc || !ap) return null; var rc = b24 != null && a24 != null && isFinite(a24) ? ((1 + b24 / 100) / (1 + a24 / 100) - 1) * 100 : null;
-        return ['BTC/' + alt, (live.btc / ap).toFixed(k === 'BTCETH' ? 1 : 0) + (rc != null && Math.abs(rc) >= 0.05 ? (rc > 0 ? ' \u00b7 BTC stronger' : ' \u00b7 ' + alt + ' stronger') : ''), rc, null, rc == null ? 'BTC priced in ' + alt + ' (Coinbase legs)' : 'BTC priced in ' + alt + ': ' + (rc >= 0 ? 'BTC gaining vs ' + alt : alt + ' gaining vs BTC') + ' over 24h (' + (rc >= 0 ? '+' : '\u2212') + Math.abs(rc).toFixed(2) + '%), computed from the BTC-USD and ' + alt + '-USD 24h changes on Coinbase'];
+        var xa = false; try { xa = !!(JSON.parse(localStorage.getItem('btd_cxalt') || '{}') || {})[alt.toLowerCase()]; } catch (e) {} /* same saved orientation as the Crypto tiles; default BTC/x */
+        var bt = rc != null && Math.abs(rc) >= 0.05 ? (rc > 0 ? 'BTC gaining vs ' + alt : alt + ' gaining vs BTC') : '', why = ' over 24h, computed from the BTC-USD and ' + alt + '-USD 24h changes on Coinbase';
+        if (xa) { var ic = rc == null ? null : (1 / (1 + rc / 100) - 1) * 100, iv = ap / live.btc; return [alt + '/BTC', iv.toFixed(iv < 0.01 ? 6 : 5) + (bt ? ' \u00b7 ' + bt : ''), ic, null, alt + ' priced in BTC' + (ic == null ? ' (Coinbase legs)' : ': ' + (ic >= 0 ? '+' : '\u2212') + Math.abs(ic).toFixed(2) + '%' + why) + '. Flip orientation on the Crypto at a glance tile.']; }
+        return ['BTC/' + alt, (live.btc / ap).toFixed(k === 'BTCETH' ? 1 : 0) + (bt ? ' \u00b7 ' + bt : ''), rc, null, 'BTC priced in ' + alt + (rc == null ? ' (Coinbase legs)' : ': ' + (rc >= 0 ? '+' : '\u2212') + Math.abs(rc).toFixed(2) + '%' + why)];
       case 'FNG': return live.fng ? ['Fear & Greed', live.fng] : null;
       case 'ATH': var ath = athOf(); return ath && live.btc ? ['From ATH', pct((live.btc / ath - 1) * 100, 1)] : null;
       case 'PLAW': return live.btc ? ['Power Law', (live.btc / plaw(Date.now())).toFixed(2) + 'x trend'] : null;
