@@ -105,3 +105,4 @@ main.grid>*{min-width:0;max-width:100%}
   .ticker .tk-i .tk-am,.ticker .tk-i small,.ticker .tk-seg{display:none}
 }
 @media (max-width:600px){.ticker .tk-i{gap:2px;padding-right:6px;margin-right:6px}.tk-wrap [class*="hint"]{display:none}}
+@media (max-width:600px){.tk-wrap .strip-pp,.tk-wrap .tk-edit{width:40px!important;min-width:40px!important;min-height:40px;height:40px;border-radius:8px}.tk-wrap .strip-pp{margin:0 4px 0 4px}.tk-wrap{align-items:center}}
