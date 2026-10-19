@@ -61,7 +61,7 @@
   document.addEventListener('keydown', function (e) { var g = document.activeElement; if ((e.key === 'Enter' || e.key === ' ') && g && g.classList && g.classList.contains('gl')) { e.preventDefault(); cur === g ? hide() : show(g); } else if (e.key === 'Escape') hide(); });
   window.addEventListener('scroll', function () { if (cur && !coarse) hide(); }, { passive: true });
 })();
-/* The one price strip: static and swipeable by default; a visible Play button starts a slow auto-scroll (40 px/s). Saved in 'btd_scroll' = 'ticker' (new key: every existing visitor starts static). Hover or touch pauses while playing. Reduced motion: always static. */
+/* The one price strip: static and swipeable by default; a visible Play button starts a slow auto-scroll (24 px/s). Saved in 'btd_scroll' = 'ticker' (new key: every existing visitor starts static). Hover or touch pauses while playing. Reduced motion: always static. */
 (function () {
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function on() { try { return !RM && localStorage.getItem('btd_scroll') === 'ticker'; } catch (e) { return false; } }

@@ -945,7 +945,7 @@
     var halves = inn.querySelectorAll('.tk-seq'); if (halves.length !== 2) { inn.innerHTML = '<span class="tk-seq"></span><span class="tk-seq" aria-hidden="true"></span>'; halves = inn.querySelectorAll('.tk-seq'); }
     halves[0].innerHTML = seq; var w1 = halves[0].scrollWidth || 1, rep = Math.max(1, Math.ceil((tk.clientWidth || 1200) / w1)); if (rep > 1) halves[0].innerHTML = new Array(rep + 1).join(seq);
     halves[1].innerHTML = halves[0].innerHTML; var hw = halves[0].scrollWidth;
-    var dur = Math.max(30, Math.round(hw / 40)) + 's'; /* one shared speed (40 px/s) with the headlines strip */ if (inn.style.animationDuration !== dur) inn.style.animationDuration = dur; // ~45 px per second, steady whatever the list length
+    var dur = Math.max(40, Math.round(hw / 24)) + "s"; /* slow, readable: ~24 px/s on every screen */ if (inn.style.animationDuration !== dur) inn.style.animationDuration = dur; // ~45 px per second, steady whatever the list length
   }
   /* Ribbon editor: grouped options + type any ticker (validated via the quote feed), up/down, remove, reset */
   var tke = null, tkeBtn = null, TKE_G = {};
