@@ -110,3 +110,12 @@ main.grid>*{min-width:0;max-width:100%}
 .lc-xh{flex-basis:100%;min-width:0;white-space:normal}
 .lc-xh .xh{white-space:normal;overflow-wrap:anywhere;max-width:100%;overflow:visible;text-overflow:clip}
 @media (max-width:600px){.lc-xh .xh .xh-lf{display:none!important}.lc-xh .xh .xh-ls{display:inline!important}.lc-xh .xh-v{display:none}.lc-xh .xh:not(.xh-ov){font-size:12.5px}.lc-xh .xh-src{display:block;margin:1px 0 0}}
+/* Phone top area: no empty icon row. Layout + Desk Mode sit to the right of the market-status line (40px tap targets). */
+@media (max-width:600px){
+  .deskbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;column-gap:6px;row-gap:4px;align-items:center;padding-top:4px!important;padding-bottom:4px!important}
+  .deskbar>.clock{grid-column:1/-1;margin:0!important}
+  .deskbar>.mstat{grid-column:1;grid-row:2;margin:0!important;min-width:0}
+  .deskbar>.tbtn-cz{grid-column:2;grid-row:2}
+  .deskbar>.tbtn-o{grid-column:3;grid-row:2}
+  .deskbar .tbtn-cz,.deskbar .tbtn-o{width:40px;min-width:40px!important;height:40px;min-height:40px!important;padding:0!important;margin:0!important;justify-self:end;font-size:15px;display:inline-flex!important;align-items:center;justify-content:center}
+}
