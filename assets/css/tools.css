@@ -72,3 +72,4 @@
 .xh{display:block;font:12px/1.4 var(--mono,ui-monospace,Menlo,monospace);color:var(--mu);white-space:nowrap;cursor:help;margin-top:2px}.xh-p{color:#e6e7ea;font-weight:600}.xh-c.up{color:var(--up)}.xh-c.dn{color:var(--dn)}
 @media (max-width:899px){.xh-v{display:none}}
 .xh-ls{display:none}
+@media (max-width:760px){.yb-card dd{min-width:0}.xh-yb{white-space:normal}.yb-card dd small{overflow-wrap:anywhere}}
