@@ -60,14 +60,15 @@
   document.addEventListener('keydown', function (e) { var g = document.activeElement; if ((e.key === 'Enter' || e.key === ' ') && g && g.classList && g.classList.contains('gl')) { e.preventDefault(); cur === g ? hide() : show(g); } else if (e.key === 'Escape') hide(); });
   window.addEventListener('scroll', function () { if (cur && !coarse) hide(); }, { passive: true });
 })();
-/* Scrolling strips (price scroll, headlines): static and swipeable by default; a play button starts auto-scroll ('btd_scroll'='play', new key so every existing visitor starts paused). Hover or touch pauses while playing. Reduced motion: always static. */
+/* Scrolling strips (price scroll, headlines): static and swipeable by default. A strip's play button starts it; at most one strip moves at a time (playing one stops the other), one shared speed. Saved in 'btd_scroll' = 'ticker' | 'hl' (new key: every existing visitor starts static). Hover or touch pauses while playing. Reduced motion: always static. My Alts is a static swipe row. */
 (function () {
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, H = document.documentElement;
-  function playing() { try { return !RM && localStorage.getItem('btd_scroll') === 'play'; } catch (e) { return false; } }
-  function apply() { var p = playing(); H.classList.toggle('strips-paused', !p); document.querySelectorAll('.strip-pp').forEach(function (b) { b.setAttribute('aria-pressed', p ? 'true' : 'false'); b.setAttribute('aria-label', p ? 'Pause scrolling' : 'Play scrolling'); b.title = p ? 'Pause (stays paused next visit)' : 'Auto-scroll (remembered)'; b.innerHTML = p ? '&#10074;&#10074;' : '&#9654;'; }); }
-  function ensure() { if (RM) { H.classList.add('strips-paused'); return; } document.querySelectorAll('.ticker, .tk-hl').forEach(function (s) { if (s.querySelector(':scope > .strip-pp')) return; var b = document.createElement('button'); b.type = 'button'; b.className = 'strip-pp'; s.appendChild(b);
-      s.addEventListener('touchstart', function () { if (!playing()) return; s.classList.add('strip-hold'); clearTimeout(s._ht); s._ht = setTimeout(function () { s.classList.remove('strip-hold'); }, 4000); }, { passive: true }); }); apply(); }
-  H.classList.add('strips-paused');
-  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.strip-pp'); if (!b) return; e.preventDefault(); e.stopPropagation(); try { localStorage.setItem('btd_scroll', playing() ? 'pause' : 'play'); } catch (x) {} apply(); }, true);
-  setTimeout(ensure, 500); setInterval(ensure, 3000);
+  function which() { try { var v = localStorage.getItem('btd_scroll'); return !RM && (v === 'ticker' || v === 'hl') ? v : ''; } catch (e) { return ''; } }
+  function id(s) { return s.classList.contains('ticker') ? 'ticker' : 'hl'; }
+  function apply() { var w = which(); document.querySelectorAll('.ticker, .tk-hl').forEach(function (s) { var on = w === id(s); s.classList.toggle('strip-static', !on); var b = s.querySelector(':scope > .strip-pp'); if (!b) return;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.setAttribute('aria-label', on ? 'Pause scrolling' : 'Play scrolling'); b.title = on ? 'Pause (remembered)' : 'Auto-scroll this strip (only one strip moves at a time; remembered)'; b.innerHTML = on ? '&#10074;&#10074;' : '&#9654;'; }); }
+  function ensure() { document.querySelectorAll('.ticker, .tk-hl').forEach(function (s) { if (s.querySelector(':scope > .strip-pp')) return; if (!RM) { var b = document.createElement('button'); b.type = 'button'; b.className = 'strip-pp'; s.appendChild(b); }
+      s.addEventListener('touchstart', function () { if (which() !== id(s)) return; s.classList.add('strip-hold'); clearTimeout(s._ht); s._ht = setTimeout(function () { s.classList.remove('strip-hold'); }, 4000); }, { passive: true }); }); apply(); }
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.strip-pp'); if (!b) return; e.preventDefault(); e.stopPropagation(); var me = id(b.parentNode); try { localStorage.setItem('btd_scroll', which() === me ? 'off' : me); } catch (x) {} apply(); }, true);
+  ensure(); setTimeout(ensure, 500); setInterval(ensure, 3000);
 })();

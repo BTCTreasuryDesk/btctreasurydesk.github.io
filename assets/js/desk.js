@@ -934,7 +934,7 @@
     var halves = inn.querySelectorAll('.tk-seq'); if (halves.length !== 2) { inn.innerHTML = '<span class="tk-seq"></span><span class="tk-seq" aria-hidden="true"></span>'; halves = inn.querySelectorAll('.tk-seq'); }
     halves[0].innerHTML = seq; var w1 = halves[0].scrollWidth || 1, rep = Math.max(1, Math.ceil((tk.clientWidth || 1200) / w1)); if (rep > 1) halves[0].innerHTML = new Array(rep + 1).join(seq);
     halves[1].innerHTML = halves[0].innerHTML; var hw = halves[0].scrollWidth;
-    var dur = Math.max(30, Math.round(hw / 45)) + 's'; if (inn.style.animationDuration !== dur) inn.style.animationDuration = dur; // ~45 px per second, steady whatever the list length
+    var dur = Math.max(30, Math.round(hw / 40)) + 's'; /* one shared speed (40 px/s) with the headlines strip */ if (inn.style.animationDuration !== dur) inn.style.animationDuration = dur; // ~45 px per second, steady whatever the list length
   }
   /* Ribbon editor: grouped options + type any ticker (validated via the quote feed), up/down, remove, reset */
   var tke = null, tkeBtn = null, TKE_G = {};
@@ -1041,7 +1041,7 @@
       var KD = r[0] && (r[0].items || r[0].events || []); (KD || []).filter(function (x) { return x.date && Date.parse(x.date + 'T23:59:00-04:00') >= now; }).slice(0, 5).forEach(function (x) { H.push('<span class="tk-h"><em>COMING UP</em> ' + esc(x.title || x.name || '') + ' \u00b7 ' + esc(dd(x.date + 'T12:00:00-04:00')) + (x.time ? ' ' + esc(x.time) : '') + '</span>'); });
       if (DESK && DESK.strategy) { var S2 = DESK.strategy; if (S2.last_buy_btc) H.push('<span class="tk-h"><em>STRATEGY</em> Last reported purchase: ' + fmt(S2.last_buy_btc) + ' BTC (' + esc(S2.last_buy_reported || '') + ') \u00b7 holds ' + fmt(S2.btc_held) + ' BTC</span>'); if (S2.mnav) H.push('<span class="tk-h"><em>STRATEGY</em> mNAV at the last close: ' + S2.mnav.toFixed(2) + 'x</span>'); }
       var N = r[1] && r[1].items ? r[1].items.filter(function (x) { return x.published && now - Date.parse(x.published) < 7 * 864e5; }).sort(function (a, b) { return a.published < b.published ? 1 : -1; }).slice(0, 8) : []; N.forEach(function (x) { H.push('<a class="tk-h" href="' + esc(x.url) + '" target="_blank" rel="noopener"><em>NEWS \u00b7 ' + esc(dd(x.published)) + '</em> ' + esc(x.title) + ' <small>(' + esc(x.source) + ')</small></a>'); });
-      var inn2 = hl.querySelector('[data-tk-hl]'); if (!H.length) { hl.hidden = true; return; } var hs = H.join(''); inn2.innerHTML = '<span class="tk-seq">' + hs + '</span><span class="tk-seq" aria-hidden="true">' + hs + '</span>'; inn2.style.animationDuration = Math.max(60, Math.round(inn2.scrollWidth / 2 / 40)) + 's';
+      var inn2 = hl.querySelector('[data-tk-hl]'); if (!H.length) { hl.hidden = true; return; } var hs = H.join(''); inn2.innerHTML = '<span class="tk-seq">' + hs + '</span><span class="tk-seq" aria-hidden="true">' + hs + '</span>'; inn2.style.animationDuration = Math.max(30, Math.round(inn2.scrollWidth / 2 / 40)) + 's';
       var syncH = function () { hl.hidden = tk.hidden || !H.length; }; new MutationObserver(syncH).observe(tk, { attributes: true, attributeFilter: ['hidden'] }); syncH(); });
     var syncW = function () { tw.hidden = tk.hidden; }; new MutationObserver(syncW).observe(tk, { attributes: true, attributeFilter: ['hidden'] }); syncW(); }
   if (tk && tkBtn) { setTicker(LS.get('btd_ticker') !== '0', false); tkBtn.addEventListener('click', function () { setTicker(tk.hidden, true); }); }
