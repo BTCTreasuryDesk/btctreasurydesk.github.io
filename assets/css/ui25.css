@@ -117,3 +117,5 @@ main.grid>.p-ep[data-tabs]{grid-row:auto}
 .tc-segsel{display:inline-block;-webkit-appearance:none;appearance:none;min-height:40px;min-width:64px;padding:0 26px 0 12px;border:1px solid #F7931A;border-radius:6px;background:#0b0d10 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F7931A'/%3E%3C/svg%3E") no-repeat right 9px center;color:#F7931A;font:700 14px var(--mono,monospace)}
 .tc-bar .tc-more{margin-left:auto}
 }
+
+.hb-tk{font:700 13.5px var(--mono,monospace);color:#f2f4f7;margin-right:6px;letter-spacing:.02em}.hb-nm{font-size:11px;color:var(--mu,#8b95a3)}

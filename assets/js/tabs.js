@@ -42,14 +42,17 @@
   function pc(v) { return v == null || !isFinite(v) ? '' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%'; }
   function cls(v) { return v > 0 ? 'up' : v < 0 ? 'dn' : ''; }
   function onChart(s) { var T = window.BTD_TC; return !!(T && T.panes.some(function (P) { return P.sym === s; })); }
+  var DTK = { '.SPX': 'SPX', '.IXIC': 'IXIC', '.DJI': 'DJI', '.DXY': 'DXY', '.VIX': 'VIX', '@GC.1': 'GC', '@CL.1': 'CL', '@SP.1': 'ES', '@ND.1': 'NQ', '@DJ.1': 'YM' };
+  var FNM = { '@GC.1': 'Gold futures', '@CL.1': 'WTI crude futures', US10Y: 'US 10Y Treasury yield', '.DXY': 'US Dollar Index' };
+  function tkN(it) { var t = DTK[it[0]] || it[0]; return '<span class="hb-n"><b class="hb-tk">' + esc(t) + '</b><span class="hb-nm">' + esc(FNM[it[0]] || it[1]) + '</span></span>'; }
   function cell(it) { if (onChart(it[0])) return ''; var s = it[0], k = it[2] || 's', q = F && F.get(s), ses = F ? F.session() : 'open';
-    if (!q || q.px == null) return '<div class="hb-c"><span class="hb-n">' + esc(it[1]) + '</span><b class="hb-p">…</b></div>';
+    if (!q || q.px == null) return '<div class="hb-c">' + tkN(it) + '<b class="hb-p">…</b></div>';
     var main0 = '', sub = '';
     if (k === 's' && ses !== 'open' && q.ext && q.ext.px != null) { var d = (q.ext.px / q.px - 1) * 100; main0 = '<b class="hb-p">' + fmt(q.ext.px, k) + '</b><span class="hb-x ' + cls(d) + '">' + pc(d) + '</span><span class="hb-tag">' + (q.ext.kind === 'pre' ? 'PRE' : 'AH') + '</span>'; sub = 'Close ' + fmt(q.px, k) + ' <i class="' + cls(q.chp) + '">' + pc(q.chp) + '</i>'; }
     else { main0 = '<b class="hb-p">' + fmt(q.px, k) + '</b><span class="hb-x ' + cls(q.chp) + '">' + (k === 'y' && q.ch != null ? (q.ch >= 0 ? '+' : '−') + Math.abs(q.ch * 100).toFixed(1) + ' bp' : pc(q.chp)) + '</span>' + (k === 'c' ? '<span class="hb-tag on">24h</span>' : '');
       if (k !== 'c') sub = ses === 'open' ? (k === 'f' ? 'futures' : 'live') : (k === 'f' ? 'futures · front month' : 'last close'); }
-    if (k === 'i' && it[3] && ses !== 'open') { var f = F.get(it[3]); if (f && f.px != null) sub = 'Futures ' + fmt(f.px, 'i') + ' <i class="' + cls(f.chp) + '">' + pc(f.chp) + '</i>'; }
-    return '<div class="hb-c"><span class="hb-n">' + esc(it[1]) + '</span><span class="hb-m">' + main0 + '</span><small class="hb-s">' + sub + '</small></div>'; }
+    if (k === 'i' && it[3] && ses !== 'open') { var f = F.get(it[3]); if (f && f.px != null) sub = 'Futures ' + DTK[it[3]] + ' ' + fmt(f.px, 'i') + ' <i class="' + cls(f.chp) + '">' + pc(f.chp) + '</i>'; }
+    return '<div class="hb-c">' + tkN(it) + '<span class="hb-m">' + main0 + '</span><small class="hb-s">' + sub + '</small></div>'; }
   function paintHB() { var ses = F ? F.session() : 'open'; $('[data-hb-ses]', hb).textContent = { open: 'US market open', pre: 'Pre-market', post: 'After hours', closed: 'US market closed · extended-hours last trades lead' }[ses] || '';
     $('[data-hb]', hb).innerHTML = GROUPS.map(function (g) { return '<div class="hb-g"><p class="hb-h">' + g[0] + '</p><div class="hb-r">' + g[1].map(cell).join('') + '</div></div>'; }).join(''); }
   if (F) { var syms = []; GROUPS.forEach(function (g) { g[1].forEach(function (it) { if (it[2] !== 'c') syms.push(it[0]); if (it[3]) syms.push(it[3]); }); }); F.watch(syms); var pt = null; F.on('*', function () { if (pt) return; pt = setTimeout(function () { pt = null; paintHB(); }, 400); }); }
