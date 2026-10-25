@@ -98,6 +98,12 @@ body[data-tab=home] main.grid>.p-bm{order:-3;grid-column:1/7!important;grid-row:
 body[data-tab=home] main.grid>.p-ep{order:-2;grid-column:7/-1!important;grid-row:auto!important}
 @media (max-width:1023px){body[data-tab=home] main.grid>.p-bm,body[data-tab=home] main.grid>.p-ep{grid-column:1/-1!important}}
 main.grid>.p-ep[data-tabs]{grid-row:auto}
+/* Home: Biggest movers (left) + Key dates under it, latest episode spans both rows on the right: what moved, what's next, the show that explains it */
+body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:auto!important;align-self:start}
+@media (min-width:1024px){body[data-tab=home] main.grid>.p-ep{grid-row:span 2!important}body[data-tab=home] main.grid>.p-bm{align-self:start}body[data-tab=home] main.grid{grid-auto-flow:row dense}}
+@media (min-width:1024px){body[data-tab=home] main.grid>.p-kd .kd-l{grid-template-columns:1fr}body[data-tab=home] main.grid>.p-kd .kd-l li:nth-child(n+7){display:none}body[data-tab=home] main.grid>.p-kd .kd-t small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+@media (max-width:1023px){body[data-tab=home] main.grid>.p-kd{grid-column:1/-1!important}body[data-tab=home] main.grid>.p-kd{order:-1}}
+
 @media (max-width:1023px){.deskbar{display:none!important}}
 /* long-term chart (flagship) */
 .ltc{display:flex;flex-direction:column;gap:8px}

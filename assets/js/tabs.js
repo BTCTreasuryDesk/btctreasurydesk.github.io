@@ -13,7 +13,7 @@
   var MAP = [['.p-tc', 'home'], ['[data-home-board]', 'home'], ['.p-hs', 'home'], ['[data-home-movers]', 'home'], ['.p-ep', 'home show'],
     ['.p-mk', 'markets'], ['.p-wl', 'companies'], ['.p-tboard', 'companies'], ['.p-kpi', 'strategy'], ['.p-yb', 'strategy show'],
     ['.p-cx', 'crypto'], ['.p-dv', 'crypto'], ['.p-tok', 'crypto markets'], ['.p-charts', 'charts'], ['[data-alerts]', 'charts'], ['.p-wall', 'charts'],
-    ['.p-kd', 'calendar'], ['.p-news', 'calendar'], ['.p-links', 'calendar'], ['.p-wcw', 'calendar'], ['.p-optin', 'show'], ['.p-movers', 'none'], ['.p-week', 'none'], ['[data-slow-h]', 'none'], ['.p-live', 'none']];
+    ['.p-kd', 'calendar home'], ['.p-news', 'calendar'], ['.p-links', 'calendar'], ['.p-wcw', 'calendar'], ['.p-optin', 'show'], ['.p-movers', 'none'], ['.p-week', 'none'], ['[data-slow-h]', 'none'], ['.p-live', 'none']];
   function tag() { MAP.forEach(function (m) { $$(m[0], main).forEach(function (el) { if (el.parentNode === main) el.setAttribute('data-tabs', m[1]); }); }); }
   /* tab bar */
   var bar = document.createElement('nav'); bar.className = 'tabs'; bar.setAttribute('aria-label', 'Desk sections');
