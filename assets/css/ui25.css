@@ -152,3 +152,6 @@ body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:
 .hb-del{border:0;background:none;color:#ff5a5f;font-size:15px;cursor:pointer;padding:0 2px}
 .hb-add{display:flex;gap:6px;margin:0 0 6px}.hb-add input{flex:1;min-width:0;background:#0b0d10;border:1px solid #2a313b;border-radius:5px;color:#fff;padding:6px 8px;font-size:13px}.hb-add button{font:600 11px var(--mono,monospace);border:1px solid #2a313b;background:#12161c;color:#e6e9ee;border-radius:5px;padding:0 10px}
 @media (max-width:600px){.hb-lv{grid-template-columns:1fr 1fr}.hb-lvh{grid-column:1/-1}.hb-h .hb-ed{font-size:10px}}
+@keyframes alflash{0%,100%{background:transparent}25%,75%{background:rgba(255,61,242,.22)}}
+.hb-c.hb-hit{box-shadow:inset 3px 0 0 #ff3df2;animation:alflash 1.2s 3}.hb-tag.hit{background:rgba(255,61,242,.18);color:#ff3df2}
+.tc-read.al-hit .tc-px{animation:alflash 1.2s 3;color:#ff3df2}
