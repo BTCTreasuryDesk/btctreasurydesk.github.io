@@ -140,3 +140,15 @@ body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:
 @media (max-width:600px){.hb-tabs{display:flex;margin:0 0 8px}.hb-tabs button{flex:1}
   .hb[data-hbg="0"] .hb-g:not(:nth-child(1)),.hb[data-hbg="1"] .hb-g:not(:nth-child(2)),.hb[data-hbg="2"] .hb-g:not(:nth-child(3)){display:none}
   .hb-h{display:none}.hb-nm{display:none}}
+.hb-h{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.hb-md{display:inline-flex;border:1px solid #1e232b;border-radius:5px;overflow:hidden;text-transform:none;letter-spacing:0}
+.hb-md button{font:600 10px var(--mono,monospace);padding:2px 6px;background:none;border:0;color:var(--mu,#8b95a3);cursor:pointer;min-height:22px}.hb-md button.on{background:rgba(247,147,26,.15);color:#F7931A}
+.hb-tag.tok{background:rgba(79,163,255,.15);color:#4fa3ff}
+@media (max-width:600px){.hb-h{display:flex}.hb-h{font-size:0}.hb-h .hb-md{font-size:10px}.hb[data-hbg="1"] .hb-g:nth-child(2) .hb-h{display:flex}.hb-g .hb-h{display:none}}
+@media (min-width:1101px){.hb{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr)}}
+.hb-lvh{font:700 10.5px var(--mono,monospace);color:#F7931A;text-transform:uppercase;letter-spacing:.06em}
+.hb-f{grid-column:1/2;font:10.5px var(--mono,monospace);color:#9aa4b2;white-space:nowrap}.hb-f+.hb-s{grid-column:2/3}
+.hb-ed{font:600 10px var(--mono,monospace);padding:2px 7px;border:1px solid #2a313b;border-radius:5px;background:none;color:#cfd5dd;cursor:pointer;margin-left:auto;min-height:22px}
+.hb-del{border:0;background:none;color:#ff5a5f;font-size:15px;cursor:pointer;padding:0 2px}
+.hb-add{display:flex;gap:6px;margin:0 0 6px}.hb-add input{flex:1;min-width:0;background:#0b0d10;border:1px solid #2a313b;border-radius:5px;color:#fff;padding:6px 8px;font-size:13px}.hb-add button{font:600 11px var(--mono,monospace);border:1px solid #2a313b;background:#12161c;color:#e6e9ee;border-radius:5px;padding:0 10px}
+@media (max-width:600px){.hb-lv{grid-template-columns:1fr 1fr}.hb-lvh{grid-column:1/-1}.hb-h .hb-ed{font-size:10px}}

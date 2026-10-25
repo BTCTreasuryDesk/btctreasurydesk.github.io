@@ -189,7 +189,7 @@
   var P0 = mkPane(root.querySelector('[data-p0]'), 0); if (!two) P0.sym = S.s1p || 'BTC'; else if (isC(S.s1)) P0.sym = S.s1;
   if (two) mkPane(root.querySelector('[data-p1]'), 1);
   panes.forEach(render);
-  function load(sym) { if (PICK.indexOf(sym) < 0) return; var P = PHONE() || panes.length < 2 ? panes[0] : isC(sym) ? panes[0] : panes[1];
+  function load(sym) { if (PICK.indexOf(sym) < 0) { if (!/^[A-Z0-9.@^-]{1,12}$/.test(sym)) return; PICK.push(sym); } var P = PHONE() || panes.length < 2 ? panes[0] : isC(sym) ? panes[0] : panes[1];
     if (P.idx === 1 && sym === panes[0].sym) return; P.sym = sym; if (P.idx === 1) S.s2 = sym; else if (PHONE()) S.s1p = sym; else S.s1 = sym; save(); render(P); panes.forEach(read);
     try { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
   window.BTD_TC = { panes: panes, S: S, load: load, render: function () { panes.forEach(render); } };
