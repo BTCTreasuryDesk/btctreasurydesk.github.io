@@ -30,10 +30,10 @@
     if (r === '1D') return iv !== '1D'; if (r === '5D') return iv !== '1D' && (crypto ? iv !== '5m' || true : true);
     if (r === '1M') return crypto ? iv === '30m' || iv === '1h' || iv === '1D' : iv === '1D';
     if (r === '3M') return crypto ? iv === '1h' || iv === '1D' : iv === '1D'; return iv === '1D'; }
-  function defIv(t, r) { return r === '1D' ? '5m' : r === '5D' ? '30m' : '1D'; }
+  function defIv(t, r) { var d = r === '1D' ? '15m' : r === '5D' ? '1h' : r === '1M' ? '1h' : '1D'; return ivOK(t, r, d) ? d : '1D'; }
 
   /* ---------- settings (persisted) ---------- */
-  var S = { r: '1D', iv: '5m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, s2: 'MSTR', s1p: 'BTC', lines: {} };
+  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, s2: 'MSTR', s1p: 'BTC', lines: {} };
   try { var o = JSON.parse(LS.get('btd_tc') || 'null'); if (o && o.v === 1) Object.keys(S).forEach(function (k) { if (o[k] != null) S[k] = o[k]; });
     else { var o2 = JSON.parse(LS.get('btd_lc2') || '{}'); if (o2 && typeof o2.s === 'string' && PICK.indexOf(o2.s) >= 0 && o2.s !== 'BTC') S.s2 = o2.s; } } catch (e) {}
   if (RANGES.indexOf(S.r) < 0) S.r = '1D'; if (IVS.indexOf(S.iv) < 0) S.iv = defIv('BTC', S.r);
@@ -102,7 +102,9 @@
   function clearLines(P) { P.lines.forEach(function (x) { try { P.main.removePriceLine(x.l); } catch (e) {} }); P.lines = []; }
 
   /* toolbar */
-  function seg(name, opts, on, dis) { return '<span class="tc-seg" role="group" aria-label="' + name + '">' + opts.map(function (o) { var d = dis && dis(o); return '<button type="button" data-' + name + '="' + o + '"' + (o === on ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') + (d ? ' disabled' : '') + '>' + o + '</button>'; }).join('') + '</span>'; }
+  function seg(name, opts, on, dis) { return '<span class="tc-seg" role="group" aria-label="' + name + '">' + opts.map(function (o) { var d = dis && dis(o); return '<button type="button" data-' + name + '="' + o + '"' + (o === on ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') + (d ? ' disabled' : '') + '>' + o + '</button>'; }).join('') + '</span>' + segSel(name, opts.map(function (o) { return [o, o, dis && dis(o)]; }), on); }
+  function segSel(name, opts, on) { return '<select class="tc-segsel" data-segsel="' + name + '" aria-label="' + (name === 'rng' ? 'Range' : name === 'iv' ? 'Interval' : name) + '">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === on ? ' selected' : '') + (o[2] ? ' disabled' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>'; }
+  document.addEventListener('change', function (e) { var t = e.target; if (!t.matches || !t.matches('select.tc-segsel')) return; var b = t.parentNode.querySelector('button[data-' + t.dataset.segsel + '="' + t.value + '"]'); if (b) b.click(); });
   function tg(k, lab, on, title) { return '<button type="button" class="tc-tg' + (on ? ' on' : '') + '" data-tg="' + k + '" aria-pressed="' + !!on + '"' + (title ? ' title="' + title + '"' : '') + '>' + lab + '</button>'; }
   function bar(P) { var el = P.el.querySelector('[data-bar]'), ph = PHONE(), st = !isC(P.sym);
     var h = seg('rng', RANGES, S.r) + seg('iv', IVS, S.iv, function (iv) { return !ivOK(P.sym, S.r, iv); }) +
