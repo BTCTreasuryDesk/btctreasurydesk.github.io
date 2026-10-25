@@ -155,3 +155,4 @@ body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:
 @keyframes alflash{0%,100%{background:transparent}25%,75%{background:rgba(255,61,242,.22)}}
 .hb-c.hb-hit{box-shadow:inset 3px 0 0 #ff3df2;animation:alflash 1.2s 3}.hb-tag.hit{background:rgba(255,61,242,.18);color:#ff3df2}
 .tc-read.al-hit .tc-px{animation:alflash 1.2s 3;color:#ff3df2}
+.tc-bar .tc-type{width:auto!important;max-width:150px;flex:0 0 auto}
