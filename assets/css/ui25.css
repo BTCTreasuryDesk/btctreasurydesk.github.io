@@ -125,3 +125,18 @@ body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:
 }
 
 .hb-tk{font:700 13.5px var(--mono,monospace);color:#f2f4f7;margin-right:6px;letter-spacing:.02em}.hb-nm{font-size:11px;color:var(--mu,#8b95a3)}
+.tc-pk,.tc-rv{display:contents}
+/* Market pulse (Oct 25 v2): 3 even columns of 6 rows, clickable rows */
+.hb{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:1100px){.hb{grid-template-columns:repeat(2,minmax(0,1fr))}.hb-g:last-child{grid-column:1/-1}}
+@media (max-width:600px){.hb{grid-template-columns:1fr}.hb-g:last-child{grid-column:auto}}
+.hb-c[data-hb-go]{cursor:pointer}.hb-c[data-hb-go]:hover,.hb-c[data-hb-go]:focus-visible{background:#12161c;outline:0}
+.hb-c.hb-on{box-shadow:inset 3px 0 0 #F7931A;background:rgba(247,147,26,.05)}
+.hb-c{min-height:44px}
+.hb-ctx{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 10px;padding:7px 10px;border:1px solid #1e232b;border-radius:8px;font-size:12px}
+.hb-ctx em{font-style:normal;color:var(--mu,#8b95a3);text-transform:uppercase;font-size:10.5px;letter-spacing:.05em}.hb-ctx b{color:#f2f4f7}.hb-ctx i{font-style:normal}
+@media (max-width:600px){.hb-ctx{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}}
+.hb-tabs{display:none}
+@media (max-width:600px){.hb-tabs{display:flex;margin:0 0 8px}.hb-tabs button{flex:1}
+  .hb[data-hbg="0"] .hb-g:not(:nth-child(1)),.hb[data-hbg="1"] .hb-g:not(:nth-child(2)),.hb[data-hbg="2"] .hb-g:not(:nth-child(3)){display:none}
+  .hb-h{display:none}.hb-nm{display:none}}

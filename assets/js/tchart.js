@@ -17,8 +17,8 @@
   var PHONE = function () { return innerWidth < 1024; };
   var CB = { BTC: 'BTC-USD', ETH: 'ETH-USD', SOL: 'SOL-USD', XRP: 'XRP-USD', DOGE: 'DOGE-USD', LINK: 'LINK-USD', ADA: 'ADA-USD', AVAX: 'AVAX-USD', LTC: 'LTC-USD', SUI: 'SUI-USD' };
   var IDX = { SPX: ['.SPX', 'S&P 500', 'none'], IXIC: ['.IXIC', 'Nasdaq Composite', 'none'], DJI: ['.DJI', 'Dow Jones', 'none'], GOLD: ['@GC.1', 'Gold futures', ''], DXY: ['.DXY', 'US dollar index', 'none'] };
-  var NAMES = { BTC: 'Bitcoin', ETH: 'Ether', SOL: 'Solana', MSTR: 'Strategy', MPJPY: 'Metaplanet (ADR)', XXI: 'Twenty One Capital', ASST: 'Strive', MARA: 'MARA Holdings', BLSH: 'Bullish', COIN: 'Coinbase', CLSK: 'CleanSpark', DJT: 'Trump Media', TSLA: 'Tesla', RIOT: 'Riot Platforms', HUT: 'Hut 8', XYZ: 'Block', ABTC: 'American Bitcoin', GLXY: 'Galaxy Digital', GEMI: 'Gemini', NAKA: 'Nakamoto', SPCX: 'SpaceX' };
-  var PICK = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'BLSH', 'COIN', 'CLSK', 'DJT', 'TSLA', 'RIOT', 'HUT', 'XYZ', 'ABTC', 'GLXY', 'GEMI', 'NAKA', 'BTC', 'ETH', 'SOL', 'SPX', 'IXIC', 'DJI', 'GOLD', 'DXY'];
+  var NAMES = { BTC: 'Bitcoin', ETH: 'Ether', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', LINK: 'Chainlink', MSTR: 'Strategy', MPJPY: 'Metaplanet (ADR)', XXI: 'Twenty One Capital', ASST: 'Strive', MARA: 'MARA Holdings', BLSH: 'Bullish', COIN: 'Coinbase', CLSK: 'CleanSpark', DJT: 'Trump Media', TSLA: 'Tesla', RIOT: 'Riot Platforms', HUT: 'Hut 8', XYZ: 'Block', ABTC: 'American Bitcoin', GLXY: 'Galaxy Digital', GEMI: 'Gemini', NAKA: 'Nakamoto', SPCX: 'SpaceX' };
+  var PICK = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'BLSH', 'COIN', 'CLSK', 'DJT', 'TSLA', 'RIOT', 'HUT', 'XYZ', 'ABTC', 'GLXY', 'GEMI', 'NAKA', 'BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'LINK', 'SPX', 'IXIC', 'DJI', 'GOLD', 'DXY'];
   function isC(t) { return !!CB[t]; }
   function cn(t) { return IDX[t] ? IDX[t][0] : t; }
   function cur(t) { return IDX[t] ? IDX[t][2] : ''; }
@@ -33,7 +33,7 @@
   function defIv(t, r) { var d = r === '1D' ? '15m' : r === '5D' ? '1h' : r === '1M' ? '1h' : '1D'; return ivOK(t, r, d) ? d : '1D'; }
 
   /* ---------- settings (persisted) ---------- */
-  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, r2: '1D', iv2: '15m', s2: 'MSTR', s1p: 'BTC', lines: {}, p2: null };
+  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, r2: '1D', iv2: '15m', s2: 'MSTR', s1p: 'BTC', s1: 'BTC', lines: {}, p2: null };
   try { var o = JSON.parse(LS.get('btd_tc') || 'null'); if (o && o.v === 1) Object.keys(S).forEach(function (k) { if (o[k] != null) S[k] = o[k]; });
     else { var o2 = JSON.parse(LS.get('btd_lc2') || '{}'); if (o2 && typeof o2.s === 'string' && PICK.indexOf(o2.s) >= 0 && o2.s !== 'BTC') S.s2 = o2.s; } } catch (e) {}
   if (RANGES.indexOf(S.r) < 0) S.r = '1D'; if (RANGES.indexOf(S.r2) < 0) S.r2 = S.r; if (IVS.indexOf(S.iv2) < 0) S.iv2 = S.iv;
@@ -84,7 +84,7 @@
   var TT = { localization: { timeFormatter: function (t) { return new Date(t * 1e3).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' ET'; } } };
   function mkPane(el, idx) {
     var P = { el: el, idx: idx, sym: idx === 0 ? 'BTC' : S.s2, b: [], lines: [] };
-    el.innerHTML = '<div class="tc-read" data-r></div><div class="tc-bar" data-bar></div><div class="tc-cv" data-cv><div class="tc-hud mono" data-hud></div><div class="tc-msg" data-msg hidden></div></div><div class="tc-kn mono" data-kn></div>';
+    el.innerHTML = '<div class="tc-read" data-r><span class="tc-pk" data-pk></span><span class="tc-rv" data-rv></span></div><div class="tc-bar" data-bar></div><div class="tc-cv" data-cv><div class="tc-hud mono" data-hud></div><div class="tc-msg" data-msg hidden></div></div><div class="tc-kn mono" data-kn></div>';
     var cv = el.querySelector('[data-cv]');
     var ch = LW.createChart(cv, Object.assign({ autoSize: true, layout: { background: { color: 'transparent' }, textColor: '#8b95a3', fontFamily: 'ui-monospace,Menlo,monospace', fontSize: 11, attributionLogo: false },
       grid: { vertLines: { color: 'rgba(255,255,255,.04)' }, horzLines: { color: 'rgba(255,255,255,.05)' } }, rightPriceScale: { borderColor: '#222831' }, timeScale: { borderColor: '#222831', timeVisible: true, secondsVisible: false, rightOffset: 3,
@@ -123,21 +123,23 @@
   function idxTwo() { return panes.length > 1 && !PHONE(); }
 
   /* readout: price + session; stocks outside the regular session lead with the extended-hours price */
-  function read(P) { var el = P.el.querySelector('[data-r]'), t = P.sym, q = quote(t), c = cur(t), ses = F ? F.session() : 'open', h = '';
+  function read(P) { var el = P.el.querySelector('[data-rv]'), pk = P.el.querySelector('[data-pk]'), t = P.sym, q = quote(t), c = cur(t), ses = F ? F.session() : 'open', h = '';
     var pick = '<select class="tc-pick" data-pick aria-label="Chart symbol">' + PICK.filter(function (x) { return idxTwo() ? (P.idx === 0 ? isC(x) : x !== panes[0].sym) : true; }).map(function (x) { return '<option value="' + x + '"' + (x === t ? ' selected' : '') + '>' + x + ' · ' + esc(nm(x)) + '</option>'; }).join('') + '</select>';
-    if (!q || q.px == null) { el.innerHTML = pick + '<span class="tc-px">—</span>'; return; }
+    /* only rebuild the picker when its options change: live ticks used to replace it every second, closing the open dropdown */
+    if (pk.dataset.k !== pick) { var sl = pk.querySelector('select'); if (!(sl && document.activeElement === sl && sl.value === t)) { pk.innerHTML = pick; pk.dataset.k = pick; } }
+    if (!q || q.px == null) { el.innerHTML = '<span class="tc-px">—</span>'; return; }
     if (isC(t)) h = '<b class="tc-px">' + fp(q.px) + '</b><span class="tc-ch ' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sgn(q.ch) + ' (' + sg(q.chp) + ') 24h</span><span class="tc-ses on">Live 24/7 · Coinbase</span>';
     else if (ses !== 'open' && q.ext && q.ext.px != null) { var d = q.ext.px - q.px, p = d / q.px * 100, lab = q.ext.kind === 'pre' ? 'Pre-market' : 'After hours';
       h = '<b class="tc-px">' + fp(q.ext.px, c) + '</b><span class="tc-ch ' + (d >= 0 ? 'up' : 'dn') + '">' + sgn(d, c) + ' (' + sg(p) + ')</span><span class="tc-ses ext">' + (ses === 'closed' ? 'Last ' + lab.toLowerCase() : lab) + '</span>' +
         '<span class="tc-close">Close ' + fp(q.px, c) + ' <i class="' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sg(q.chp) + '</i></span>'; }
     else h = '<b class="tc-px">' + fp(q.px, c) + '</b><span class="tc-ch ' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sgn(q.ch, c) + ' (' + sg(q.chp) + ')</span><span class="tc-ses' + (ses === 'open' ? ' on' : '') + '">' + (ses === 'open' ? 'Market open' : 'Close') + (q.rt === false ? ' · delayed' : '') + '</span>';
-    el.innerHTML = pick + h; }
+    el.innerHTML = h; }
   /* key numbers under the chart */
   var DESK = null; J('/assets/data/desk.json').then(function (j) { DESK = j; panes.forEach(kn); }).catch(function () {});
   var B7 = null; J('https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400').then(function (a) { if (Array.isArray(a) && a[7]) B7 = +a[7][4]; panes.forEach(kn); }).catch(function () {});
   function kn(P) { var el = P.el.querySelector('[data-kn]'), t = P.sym, q = quote(t), c = cur(t), it = [];
     if (!q) { el.innerHTML = ''; return; }
-    if (isC(t)) { it.push(['24h range', fp(q.lo) + '–' + fp(q.hi)]); if (t === 'BTC' && B7) it.push(['7D', sg((q.px / B7 - 1) * 100)]); if (t === 'BTC' && window.BTD_FUND && window.BTD_FUND.rate != null) it.push(['Funding', sg(window.BTD_FUND.rate, 4) + '/8h']); }
+    if (isC(t)) { it.push(['24h range', fp(q.lo) + '–' + fp(q.hi)]); if (t === 'BTC' && B7) it.push(['7D', sg((q.px / B7 - 1) * 100)]); if (t === 'BTC' && window.BTD_FUND && window.BTD_FUND.f8 != null) it.push(['Funding', sg(window.BTD_FUND.f8, 4) + '/8h']); }
     else { it.push(['Day range', fp(q.lo, c) + '–' + fp(q.hi, c)]); it.push(['Prev close', fp(q.prev, c)]); if (q.vol) it.push(['Vol', q.vol]); if (q.yh) it.push(['52W', fp(q.yl, c) + '–' + fp(q.yh, c)]);
     }
     el.innerHTML = it.map(function (x) { return '<span><em>' + x[0] + '</em> <b>' + x[1] + '</b></span>'; }).join(''); }
@@ -179,13 +181,16 @@
       else if (k === 'fs') { var el = P.el; if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen(); else el.classList.toggle('tc-fs'); return; }
       else if (k === 'more') { P.more = !P.more; bar(P); return; } else if (k === 'sync') { S.sync = S.sync ? 0 : 1; if (!S.sync) { S.r2 = S.r; S.iv2 = S.iv; } save(); panes.forEach(render); return; } else if (VK.indexOf(k) >= 0) v[k] = v[k] ? 0 : 1; else return;
       if (k === 'log' && v.log) v.cmp = 0; if (k === 'cmp' && v.cmp) v.log = 0; save(); render(P); } });
-  root.addEventListener('change', function (e) { var s = e.target.closest('[data-pick]'); if (!s) return; var P = panes.filter(function (Q) { return Q.el.contains(s); })[0]; P.sym = s.value; if (P.idx === 1) S.s2 = s.value; else if (PHONE()) S.s1p = s.value; save(); render(P); if (panes.length > 1) panes.forEach(read); });
+  root.addEventListener('change', function (e) { var s = e.target.closest('[data-pick]'); if (!s) return; var P = panes.filter(function (Q) { return Q.el.contains(s); })[0]; P.sym = s.value; if (P.idx === 1) S.s2 = s.value; else if (PHONE()) S.s1p = s.value; else S.s1 = s.value; s.blur(); save(); render(P); if (panes.length > 1) panes.forEach(read); });
 
   /* build */
   var two = !PHONE();
   root.innerHTML = '<div class="tc-pane" data-p0></div>' + (two ? '<div class="tc-pane" data-p1></div>' : '');
-  var P0 = mkPane(root.querySelector('[data-p0]'), 0); if (!two) P0.sym = S.s1p || 'BTC';
+  var P0 = mkPane(root.querySelector('[data-p0]'), 0); if (!two) P0.sym = S.s1p || 'BTC'; else if (isC(S.s1)) P0.sym = S.s1;
   if (two) mkPane(root.querySelector('[data-p1]'), 1);
   panes.forEach(render);
-  window.BTD_TC = { panes: panes, S: S, render: function () { panes.forEach(render); } };
+  function load(sym) { if (PICK.indexOf(sym) < 0) return; var P = PHONE() || panes.length < 2 ? panes[0] : isC(sym) ? panes[0] : panes[1];
+    if (P.idx === 1 && sym === panes[0].sym) return; P.sym = sym; if (P.idx === 1) S.s2 = sym; else if (PHONE()) S.s1p = sym; else S.s1 = sym; save(); render(P); panes.forEach(read);
+    try { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
+  window.BTD_TC = { panes: panes, S: S, load: load, render: function () { panes.forEach(render); } };
 })();
