@@ -1,0 +1,45 @@
+/* BTC Treasury Desk: Desk alerts (browser-side, Oct 25, 2026).
+   Free: up to 3 price alerts. Members tier (Desk Pro): up to 25 alerts, indicator triggers (mNAV, MVRV, Mayer Multiple, Pi Cycle, 200-week MA cross)
+   and faster checks (15 s vs 60 s). Gate = BTD_MEMBERS (PRO_GATE off = everything open during launch).
+   Delivery: on-page banner + browser notification (if allowed) while a Desk tab is open. Saved in localStorage 'btd_alerts'. Education only. */
+(function () {
+  'use strict';
+  var F = window.BTD_FEED, LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  function pro() { var C = window.BTD_MEMBERS; if (!C || !C.PRO_GATE) return true; return C.canAccess ? C.canAccess('pro') : false; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var A = []; try { A = JSON.parse(LS.get('btd_alerts') || '[]') || []; } catch (e) { A = []; }
+  function save() { LS.set('btd_alerts', JSON.stringify(A)); paint(); }
+  function max() { return pro() ? 25 : 3; }
+  var IND = { mnav: 'MSTR mNAV (Strategy method)', mvrv: 'BTC MVRV', mayer: 'BTC Mayer Multiple', pi: 'Pi Cycle (111D vs 2×350D)', w200: 'BTC vs 200-week MA' };
+  /* indicator values */
+  var D = null, DESK = null; fetch('/assets/data/btc_daily.json').then(function (r) { return r.json(); }).then(function (j) { D = j.closes; }).catch(function () {});
+  fetch('/assets/data/desk.json').then(function (r) { return r.json(); }).then(function (j) { DESK = j; }).catch(function () {});
+  function ma(n, px) { if (!D || D.length < n) return null; var a = D.slice(-(n - 1)).concat([px]), s = 0; a.forEach(function (v) { s += v; }); return s / n; }
+  function ind(k) { var b = F && F.get('BTC'), px = b && b.px; if (!px) return null;
+    if (k === 'mayer') { var m = ma(200, px); return m ? px / m : null; }
+    if (k === 'mvrv') { var rp = DESK && DESK.onchain && DESK.onchain.realized_price; return rp ? px / rp : null; }
+    if (k === 'w200') { if (!D) return null; var w = []; for (var i = D.length - 1; i >= 0 && w.length < 200; i -= 7) w.push(D[i]); if (w.length < 200) return null; var s = 0; w.forEach(function (v) { s += v; }); return px / (s / 200); }
+    if (k === 'pi') { var a = ma(111, px), b2 = ma(350, px); return a && b2 ? a / (2 * b2) : null; }
+    if (k === 'mnav') { var q = F.get('MSTR'); try { return DESK && window.btdLiveMnav && q ? window.btdLiveMnav(DESK.strategy.kpis, q.px, px) : null; } catch (e) { return null; } } return null; }
+  function val(a) { if (a.ind) return ind(a.ind); var q = F && F.get(a.sym === 'BTC' || a.sym === 'ETH' || a.sym === 'SOL' ? a.sym : ({ SPX: '.SPX', IXIC: '.IXIC', DJI: '.DJI', GOLD: '@GC.1', DXY: '.DXY' }[a.sym] || a.sym)); if (!q || q.px == null) return null; return q.ext && F.session() !== 'open' && q.ext.px != null ? q.ext.px : q.px; }
+  function add(o) { if (A.length >= max()) { banner('Alert limit reached (' + max() + (pro() ? '' : ' on the free tier; members get 25 plus indicator alerts') + ').'); return; }
+    var v = val(o); var a = { id: Date.now().toString(36), sym: o.sym || 'BTC', ind: o.ind || null, lvl: +o.px || +o.lvl, dir: o.dir || (v != null && v > (+o.px || +o.lvl) ? 'below' : 'above'), on: 1 }; if (a.ind && !pro()) { banner('Indicator alerts are a Members feature.'); return; } A.push(a); save(); askPerm(); }
+  function askPerm() { try { if (window.Notification && Notification.permission === 'default') Notification.requestPermission(); } catch (e) {} }
+  function banner(t) { var b = document.querySelector('.al-ban'); if (!b) { b = document.createElement('div'); b.className = 'al-ban'; b.setAttribute('role', 'status'); document.body.appendChild(b); } b.textContent = t; b.classList.add('on'); clearTimeout(b._t); b._t = setTimeout(function () { b.classList.remove('on'); }, 9000); }
+  function check() { var hit = 0; A.forEach(function (a) { if (!a.on) return; var v = val(a); if (v == null) return; if ((a.dir === 'above' && v >= a.lvl) || (a.dir === 'below' && v <= a.lvl)) { a.on = 0; hit = 1; var t = (a.ind ? IND[a.ind] : a.sym) + ' is ' + a.dir + ' ' + a.lvl + ' (now ' + (+v).toPrecision(5) + ')';
+      banner('Desk alert: ' + t); try { if (window.Notification && Notification.permission === 'granted') new Notification('BTC Treasury Desk alert', { body: t, icon: '/apple-touch-icon.png' }); } catch (e) {} } }); if (hit) save(); }
+  var tick = 0; setInterval(function () { tick++; if (pro() || tick % 4 === 0) check(); }, 15e3); /* members every 15 s, free every 60 s */
+  /* panel (Charts tab) */
+  var main = document.querySelector('main.grid'), P = null;
+  function paint() { if (!P) return; var l = P.querySelector('[data-al-l]'); l.innerHTML = A.length ? A.map(function (a) { var v = val(a); return '<li' + (a.on ? '' : ' class="done"') + '><b>' + esc(a.ind ? IND[a.ind] : a.sym) + '</b> ' + a.dir + ' <b class="mono">' + a.lvl + '</b>' + (v != null ? ' <small class="mono">now ' + (+v).toPrecision(5) + '</small>' : '') + (a.on ? '' : ' <small>triggered</small>') + ' <button type="button" data-al-x="' + a.id + '" aria-label="Delete alert">×</button></li>'; }).join('') : '<li class="muted">No alerts yet. Add one below, or use “+ Line” on a chart.</li>';
+    P.querySelector('[data-al-cap]').textContent = A.length + ' / ' + max() + (pro() ? ' · Members tier' + (window.BTD_MEMBERS && !window.BTD_MEMBERS.PRO_GATE ? ' (free during launch)' : '') : ' · free tier'); }
+  if (main) { P = document.createElement('section'); P.className = 'p p-al'; P.id = 'alerts'; P.setAttribute('data-alerts', ''); P.setAttribute('aria-label', 'Desk alerts');
+    P.innerHTML = '<div class="p-h"><span class="p-t">Desk alerts</span><span class="tag mono" data-al-cap></span></div><ul class="al-l" data-al-l></ul>' +
+      '<div class="al-f"><select data-al-k aria-label="Alert on"><option value="p:BTC">BTC price</option><option value="p:MSTR">MSTR price</option><option value="p:ASST">ASST price</option><option value="p:ETH">ETH price</option><option value="p:SPX">S&amp;P 500</option>' + Object.keys(IND).map(function (k) { return '<option value="i:' + k + '">' + IND[k] + ' · Members</option>'; }).join('') + '</select>' +
+      '<select data-al-d aria-label="Direction"><option value="above">rises above</option><option value="below">falls below</option></select><input data-al-v type="number" step="any" inputmode="decimal" placeholder="level" aria-label="Level"><button type="button" class="chip on" data-al-add>Add alert</button></div>' +
+      '<p class="p-f">Alerts run in this browser while a Desk tab is open (banner + notification if you allow it). Free: 3 price alerts. Members: 25 alerts, indicator triggers and 15-second checks. Indicators: Mayer = price / 200-day MA; MVRV = price / realized price (desk.json); Pi Cycle = 111-day MA / (2 × 350-day MA), 1.0 = cross. Education only.</p>';
+    main.appendChild(P); paint(); setInterval(paint, 30e3);
+    P.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; if (b.dataset.alX) { A = A.filter(function (a) { return a.id !== b.dataset.alX; }); save(); }
+      else if (b.hasAttribute('data-al-add')) { var k = P.querySelector('[data-al-k]').value.split(':'), v = +P.querySelector('[data-al-v]').value; if (!isFinite(v) || !v) return; add(k[0] === 'i' ? { ind: k[1], lvl: v, dir: P.querySelector('[data-al-d]').value } : { sym: k[1], px: v, dir: P.querySelector('[data-al-d]').value }); P.querySelector('[data-al-v]').value = ''; } }); }
+  window.BTD_ALERTS = { add: add, list: function () { return A; }, ind: ind, pro: pro };
+})();
