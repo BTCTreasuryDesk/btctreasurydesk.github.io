@@ -306,12 +306,12 @@
   }
   function step(d) { cs.i = (cs.i + d + CHARTS.length) % CHARTS.length; drawChart(); }
   document.addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
+    var b = e.target.closest('button'); if (!b || b.closest('.tc-pane')) return; // trading-desk charts handle their own buttons
     if (b.dataset.ci != null) { cs.i = +b.dataset.ci; drawChart(); }
     else if (b.hasAttribute('data-prev')) step(-1);
     else if (b.hasAttribute('data-next')) step(1);
     else if (b.dataset.style) { cs.style = b.dataset.style; $$('[data-style]').forEach(function (x) { x.classList.toggle('on', x === b); }); drawChart(); }
-    else if (b.dataset.iv) { cs.iv = b.dataset.iv; $$('[data-iv]').forEach(function (x) { x.classList.toggle('on', x === b); }); drawChart(); }
+    else if (b.dataset.iv) { cs.iv = b.dataset.iv; $$('[data-iv]').forEach(function (x) { if (!x.closest('.tc-pane')) x.classList.toggle('on', x === b); }); drawChart(); }
   });
   document.addEventListener('keydown', function (e) {
     if (/input|textarea|select/i.test((e.target.tagName || ''))) return;

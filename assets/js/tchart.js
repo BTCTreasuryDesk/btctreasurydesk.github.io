@@ -33,10 +33,14 @@
   function defIv(t, r) { var d = r === '1D' ? '15m' : r === '5D' ? '1h' : r === '1M' ? '1h' : '1D'; return ivOK(t, r, d) ? d : '1D'; }
 
   /* ---------- settings (persisted) ---------- */
-  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, r2: '1D', iv2: '15m', s2: 'MSTR', s1p: 'BTC', lines: {} };
+  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, r2: '1D', iv2: '15m', s2: 'MSTR', s1p: 'BTC', lines: {}, p2: null };
   try { var o = JSON.parse(LS.get('btd_tc') || 'null'); if (o && o.v === 1) Object.keys(S).forEach(function (k) { if (o[k] != null) S[k] = o[k]; });
     else { var o2 = JSON.parse(LS.get('btd_lc2') || '{}'); if (o2 && typeof o2.s === 'string' && PICK.indexOf(o2.s) >= 0 && o2.s !== 'BTC') S.s2 = o2.s; } } catch (e) {}
   if (RANGES.indexOf(S.r) < 0) S.r = '1D'; if (RANGES.indexOf(S.r2) < 0) S.r2 = S.r; if (IVS.indexOf(S.iv2) < 0) S.iv2 = S.iv;
+  /* per-chart view settings (candles/line, MAs, VWAP, volume, log, compare): never shared; right chart keeps its own in S.p2 */
+  var VK = ['type', 'ma20', 'ma50', 'ma200', 'vwap', 'vol', 'log', 'cmp'];
+  if (!S.p2 || typeof S.p2 !== 'object') { S.p2 = {}; VK.forEach(function (k) { S.p2[k] = S[k]; }); } else VK.forEach(function (k) { if (S.p2[k] == null) S.p2[k] = S[k]; });
+  function V(P) { return P && P.idx === 1 ? S.p2 : S; }
   /* per-pane range/interval: shared while Sync is on, independent for the right chart when off */
   function own(P) { return !S.sync && P.idx === 1; }
   function RG(P) { return own(P) ? S.r2 : S.r; }
@@ -112,7 +116,7 @@
   function tg(k, lab, on, title) { return '<button type="button" class="tc-tg' + (on ? ' on' : '') + '" data-tg="' + k + '" aria-pressed="' + !!on + '"' + (title ? ' title="' + title + '"' : '') + '>' + lab + '</button>'; }
   function bar(P) { var el = P.el.querySelector('[data-bar]'), ph = PHONE(), st = !isC(P.sym);
     var r = RG(P), h = seg('rng', RANGES, r) + seg('iv', IVS, P.iv || IV(P), function (iv) { return !ivOK(P.sym, r, iv); }) +
-      '<span class="tc-tools' + (ph && !P.more ? ' tc-hide' : '') + '">' + tg('type', S.type === 'candle' ? 'Candles' : 'Line', 1, 'Candles or line') + tg('ma20', 'MA20', S.ma20) + tg('ma50', 'MA50', S.ma50) + tg('ma200', 'MA200', S.ma200) + (st ? tg('vwap', 'VWAP', S.vwap) : '') + tg('vol', 'Vol', S.vol) + tg('log', 'Log', S.log, 'Logarithmic price scale') + tg('cmp', 'Compare %', S.cmp, 'Overlay the other chart in % from the first bar') +
+      '<span class="tc-tools' + (ph && !P.more ? ' tc-hide' : '') + '">' + tg('type', V(P).type === 'candle' ? 'Candles' : 'Line', 1, 'Candles or line') + tg('ma20', 'MA20', V(P).ma20) + tg('ma50', 'MA50', V(P).ma50) + tg('ma200', 'MA200', V(P).ma200) + (st ? tg('vwap', 'VWAP', V(P).vwap) : '') + tg('vol', 'Vol', V(P).vol) + tg('log', 'Log', V(P).log, 'Logarithmic price scale') + tg('cmp', 'Compare %', V(P).cmp, 'Overlay the other chart in % from the first bar') +
       tg('draw', P.drawing ? 'Click chart…' : '+ Line', P.drawing, 'Click the chart to place a horizontal line / alert level') + (P.lines.length ? tg('clr', 'Clear lines', 0) : '') + (idxTwo() ? tg('sync', 'Sync', S.sync, 'Link range and crosshair across both charts') : '') + tg('fs', '⛶', 0, 'Fullscreen') + '</span>' +
       (ph ? '<button type="button" class="tc-tg tc-more" data-tg="more" aria-expanded="' + !!P.more + '">' + (P.more ? 'Less' : 'Tools') + '</button>' : '');
     el.innerHTML = h; }
@@ -144,17 +148,17 @@
     bars(t, r, iv).then(function (b) { if (P.tok !== tok) return; P.b = b;
       if (!b.length) { msg.hidden = false; msg.textContent = 'No chart data for ' + t + ' right now. The price above is the live quote.'; }
       if (P.main) { clearLines(P); P.ch.removeSeries(P.main); }
-      P.main = S.type === 'candle' ? P.ch.addSeries(LW.CandlestickSeries, { upColor: '#2fd17c', downColor: '#ff5a5f', borderVisible: false, wickUpColor: '#2fd17c', wickDownColor: '#ff5a5f' })
+      P.main = V(P).type === 'candle' ? P.ch.addSeries(LW.CandlestickSeries, { upColor: '#2fd17c', downColor: '#ff5a5f', borderVisible: false, wickUpColor: '#2fd17c', wickDownColor: '#ff5a5f' })
         : P.ch.addSeries(LW.AreaSeries, { lineColor: '#F7931A', topColor: 'rgba(247,147,26,.28)', bottomColor: 'rgba(247,147,26,0)', lineWidth: 2 });
-      P.main.setData(S.type === 'candle' ? b : b.map(function (x) { return { time: x.time, value: x.close }; }));
-      P.vol.setData(S.vol ? b.map(function (x) { return { time: x.time, value: x.volume || 0, color: x.close >= x.open ? 'rgba(47,209,124,.35)' : 'rgba(255,90,95,.35)' }; }) : []);
-      [20, 50, 200].forEach(function (n, i) { P.ma[i].setData(S['ma' + n] ? sma(b, n) : []); });
-      P.vw.setData(S.vwap && !isC(t) && r !== 'Max' && /^(1D|5D)$/.test(r) ? vwap(b) : []);
-      P.ch.priceScale('right').applyOptions({ mode: S.cmp ? 2 : S.log ? 1 : 0 });
+      P.main.setData(V(P).type === 'candle' ? b : b.map(function (x) { return { time: x.time, value: x.close }; }));
+      P.vol.setData(V(P).vol ? b.map(function (x) { return { time: x.time, value: x.volume || 0, color: x.close >= x.open ? 'rgba(47,209,124,.35)' : 'rgba(255,90,95,.35)' }; }) : []);
+      [20, 50, 200].forEach(function (n, i) { P.ma[i].setData(V(P)['ma' + n] ? sma(b, n) : []); });
+      P.vw.setData(V(P).vwap && !isC(t) && r !== 'Max' && /^(1D|5D)$/.test(r) ? vwap(b) : []);
+      P.ch.priceScale('right').applyOptions({ mode: V(P).cmp ? 2 : V(P).log ? 1 : 0 });
       /* stocks intraday: shade pre/post */
-      if (!isC(t) && /^(1D|5D)$/.test(r) && S.type === 'candle') P.main.setData(b.map(function (x) { var m = etMin(x.time), ext = m < 570 || m >= 960; return ext ? Object.assign({}, x, { color: x.close >= x.open ? 'rgba(47,209,124,.45)' : 'rgba(255,90,95,.45)', wickColor: 'rgba(160,170,180,.5)' }) : x; }));
+      if (!isC(t) && /^(1D|5D)$/.test(r) && V(P).type === 'candle') P.main.setData(b.map(function (x) { var m = etMin(x.time), ext = m < 570 || m >= 960; return ext ? Object.assign({}, x, { color: x.close >= x.open ? 'rgba(47,209,124,.45)' : 'rgba(255,90,95,.45)', wickColor: 'rgba(160,170,180,.5)' }) : x; }));
       (S.lines[t] || []).forEach(function (px) { addLine(P, px, 0); });
-      P.cmpS.setData([]); if (S.cmp) { var other = panes.filter(function (Q) { return Q !== P; })[0], os = other ? other.sym : (t === 'BTC' ? 'MSTR' : 'BTC'); P.cmpS.applyOptions({ title: os });
+      P.cmpS.setData([]); if (V(P).cmp) { var other = panes.filter(function (Q) { return Q !== P; })[0], os = other ? other.sym : (t === 'BTC' ? 'MSTR' : 'BTC'); P.cmpS.applyOptions({ title: os });
         bars(os, r, ivOK(os, r, iv) ? iv : defIv(os, r)).then(function (ob) { if (P.tok !== tok || !ob.length || !b.length) return; var t0 = b[0].time, base = near(ob, t0); if (!base) return; var k = b[0].close / base.close; P.cmpS.setData(ob.filter(function (x) { return x.time >= t0 - 1; }).map(function (x) { return { time: x.time, value: x.close * k }; })); }).catch(function () {}); }
       P.ch.timeScale().fitContent(); hud(P, null); bar(P);
     }).catch(function () { if (P.tok !== tok) return; msg.hidden = false; msg.textContent = 'Chart service did not answer. Retrying in a minute; the price above is live.'; setTimeout(function () { render(P); }, 60e3); }); }
@@ -163,7 +167,7 @@
     var px = isC(P.sym) ? q.px : (F.session() === 'open' ? q.px : q.ext && F.session() !== 'closed' ? q.ext.px : null); if (px == null || !/^(1D|5D)$/.test(RG(P))) return;
     var last = P.b[P.b.length - 1], sec = IVS_S[P.iv] || 300, now = Math.floor(Date.now() / 1e3), bt = Math.floor(now / sec) * sec; if (bt < last.time) return;
     if (bt === last.time) { last.close = px; last.high = Math.max(last.high, px); last.low = Math.min(last.low, px); } else { last = { time: bt, open: last.close, high: Math.max(px, last.close), low: Math.min(px, last.close), close: px, volume: 0 }; P.b.push(last); }
-    try { P.main.update(S.type === 'candle' ? last : { time: last.time, value: last.close }); } catch (e) {} }); });
+    try { P.main.update(V(P).type === 'candle' ? last : { time: last.time, value: last.close }); } catch (e) {} }); });
   setInterval(function () { panes.forEach(function (P) { if (/^(1D|5D)$/.test(RG(P)) && !document.hidden) { delete cache[P.sym + '|' + RG(P) + '|' + P.iv]; render(P); } }); }, 5 * 60e3);
 
   /* events */
@@ -171,10 +175,10 @@
     if (b.dataset.rng) { var nr = b.dataset.rng, ni = defIv(isC(P.sym) ? P.sym : 'BTC', nr); if (own(P)) { S.r2 = nr; S.iv2 = ni; } else { S.r = nr; S.iv = ni; } save(); all.forEach(render); }
     else if (b.dataset.iv) { if (own(P)) S.iv2 = b.dataset.iv; else S.iv = b.dataset.iv; save(); all.forEach(render); }
     else if (b.dataset.tg) { var k = b.dataset.tg;
-      if (k === 'type') S.type = S.type === 'candle' ? 'line' : 'candle'; else if (k === 'draw') { P.drawing = !P.drawing; bar(P); return; } else if (k === 'clr') { clearLines(P); delete S.lines[P.sym]; save(); bar(P); return; }
+      var v = V(P); if (k === 'type') v.type = v.type === 'candle' ? 'line' : 'candle'; else if (k === 'draw') { P.drawing = !P.drawing; bar(P); return; } else if (k === 'clr') { clearLines(P); delete S.lines[P.sym]; save(); bar(P); return; }
       else if (k === 'fs') { var el = P.el; if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen(); else el.classList.toggle('tc-fs'); return; }
-      else if (k === 'more') { P.more = !P.more; bar(P); return; } else if (k === 'sync') { S.sync = S.sync ? 0 : 1; if (!S.sync) { S.r2 = S.r; S.iv2 = S.iv; } save(); panes.forEach(render); return; } else S[k] = S[k] ? 0 : 1;
-      if (k === 'log' && S.log) S.cmp = 0; if (k === 'cmp' && S.cmp) S.log = 0; save(); panes.forEach(render); } });
+      else if (k === 'more') { P.more = !P.more; bar(P); return; } else if (k === 'sync') { S.sync = S.sync ? 0 : 1; if (!S.sync) { S.r2 = S.r; S.iv2 = S.iv; } save(); panes.forEach(render); return; } else if (VK.indexOf(k) >= 0) v[k] = v[k] ? 0 : 1; else return;
+      if (k === 'log' && v.log) v.cmp = 0; if (k === 'cmp' && v.cmp) v.log = 0; save(); render(P); } });
   root.addEventListener('change', function (e) { var s = e.target.closest('[data-pick]'); if (!s) return; var P = panes.filter(function (Q) { return Q.el.contains(s); })[0]; P.sym = s.value; if (P.idx === 1) S.s2 = s.value; else if (PHONE()) S.s1p = s.value; save(); render(P); if (panes.length > 1) panes.forEach(read); });
 
   /* build */
