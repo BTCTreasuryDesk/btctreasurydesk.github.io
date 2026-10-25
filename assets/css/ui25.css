@@ -99,3 +99,11 @@ body[data-tab=home] main.grid>.p-ep{order:-2;grid-column:7/-1!important;grid-row
 @media (max-width:1023px){body[data-tab=home] main.grid>.p-bm,body[data-tab=home] main.grid>.p-ep{grid-column:1/-1!important}}
 main.grid>.p-ep[data-tabs]{grid-row:auto}
 @media (max-width:1023px){.deskbar{display:none!important}}
+/* long-term chart (flagship) */
+.ltc{display:flex;flex-direction:column;gap:8px}
+.lt-bar{display:flex;flex-direction:column;gap:6px}.lt-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lt-cv{position:relative;height:min(72vh,680px);min-height:380px}
+.ltc:fullscreen{background:#050607;padding:14px}.ltc:fullscreen .lt-cv{height:calc(100vh - 170px)}
+.lt-pro{font-size:8.5px;color:#c084fc;letter-spacing:.04em;text-transform:uppercase}
+.lt-note{font-size:11.5px;color:#8b95a3;line-height:1.5}
+@media (max-width:700px){.lt-cv{height:420px}.lt-row .tc-tg,.lt-row .tc-seg button,.lt-row .tc-pick{min-height:40px}}

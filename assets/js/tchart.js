@@ -81,7 +81,7 @@
     var ch = LW.createChart(cv, Object.assign({ autoSize: true, layout: { background: { color: 'transparent' }, textColor: '#8b95a3', fontFamily: 'ui-monospace,Menlo,monospace', fontSize: 11, attributionLogo: false },
       grid: { vertLines: { color: 'rgba(255,255,255,.04)' }, horzLines: { color: 'rgba(255,255,255,.05)' } }, rightPriceScale: { borderColor: '#222831' }, timeScale: { borderColor: '#222831', timeVisible: true, secondsVisible: false, rightOffset: 3,
         tickMarkFormatter: function (t, tt) { var d = new Date(t * 1e3), o = { timeZone: 'America/New_York' }; if (tt >= 3) { o.hour = 'numeric'; o.minute = '2-digit'; } else if (tt === 2) { o.month = 'short'; o.day = 'numeric'; } else if (tt === 1) o.month = 'short'; else o.year = 'numeric'; return d.toLocaleString('en-US', o); } },
-      crosshair: { mode: 0 } }, TT));
+      crosshair: { mode: 0 } }, TT)); ch.timeScale().applyOptions({ minBarSpacing: 0.05 });
     P.ch = ch;
     P.main = null; P.vol = ch.addSeries(LW.HistogramSeries, { priceScaleId: 'vol', priceFormat: { type: 'volume' }, color: 'rgba(140,150,165,.35)', lastValueVisible: false, priceLineVisible: false });
     ch.priceScale('vol').applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
