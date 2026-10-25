@@ -33,10 +33,14 @@
   function defIv(t, r) { var d = r === '1D' ? '15m' : r === '5D' ? '1h' : r === '1M' ? '1h' : '1D'; return ivOK(t, r, d) ? d : '1D'; }
 
   /* ---------- settings (persisted) ---------- */
-  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, s2: 'MSTR', s1p: 'BTC', lines: {} };
+  var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, r2: '1D', iv2: '15m', s2: 'MSTR', s1p: 'BTC', lines: {} };
   try { var o = JSON.parse(LS.get('btd_tc') || 'null'); if (o && o.v === 1) Object.keys(S).forEach(function (k) { if (o[k] != null) S[k] = o[k]; });
     else { var o2 = JSON.parse(LS.get('btd_lc2') || '{}'); if (o2 && typeof o2.s === 'string' && PICK.indexOf(o2.s) >= 0 && o2.s !== 'BTC') S.s2 = o2.s; } } catch (e) {}
-  if (RANGES.indexOf(S.r) < 0) S.r = '1D'; if (IVS.indexOf(S.iv) < 0) S.iv = defIv('BTC', S.r);
+  if (RANGES.indexOf(S.r) < 0) S.r = '1D'; if (RANGES.indexOf(S.r2) < 0) S.r2 = S.r; if (IVS.indexOf(S.iv2) < 0) S.iv2 = S.iv;
+  /* per-pane range/interval: shared while Sync is on, independent for the right chart when off */
+  function own(P) { return !S.sync && P.idx === 1; }
+  function RG(P) { return own(P) ? S.r2 : S.r; }
+  function IV(P) { return own(P) ? S.iv2 : S.iv; } if (IVS.indexOf(S.iv) < 0) S.iv = defIv('BTC', S.r);
   function save() { var o = { v: 1 }; Object.keys(S).forEach(function (k) { o[k] = S[k]; }); LS.set('btd_tc', JSON.stringify(o)); }
 
   /* ---------- data ---------- */
@@ -88,14 +92,14 @@
     P.ma = [20, 50, 200].map(function (n, i) { return ch.addSeries(LW.LineSeries, { color: ['#4fa3ff', '#f2c94c', '#c084fc'][i], lineWidth: 1, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false }); });
     P.vw = ch.addSeries(LW.LineSeries, { color: '#22d3ee', lineWidth: 1, lineStyle: 2, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
     P.cmpS = ch.addSeries(LW.LineSeries, { color: '#9aa4b2', lineWidth: 1.5, lastValueVisible: true, priceLineVisible: false });
-    ch.subscribeCrosshairMove(function (p) { hud(P, p); if (S.sync && !P.syncing) panes.forEach(function (Q) { if (Q === P || !Q.main || !Q.b.length) return; Q.syncing = 1; try { if (p && p.time) { var bt = near(Q.b, p.time); if (bt) Q.ch.setCrosshairPosition(bt.close, bt.time, Q.main); } else Q.ch.clearCrosshairPosition(); } catch (e) {} Q.syncing = 0; }); });
+    ch.subscribeCrosshairMove(function (p) { hud(P, p); if (S.sync && !P.syncing) panes.forEach(function (Q) { if (Q === P || !Q.main || !Q.b.length) return; Q.syncing = 1; try { if (p && p.time) { var bt = near(Q.b, p.time), tol = IVS_S[Q.iv] || 300; if (bt && Math.abs(bt.time - p.time) < tol) { Q.ch.setCrosshairPosition(bt.close, bt.time, Q.main); hud(Q, { time: bt.time }); } else { Q.ch.clearCrosshairPosition(); hud(Q, null, 1); } } else { Q.ch.clearCrosshairPosition(); hud(Q, null); } } catch (e) {} Q.syncing = 0; }); });
     ch.timeScale().subscribeVisibleLogicalRangeChange(function () {});
     ch.subscribeClick(function (p) { if (!P.drawing || !p || !p.point || !P.main) return; var px = P.main.coordinateToPrice(p.point.y); if (px == null) return; addLine(P, +px.toPrecision(6), 1); P.drawing = 0; bar(P); });
     panes.push(P); return P; }
   function near(b, t) { var lo = 0, hi = b.length - 1; if (!b.length) return null; while (lo < hi) { var m = (lo + hi) >> 1; if (b[m].time < t) lo = m + 1; else hi = m; } var c = b[lo], d = b[lo - 1]; return d && Math.abs(d.time - t) < Math.abs(c.time - t) ? d : c; }
-  function hud(P, p) { var h = P.el.querySelector('[data-hud]'); var b = p && p.time ? near(P.b, p.time) : P.b[P.b.length - 1]; if (!b) { h.textContent = ''; return; }
+  function hud(P, p, nob) { var h = P.el.querySelector('[data-hud]'); if (nob) { h.innerHTML = '<span>No ' + esc(P.sym) + ' bar at this time (market closed)</span>'; return; } var b = p && p.time ? near(P.b, p.time) : P.b[P.b.length - 1], r0 = RG(P); if (!b) { h.textContent = ''; return; }
     var i = P.b.indexOf(b), pv = i > 0 ? P.b[i - 1].close : b.open, c = cur(P.sym), chg = pv ? (b.close / pv - 1) * 100 : null;
-    h.innerHTML = '<span>' + new Date(b.time * 1e3).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: S.iv === '1D' || !/^(1D|5D|1M|3M)$/.test(S.r) ? undefined : 'numeric', minute: S.iv === '1D' || !/^(1D|5D|1M|3M)$/.test(S.r) ? undefined : '2-digit' }) + '</span> O <b>' + fp(b.open, c) + '</b> H <b>' + fp(b.high, c) + '</b> L <b>' + fp(b.low, c) + '</b> C <b>' + fp(b.close, c) + '</b> <i class="' + (chg >= 0 ? 'up' : 'dn') + '">' + sg(chg) + '</i>' + (b.volume ? ' Vol <b>' + Math.round(b.volume).toLocaleString('en-US') + '</b>' : ''); }
+    h.innerHTML = '<span>' + new Date(b.time * 1e3).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: P.iv === '1D' || !/^(1D|5D|1M|3M)$/.test(r0) ? undefined : 'numeric', minute: P.iv === '1D' || !/^(1D|5D|1M|3M)$/.test(r0) ? undefined : '2-digit' }) + '</span> O <b>' + fp(b.open, c) + '</b> H <b>' + fp(b.high, c) + '</b> L <b>' + fp(b.low, c) + '</b> C <b>' + fp(b.close, c) + '</b> <i class="' + (chg >= 0 ? 'up' : 'dn') + '">' + sg(chg) + '</i>' + (b.volume ? ' Vol <b>' + Math.round(b.volume).toLocaleString('en-US') + '</b>' : ''); }
 
   /* lines / alert levels (per symbol, saved) */
   function addLine(P, px, persist) { if (!P.main) return; var l = P.main.createPriceLine({ price: px, color: '#F7931A', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: 'alert' }); P.lines.push({ px: px, l: l }); if (persist) { (S.lines[P.sym] = S.lines[P.sym] || []).push(px); if (S.lines[P.sym].length > 8) S.lines[P.sym].shift(); save(); if (window.BTD_ALERTS) window.BTD_ALERTS.add({ sym: P.sym, px: px }); } }
@@ -107,7 +111,7 @@
   document.addEventListener('change', function (e) { var t = e.target; if (!t.matches || !t.matches('select.tc-segsel')) return; var b = t.parentNode.querySelector('button[data-' + t.dataset.segsel + '="' + t.value + '"]'); if (b) b.click(); });
   function tg(k, lab, on, title) { return '<button type="button" class="tc-tg' + (on ? ' on' : '') + '" data-tg="' + k + '" aria-pressed="' + !!on + '"' + (title ? ' title="' + title + '"' : '') + '>' + lab + '</button>'; }
   function bar(P) { var el = P.el.querySelector('[data-bar]'), ph = PHONE(), st = !isC(P.sym);
-    var h = seg('rng', RANGES, S.r) + seg('iv', IVS, S.iv, function (iv) { return !ivOK(P.sym, S.r, iv); }) +
+    var r = RG(P), h = seg('rng', RANGES, r) + seg('iv', IVS, P.iv || IV(P), function (iv) { return !ivOK(P.sym, r, iv); }) +
       '<span class="tc-tools' + (ph && !P.more ? ' tc-hide' : '') + '">' + tg('type', S.type === 'candle' ? 'Candles' : 'Line', 1, 'Candles or line') + tg('ma20', 'MA20', S.ma20) + tg('ma50', 'MA50', S.ma50) + tg('ma200', 'MA200', S.ma200) + (st ? tg('vwap', 'VWAP', S.vwap) : '') + tg('vol', 'Vol', S.vol) + tg('log', 'Log', S.log, 'Logarithmic price scale') + tg('cmp', 'Compare %', S.cmp, 'Overlay the other chart in % from the first bar') +
       tg('draw', P.drawing ? 'Click chart…' : '+ Line', P.drawing, 'Click the chart to place a horizontal line / alert level') + (P.lines.length ? tg('clr', 'Clear lines', 0) : '') + (idxTwo() ? tg('sync', 'Sync', S.sync, 'Link range and crosshair across both charts') : '') + tg('fs', '⛶', 0, 'Fullscreen') + '</span>' +
       (ph ? '<button type="button" class="tc-tg tc-more" data-tg="more" aria-expanded="' + !!P.more + '">' + (P.more ? 'Less' : 'Tools') + '</button>' : '');
@@ -135,7 +139,7 @@
     el.innerHTML = it.map(function (x) { return '<span><em>' + x[0] + '</em> <b>' + x[1] + '</b></span>'; }).join(''); }
 
   /* render */
-  function render(P) { var t = P.sym, r = S.r, iv = ivOK(t, r, S.iv) ? S.iv : defIv(t, r), msg = P.el.querySelector('[data-msg]'); P.iv = iv; bar(P); read(P); kn(P);
+  function render(P) { var t = P.sym, r = RG(P), iv = ivOK(t, r, IV(P)) ? IV(P) : defIv(t, r), msg = P.el.querySelector('[data-msg]'); P.iv = iv; bar(P); read(P); kn(P);
     var tok = P.tok = {}; msg.hidden = true;
     bars(t, r, iv).then(function (b) { if (P.tok !== tok) return; P.b = b;
       if (!b.length) { msg.hidden = false; msg.textContent = 'No chart data for ' + t + ' right now. The price above is the live quote.'; }
@@ -156,20 +160,20 @@
     }).catch(function () { if (P.tok !== tok) return; msg.hidden = false; msg.textContent = 'Chart service did not answer. Retrying in a minute; the price above is live.'; setTimeout(function () { render(P); }, 60e3); }); }
   /* live last bar */
   if (F) F.on('*', function (v, k) { panes.forEach(function (P) { if (!P.main || !P.b.length) return; var q = quote(P.sym); if (!q || q !== v) return; read(P); kn(P);
-    var px = isC(P.sym) ? q.px : (F.session() === 'open' ? q.px : q.ext && F.session() !== 'closed' ? q.ext.px : null); if (px == null || !/^(1D|5D)$/.test(S.r)) return;
+    var px = isC(P.sym) ? q.px : (F.session() === 'open' ? q.px : q.ext && F.session() !== 'closed' ? q.ext.px : null); if (px == null || !/^(1D|5D)$/.test(RG(P))) return;
     var last = P.b[P.b.length - 1], sec = IVS_S[P.iv] || 300, now = Math.floor(Date.now() / 1e3), bt = Math.floor(now / sec) * sec; if (bt < last.time) return;
     if (bt === last.time) { last.close = px; last.high = Math.max(last.high, px); last.low = Math.min(last.low, px); } else { last = { time: bt, open: last.close, high: Math.max(px, last.close), low: Math.min(px, last.close), close: px, volume: 0 }; P.b.push(last); }
     try { P.main.update(S.type === 'candle' ? last : { time: last.time, value: last.close }); } catch (e) {} }); });
-  setInterval(function () { panes.forEach(function (P) { if (/^(1D|5D)$/.test(S.r) && !document.hidden) { delete cache[P.sym + '|' + S.r + '|' + P.iv]; render(P); } }); }, 5 * 60e3);
+  setInterval(function () { panes.forEach(function (P) { if (/^(1D|5D)$/.test(RG(P)) && !document.hidden) { delete cache[P.sym + '|' + RG(P) + '|' + P.iv]; render(P); } }); }, 5 * 60e3);
 
   /* events */
   root.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var P = panes.filter(function (Q) { return Q.el.contains(b); })[0]; if (!P) return; var all = S.sync ? panes : [P];
-    if (b.dataset.rng) { S.r = b.dataset.rng; S.iv = defIv(P.sym, S.r); save(); all.forEach(render); if (!S.sync) render(P); }
-    else if (b.dataset.iv) { S.iv = b.dataset.iv; save(); all.forEach(render); }
+    if (b.dataset.rng) { var nr = b.dataset.rng, ni = defIv(isC(P.sym) ? P.sym : 'BTC', nr); if (own(P)) { S.r2 = nr; S.iv2 = ni; } else { S.r = nr; S.iv = ni; } save(); all.forEach(render); }
+    else if (b.dataset.iv) { if (own(P)) S.iv2 = b.dataset.iv; else S.iv = b.dataset.iv; save(); all.forEach(render); }
     else if (b.dataset.tg) { var k = b.dataset.tg;
       if (k === 'type') S.type = S.type === 'candle' ? 'line' : 'candle'; else if (k === 'draw') { P.drawing = !P.drawing; bar(P); return; } else if (k === 'clr') { clearLines(P); delete S.lines[P.sym]; save(); bar(P); return; }
       else if (k === 'fs') { var el = P.el; if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen(); else el.classList.toggle('tc-fs'); return; }
-      else if (k === 'more') { P.more = !P.more; bar(P); return; } else S[k] = S[k] ? 0 : 1;
+      else if (k === 'more') { P.more = !P.more; bar(P); return; } else if (k === 'sync') { S.sync = S.sync ? 0 : 1; if (!S.sync) { S.r2 = S.r; S.iv2 = S.iv; } save(); panes.forEach(render); return; } else S[k] = S[k] ? 0 : 1;
       if (k === 'log' && S.log) S.cmp = 0; if (k === 'cmp' && S.cmp) S.log = 0; save(); panes.forEach(render); } });
   root.addEventListener('change', function (e) { var s = e.target.closest('[data-pick]'); if (!s) return; var P = panes.filter(function (Q) { return Q.el.contains(s); })[0]; P.sym = s.value; if (P.idx === 1) S.s2 = s.value; else if (PHONE()) S.s1p = s.value; save(); render(P); if (panes.length > 1) panes.forEach(read); });
 
