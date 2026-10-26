@@ -195,3 +195,10 @@ body[data-tab=companies] main.grid>.p-wl,body[data-tab=companies] main.grid>.p-t
 .tps-in{width:min(480px,94vw)}
 .tps-l li button span{flex:1;min-width:0;display:flex;flex-direction:column}.tps-l li button span small{font:10.5px var(--mono,monospace);color:#6b7480;margin-top:1px}
 .tps-l li button i{font:600 12px var(--mono,monospace);font-style:normal;margin-left:auto}.tps-l .up{color:#2fd17c}.tps-l .dn{color:#ff5a5f}
+
+/* picker polish t1025zb */
+.tps-ch{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.tps-ch::-webkit-scrollbar{display:none}.tps-ch button{flex:0 0 auto}
+.tps-tb button{flex:1 1 0;min-width:0;min-height:44px;white-space:nowrap}
+.tps-na{color:#5b6472;font-style:normal}
+.tps-more{list-style:none}.tps-more button{width:100%;margin:6px 0;padding:10px;border:1px dashed #2a313b;border-radius:8px;background:#0b0d10;color:#F7931A;font:700 12.5px var(--mono,monospace);cursor:pointer}
+.tps-ch{display:none!important}
