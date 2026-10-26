@@ -66,7 +66,7 @@
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function on() { try { return !RM && localStorage.getItem('btd_scroll') === 'ticker'; } catch (e) { return false; } }
   function apply() { var p = on(); document.querySelectorAll('.ticker').forEach(function (s) { s.classList.toggle('strip-play', p); }); document.querySelectorAll('.strip-pp').forEach(function (b) {
-      b.setAttribute('aria-pressed', p ? 'true' : 'false'); b.setAttribute('aria-label', p ? 'Pause the price strip' : 'Play the price strip'); b.title = p ? 'Pause (remembered)' : 'Auto-scroll slowly (remembered)'; b.innerHTML = p ? '&#10074;&#10074;<span class="pp-l"> Pause</span>' : '&#9654;<span class="pp-l"> Play</span>'; }); }
+      b.setAttribute('aria-pressed', p ? 'true' : 'false'); b.setAttribute('aria-label', p ? 'Pause the price strip' : 'Play the price strip'); b.title = p ? 'Pause (remembered)' : 'Auto-scroll slowly (remembered)'; b.innerHTML = p ? '&#10074;&#10074;<span class="pp-l"> Pause</span>' : '&#9654;<span class="pp-l"> Auto-scroll</span>'; }); }
   window.btdStripApply = apply;
   function ensure() { document.querySelectorAll('.ticker').forEach(function (s) { var w = s.parentNode; if (!w || w.querySelector('.strip-pp') || s.dataset.pp) { return; } s.dataset.pp = 1;
       if (!RM) { var b = document.createElement('button'); b.type = 'button'; b.className = 'strip-pp'; var ed = w.querySelector('.tk-edit'); if (w.classList.contains('tk-wrap') && ed) w.insertBefore(b, ed); else w.insertBefore(b, s.nextSibling); }

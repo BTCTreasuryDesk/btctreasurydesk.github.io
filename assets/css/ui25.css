@@ -156,3 +156,21 @@ body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:
 .hb-c.hb-hit{box-shadow:inset 3px 0 0 #ff3df2;animation:alflash 1.2s 3}.hb-tag.hit{background:rgba(255,61,242,.18);color:#ff3df2}
 .tc-read.al-hit .tc-px{animation:alflash 1.2s 3;color:#ff3df2}
 .tc-bar .tc-type{width:auto!important;max-width:150px;flex:0 0 auto}
+/* symbol picker button + search sheet (Oct 25 v3) */
+.tc-pkb{display:inline-flex;align-items:baseline;gap:6px;background:#0b0d10;border:1px solid #2a313b;border-radius:6px;color:#e6e9ee;padding:5px 10px;cursor:pointer;min-height:32px;max-width:240px}
+.tc-pkb b{font:700 14px var(--mono,monospace);color:#fff}.tc-pkb span{font-size:12px;color:#8b95a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tc-pkb i{font-style:normal;color:#F7931A;font-size:11px}
+.tc-pkb:hover,.tc-pkb:focus-visible{border-color:#F7931A;outline:0}
+.tps{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);display:flex;align-items:flex-start;justify-content:center;padding-top:8vh}
+.tps[hidden]{display:none}
+.tps-in{width:min(440px,94vw);max-height:76vh;display:flex;flex-direction:column;background:#0e1115;border:1px solid #2a313b;border-radius:10px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.tps-h{display:flex;gap:6px}.tps-h input{flex:1;min-width:0;background:#0b0d10;border:1px solid #F7931A;border-radius:6px;color:#fff;font:600 15px var(--mono,monospace);padding:9px 10px;text-transform:uppercase}
+.tps-h input::placeholder{text-transform:none;font-weight:400;font-size:13px;color:#6b7480}
+.tps-x{background:none;border:1px solid #2a313b;border-radius:6px;color:#cfd5dd;width:40px;font-size:15px;cursor:pointer}
+.tps-ch{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.tps-ch button{font:700 12px var(--mono,monospace);border:1px solid #2a313b;border-radius:14px;background:#12161c;color:#e6e9ee;padding:5px 11px;cursor:pointer}.tps-ch button.on{border-color:#F7931A;color:#F7931A}
+.tps-l{list-style:none;margin:0;padding:0;overflow-y:auto;flex:1}.tps-l li button{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;background:none;border:0;border-top:1px solid #161a20;color:#e6e9ee;padding:9px 6px;cursor:pointer}
+.tps-l li button:hover,.tps-l li button:focus-visible{background:#151a21;outline:0}.tps-l em{font:10.5px var(--mono,monospace);color:#6b7480;font-style:normal;width:34px}.tps-l b{font:700 13.5px var(--mono,monospace);min-width:56px}.tps-l span{font-size:12.5px;color:#8b95a3}
+.tps-sep{font:700 10.5px var(--mono,monospace);color:#F7931A;text-transform:uppercase;letter-spacing:.06em;padding:10px 6px 4px}.tps-none{color:#8b95a3;padding:12px 6px;font-size:13px}
+.tps-e{font-size:12.5px;color:#cfd5dd;margin:4px 2px}.tps-e.bad{color:#ff5a5f}.tps-f{font-size:11px;color:#6b7480;margin:8px 2px 0}
+@media (max-width:760px){.tps{padding:0;background:#0e1115}.tps-in{width:100vw;max-height:none;height:100%;border:0;border-radius:0;padding:12px}}
+body.tps-open{overflow:hidden}
+.tbtn-cz{display:none!important} /* Layout panel removed: tabs + Market pulse edit replace it */

@@ -19,7 +19,15 @@
   var IDX = { SPX: ['.SPX', 'S&P 500', 'none'], IXIC: ['.IXIC', 'Nasdaq Composite', 'none'], DJI: ['.DJI', 'Dow Jones', 'none'], GOLD: ['@GC.1', 'Gold futures', ''], DXY: ['.DXY', 'US dollar index', 'none'] };
   var NAMES = { BTC: 'Bitcoin', ETH: 'Ether', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', LINK: 'Chainlink', MSTR: 'Strategy', MPJPY: 'Metaplanet (ADR)', XXI: 'Twenty One Capital', ASST: 'Strive', MARA: 'MARA Holdings', BLSH: 'Bullish', COIN: 'Coinbase', CLSK: 'CleanSpark', DJT: 'Trump Media', TSLA: 'Tesla', RIOT: 'Riot Platforms', HUT: 'Hut 8', XYZ: 'Block', ABTC: 'American Bitcoin', GLXY: 'Galaxy Digital', GEMI: 'Gemini', NAKA: 'Nakamoto', SPCX: 'SpaceX' };
   var PICK = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'BLSH', 'COIN', 'CLSK', 'DJT', 'TSLA', 'RIOT', 'HUT', 'XYZ', 'ABTC', 'GLXY', 'GEMI', 'NAKA', 'BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'LINK', 'SPX', 'IXIC', 'DJI', 'GOLD', 'DXY'];
+  /* Top-100 chartable coins: Coinpaprika market-cap rank filtered to coins with a Coinbase USD market (no stablecoins, wrapped/staked or gold tokens).
+     Embedded fallback (Oct 25, 2026); /assets/data/coins.json (refreshed weekly) replaces it when it loads; cached in localStorage. */
+  var COINS = [["BTC","Bitcoin"],["ETH","Ethereum"],["BNB","BNB"],["XRP","XRP"],["SOL","Solana"],["ZEC","Zcash"],["HYPE","Hyperliquid"],["DOGE","Dogecoin"],["LINK","Chainlink"],["ADA","Cardano"],["NEAR","Near Protocol"],["XLM","Stellar"],["BCH","Bitcoin Cash"],["UNI","Uniswap"],["LTC","Litecoin"],["SUI","Sui"],["AVAX","Avalanche"],["HBAR","Hedera Hashgraph"],["SHIB","Shiba Inu"],["ENA","Ethena"],["CRO","Cronos"],["TAO","BitTensor"],["QNT","Quant"],["AAVE","Aave"],["ONDO","Ondo"],["PUMP","Pump.fun"],["PEPE","Pepe"],["DOT","Polkadot"],["WLFI","Official World Liberty Financial"],["WLD","Worldcoin"],["SKY","Sky"],["ICP","Internet Computer"],["VVV","Venice Token"],["ETC","Ethereum Classic"],["ASTER","Aster"],["ARB","Arbitrum"],["POL","Polygon Ecosystem Token"],["ALGO","Algorand"],["RENDER","Render"],["FIL","Filecoin"],["INJ","Injective Protocol"],["DASH","Dash"],["CAKE","PancakeSwap"],["ATOM","Cosmos"],["APT","Aptos"],["ETHFI","Ether.fi"],["PYTH","Pyth Network"],["VET","VeChain"],["AERO","Aerodrome Finance"],["STX","Stacks"],["CRV","Curve DAO Token"],["TIA","Celestia"],["FLR","Flare Network"],["GRASS","GRASS"],["RAY","Raydium"],["MORPHO","Morpho"],["PENGU","Pudgy Penguins"],["FET","Artificial Superintelligence Alliance"],["VIRTUAL","Virtuals Protocol"],["TRUMP","OFFICIAL TRUMP"],["SEI","Sei"],["STRK","Starknet"],["TON","TONToken"],["SPX","SPX6900"],["PENDLE","Pendle"],["XTZ","Tezos"],["LDO","Lido DAO"],["GNO","Gnosis"],["DRV","Derive"],["OP","Optimism"],["CVX","Convex Finance"],["MON","Monad"],["BONK","Bonk"],["BAT","Basic Attention Token"],["FLOKI","Floki Inu"],["GRT","The Graph"],["JASMY","JasmyCoin"],["SYRUP","Syrup Token"],["KITE","Kite"],["COMP","Compound"],["AKT","Akash Network"],["ZRO","LayerZero"],["ENS","Ethereum Name Service"],["WIF","dogwifhat"],["CAP","Cap"],["USELESS","Useless Coin"],["TRAC","OriginTrail"],["AXS","Axie Infinity"],["XCN","Onyxcoin"],["BEAM","Beam Token"],["MANA","Decentraland"],["STG","Stargate Finance"],["S","Sonic"],["SENT","Sentient"],["MET","Meteora"],["CHZ","Chiliz"],["XPL","Plasma"],["SAND","The Sandbox"],["JTO","Jito"],["AIOZ","AIOZ Network"]];
+  try { var cc = JSON.parse(localStorage.getItem('btd_coins') || 'null'); if (cc && cc.length > 20) COINS = cc; } catch (e) {}
+  function addCoins() { COINS.forEach(function (c) { if (!CB[c[0]]) CB[c[0]] = c[0] + '-USD'; if (!NAMES[c[0]]) NAMES[c[0]] = c[1]; }); }
+  fetch('/assets/data/coins.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.coins && j.coins.length > 20) { COINS = j.coins.map(function (c) { return [c.s, c.n]; }); try { localStorage.setItem('btd_coins', JSON.stringify(COINS)); } catch (e) {} addCoins(); } }).catch(function () {});
+  var STK_CHIPS = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'COIN', 'SPX', 'IXIC'], C_CHIPS = ['BTC', 'ETH', 'SOL', 'XRP', 'DOGE'];
   function isC(t) { return !!CB[t]; }
+  addCoins();
   function cn(t) { return IDX[t] ? IDX[t][0] : t; }
   function cur(t) { return IDX[t] ? IDX[t][2] : ''; }
   function nm(t) { return IDX[t] ? IDX[t][1] : NAMES[t] || t; }
@@ -126,9 +134,9 @@
 
   /* readout: price + session; stocks outside the regular session lead with the extended-hours price */
   function read(P) { var el = P.el.querySelector('[data-rv]'), pk = P.el.querySelector('[data-pk]'), t = P.sym, q = quote(t), c = cur(t), ses = F ? F.session() : 'open', h = '';
-    var pick = '<select class="tc-pick" data-pick aria-label="Chart symbol">' + PICK.filter(function (x) { return idxTwo() ? (P.idx === 0 ? isC(x) : x !== panes[0].sym) : true; }).map(function (x) { return '<option value="' + x + '"' + (x === t ? ' selected' : '') + '>' + x + ' · ' + esc(nm(x)) + '</option>'; }).join('') + '</select>';
+    var pick = '<button type="button" class="tc-pkb" data-pkb aria-haspopup="dialog" aria-label="Change symbol"><b>' + esc(t) + '</b><span>' + esc(nm(t)) + '</span><i aria-hidden="true">▾</i></button>';
     /* only rebuild the picker when its options change: live ticks used to replace it every second, closing the open dropdown */
-    if (pk.dataset.k !== pick) { var sl = pk.querySelector('select'); if (!(sl && document.activeElement === sl && sl.value === t)) { pk.innerHTML = pick; pk.dataset.k = pick; } }
+    if (pk.dataset.k !== pick) { pk.innerHTML = pick; pk.dataset.k = pick; }
     if (!q || q.px == null) { el.innerHTML = '<span class="tc-px">—</span>'; return; }
     if (isC(t)) h = '<b class="tc-px">' + fp(q.px) + '</b><span class="tc-ch ' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sgn(q.ch) + ' (' + sg(q.chp) + ') 24h</span><span class="tc-ses on">Live 24/7 · Coinbase</span>';
     else if (ses !== 'open' && q.ext && q.ext.px != null) { var d = q.ext.px - q.px, p = d / q.px * 100, lab = q.ext.kind === 'pre' ? 'Pre-market' : 'After hours';
@@ -197,10 +205,40 @@
   root.innerHTML = '<div class="tc-pane" data-p0></div>' + (two ? '<div class="tc-pane" data-p1></div>' : '');
   var P0 = mkPane(root.querySelector('[data-p0]'), 0); if (!two) P0.sym = S.s1p || 'BTC'; else if (isC(S.s1)) P0.sym = S.s1;
   if (two) mkPane(root.querySelector('[data-p1]'), 1);
+  panes.forEach(function (P) { if (!isC(P.sym) && F) try { F.watch([cn(P.sym)]); } catch (e) {} if (!isC(P.sym) && PICK.indexOf(P.sym) < 0) PICK.push(P.sym); });
   panes.forEach(render);
   function load(sym) { if (PICK.indexOf(sym) < 0) { if (!/^[A-Z0-9.@^-]{1,12}$/.test(sym)) return; PICK.push(sym); } var P = PHONE() || panes.length < 2 ? panes[0] : isC(sym) ? panes[0] : panes[1];
     if (P.idx === 1 && sym === panes[0].sym) return; P.sym = sym; if (P.idx === 1) S.s2 = sym; else if (PHONE()) S.s1p = sym; else S.s1 = sym; save(); render(P); panes.forEach(read);
     try { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
   document.addEventListener('btd:alert', function (e) { var sy = e.detail && e.detail.sym; panes.forEach(function (P) { if (P.sym !== sy) return; var r = P.el.querySelector('.tc-read'); r.classList.remove('al-hit'); void r.offsetWidth; r.classList.add('al-hit'); P.lines.forEach(function (x) { if (Math.abs(x.px - e.detail.lvl) / x.px < 1e-6) try { x.l.applyOptions({ color: '#ff3df2', title: 'crossed' }); } catch (q) {} }); }); });
+  /* ---------- symbol search sheet: left = top-100 crypto, right = any stock/ETF/index (CNBC), phone single chart = both ---------- */
+  var SH = document.createElement('div'); SH.className = 'tps'; SH.hidden = true; SH.setAttribute('role', 'dialog'); SH.setAttribute('aria-modal', 'true'); SH.setAttribute('aria-label', 'Choose a symbol');
+  SH.innerHTML = '<div class="tps-in"><div class="tps-h"><input type="search" data-q autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="tps-x" data-x aria-label="Close">✕</button></div><div class="tps-ch" data-ch></div><p class="tps-e" data-e hidden></p><ul class="tps-l" data-l></ul><p class="tps-f" data-f></p></div>';
+  document.body.appendChild(SH); var SP = null, SM = 'c';
+  function TRS() { return DESK && DESK.treasuries ? (DESK.treasuries.rows || []).filter(function (r) { return /^[A-Z]{1,5}$/.test(r.tk || ''); }) : []; }
+  function openSheet(P) { SP = P; SM = PHONE() || panes.length < 2 ? 'b' : P.idx === 0 ? 'c' : 's'; var q = SH.querySelector('[data-q]'); q.value = ''; q.placeholder = SM === 'c' ? 'Search top 100 coins' : SM === 's' ? 'Any stock, ETF or index (e.g. NVDA, IBIT, SPX)' : 'Search coins, or type any stock / ETF / index';
+    var ch = SM === 'c' ? C_CHIPS : SM === 's' ? STK_CHIPS : ['BTC', 'ETH', 'SOL', 'MSTR', 'MPJPY', 'XXI', 'COIN'];
+    SH.querySelector('[data-ch]').innerHTML = ch.map(function (x) { return '<button type="button" data-go="' + x + '"' + (x === P.sym ? ' class="on"' : '') + '>' + x + '</button>'; }).join('');
+    SH.querySelector('[data-f]').textContent = SM === 's' ? 'Stocks, ETFs and indexes: CNBC (any symbol with chart data). Education only.' : 'Coins: top 100 by market cap (Coinpaprika) with a Coinbase USD market; stablecoins and wrapped tokens excluded.';
+    SH.querySelector('[data-e]').hidden = true; list(''); SH.hidden = false; document.body.classList.add('tps-open'); setTimeout(function () { q.focus(); }, 30); }
+  function closeSheet() { SH.hidden = true; document.body.classList.remove('tps-open'); SP = null; }
+  function row(x, n, k, i) { return '<li><button type="button" data-go="' + esc(x) + '" data-k="' + k + '">' + (i ? '<em>' + i + '</em>' : '') + '<b>' + esc(x) + '</b><span>' + esc(n) + '</span></button></li>'; }
+  function list(q) { q = (q || '').trim().toUpperCase(); var h = '', n = 0;
+    if (SM !== 's') COINS.forEach(function (c, i) { if (n >= 100) return; if (!q || c[0].indexOf(q) === 0 || c[1].toUpperCase().indexOf(q) >= 0) { h += row(c[0], c[1], 'c', '#' + (i + 1)); n++; } });
+    if (SM !== 'c') { var tr = TRS().filter(function (r) { return !q || r.tk.indexOf(q) === 0 || r.name.toUpperCase().indexOf(q) >= 0; }).slice(0, q ? 20 : 12);
+      if (SM === 'b' && tr.length) h += '<li class="tps-sep">BTC treasury stocks</li>'; tr.forEach(function (r) { h += row(r.tk, r.name, 's'); });
+      Object.keys(IDX).forEach(function (k) { if (!q || k.indexOf(q) === 0) h += row(k, IDX[k][1], 's'); });
+      if (q && /^[A-Z0-9.^@-]{1,10}$/.test(q) && !isC(q) && !tr.some(function (r) { return r.tk === q; }) && !IDX[q]) h = row(q, 'Chart ' + q + ' (stock, ETF or index)', 's') + h; }
+    SH.querySelector('[data-l]').innerHTML = h || '<li class="tps-none">No match. ' + (SM === 'c' ? 'Only the top 100 chartable coins are listed.' : '') + '</li>'; }
+  function choose(sym, k) { var P = SP; if (!P) return; var e = SH.querySelector('[data-e]'), crypto = k === 'c' || (k !== 's' && isC(sym));
+    if (crypto && !CB[sym]) CB[sym] = sym + '-USD'; e.hidden = false; e.className = 'tps-e'; e.textContent = 'Checking ' + sym + '…';
+    var chk = crypto ? bars(sym, '5D', '1h') : cnbc(sym, '5D').then(function (b) { return b.length ? b : cnbc(sym, '1Y'); });
+    chk.then(function (b) { if (!b || !b.length) throw 0; if (!crypto && F) { try { F.watch([cn(sym)]); } catch (x) {} }
+      if (!crypto && PICK.indexOf(sym) < 0) PICK.push(sym); P.sym = sym; if (P.idx === 1) S.s2 = sym; else if (PHONE()) S.s1p = sym; else S.s1 = sym; save(); closeSheet(); render(P); panes.forEach(read); })
+      .catch(function () { if (crypto && COINS.every(function (c) { return c[0] !== sym; })) delete CB[sym]; e.className = 'tps-e bad'; e.textContent = 'No chart data for ' + sym + (crypto ? ' on Coinbase right now.' : '. Check the symbol (US tickers like NVDA, ETFs like IBIT, indexes like SPX).'); }); }
+  SH.addEventListener('input', function (e) { if (e.target.matches('[data-q]')) { SH.querySelector('[data-e]').hidden = true; list(e.target.value); } });
+  SH.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); if (e.key === 'Enter' && e.target.matches('[data-q]')) { var f = SH.querySelector('[data-l] [data-go]'); if (f) choose(f.dataset.go, f.dataset.k); } });
+  SH.addEventListener('click', function (e) { if (e.target === SH || e.target.closest('[data-x]')) return closeSheet(); var b = e.target.closest('[data-go]'); if (b) choose(b.dataset.go, b.dataset.k || (isC(b.dataset.go) ? 'c' : 's')); });
+  root.addEventListener('click', function (e) { var b = e.target.closest('[data-pkb]'); if (!b) return; var P = panes.filter(function (Q) { return Q.el.contains(b); })[0]; if (P) openSheet(P); });
   window.BTD_TC = { panes: panes, S: S, load: load, render: function () { panes.forEach(render); } };
 })();

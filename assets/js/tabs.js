@@ -84,6 +84,8 @@
   function paintCtx() { var el = $('[data-hb-ctx]', hb), it = [], fu = window.BTD_FUND, b = F && F.get('BTC');
     if (GL) { it.push(['BTC dominance', GL.dom.toFixed(1) + '%', '', '']); it.push(['Total crypto cap', '$' + (GL.cap / 1e12).toFixed(2) + 'T', pc(GL.chp), cls(GL.chp)]); it.push(['24h crypto volume', '$' + (GL.vol / 1e9).toFixed(0) + 'B', '', '']); }
     if (fu && fu.f8 != null) it.push(['BTC funding', (fu.f8 >= 0 ? '+' : '−') + Math.abs(fu.f8).toFixed(4) + '%/8h', fu.ann != null ? (fu.ann >= 0 ? '+' : '−') + Math.abs(fu.ann).toFixed(1) + '% ann.' : '', '']);
+    /* new: sats per dollar (beginner anchor) */
+    var bb = F && F.get('BTC'), mq0 = F && F.get('MSTR'); if (bb && bb.px) it.push(['$1 buys', Math.round(1e8 / bb.px).toLocaleString('en-US') + ' sats', '', '']);
     el.innerHTML = it.map(function (x) { return '<span><em>' + x[0] + '</em> <b>' + x[1] + '</b>' + (x[2] ? ' <i class="' + x[3] + '">' + x[2] + '</i>' : '') + '</span>'; }).join(''); el.hidden = !it.length; }
   /* BTC key levels, computed from real closes: btc_daily.json (CoinMarketCap/Coinbase daily closes, weekly refresh) + Coinbase daily candles (prior day H/L, week open) + live price */
   var LV = null;
