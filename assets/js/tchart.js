@@ -16,7 +16,7 @@
   function sgn(v, cur) { if (v == null || !isFinite(v)) return ''; var a = Math.abs(v); return (v >= 0 ? '+' : '−') + (cur === 'none' ? '' : '$') + a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: a < 0.1 ? 4 : 2 }); }
   var PHONE = function () { return innerWidth < 1024; };
   var CB = { BTC: 'BTC-USD', ETH: 'ETH-USD', SOL: 'SOL-USD', XRP: 'XRP-USD', DOGE: 'DOGE-USD', LINK: 'LINK-USD', ADA: 'ADA-USD', AVAX: 'AVAX-USD', LTC: 'LTC-USD', SUI: 'SUI-USD' };
-  var IDX = { SPX: ['.SPX', 'S&P 500', 'none'], IXIC: ['.IXIC', 'Nasdaq Composite', 'none'], DJI: ['.DJI', 'Dow Jones', 'none'], GOLD: ['@GC.1', 'Gold futures', ''], DXY: ['.DXY', 'US dollar index', 'none'] };
+  var IDX = { SPX: ['.SPX', 'S&P 500', 'none'], IXIC: ['.IXIC', 'Nasdaq Composite', 'none'], DJI: ['.DJI', 'Dow Jones', 'none'], GOLD: ['@GC.1', 'Gold futures', ''], DXY: ['.DXY', 'US dollar index', 'none'], NDX: ['.NDX', 'Nasdaq 100', 'none'], RUT: ['.RUT', 'Russell 2000', 'none'], VIX: ['.VIX', 'Volatility index', 'none'] };
   var NAMES = { BTC: 'Bitcoin', ETH: 'Ether', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', LINK: 'Chainlink', MSTR: 'Strategy', MPJPY: 'Metaplanet (ADR)', XXI: 'Twenty One Capital', ASST: 'Strive', MARA: 'MARA Holdings', BLSH: 'Bullish', COIN: 'Coinbase', CLSK: 'CleanSpark', DJT: 'Trump Media', TSLA: 'Tesla', RIOT: 'Riot Platforms', HUT: 'Hut 8', XYZ: 'Block', ABTC: 'American Bitcoin', GLXY: 'Galaxy Digital', GEMI: 'Gemini', NAKA: 'Nakamoto', SPCX: 'SpaceX' };
   var PICK = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'BLSH', 'COIN', 'CLSK', 'DJT', 'TSLA', 'RIOT', 'HUT', 'XYZ', 'ABTC', 'GLXY', 'GEMI', 'NAKA', 'BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'LINK', 'SPX', 'IXIC', 'DJI', 'GOLD', 'DXY'];
   /* Top-100 chartable coins: Coinpaprika market-cap rank filtered to coins with a Coinbase USD market (no stablecoins, wrapped/staked or gold tokens).
@@ -217,20 +217,30 @@
   SH.innerHTML = '<div class="tps-in"><div class="tps-h"><input type="search" data-q autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="tps-x" data-x aria-label="Close">✕</button></div><div class="tps-ch" data-ch></div><p class="tps-e" data-e hidden></p><ul class="tps-l" data-l></ul><p class="tps-f" data-f></p></div>';
   document.body.appendChild(SH); var SP = null, SM = 'c';
   function TRS() { return DESK && DESK.treasuries ? (DESK.treasuries.rows || []).filter(function (r) { return /^[A-Z]{1,5}$/.test(r.tk || ''); }) : []; }
-  function openSheet(P) { SP = P; SM = PHONE() || panes.length < 2 ? 'b' : P.idx === 0 ? 'c' : 's'; var q = SH.querySelector('[data-q]'); q.value = ''; q.placeholder = SM === 'c' ? 'Search top 100 coins' : SM === 's' ? 'Any stock, ETF or index (e.g. NVDA, IBIT, SPX)' : 'Search coins, or type any stock / ETF / index';
-    var ch = SM === 'c' ? C_CHIPS : SM === 's' ? STK_CHIPS : ['BTC', 'ETH', 'SOL', 'MSTR', 'MPJPY', 'XXI', 'COIN'];
+  var OTHER = [['IBIT', 'iShares Bitcoin Trust ETF'], ['FBTC', 'Fidelity Wise Origin Bitcoin ETF'], ['GLD', 'SPDR Gold Shares ETF'], ['GOLD', 'Gold futures'], ['SPY', 'SPDR S&P 500 ETF'], ['QQQ', 'Invesco QQQ (Nasdaq 100) ETF']];
+  var IDXL = ['SPX', 'IXIC', 'DJI', 'RUT', 'VIX', 'DXY'], ST = 's';
+  function openSheet(P) { SP = P; SM = PHONE() || panes.length < 2 ? 'b' : P.idx === 0 ? 'c' : 's'; ST = SM === 'b' ? (isC(P.sym) && P.sym !== 'BTC' ? 'c' : 's') : SM; var q = SH.querySelector('[data-q]'); q.value = ''; paintSheet(); SH.querySelector('[data-e]').hidden = true; SH.hidden = false; document.body.classList.add('tps-open'); if (F && !openSheet.w) { openSheet.w = 1; try { F.watch(TRS().map(function (r) { return r.tk; })); } catch (x) {} } setTimeout(function () { q.focus(); }, 30); }
+  function paintSheet() { var q = SH.querySelector('[data-q]'), P = SP, tb = SH.querySelector('[data-tb]');
+    if (!tb) { tb = document.createElement('div'); tb.className = 'tps-tb'; tb.setAttribute('data-tb', ''); tb.setAttribute('role', 'tablist'); SH.querySelector('.tps-in').insertBefore(tb, SH.querySelector('.tps-h')); }
+    tb.hidden = SM !== 'b'; tb.innerHTML = '<button type="button" role="tab" data-st="s"' + (ST === 's' ? ' class="on" aria-selected="true"' : '') + '>₿ Bitcoin &amp; Treasury Stocks</button><button type="button" role="tab" data-st="c"' + (ST === 'c' ? ' class="on" aria-selected="true"' : '') + '>Crypto · top 100</button>';
+    q.placeholder = ST === 'c' ? 'Search top 100 coins' : 'Search treasury stocks, or type any stock / ETF / index (e.g. NVDA, IBIT, GLD)';
+    var ch = ST === 'c' ? C_CHIPS : (SM === 'b' ? ['BTC'] : []).concat(['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'COIN']);
     SH.querySelector('[data-ch]').innerHTML = ch.map(function (x) { return '<button type="button" data-go="' + x + '"' + (x === P.sym ? ' class="on"' : '') + '>' + x + '</button>'; }).join('');
-    SH.querySelector('[data-f]').textContent = SM === 's' ? 'Stocks, ETFs and indexes: CNBC (any symbol with chart data). Education only.' : 'Coins: top 100 by market cap (Coinpaprika) with a Coinbase USD market; stablecoins and wrapped tokens excluded.';
-    SH.querySelector('[data-e]').hidden = true; list(''); SH.hidden = false; document.body.classList.add('tps-open'); setTimeout(function () { q.focus(); }, 30); }
+    SH.querySelector('[data-f]').textContent = ST === 'c' ? 'Coins: top 100 by market cap (Coinpaprika) with a Coinbase USD market; stablecoins and wrapped tokens excluded.' : 'Treasury stocks: BitcoinTreasuries.NET ranking (BTC held). Stocks, ETFs, gold and indexes: CNBC; any symbol with chart data. Education only.';
+    list(q.value); }
   function closeSheet() { SH.hidden = true; document.body.classList.remove('tps-open'); SP = null; }
-  function row(x, n, k, i) { return '<li><button type="button" data-go="' + esc(x) + '" data-k="' + k + '">' + (i ? '<em>' + i + '</em>' : '') + '<b>' + esc(x) + '</b><span>' + esc(n) + '</span></button></li>'; }
-  function list(q) { q = (q || '').trim().toUpperCase(); var h = '', n = 0;
-    if (SM !== 's') COINS.forEach(function (c, i) { if (n >= 100) return; if (!q || c[0].indexOf(q) === 0 || c[1].toUpperCase().indexOf(q) >= 0) { h += row(c[0], c[1], 'c', '#' + (i + 1)); n++; } });
-    if (SM !== 'c') { var tr = TRS().filter(function (r) { return !q || r.tk.indexOf(q) === 0 || r.name.toUpperCase().indexOf(q) >= 0; }).slice(0, q ? 20 : 12);
-      if (SM === 'b' && tr.length) h += '<li class="tps-sep">BTC treasury stocks</li>'; tr.forEach(function (r) { h += row(r.tk, r.name, 's'); });
-      Object.keys(IDX).forEach(function (k) { if (!q || k.indexOf(q) === 0) h += row(k, IDX[k][1], 's'); });
-      if (q && /^[A-Z0-9.^@-]{1,10}$/.test(q) && !isC(q) && !tr.some(function (r) { return r.tk === q; }) && !IDX[q]) { var tr0 = row(q, 'Chart ' + q + ' (stock, ETF or index)', 's'); h = n ? h + tr0 : tr0 + h; } }
-    SH.querySelector('[data-l]').innerHTML = h || '<li class="tps-none">No match. ' + (SM === 'c' ? 'Only the top 100 chartable coins are listed.' : '') + '</li>'; }
+  function row(x, n, k, i, ctx) { var q0 = quote(x), ch = q0 && q0.chp != null ? '<i class="' + (q0.chp >= 0 ? 'up' : 'dn') + '">' + sg(q0.chp) + '</i>' : ''; return '<li><button type="button" data-go="' + esc(x) + '" data-k="' + k + '">' + (i ? '<em>' + i + '</em>' : '') + '<b>' + esc(x) + '</b><span>' + esc(n) + (ctx ? '<small>' + ctx + '</small>' : '') + '</span>' + ch + '</button></li>'; }
+  function sec(t) { return '<li class="tps-sep">' + t + '</li>'; }
+  function list(q) { q = (q || '').trim().toUpperCase(); var h = '', n = 0, m = function (x, nmx) { return !q || x.indexOf(q) === 0 || String(nmx).toUpperCase().indexOf(q) >= 0; };
+    if (ST === 'c') { h += sec('Crypto · top 100 by market cap'); COINS.forEach(function (c, i) { if (n < 100 && m(c[0], c[1])) { n++; h += row(c[0], c[1], 'c', '#' + (i + 1)); } }); if (!n) h = ''; }
+    else { if (SM === 'b' && m('BTC', 'Bitcoin')) h += sec('Bitcoin') + row('BTC', 'Bitcoin · Coinbase 24/7', 'c');
+      var tr = TRS().filter(function (r) { return m(r.tk, r.name); }); if (!tr.length && !q) tr = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'COIN'].map(function (t) { return { tk: t, name: nm(t), rank: '' }; });
+      if (tr.length) { h += sec('BTC Treasury Stocks'); tr.forEach(function (r) { h += row(r.tk, r.name, 's', r.rank ? '#' + r.rank : '', [r.btc ? '₿ ' + Math.round(r.btc).toLocaleString('en-US') : '', r.mnav ? 'mNAV ' + (+r.mnav).toFixed(2) + 'x' : ''].filter(Boolean).join(' · ')); n++; }); }
+      var oo = OTHER.filter(function (o) { return m(o[0], o[1]); }); var typed = q && /^[A-Z0-9.^@-]{1,10}$/.test(q) && !isC(q) && !tr.some(function (r) { return r.tk === q; }) && !IDX[q] && !OTHER.some(function (o) { return o[0] === q; });
+      if (typed || oo.length) { h += sec('Any stock, ETF or major asset'); if (typed) h += row(q, 'Chart ' + q + ' (stock, ETF or index)', 's'); oo.forEach(function (o) { h += row(o[0], o[1], 's'); }); }
+      var ii = IDXL.filter(function (k) { return m(k, IDX[k][1]); }); if (ii.length) { h += sec('Major Indexes'); ii.forEach(function (k) { h += row(k, IDX[k][1], 's'); }); }
+      if (typed && !n) { /* typed symbol first when nothing else matches */ } }
+    SH.querySelector('[data-l]').innerHTML = h || '<li class="tps-none">No match. ' + (ST === 'c' ? 'Only the top 100 chartable coins are listed.' : '') + '</li>'; }
   function choose(sym, k) { var P = SP; if (!P) return; var e = SH.querySelector('[data-e]'), crypto = k === 'c' || (k !== 's' && isC(sym));
     if (crypto && !CB[sym]) CB[sym] = sym + '-USD'; e.hidden = false; e.className = 'tps-e'; e.textContent = 'Checking ' + sym + '…';
     var chk = crypto ? bars(sym, '5D', '1h') : cnbc(sym, '5D').then(function (b) { return b.length ? b : cnbc(sym, '1Y'); });
@@ -239,7 +249,7 @@
       .catch(function () { if (crypto && COINS.every(function (c) { return c[0] !== sym; })) delete CB[sym]; e.className = 'tps-e bad'; e.textContent = 'No chart data for ' + sym + (crypto ? ' on Coinbase right now.' : '. Check the symbol (US tickers like NVDA, ETFs like IBIT, indexes like SPX).'); }); }
   SH.addEventListener('input', function (e) { if (e.target.matches('[data-q]')) { SH.querySelector('[data-e]').hidden = true; list(e.target.value); } });
   SH.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); if (e.key === 'Enter' && e.target.matches('[data-q]')) { var f = SH.querySelector('[data-l] [data-go]'); if (f) choose(f.dataset.go, f.dataset.k); } });
-  SH.addEventListener('click', function (e) { if (e.target === SH || e.target.closest('[data-x]')) return closeSheet(); var b = e.target.closest('[data-go]'); if (b) choose(b.dataset.go, b.dataset.k || (isC(b.dataset.go) ? 'c' : 's')); });
+  SH.addEventListener('click', function (e) { var stb = e.target.closest('[data-st]'); if (stb) { ST = stb.dataset.st; paintSheet(); return; } if (e.target === SH || e.target.closest('[data-x]')) return closeSheet(); var b = e.target.closest('[data-go]'); if (b) choose(b.dataset.go, b.dataset.k || (isC(b.dataset.go) ? 'c' : 's')); });
   root.addEventListener('click', function (e) { var b = e.target.closest('[data-pkb]'); if (!b) return; var P = panes.filter(function (Q) { return Q.el.contains(b); })[0]; if (P) openSheet(P); });
   window.BTD_TC = { panes: panes, S: S, load: load, render: function () { panes.forEach(render); } };
 })();

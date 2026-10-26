@@ -189,3 +189,8 @@ body[data-tab=home] main.grid>.p-tc{order:-9}body[data-tab=home] main.grid>.p-hb
 body[data-tab=companies] main.grid>.p-kpi{order:-5;grid-column:1/-1}
 body[data-tab=crypto] main.grid>.p-cx,body[data-tab=crypto] main.grid>.p-dv,body[data-tab=crypto] main.grid>.p-tok{grid-column:1/-1!important;grid-row:auto!important}
 body[data-tab=companies] main.grid>.p-wl,body[data-tab=companies] main.grid>.p-tboard{grid-column:1/-1!important;grid-row:auto!important}
+.tps-tb{display:flex;gap:0;margin:0 0 8px;border:1px solid #2a313b;border-radius:8px;overflow:hidden}.tps-tb[hidden]{display:none}
+.tps-tb button{flex:1;background:#0b0d10;border:0;color:#aab3bf;font:700 12.5px var(--mono,monospace);padding:10px 6px;cursor:pointer}.tps-tb button.on{background:rgba(247,147,26,.16);color:#F7931A}
+.tps-in{width:min(480px,94vw)}
+.tps-l li button span{flex:1;min-width:0;display:flex;flex-direction:column}.tps-l li button span small{font:10.5px var(--mono,monospace);color:#6b7480;margin-top:1px}
+.tps-l li button i{font:600 12px var(--mono,monospace);font-style:normal;margin-left:auto}.tps-l .up{color:#2fd17c}.tps-l .dn{color:#ff5a5f}
