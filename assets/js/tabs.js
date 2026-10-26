@@ -35,7 +35,7 @@
      ETH/SOL alone). Row on a chart is highlighted; clicking a row loads it into the chart (crypto left, stocks right on desktop). */
   var GROUPS = [['Crypto · live 24/7', [['BTC', 'Bitcoin', 'c'], ['ETH', 'Ether', 'c'], ['SOL', 'Solana', 'c'], ['XRP', 'XRP', 'c'], ['DOGE', 'Dogecoin', 'c'], ['LINK', 'Chainlink', 'c']]],
     ['Bitcoin treasury stocks · your list', []],
-    ['Markets & macro', [['.SPX', 'S&P 500', 'i', '@SP.1'], ['.IXIC', 'Nasdaq', 'i', '@ND.1'], ['.DJI', 'Dow', 'i', '@DJ.1'], ['US10Y', '10Y yield', 'y'], ['.DXY', 'Dollar (DXY)', 'i'], ['@GC.1', 'Gold', 'f']]]];
+    ['Markets & macro', [['.SPX', 'S&P 500', 'i', '@SP.1'], ['.NDX', 'Nasdaq-100', 'i', '@ND.1'], ['.DJI', 'Dow', 'i', '@DJ.1'], ['US10Y', '10Y yield', 'y'], ['.DXY', 'Dollar (DXY)', 'i'], ['@GC.1', 'Gold', 'f']]]];
   var HIT = {}, DEF = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'COIN'], NMS = { MSTR: 'Strategy', MPJPY: 'Metaplanet ADR', XXI: 'Twenty One', ASST: 'Strive', MARA: 'MARA Holdings', COIN: 'Coinbase' }, TRS = {}, EDIT = 0;
   var CRYPTO = ['BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'LINK', 'ADA', 'AVAX', 'LTC', 'SUI', 'BCH', 'DOT', 'HBAR'];
   var MINE = (function () { try { var a = JSON.parse(localStorage.getItem('btd_hbs') || 'null'); if (Array.isArray(a) && a.length) return a.slice(0, 12); } catch (e) {} return DEF.slice(); })();
