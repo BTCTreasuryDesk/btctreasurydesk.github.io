@@ -31,13 +31,13 @@
   function cn(t) { return IDX[t] ? IDX[t][0] : t; }
   function cur(t) { return IDX[t] ? IDX[t][2] : ''; }
   function nm(t) { return IDX[t] ? IDX[t][1] : NAMES[t] || t; }
-  var RANGES = ['1D', '5D', '1M', '6M', '1Y'], IVS = ['5m', '15m', '30m', '1h', '4h', '1D'], IVS_S = { '5m': 300, '15m': 900, '30m': 1800, '1h': 3600, '4h': 14400, '1D': 86400 };
-  var RDAYS = { '1D': 1, '5D': 5, '1M': 31, '6M': 183, '3M': 92, '1Y': 366, '5Y': 1830, Max: 99999 };
+  var RANGES = ['1H', '4H', '1D', '5D', '1M', '1Y', 'Max'], RLAB = { '5D': '1W', Max: 'ALL' }, IVS = ['1m', '5m', '15m', '30m', '1h', '4h', '1D'], IVS_S = { '1m': 60, '5m': 300, '15m': 900, '30m': 1800, '1h': 3600, '4h': 14400, '1D': 86400 };
+  var RDAYS = { '1H': 1 / 24, '4H': 1 / 6, '1D': 1, '5D': 5, '1M': 31, '6M': 183, '3M': 92, '1Y': 366, '5Y': 1830, Max: 99999 };
   /* which intervals make sense per range (bars stay readable and the data exists) */
   /* only the 2-3 intervals that make sense per range (Max lives on the long-term chart) */
-  function ivList(t, r) { var c = isC(t); return r === '1D' ? ['5m', '15m', '30m'] : r === '5D' ? ['15m', '30m', '1h'] : r === '1M' ? (c ? ['1h', '4h', '1D'] : ['1D']) : ['1D']; }
+  function ivList(t, r) { var c = isC(t); return r === '1H' ? (c ? ['1m', '5m'] : ['5m']) : r === '4H' ? ['5m', '15m'] : r === '1D' ? ['5m', '15m', '30m'] : r === '5D' ? ['15m', '30m', '1h'] : r === '1M' ? (c ? ['1h', '4h', '1D'] : ['1D']) : ['1D']; }
   function ivOK(t, r, iv) { return ivList(t, r).indexOf(iv) >= 0; }
-  function defIv(t, r) { var d = r === '1D' ? '15m' : r === '5D' ? '1h' : r === '1M' ? (isC(t) ? '4h' : '1D') : '1D'; return ivOK(t, r, d) ? d : '1D'; }
+  function defIv(t, r) { var d = r === '1H' ? (isC(t) ? '1m' : '5m') : r === '4H' ? '5m' : r === '1D' ? '15m' : r === '5D' ? '1h' : r === '1M' ? (isC(t) ? '4h' : '1D') : '1D'; return ivOK(t, r, d) ? d : '1D'; }
 
   /* ---------- settings (persisted) ---------- */
   var S = { r: '1D', iv: '15m', type: 'candle', ma20: 0, ma50: 0, ma200: 0, vwap: 1, vol: 1, log: 0, cmp: 0, sync: 1, r2: '1D', iv2: '15m', s2: 'MSTR', s1p: 'BTC', s1: 'BTC', lines: {}, p2: null };
@@ -59,7 +59,7 @@
   var cache = {};
   function agg(bars, sec) { if (!bars.length) return bars; var out = [], cur0 = null;
     bars.forEach(function (b) { var k = Math.floor(b.time / sec) * sec; if (!cur0 || cur0.time !== k) { cur0 = { time: k, open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume || 0 }; out.push(cur0); } else { cur0.high = Math.max(cur0.high, b.high); cur0.low = Math.min(cur0.low, b.low); cur0.close = b.close; cur0.volume += b.volume || 0; } }); return out; }
-  function cbBars(t, r, iv) { var g = { '5m': 300, '15m': 900, '30m': 900, '1h': 3600, '4h': 3600, '1D': 86400 }[iv], now = Date.now(), span = Math.min(RDAYS[r], 1900) * DAY;
+  function cbBars(t, r, iv) { var g = { '1m': 60, '5m': 300, '15m': 900, '30m': 900, '1h': 3600, '4h': 3600, '1D': 86400 }[iv], now = Date.now(), span = Math.min(RDAYS[r], 1900) * DAY;
     if (r === 'Max' || r === '5Y') { if (t === 'BTC') return J('/assets/data/btc_daily.json').then(function (j) { var t0 = Date.parse(j.start + 'T00:00:00Z') / 1e3, from = r === '5Y' ? now / 1e3 - 1830 * 86400 : 0; return j.closes.map(function (c, i) { return { time: t0 + i * 86400, open: i ? j.closes[i - 1] : c, high: Math.max(c, i ? j.closes[i - 1] : c), low: Math.min(c, i ? j.closes[i - 1] : c), close: c }; }).filter(function (b) { return b.time >= from; }); }); span = 1830 * DAY; }
     var from = now - span, parts = [], step = g * 300e3; for (var a = from; a < now; a += step) parts.push([a, Math.min(now, a + step)]);
     if (parts.length > 12) parts = parts.slice(-12);
@@ -70,13 +70,14 @@
   function etDay(sec) { return new Date(sec * 1e3).toLocaleDateString('en-CA', { timeZone: 'America/New_York' }); }
   function etMin(sec) { var p = new Date(sec * 1e3).toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit', minute: '2-digit' }).split(':'); return (+p[0] % 24) * 60 + +p[1]; }
   function stockBars(t, r, iv) {
-    if (r === '1D' || r === '5D') return cnbc(t, '5D').then(function (b) {
+    if (r === '1H' || r === '4H' || r === '1D' || r === '5D') return cnbc(t, '5D').then(function (b) {
       if (b.length < 5) return cnbc(t, '1D'); return b; }).then(function (b) {
       if (r === '1D' && b.length) { var last = etDay(b[b.length - 1].time); b = b.filter(function (x) { return etDay(x.time) === last; }); }
+      if ((r === '1H' || r === '4H') && b.length) { var cut = b[b.length - 1].time - RDAYS[r] * 86400; b = b.filter(function (x) { return x.time >= cut; }); } /* latest session's last 1h / 4h (CNBC 5-min bars) */
       var s = IVS_S[iv] || 300; return s > 300 ? agg(b, s) : b; });
     var per = r === 'Max' ? 'ALL' : r === '5Y' ? '5Y' : r === '6M' ? '1Y' : r === '1Y' || r === '1M' || r === '3M' ? '1Y' : '6M';
     return cnbc(t, per).then(function (b) { var from = Date.now() / 1e3 - RDAYS[r] * 86400; return r === 'Max' ? b : b.filter(function (x) { return x.time >= from; }); }); }
-  function bars(t, r, iv) { var k = t + '|' + r + '|' + iv, c = cache[k]; if (c && Date.now() - c.at < (r === '1D' || r === '5D' ? 60e3 : 600e3)) return Promise.resolve(c.b);
+  function bars(t, r, iv) { var k = t + '|' + r + '|' + iv, c = cache[k]; if (c && Date.now() - c.at < (r === '1H' || r === '4H' || r === '1D' || r === '5D' ? 60e3 : 600e3)) return Promise.resolve(c.b);
     return (isC(t) ? cbBars(t, r, iv) : stockBars(t, r, iv)).then(function (b) { cache[k] = { at: Date.now(), b: b }; return b; }); }
 
   /* ---------- indicators ---------- */
@@ -113,19 +114,19 @@
   function near(b, t) { var lo = 0, hi = b.length - 1; if (!b.length) return null; while (lo < hi) { var m = (lo + hi) >> 1; if (b[m].time < t) lo = m + 1; else hi = m; } var c = b[lo], d = b[lo - 1]; return d && Math.abs(d.time - t) < Math.abs(c.time - t) ? d : c; }
   function hud(P, p, nob) { var h = P.el.querySelector('[data-hud]'); if (nob) { h.innerHTML = '<span>No ' + esc(P.sym) + ' bar at this time (market closed)</span>'; return; } var b = p && p.time ? near(P.b, p.time) : P.b[P.b.length - 1], r0 = RG(P); if (!b) { h.textContent = ''; return; }
     var i = P.b.indexOf(b), pv = i > 0 ? P.b[i - 1].close : b.open, c = cur(P.sym), chg = pv ? (b.close / pv - 1) * 100 : null;
-    h.innerHTML = '<span>' + new Date(b.time * 1e3).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: P.iv === '1D' || !/^(1D|5D|1M|3M)$/.test(r0) ? undefined : 'numeric', minute: P.iv === '1D' || !/^(1D|5D|1M|3M)$/.test(r0) ? undefined : '2-digit' }) + '</span> O <b>' + fp(b.open, c) + '</b> H <b>' + fp(b.high, c) + '</b> L <b>' + fp(b.low, c) + '</b> C <b>' + fp(b.close, c) + '</b> <i class="' + (chg >= 0 ? 'up' : 'dn') + '">' + sg(chg) + '</i>' + (b.volume ? ' Vol <b>' + Math.round(b.volume).toLocaleString('en-US') + '</b>' : ''); }
+    h.innerHTML = '<span>' + new Date(b.time * 1e3).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: P.iv === '1D' || !/^(1H|4H|1D|5D|1M|3M)$/.test(r0) ? undefined : 'numeric', minute: P.iv === '1D' || !/^(1H|4H|1D|5D|1M|3M)$/.test(r0) ? undefined : '2-digit' }) + '</span> O <b>' + fp(b.open, c) + '</b> H <b>' + fp(b.high, c) + '</b> L <b>' + fp(b.low, c) + '</b> C <b>' + fp(b.close, c) + '</b> <i class="' + (chg >= 0 ? 'up' : 'dn') + '">' + sg(chg) + '</i>' + (b.volume ? ' Vol <b>' + Math.round(b.volume).toLocaleString('en-US') + '</b>' : ''); }
 
   /* lines / alert levels (per symbol, saved) */
   function addLine(P, px, persist) { if (!P.main) return; var l = P.main.createPriceLine({ price: px, color: '#F7931A', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: 'alert' }); P.lines.push({ px: px, l: l }); if (persist) { (S.lines[P.sym] = S.lines[P.sym] || []).push(px); if (S.lines[P.sym].length > 8) S.lines[P.sym].shift(); save(); if (window.BTD_ALERTS) window.BTD_ALERTS.add({ sym: P.sym, px: px }); } }
   function clearLines(P) { P.lines.forEach(function (x) { try { P.main.removePriceLine(x.l); } catch (e) {} }); P.lines = []; }
 
   /* toolbar */
-  function seg(name, opts, on, dis) { return '<span class="tc-seg" role="group" aria-label="' + name + '">' + opts.map(function (o) { var d = dis && dis(o); return '<button type="button" data-' + name + '="' + o + '"' + (o === on ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') + (d ? ' disabled' : '') + '>' + o + '</button>'; }).join('') + '</span>' + segSel(name, opts.map(function (o) { return [o, o, dis && dis(o)]; }), on); }
+  function seg(name, opts, on, dis) { return '<span class="tc-seg" role="group" aria-label="' + name + '">' + opts.map(function (o) { var d = dis && dis(o); return '<button type="button" data-' + name + '="' + o + '"' + (o === on ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') + (d ? ' disabled' : '') + '>' + (name === 'rng' && RLAB[o] || o) + '</button>'; }).join('') + '</span>' + segSel(name, opts.map(function (o) { return [o, o, dis && dis(o)]; }), on); }
   function segSel(name, opts, on) { return '<select class="tc-segsel" data-segsel="' + name + '" aria-label="' + (name === 'rng' ? 'Range' : name === 'iv' ? 'Interval' : name) + '">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === on ? ' selected' : '') + (o[2] ? ' disabled' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>'; }
   document.addEventListener('change', function (e) { var t = e.target; if (!t.matches || !t.matches('select.tc-segsel')) return; var b = t.parentNode.querySelector('button[data-' + t.dataset.segsel + '="' + t.value + '"]'); if (b) b.click(); });
   function tg(k, lab, on, title) { return '<button type="button" class="tc-tg' + (on ? ' on' : '') + '" data-tg="' + k + '" aria-pressed="' + !!on + '"' + (title ? ' title="' + title + '"' : '') + '>' + lab + '</button>'; }
   function bar(P) { var el = P.el.querySelector('[data-bar]'), ph = PHONE(), st = !isC(P.sym);
-    var r = RG(P), h = seg('rng', RANGES, r) + seg('iv', ivList(P.sym, r), P.iv || IV(P)) +
+    var r = RG(P), h = seg('rng', RANGES, r).replace('class="tc-seg"', 'class="tc-seg tc-rng"').replace(/<select[\s\S]*?<\/select>/, '') + seg('iv', ivList(P.sym, r), P.iv || IV(P)) +
       '<span class="tc-tools' + (ph && !P.more ? ' tc-hide' : '') + '">' + '<select class="tc-pick tc-type" data-ctype aria-label="Chart style">' + TYPES.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === V(P).type ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select>' + tg('ma20', 'MA20', V(P).ma20) + tg('ma50', 'MA50', V(P).ma50) + tg('ma200', 'MA200', V(P).ma200) + (st ? tg('vwap', 'VWAP', V(P).vwap) : '') + tg('vol', 'Vol', V(P).vol) + tg('log', 'Log', V(P).log, 'Logarithmic price scale') + tg('cmp', 'Compare %', V(P).cmp, 'Overlay the other chart in % from the first bar') +
       tg('draw', P.drawing ? 'Click chart…' : '+ Line', P.drawing, 'Click the chart to place a horizontal line / alert level') + (P.lines.length ? tg('clr', 'Clear lines', 0) : '') + (idxTwo() ? tg('sync', 'Sync', S.sync, 'Link range and crosshair across both charts') : '') + tg('fs', '⛶', 0, 'Fullscreen') + '</span>' +
       (ph ? '<button type="button" class="tc-tg tc-more" data-tg="more" aria-expanded="' + !!P.more + '">' + (P.more ? 'Less' : 'Tools') + '</button>' : '');
@@ -172,10 +173,10 @@
       P.main.setData(OHLC ? d0 : b.map(function (x) { return { time: x.time, value: x.close }; }));
       P.vol.setData(V(P).vol ? b.map(function (x) { return { time: x.time, value: x.volume || 0, color: x.close >= x.open ? 'rgba(47,209,124,.35)' : 'rgba(255,90,95,.35)' }; }) : []);
       [20, 50, 200].forEach(function (n, i) { P.ma[i].setData(V(P)['ma' + n] ? sma(b, n) : []); });
-      P.vw.setData(V(P).vwap && !isC(t) && r !== 'Max' && /^(1D|5D)$/.test(r) ? vwap(b) : []);
+      P.vw.setData(V(P).vwap && !isC(t) && r !== 'Max' && /^(1H|4H|1D|5D)$/.test(r) ? vwap(b) : []);
       P.ch.priceScale('right').applyOptions({ mode: V(P).cmp ? 2 : V(P).log ? 1 : 0 });
       /* stocks intraday: shade pre/post */
-      if (!isC(t) && /^(1D|5D)$/.test(r) && (V(P).type === 'candle' || V(P).type === 'hollow')) P.main.setData(b.map(function (x) { var m = etMin(x.time), ext = m < 570 || m >= 960; return ext ? Object.assign({}, x, { color: x.close >= x.open ? 'rgba(47,209,124,.45)' : 'rgba(255,90,95,.45)', wickColor: 'rgba(160,170,180,.5)' }) : x; }));
+      if (!isC(t) && /^(1H|4H|1D|5D)$/.test(r) && (V(P).type === 'candle' || V(P).type === 'hollow')) P.main.setData(b.map(function (x) { var m = etMin(x.time), ext = m < 570 || m >= 960; return ext ? Object.assign({}, x, { color: x.close >= x.open ? 'rgba(47,209,124,.45)' : 'rgba(255,90,95,.45)', wickColor: 'rgba(160,170,180,.5)' }) : x; }));
       (S.lines[t] || []).forEach(function (px) { addLine(P, px, 0); });
       P.cmpS.setData([]); if (V(P).cmp) { var other = panes.filter(function (Q) { return Q !== P; })[0], os = other ? other.sym : (t === 'BTC' ? 'MSTR' : 'BTC'); P.cmpS.applyOptions({ title: os });
         bars(os, r, ivOK(os, r, iv) ? iv : defIv(os, r)).then(function (ob) { if (P.tok !== tok || !ob.length || !b.length) return; var t0 = b[0].time, base = near(ob, t0); if (!base) return; var k = b[0].close / base.close; P.cmpS.setData(ob.filter(function (x) { return x.time >= t0 - 1; }).map(function (x) { return { time: x.time, value: x.close * k }; })); }).catch(function () {}); }
@@ -184,11 +185,11 @@
   /* live last bar */
   var rdT = null; if (F) F.on('*', function () { if (rdT) return; rdT = setTimeout(function () { rdT = null; panes.forEach(function (P) { read(P); kn(P); }); }, 700); });
   if (F) F.on('*', function (v, k) { panes.forEach(function (P) { if (!P.main || !P.b.length) return; var q = quote(P.sym); if (!q || q !== v) return;
-    var px = isC(P.sym) ? q.px : (F.session() === 'open' ? q.px : q.ext && F.session() !== 'closed' ? q.ext.px : null); if (px == null || !/^(1D|5D)$/.test(RG(P))) return;
+    var px = isC(P.sym) ? q.px : (F.session() === 'open' ? q.px : q.ext && F.session() !== 'closed' ? q.ext.px : null); if (px == null || !/^(1H|4H|1D|5D)$/.test(RG(P))) return;
     var last = P.b[P.b.length - 1], sec = IVS_S[P.iv] || 300, now = Math.floor(Date.now() / 1e3), bt = Math.floor(now / sec) * sec; if (bt < last.time) return;
     if (bt === last.time) { last.close = px; last.high = Math.max(last.high, px); last.low = Math.min(last.low, px); } else { last = { time: bt, open: last.close, high: Math.max(px, last.close), low: Math.min(px, last.close), close: px, volume: 0 }; P.b.push(last); }
     try { if (V(P).type !== 'ha') P.main.update(/^(candle|hollow|bar)$/.test(V(P).type) ? last : { time: last.time, value: last.close }); } catch (e) {} }); });
-  setInterval(function () { panes.forEach(function (P) { if (/^(1D|5D)$/.test(RG(P)) && !document.hidden) { delete cache[P.sym + '|' + RG(P) + '|' + P.iv]; render(P); } }); }, 5 * 60e3);
+  setInterval(function () { panes.forEach(function (P) { if (/^(1H|4H|1D|5D)$/.test(RG(P)) && !document.hidden) { delete cache[P.sym + '|' + RG(P) + '|' + P.iv]; render(P); } }); }, 5 * 60e3);
 
   /* events */
   root.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var P = panes.filter(function (Q) { return Q.el.contains(b); })[0]; if (!P) return; var all = S.sync ? panes : [P];
