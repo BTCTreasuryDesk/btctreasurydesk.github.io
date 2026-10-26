@@ -475,12 +475,12 @@
   var cl = function (v) { return v > 0 ? 'up' : v < 0 ? 'dn' : 'fl'; };
   /* friendly names -> quote-service symbols, with the label shown on the tile */
   var AL = { SPX: ['.SPX', 'SPX', 'S&P 500'], '^GSPC': ['.SPX', 'SPX', 'S&P 500'], IXIC: ['.IXIC', 'IXIC', 'Nasdaq'], NASDAQ: ['.IXIC', 'IXIC', 'Nasdaq'], DJI: ['.DJI', 'DJI', 'Dow'], DOW: ['.DJI', 'DJI', 'Dow'], RUT: ['.RUT', 'RUT', 'Russell 2000'], VIX: ['.VIX', 'VIX', 'Volatility'], DXY: ['.DXY', 'DXY', 'Dollar index'],
-    'ES=F': ['@SP.1', 'ES=F', 'S&P 500 fut'], 'NQ=F': ['@ND.1', 'NQ=F', 'Nasdaq fut'], 'YM=F': ['@DJ.1', 'YM=F', 'Dow fut'], 'GC=F': ['@GC.1', 'GC=F', 'Gold fut'], GOLD: ['@GC.1', 'GC=F', 'Gold fut'], 'SI=F': ['@SI.1', 'SI=F', 'Silver fut'], SILVER: ['@SI.1', 'SI=F', 'Silver fut'], 'CL=F': ['@CL.1', 'CL=F', 'WTI fut'], OIL: ['@CL.1', 'CL=F', 'WTI fut'], 'HG=F': ['@HG.1', 'HG=F', 'Copper fut'], 'NG=F': ['@NG.1', 'NG=F', 'Nat gas fut'],
+    'ES=F': ['@SP.1', 'ES=F', 'S&P 500 fut'], 'NQ=F': ['@ND.1', 'NQ=F', 'Nasdaq-100 fut'], 'YM=F': ['@DJ.1', 'YM=F', 'Dow fut'], 'GC=F': ['@GC.1', 'GC=F', 'Gold fut'], GOLD: ['@GC.1', 'GC=F', 'Gold fut'], 'SI=F': ['@SI.1', 'SI=F', 'Silver fut'], SILVER: ['@SI.1', 'SI=F', 'Silver fut'], 'CL=F': ['@CL.1', 'CL=F', 'WTI fut'], OIL: ['@CL.1', 'CL=F', 'WTI fut'], 'HG=F': ['@HG.1', 'HG=F', 'Copper fut'], 'NG=F': ['@NG.1', 'NG=F', 'Nat gas fut'],
     US10Y: ['US10Y', 'US10Y', '10Y yield'], US2Y: ['US2Y', 'US2Y', '2Y yield'], US30Y: ['US30Y', 'US30Y', '30Y yield'], US5Y: ['US5Y', 'US5Y', '5Y yield'] };
-  var IX = { 'IX:SPX': ['.SPX', '@SP.1', 'SPX', 'S&P 500', 'ES=F'], 'IX:IXIC': ['.IXIC', '@ND.1', 'IXIC', 'Nasdaq', 'NQ=F'], 'IX:DJI': ['.DJI', '@DJ.1', 'DJI', 'Dow', 'YM=F'] };
+  var IX = { 'IX:SPX': ['.SPX', '@SP.1', 'SPX', 'S&P 500', 'ES=F'], 'IX:IXIC': ['.NDX', '@ND.1', 'NDX', 'Nasdaq-100', 'NQ=F'], 'IX:DJI': ['.DJI', '@DJ.1', 'DJI', 'Dow', 'YM=F'] };
   var DEF = ['MSTR', 'MPJPY', 'XXI', 'ASST', 'MARA', 'COIN', 'CLSK', 'RIOT', 'HUT', 'GLXY', 'NAKA'].map(function (t) { return { k: t, tk: t }; }), MAX = 16, L, CB = {}, msg = '';
   /* Session-aware row: regular US hours = your stocks; pre-market, after hours, overnight, weekends, holidays = index futures + 24/7 tokenized prices. Override saved. */
-  var OFF = [{ k: '@SP.1', tk: 'ES=F', nm: 'S&P 500 fut' }, { k: '@ND.1', tk: 'NQ=F', nm: 'Nasdaq fut' }, { k: '@DJ.1', tk: 'YM=F', nm: 'Dow fut' }].concat(['MSTR', 'COIN', 'MARA', 'CRCL', 'HOOD'].map(function (t) { return { k: 'T:' + t, tk: t + 'x', nm: 'token' }; }));
+  var OFF = [{ k: '@SP.1', tk: 'ES=F', nm: 'S&P 500 fut' }, { k: '@ND.1', tk: 'NQ=F', nm: 'Nasdaq-100 fut' }, { k: '@DJ.1', tk: 'YM=F', nm: 'Dow fut' }].concat(['MSTR', 'COIN', 'MARA', 'CRCL', 'HOOD'].map(function (t) { return { k: 'T:' + t, tk: t + 'x', nm: 'token' }; }));
   var HM = function () { var m = LS.get('btd_hsm'); return m === 'stocks' || m === 'fut' ? m : 'auto'; };
   var eff = function () { var m = HM(); return m === 'auto' ? (F.session() === 'open' ? 'stocks' : 'fut') : m; };
   var cur = function () { return eff() === 'fut' ? OFF : L; };
