@@ -139,9 +139,9 @@
     if (pk.dataset.k !== pick) { pk.innerHTML = pick; pk.dataset.k = pick; }
     if (!q || q.px == null) { el.innerHTML = '<span class="tc-px">—</span>'; return; }
     if (isC(t)) h = '<b class="tc-px">' + fp(q.px) + '</b><span class="tc-ch ' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sgn(q.ch) + ' (' + sg(q.chp) + ') 24h</span><span class="tc-ses on">Live 24/7 · Coinbase</span>';
-    else if (ses !== 'open' && q.ext && q.ext.px != null) { var d = q.ext.px - q.px, p = d / q.px * 100, lab = q.ext.kind === 'pre' ? 'Pre-market' : 'After hours';
-      h = '<b class="tc-px">' + fp(q.ext.px, c) + '</b><span class="tc-ch ' + (d >= 0 ? 'up' : 'dn') + '">' + sgn(d, c) + ' (' + sg(p) + ')</span><span class="tc-ses ext">' + (ses === 'closed' ? 'Last ' + lab.toLowerCase() : lab) + '</span>' +
-        '<span class="tc-close">Close ' + fp(q.px, c) + ' <i class="' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sg(q.chp) + '</i></span>'; }
+    else if (ses !== 'open' && ((q.ext && q.ext.px != null) || (ses === 'closed' && window.BTD_TOK && window.BTD_TOK[t]))) { var tk0 = ses === 'closed' && window.BTD_TOK && window.BTD_TOK[t], xp = tk0 ? tk0.px : q.ext.px, d = xp - q.px, p = d / q.px * 100, lab = tk0 ? 'Overnight 24/7' : q.ext.kind === 'pre' ? 'Pre-market' : 'After hours';
+      h = '<b class="tc-px">' + fp(q.px, c) + '</b><span class="tc-ch ' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sgn(q.ch, c) + ' (' + sg(q.chp) + ')</span><span class="tc-ses">Close</span>' +
+        '<span class="tc-xl" title="' + (tk0 ? 'Kraken xStocks tokenized share, 24/7' : 'Extended-hours last trade, CNBC') + '"><span class="tc-ses ext">' + (tk0 ? '24/7' : q.ext.kind === 'pre' ? 'PRE' : 'AH') + '</span> ' + lab + ' <b>' + fp(xp, c) + '</b> <i class="' + (d >= 0 ? 'up' : 'dn') + '">' + sgn(d, c) + ' (' + sg(p) + ')</i></span>'; }
     else h = '<b class="tc-px">' + fp(q.px, c) + '</b><span class="tc-ch ' + (q.chp >= 0 ? 'up' : 'dn') + '">' + sgn(q.ch, c) + ' (' + sg(q.chp) + ')</span><span class="tc-ses' + (ses === 'open' ? ' on' : '') + '">' + (ses === 'open' ? 'Market open' : 'Close') + (q.rt === false ? ' · delayed' : '') + '</span>';
     el.innerHTML = h; }
   /* key numbers under the chart */
@@ -182,7 +182,8 @@
       P.ch.timeScale().fitContent(); hud(P, null); bar(P);
     }).catch(function () { if (P.tok !== tok) return; msg.hidden = false; msg.textContent = 'Chart service did not answer. Retrying in a minute; the price above is live.'; setTimeout(function () { render(P); }, 60e3); }); }
   /* live last bar */
-  if (F) F.on('*', function (v, k) { panes.forEach(function (P) { if (!P.main || !P.b.length) return; var q = quote(P.sym); if (!q || q !== v) return; read(P); kn(P);
+  var rdT = null; if (F) F.on('*', function () { if (rdT) return; rdT = setTimeout(function () { rdT = null; panes.forEach(function (P) { read(P); kn(P); }); }, 700); });
+  if (F) F.on('*', function (v, k) { panes.forEach(function (P) { if (!P.main || !P.b.length) return; var q = quote(P.sym); if (!q || q !== v) return;
     var px = isC(P.sym) ? q.px : (F.session() === 'open' ? q.px : q.ext && F.session() !== 'closed' ? q.ext.px : null); if (px == null || !/^(1D|5D)$/.test(RG(P))) return;
     var last = P.b[P.b.length - 1], sec = IVS_S[P.iv] || 300, now = Math.floor(Date.now() / 1e3), bt = Math.floor(now / sec) * sec; if (bt < last.time) return;
     if (bt === last.time) { last.close = px; last.high = Math.max(last.high, px); last.low = Math.min(last.low, px); } else { last = { time: bt, open: last.close, high: Math.max(px, last.close), low: Math.min(px, last.close), close: px, volume: 0 }; P.b.push(last); }

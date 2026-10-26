@@ -174,3 +174,18 @@ body[data-tab=home] main.grid>.p-kd{order:-1;grid-column:1/7!important;grid-row:
 @media (max-width:760px){.tps{padding:0;background:#0e1115}.tps-in{width:100vw;max-height:none;height:100%;border:0;border-radius:0;padding:12px}}
 body.tps-open{overflow:hidden}
 .tbtn-cz{display:none!important} /* Layout panel removed: tabs + Market pulse edit replace it */
+/* Home order v3: charts, Market pulse, Your Bitcoin (calculator + converter, prominent), Key metrics… */
+body[data-tab=home] main.grid>.p-tc{order:-9}body[data-tab=home] main.grid>.p-hb{order:-8}body[data-tab=home] main.grid>.p-yb{order:-7;grid-column:1/-1!important}
+.p-yb{grid-template-columns:1.3fr 1fr 1fr!important}
+.p-yb .yb-cta:first-of-type b{font-size:17px}.p-yb .yb-cta:first-of-type{border-color:#F7931A;background:linear-gradient(180deg,#1a1208,#100c07)}
+.yb-conv label{display:flex;align-items:center;gap:6px}.yb-conv input{flex:1;min-width:0;background:#0b0d10;border:1px solid #2a313b;border-radius:5px;color:#fff;font:600 14px var(--mono,monospace);padding:6px 8px}.yb-conv span{font:600 11px var(--mono,monospace);color:#8b95a3;width:34px}
+@media (max-width:760px){.p-yb{grid-template-columns:1fr!important}}
+/* merged Strategy extras */
+.kpi-x{display:grid;grid-template-columns:1fr 1fr 2fr;gap:10px;margin-top:10px}.kpi-xc{border:1px solid #1e232b;border-radius:8px;padding:8px 10px}.kpi-xc .kv{display:flex;justify-content:space-between;gap:8px;padding:3px 0;font-size:12.5px}
+.kpi-xc table{width:100%;font-size:12px}.kpi-xc .p-f{font-size:10.5px}
+@media (max-width:900px){.kpi-x{grid-template-columns:1fr}}
+.hb-xl{white-space:nowrap}.hb-xl i{font-style:normal}
+.tc-xl{flex-basis:100%;font:12.5px var(--mono,monospace);color:#cfd5dd}.tc-xl b{color:#fff}.tc-xl i{font-style:normal}.tc-xl .up{color:#2fd17c}.tc-xl .dn{color:#ff5a5f}
+body[data-tab=companies] main.grid>.p-kpi{order:-5;grid-column:1/-1}
+body[data-tab=crypto] main.grid>.p-cx,body[data-tab=crypto] main.grid>.p-dv,body[data-tab=crypto] main.grid>.p-tok{grid-column:1/-1!important;grid-row:auto!important}
+body[data-tab=companies] main.grid>.p-wl,body[data-tab=companies] main.grid>.p-tboard{grid-column:1/-1!important;grid-row:auto!important}

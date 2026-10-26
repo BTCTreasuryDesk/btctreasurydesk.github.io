@@ -8,10 +8,10 @@
   var F = window.BTD_FEED, $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   function J(u) { return fetch(u, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  var TABS = [['home', 'Home'], ['markets', 'Markets'], ['companies', 'Companies'], ['strategy', 'Strategy'], ['crypto', 'Crypto'], ['charts', 'Charts'], ['calendar', 'Calendar & News'], ['show', 'Show']];
+  var TABS = [['home', 'Home'], ['markets', 'Markets'], ['companies', 'Companies'], ['crypto', 'Crypto'], ['charts', 'Charts'], ['calendar', 'Calendar & News'], ['show', 'Show']];
   /* panel -> tab (selector inside main) */
   var MAP = [['.p-tc', 'home'], ['[data-home-board]', 'home'], ['.p-hs', 'home'], ['[data-home-movers]', 'home'], ['.p-ep', 'home show'],
-    ['.p-mk', 'markets'], ['.p-wl', 'companies'], ['.p-tboard', 'companies'], ['.p-kpi', 'strategy'], ['.p-yb', 'strategy show'],
+    ['.p-mk', 'markets'], ['.p-wl', 'companies'], ['.p-tboard', 'companies'], ['.p-kpi', 'companies'], ['.p-yb', 'home show'],
     ['.p-cx', 'crypto'], ['.p-dv', 'crypto'], ['.p-tok', 'crypto markets'], ['.p-charts', 'charts'], ['[data-alerts]', 'charts'], ['.p-wall', 'charts'],
     ['.p-kd', 'calendar home'], ['.p-news', 'calendar'], ['.p-links', 'calendar'], ['.p-wcw', 'calendar'], ['.p-optin', 'show'], ['.p-movers', 'none'], ['.p-week', 'none'], ['[data-slow-h]', 'none'], ['.p-live', 'none']];
   function tag() { MAP.forEach(function (m) { $$(m[0], main).forEach(function (el) { if (el.parentNode === main) el.setAttribute('data-tabs', m[1]); }); }); }
@@ -19,11 +19,11 @@
   var bar = document.createElement('nav'); bar.className = 'tabs'; bar.setAttribute('aria-label', 'Desk sections');
   bar.innerHTML = '<div class="tabs-in" role="tablist">' + TABS.map(function (t) { return '<button type="button" role="tab" data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div><a class="tabs-next mono" data-next href="#calendar" hidden></a>';
   main.parentNode.insertBefore(bar, main);
-  var ANCH = { derivatives: 'crypto', tokenized: 'crypto', 'key-dates': 'calendar', board: 'companies', charts: 'charts', 'your-bitcoin': 'strategy', 'latest-episode': 'show', 'news-of-the-week': 'calendar', 'preferreds-desk': 'strategy', alerts: 'charts' };
-  function cur() { var h = location.hash.replace('#', ''); if (TABS.some(function (t) { return t[0] === h; })) return h; return ANCH[h] || 'home'; }
+  var ANCH = { derivatives: 'crypto', tokenized: 'crypto', 'key-dates': 'calendar', board: 'companies', charts: 'charts', 'your-bitcoin': 'home', 'latest-episode': 'show', 'news-of-the-week': 'calendar', 'preferreds-desk': 'companies', alerts: 'charts' };
+  function cur() { var h = location.hash.replace('#', ''); if (h === 'strategy') return 'companies'; if (TABS.some(function (t) { return t[0] === h; })) return h; return ANCH[h] || 'home'; }
   function show(t, scroll) { tag(); document.body.setAttribute('data-tab', t); $$('[data-tab]', bar).forEach(function (b) { var on = b.dataset.tab === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
     $$('main.grid > *', document).forEach(function (el) { var ts = (el.getAttribute('data-tabs') || 'none').split(' '); el.classList.toggle('tab-off', ts.indexOf(t) < 0); });
-    window.dispatchEvent(new Event('resize')); if (scroll) { var a = $('.tabs-in .on', bar); if (a && a.scrollIntoView) a.scrollIntoView({ block: 'nearest', inline: 'center' }); window.scrollTo({ top: Math.max(0, bar.offsetTop - 8), behavior: 'auto' }); } }
+    window.dispatchEvent(new Event('resize')); if (scroll) { var a = $('.tabs-in .on', bar); if (a && a.scrollIntoView) a.scrollIntoView({ block: 'nearest', inline: 'center' }); if (bar.getBoundingClientRect().top < 0) window.scrollTo({ top: Math.max(0, bar.offsetTop - 8), behavior: 'auto' }); } }
   bar.addEventListener('click', function (e) { var b = e.target.closest('[data-tab]'); if (!b) return; var t = b.dataset.tab; history.replaceState(null, '', t === 'home' ? location.pathname : '#' + t); show(t, 1); });
   window.addEventListener('hashchange', function () { show(cur(), 0); var id = location.hash.slice(1), el = id && document.getElementById(id); if (el && ANCH[id]) setTimeout(function () { el.scrollIntoView(); }, 50); });
   /* next key event chip (one place) */
@@ -45,7 +45,7 @@
   J('/assets/data/desk.json').then(function (j) { (j.treasuries.rows || []).forEach(function (r) { if (r.tk) TRS[r.tk] = r; }); stRows(); paintHB(); }).catch(function () {});
   var CHS = { '.SPX': 'SPX', '.IXIC': 'IXIC', '.DJI': 'DJI', '.DXY': 'DXY', '@GC.1': 'GOLD' };
   var hb = document.createElement('section'); hb.className = 'p p-hb'; hb.setAttribute('data-home-board', ''); hb.setAttribute('aria-label', 'Market pulse: crypto, bitcoin treasury stocks, markets and macro');
-  hb.innerHTML = '<div class="p-h"><span class="p-t">Market pulse</span><span class="hb-ses mono" data-hb-ses></span><a class="more" href="#alerts">Alerts</a> <a class="more" href="#markets">All markets →</a></div><div class="hb-ctx mono" data-hb-ctx></div><div class="hb-ctx hb-lv mono" data-hb-lv hidden></div><div class="seg hb-tabs" role="tablist" aria-label="Market pulse group"><button type="button" data-hbt="1" class="on">BTC stocks</button><button type="button" data-hbt="0">Crypto</button><button type="button" data-hbt="2">Macro</button></div><div class="hb" data-hb data-hbg="1"></div><p class="p-f">Context strip: BTC dominance, total crypto market cap and 24h volume from Coinpaprika (every 5 min), BTC perpetual funding from Deribit. Key levels: % = distance of live BTC from each level (daily closes; 200W MA = 200 weekly closes). Tap a row to chart it. Stocks: CNBC exchange prices; outside 9:30–4:00 ET the pre-market (PRE) or after-hours (AH) last trade leads and the official regular-session close sits under it. Crypto: Coinbase, 24h change. Stock price mode: Auto follows the session (regular → PRE/AH → 24/7 tokenized overnight and weekends); Ext, 24/7 and Close force one. 24/7 = Kraken xStocks tokenized MSTR, COIN, MARA (only when actively traded); tokens can differ from the exchange price. Index rows show futures when the cash market is closed. Education only.</p>';
+  hb.innerHTML = '<div class="p-h"><span class="p-t">Market pulse</span><span class="hb-ses mono" data-hb-ses></span><a class="more" href="#alerts">Alerts</a> <a class="more" href="#markets">All markets →</a></div><div class="hb-ctx mono" data-hb-ctx></div><div class="hb-ctx hb-lv mono" data-hb-lv hidden></div><div class="seg hb-tabs" role="tablist" aria-label="Market pulse group"><button type="button" data-hbt="1" class="on">BTC stocks</button><button type="button" data-hbt="0">Crypto</button><button type="button" data-hbt="2">Macro</button></div><div class="hb" data-hb data-hbg="1"></div><p class="p-f">Context strip: BTC dominance, total crypto market cap and 24h volume from Coinpaprika (every 5 min), BTC perpetual funding from Deribit. Key levels: % = distance of live BTC from each level (daily closes; 200W MA = 200 weekly closes). Tap a row to chart it. Stocks: CNBC exchange prices; outside 9:30–4:00 ET the pre-market (PRE) or after-hours (AH) last trade leads and the official regular-session close sits under it. Crypto: Coinbase, 24h change. Stocks: the big number is always the official regular-session price/close; the small line under it shows the active extended session (Pre-market, After hours, or Overnight 24/7) with its change vs the close, and nothing when no real trade exists. Mode: Auto follows the session; Ext, 24/7 and Close force one. 24/7 = Kraken xStocks tokenized MSTR, COIN, MARA (only when actively traded); tokens can differ from the exchange price. Index rows show futures when the cash market is closed. Education only.</p>';
   var tc = $('.p-tc', main); main.insertBefore(hb, tc ? tc.nextSibling : main.firstChild);
   function fmt(v, k) { if (v == null || !isFinite(v)) return '—'; var a = Math.abs(v), d = k === 'y' ? 3 : a >= 1000 ? (k === 'c' ? 0 : 2) : a < 1 && k === 'c' ? 4 : 2; return (k === 'c' || k === 's' || k === 'f' ? '$' : '') + v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) + (k === 'y' ? '%' : ''); }
   function pc(v) { return v == null || !isFinite(v) ? '' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%'; }
@@ -60,7 +60,7 @@
   var TOK = {}, TKS = ['MSTR', 'COIN', 'MARA'], MODE = LSg('btd_hbm') || 'auto';
   function LSg(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function tokF() { J('https://api.kraken.com/0/public/Ticker?asset_class=tokenized_asset&pair=' + TKS.map(function (t) { return t + 'xUSD'; }).join(',')).then(function (j) { var r = j.result || {}; TKS.forEach(function (t) { var x = r[t + 'xUSD']; if (x && x.c && +x.c[0] > 0 && x.t && +x.t[1] >= 20) TOK[t] = { px: +x.c[0], n: +x.t[1] }; else delete TOK[t]; }); paintHB(); }).catch(function () {}); }
-  tokF(); setInterval(tokF, 60e3);
+  tokF(); setInterval(tokF, 60e3); window.BTD_TOK = TOK;
   /* which price leads a stock row: auto = session-aware (open: regular; pre/post: extended; overnight/weekend: 24/7 token if liquid, else last extended) */
   function pickSt(s, q, ses) { var m = MODE, ext = q.ext && q.ext.px != null ? q.ext : null, tk = TOK[s];
     if (m === 'close') return null; if (m === '247') return tk ? { px: tk.px, tag: '24/7', t: 'tok' } : ext ? { px: ext.px, tag: ext.kind === 'pre' ? 'PRE' : 'AH' } : null;
@@ -71,7 +71,9 @@
     if (!q || q.px == null) return open + tkN(it) + '<span class="hb-m"><b class="hb-p">…</b></span><small class="hb-s">&nbsp;</small></div>';
     var main0 = '', sub = '';
     var L = k === 's' ? pickSt(s, q, ses) : null;
-    if (L) { var d = (L.px / q.px - 1) * 100; main0 = '<b class="hb-p">' + fmt(L.px, k) + '</b><span class="hb-x ' + cls(d) + '">' + pc(d) + '</span><span class="hb-tag' + (L.t ? ' tok' : '') + '" title="' + (L.t ? '24/7 tokenized price (Kraken xStocks), change vs official close' : 'Extended-hours last trade (CNBC), change vs official close') + '">' + L.tag + '</span>'; sub = 'Close ' + fmt(q.px, k) + ' <i class="' + cls(q.chp) + '">' + pc(q.chp) + '</i>'; }
+    if (L) { var d = (L.px / q.px - 1) * 100, LN = { PRE: 'Pre-market', AH: 'After hours', '24/7': 'Overnight 24/7' }[L.tag];
+      main0 = '<b class="hb-p">' + fmt(q.px, k) + '</b><span class="hb-x ' + cls(q.chp) + '">' + pc(q.chp) + '</span>';
+      sub = '<span class="hb-xl" title="' + (L.t ? '24/7 tokenized price (Kraken xStocks), change vs official close' : 'Extended-hours last trade (CNBC), change vs official close') + '"><span class="hb-tag' + (L.t ? ' tok' : '') + '">' + L.tag + '</span> ' + LN + ' ' + fmt(L.px, k) + ' <i class="' + cls(d) + '">' + pc(d) + '</i></span>'; }
     else { main0 = '<b class="hb-p">' + fmt(q.px, k) + '</b><span class="hb-x ' + cls(q.chp) + '">' + (k === 'y' && q.ch != null ? (q.ch >= 0 ? '+' : '−') + Math.abs(q.ch * 100).toFixed(1) + ' bp' : pc(q.chp)) + '</span>' + (k === 'c' ? '<span class="hb-tag on">24h</span>' : '');
       sub = k === 'c' ? 'Coinbase · live' : ses === 'open' ? (k === 'f' ? 'futures · live' : 'regular session · live') : (k === 'f' ? 'futures · front month' : 'official close'); }
     if (k === 'i' && it[3] && ses !== 'open') { var f = F.get(it[3]); if (f && f.px != null) sub = 'Close · futures ' + DTK[it[3]] + ' ' + fmt(f.px, 'i') + ' <i class="' + cls(f.chp) + '">' + pc(f.chp) + '</i>'; }
@@ -158,6 +160,20 @@
     else if (note) note.remove(); }
   if (F) F.watch(['MSTR', 'COIN', 'MARA', 'HOOD', 'NVDA']);
 
-  tag(); show(cur(), 0); dedupe(); [1500, 4000, 9000].forEach(function (ms) { setTimeout(function () { tag(); dedupe(); tokGuard(); show(document.body.getAttribute('data-tab') || 'home', 0); }, ms); }); setInterval(dedupe, 4000);
+  /* Strategy: ONE section. The KPI strip (.p-kpi) gets the unique pieces of the old Strategy/Strive block (days since last buy, Strive ASST, digital-credit table); the old block stays hidden as a data hook. */
+  function mergeStrat() { var k = $('.p-kpi', main), o = $('.p-strat'); if (!k || !o) return; var x = $('[data-kpi-x]', k);
+    if (!x) { x = document.createElement('div'); x.className = 'kpi-x'; x.setAttribute('data-kpi-x', ''); x.innerHTML = '<div class="kpi-xc" data-kx1><p class="hb-h">Strategy · MSTR</p></div><div class="kpi-xc" data-kx2><p class="hb-h">Strive · ASST</p></div><div class="kpi-xc kpi-xp" data-kx3><p class="hb-h">Digital credit (preferreds)</p></div>'; }
+    var kv = $$('.kv', o), days = kv.filter(function (e) { return $('[data-k="mstr-days"]', e); })[0], ab = kv.filter(function (e) { return $('[data-k="asst-btc"]', e); })[0], ad = kv.filter(function (e) { return $('[data-k="asst-days"]', e); })[0], cost = kv.filter(function (e) { return $('[data-live="mstr-pl"]', e); })[0], tb = $('[data-prefs]', o), src = $('[data-strat-src]', o);
+    [[days, 'kx1'], [cost, 'kx1'], [ab, 'kx2'], [ad, 'kx2'], [tb, 'kx3'], [src, 'kx3']].forEach(function (p) { if (p[0]) $('[data-' + p[1] + ']', x).appendChild(p[0]); });
+    if (x.parentNode !== k) k.appendChild(x); }
+  /* Sats <-> USD converter (live Coinbase BTC via the shared feed) inside Your Bitcoin */
+  function conv() { var y = $('.p-yb', main); if (!y || $('[data-cv2]', y)) return; var c = document.createElement('div'); c.className = 'yb-cta yb-conv'; c.setAttribute('data-cv2', '');
+    c.innerHTML = '<b>Sats ⇄ USD</b><label><input type="number" inputmode="decimal" min="0" step="any" data-cs value="100000" aria-label="Sats"> <span>sats</span></label><label><input type="number" inputmode="decimal" min="0" step="any" data-cu aria-label="US dollars"> <span>USD</span></label><small class="muted" data-cr>Live BTC price (Coinbase)</small>';
+    var f0 = $('.yb-cta', y); y.insertBefore(c, f0 ? f0.nextSibling : null); var cs = $('[data-cs]', c), cu = $('[data-cu]', c), last = 's';
+    function px() { var b = F && F.get('BTC'); return b && b.px; }
+    function fs() { last = 's'; var p = px(); if (p) cu.value = (parseFloat(cs.value || 0) / 1e8 * p).toFixed(2); var r = $('[data-cr]', c); if (p) r.textContent = '1 BTC = $' + Math.round(p).toLocaleString('en-US') + ' · $1 = ' + Math.round(1e8 / p).toLocaleString('en-US') + ' sats (Coinbase live)'; }
+    function fu() { last = 'u'; var p = px(); if (p) cs.value = Math.round(parseFloat(cu.value || 0) / p * 1e8); }
+    cs.addEventListener('input', fs); cu.addEventListener('input', fu); setInterval(function () { if (document.activeElement !== cs && document.activeElement !== cu) (last === 's' ? fs : fu)(); }, 5000); setTimeout(fs, 1500); fs(); }
+  tag(); show(cur(), 0); mergeStrat(); conv(); setInterval(mergeStrat, 4000); dedupe(); [1500, 4000, 9000].forEach(function (ms) { setTimeout(function () { tag(); dedupe(); tokGuard(); show(document.body.getAttribute('data-tab') || 'home', 0); }, ms); }); setInterval(dedupe, 4000);
   setInterval(tokGuard, 30e3);
 })();
