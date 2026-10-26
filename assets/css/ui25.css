@@ -202,3 +202,6 @@ body[data-tab=companies] main.grid>.p-wl,body[data-tab=companies] main.grid>.p-t
 .tps-na{color:#5b6472;font-style:normal}
 .tps-more{list-style:none}.tps-more button{width:100%;margin:6px 0;padding:10px;border:1px dashed #2a313b;border-radius:8px;background:#0b0d10;color:#F7931A;font:700 12.5px var(--mono,monospace);cursor:pointer}
 .tps-ch{display:none!important}
+/* desktop: range pills on their own row above interval + tools, same as phone */
+@media (min-width:601px){.tc-bar{flex-wrap:wrap!important;row-gap:6px}.tc-bar>.tc-rng{order:-1;flex:0 0 100%;display:flex;max-width:440px}.tc-bar>.tc-rng button{flex:1 0 auto;min-height:32px}}
+@media (min-width:1024px){.tc-bar .tc-tg,.tc-bar .tc-pick{padding:0 7px;font-size:11px;min-height:30px}.tc-bar .tc-type{max-width:96px}}
