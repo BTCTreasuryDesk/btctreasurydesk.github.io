@@ -1,8 +1,8 @@
 {
  "company": "Strive, Inc.",
  "ticker": "ASST",
- "as_of": "2026-10-09",
- "retrieved": "2026-10-18",
+ "as_of": "2026-10-16",
+ "retrieved": "2026-10-25",
  "source_name": "Strive weekly 8-K filings (SEC EDGAR): \"Bitcoin held\" and \"Assumed Fully Diluted Shares\"",
  "source_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001920406&type=8-K",
  "shares_note": "Assumed Fully Diluted Shares as defined by Strive (common shares plus options and unvested RSUs; excludes traditional warrants).",
@@ -90,6 +90,13 @@
    "shares": 113116098,
    "filed": "2026-10-13",
    "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026065595/asst-20261013.htm"
+  },
+  {
+   "date": "2026-10-16",
+   "btc": 36818,
+   "shares": 126790020,
+   "filed": "2026-10-19",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026066222/asst-20261019.htm"
   }
  ]
 }

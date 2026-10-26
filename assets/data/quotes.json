@@ -1,5 +1,5 @@
 {
- "as_of": "2026-10-18",
+ "as_of": "2026-10-25",
  "note": "Verbatim quotes only, each linked to its source: his posts on X, his official keynote slides and essays on michael.com, the official Lex Fridman transcript, and Strategy press releases filed with the SEC. Predictions are his view, not ours, shown with the date he made them.",
  "items": [
   {
@@ -925,6 +925,62 @@
    "url": "https://www.youtube.com/watch?v=_524Bq_ew5k",
    "speaker": "Michael Saylor",
    "verified": "2026-10-18 (checked word for word against the Bloomberg Crypto video transcript published on Yahoo Finance, Oct 13, 2026)"
+  },
+  {
+   "text": "Four months ago, we launched our Digital Credit Capital Framework. It’s delivering. Programmatic $STRC buybacks have helped strengthen our credit markets and support $MSTR. We manage the entire capital structure to create long-term shareholder value.",
+   "date": "2026-10-24",
+   "date_label": "Oct 24, 2026",
+   "type": "x",
+   "type_label": "Post on X",
+   "context": "Post on X, @saylor",
+   "theme": "strategy",
+   "theme_label": "Strategy",
+   "url": "https://x.com/saylor/status/2114030733811388709",
+   "excerpt": false,
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-25 (checked word for word against the post via the X API)"
+  },
+  {
+   "text": "Our goal is to grow Bitcoin per share. Here’s how Strategy puts Digital Capital, Digital Credit, and Digital Equity to work. $MSTR",
+   "date": "2026-10-23",
+   "date_label": "Oct 23, 2026",
+   "type": "x",
+   "type_label": "Post on X",
+   "context": "Post on X, @saylor (introducing Strategy’s MSTR explainer video and Investor Briefing)",
+   "theme": "strategy",
+   "theme_label": "Strategy",
+   "url": "https://x.com/saylor/status/2113607634611732614",
+   "excerpt": false,
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-25 (checked word for word against the post via the X API)"
+  },
+  {
+   "text": "J.P. Morgan Asset Management’s base case projects Bitcoin to outperform U.S. stocks, bonds and gold over the next decade. Wall Street is doing the math.",
+   "date": "2026-10-20",
+   "date_label": "Oct 20, 2026",
+   "type": "x",
+   "type_label": "Post on X",
+   "context": "Post on X, @saylor, citing J.P. Morgan Asset Management’s 2027 Long-Term Capital Market Assumptions",
+   "theme": "conviction",
+   "theme_label": "Conviction",
+   "url": "https://x.com/saylor/status/2112587713060757820",
+   "excerpt": false,
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-25 (checked word for word against the post via the X API)"
+  },
+  {
+   "text": "The bull market is calling.",
+   "date": "2026-10-21",
+   "date_label": "Oct 21, 2026",
+   "type": "x",
+   "type_label": "Post on X",
+   "context": "Post on X, @saylor",
+   "theme": "conviction",
+   "theme_label": "Conviction",
+   "url": "https://x.com/saylor/status/2112892556396962226",
+   "excerpt": false,
+   "speaker": "Michael Saylor",
+   "verified": "2026-10-25 (checked word for word against the post via the X API)"
   }
  ],
  "other_speakers": [

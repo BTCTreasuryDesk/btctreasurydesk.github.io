@@ -1,5 +1,5 @@
 {
- "as_of": "2026-10-18",
+ "as_of": "2026-10-25",
  "items": [
   {
    "date": "2026-10-05",
@@ -33,24 +33,6 @@
     "2026-10-29",
     "2026-10-30"
    ]
-  },
-  {
-   "date": "2026-10-20",
-   "title": "Strive SATS preferred IPO scheduled to settle (7,000,000 shares at $90)",
-   "company": "Strive",
-   "kind": "offering",
-   "detail": "15.00% Series A Perpetual SATS Preferred; dividends each business day from Nov 9, 2026.",
-   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm",
-   "source": "Strive 8-K, Oct 16, 2026"
-  },
-  {
-   "date": "2026-10-22",
-   "title": "Smarter Web \"MORE\" preferred: first ex-dividend date (£0.2301/share; record date Oct 23)",
-   "company": "The Smarter Web Company",
-   "kind": "record",
-   "detail": "Weekly dividend; latest payment date for the first one is Nov 9, 2026.",
-   "url": "https://www.investegate.co.uk/announcement/rns/the-smarter-web-company-plc--swc/results-of-offer-and-preferred-dividend-timetable/9816797",
-   "source": "SWC RNS, Oct 12, 2026"
   },
   {
    "date": "2026-10-28",
@@ -96,13 +78,69 @@
    "source": "Strategy 8-K, Oct 16, 2026"
   },
   {
+   "date": "2026-11-02",
+   "end": "2026-11-30",
+   "title": "SATA daily dividends continue ($0.0571/share each business day, 13.00% rate)",
+   "company": "Strive",
+   "kind": "dividend",
+   "detail": "Declared for 19 business days in November ($1.0849 in total); record date is the prior business day.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026065594/asst-20261012.htm",
+   "source": "Strive 8-K, Oct 13, 2026",
+   "daily_dates": [
+    "2026-11-02",
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-05",
+    "2026-11-06",
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-12",
+    "2026-11-13",
+    "2026-11-16",
+    "2026-11-17",
+    "2026-11-18",
+    "2026-11-19",
+    "2026-11-20",
+    "2026-11-23",
+    "2026-11-24",
+    "2026-11-25",
+    "2026-11-27",
+    "2026-11-30"
+   ]
+  },
+  {
    "date": "2026-11-09",
-   "title": "Strive SATS: first regular dividend date (then each business day)",
+   "title": "Strive SATS: first dividend paid ($0.8710/share; record date Nov 6)",
    "company": "Strive",
    "kind": "payment",
-   "detail": "First payment includes dividends accrued from the Oct 20 closing, if declared.",
-   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm",
-   "source": "Strive 8-K, Oct 16, 2026"
+   "detail": "Covers dividends accrued Oct 21–Nov 9 at 15.00% a year on the $100 stated amount; daily payments follow each business day.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026066608/asst-20261021.htm",
+   "source": "Strive 8-K, Oct 21, 2026"
+  },
+  {
+   "date": "2026-11-10",
+   "end": "2026-11-30",
+   "title": "SATS daily dividends ($0.0658/share each business day)",
+   "company": "Strive",
+   "kind": "dividend",
+   "detail": "Declared for 13 business days Nov 10–30 ($0.8554 in total); record date is the prior business day.",
+   "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026066608/asst-20261021.htm",
+   "source": "Strive 8-K, Oct 21, 2026",
+   "daily_dates": [
+    "2026-11-10",
+    "2026-11-12",
+    "2026-11-13",
+    "2026-11-16",
+    "2026-11-17",
+    "2026-11-18",
+    "2026-11-19",
+    "2026-11-20",
+    "2026-11-23",
+    "2026-11-24",
+    "2026-11-25",
+    "2026-11-27",
+    "2026-11-30"
+   ]
   },
   {
    "date": "2026-11-15",

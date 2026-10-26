@@ -1,13 +1,13 @@
 {
- "week": "2026-10-18",
+ "week": "2026-10-25",
  "note": "Edited at the Sunday refresh. Items with new:true get a NEW badge. Auto zone/badge/momentum changes are computed in the browser.",
  "items": [
   {
-   "t": "Ep. 13 recap: MSCI’s new rule puts Strategy on notice, STRC daily dividends conditionally declared for November, and Strive passes MARA at 35,595 BTC.",
+   "t": "Ep. 14 recap: Strategy's daily-dividend vote is Wednesday (same day as the Fed), Q3 results Thursday, and why sats per share is the number that matters.",
    "new": true
   },
   {
-   "t": "New Short: how much bitcoin do your MSTR shares own? Try it on the Your Bitcoin calculator.",
+   "t": "Preferreds Desk: Strive's new SATS (15.00% fixed, paid every business day from Nov 9) now has its own row next to SATA, and the Strategy Preferreds Guide PDF covers it.",
    "new": true
   },
   {
@@ -18,7 +18,8 @@
  "fresh": {
   "tools": [],
   "library": [
-   "pguide"
+   "pguide",
+   "tcs"
   ],
   "_note": "Sunday refresh: list tab ids and Library keys (tcs, pguide, cycle, numbers, cheat, data, quotes, whitepaper, glossary) that are new or materially updated this week; clear them the next week."
  }

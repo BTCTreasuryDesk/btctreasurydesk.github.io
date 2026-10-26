@@ -3,6 +3,98 @@
  "weeks": [
   {
    "_note": "Sunday refresh: News of the Week. Max 8 material items from the past Mon-Sun, grouped in this order: strategy (Strategy & Saylor), treasury (other big treasury companies: Strive/ASST, Metaplanet...), industry (index/regulatory/capital-markets news for the sector, other companies), bitcoin (price milestones, network, ETFs, adoption, crypto regulation) (omit a group with nothing material). One line each, date, official source preferred (SEC/TSE filing, company press release, regulator, index provider, Farside for ETF flows). BEFORE replacing, append the old news_week object to assets/data/news_archive.json weeks[] (newest first). Mark the 3 most material items with \"top\": 1 (shown when the card is collapsed). Each item also gets \"why\": one line, 'Why it matters for holders' (plain, factual, no advice). Mark the week's single biggest item \"lead\": 1 (the bold Top story; any group). 'On deck next week' is built automatically from desk.json week_ahead.",
+   "week_of": "2026-10-12",
+   "label": "Oct 12 – 18, 2026",
+   "as_of": "2026-10-18",
+   "items": [
+    {
+     "cat": "strategy",
+     "date": "2026-10-15",
+     "text": "Conditionally declared daily STRC dividends for every calendar day Nov 1–30 at a 12.00% rate ($0.03–$0.04/share a day, $1.00 in total), payable only if stockholders approve the daily-dividend amendments on Oct 28.",
+     "src": {
+      "name": "Strategy 8-K",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526423400/mstr-20261015.htm"
+     },
+     "top": 1,
+     "why": "If the vote passes, every calendar day becomes a STRC record date and the Nov 15 semi-monthly payment falls away; if it fails, the semi-monthly schedule stays."
+    },
+    {
+     "cat": "strategy",
+     "date": "2026-10-12",
+     "text": "Bought 250 BTC (~$21.5M, avg $86,194) to reach 848,250 BTC, funded by $21.0M of MSTR sales; repurchased $192.4M of STRC (1.93M shares). No preferred ATM sales.",
+     "src": {
+      "name": "Strategy 8-K Ex. 99.1",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526419726/mstr-ex99_1.htm"
+     },
+     "why": "STRC was bought back at about $99.58 a share, just under $100 par, using cash rather than new issuance; average BTC cost is $75,444."
+    },
+    {
+     "cat": "treasury",
+     "date": "2026-10-14",
+     "text": "Strive bought 6,133 BTC in two weeks (3,311 Oct 5–9, 2,822 Oct 12–13) to reach 35,595 BTC, passing MARA (35,577) for #4 among public companies; warrant exercises brought in $369.2M.",
+     "src": {
+      "name": "Strive 8-K",
+      "url": "https://www.sec.gov/Archives/edgar/data/1920406/000162828026065816/asst-20261014.htm"
+     },
+     "top": 1,
+     "why": "Strive is now the fourth-largest public bitcoin holder; the warrant cash funded the buys, but it also adds about 13.7M Class A shares."
+    },
+    {
+     "cat": "treasury",
+     "date": "2026-10-15",
+     "text": "Strive priced an upsized IPO of its new 15.00% SATS perpetual preferred: 7M shares at $90 (~$630M gross), dividends each business day from Nov 9, settling Oct 20.",
+     "src": {
+      "name": "Strive 8-K",
+      "url": "https://www.sec.gov/Archives/edgar/data/1920406/000095010326015690/dp255095_ex9901.htm"
+     },
+     "why": "A second, higher-rate preferred next to SATA; at $90 on a $100 stated amount the starting yield is about 16.7%."
+    },
+    {
+     "cat": "treasury",
+     "date": "2026-10-13",
+     "text": "Metaplanet set ¥52B of zero-coupon convertible bonds due 2031 (conversion price ¥339): about ¥23.6B to repay part of its bitcoin-backed loan and up to ¥28.3B for share buybacks under a new ¥60B program.",
+     "src": {
+      "name": "Metaplanet TSE notice (via Japan IR)",
+      "url": "https://japanir.jp/en/company/company-3350/ir/3350-20261014-01_wp_capital_policy/"
+     },
+     "why": "Swaps secured, interest-bearing BTC-backed debt for unsecured debt with no coupon and frees pledged BTC; potential dilution is about 11.24% if the bonds convert."
+    },
+    {
+     "cat": "industry",
+     "date": "2026-10-15",
+     "text": "MSCI adopted its 'non-operating companies' rule (Oct 15): issuers failing an operating-assets screen and 4 of 5 financial ratios become ineligible from the Nov 30 close. Strategy and Metaplanet are on the potential-deletion list; the final list is due Nov 11. Strategy called the rule 'discriminatory' and asked MSCI to withdraw it.",
+     "src": {
+      "name": "MSCI announcement",
+      "url": "https://app2.msci.com/webapp/index_ann/DocGet?lang=en&pub_key=aq0wbkjxPgo%3D"
+     },
+     "top": 1,
+     "why": "Current constituents are removed only if they fail the screen in each of their two most recent annual filings. Funds tracking MSCI hold about 13M MSTR shares (~3.1% of basic shares).",
+     "lead": 1
+    },
+    {
+     "cat": "industry",
+     "date": "2026-10-14",
+     "text": "Smarter Web (SWC) listed its \"MORE\" preferred on the LSE Main Market (12% initial variable rate, paid weekly; £10.0M raised) and bought 83 BTC to reach 2,830 BTC.",
+     "src": {
+      "name": "SWC RNS",
+      "url": "https://www.investegate.co.uk/announcement/rns/the-smarter-web-company-plc--swc/first-day-of-dealings-in-preferred-shares/9821366"
+     },
+     "why": "A UK-listed take on the Strategy-style preferred model; SWC used part of the proceeds to cut its Coinbase credit line to about £16M."
+    },
+    {
+     "cat": "bitcoin",
+     "date": "2026-10-16",
+     "text": "US spot bitcoin ETFs had $228.4M of net outflows over Oct 12–16, including −$261.4M on Oct 14, the day September CPI came in at 3.7% a year.",
+     "src": {
+      "name": "Farside Investors",
+      "url": "https://farside.co.uk/btc/"
+     },
+     "why": "ETF flows are a big source of marginal BTC demand; the Fed’s next rate decision is Oct 28, after the hotter CPI print."
+    }
+   ]
+  },
+  {
+   "_note": "Sunday refresh: News of the Week. Max 8 material items from the past Mon-Sun, grouped in this order: strategy (Strategy & Saylor), treasury (other big treasury companies: Strive/ASST, Metaplanet...), industry (index/regulatory/capital-markets news for the sector, other companies), bitcoin (price milestones, network, ETFs, adoption, crypto regulation) (omit a group with nothing material). One line each, date, official source preferred (SEC/TSE filing, company press release, regulator, index provider, Farside for ETF flows). BEFORE replacing, append the old news_week object to assets/data/news_archive.json weeks[] (newest first). Mark the 3 most material items with \"top\": 1 (shown when the card is collapsed). Each item also gets \"why\": one line, 'Why it matters for holders' (plain, factual, no advice). Mark the week's single biggest item \"lead\": 1 (the bold Top story; any group). 'On deck next week' is built automatically from desk.json week_ahead.",
    "week_of": "2026-10-05",
    "label": "Oct 5 – 11, 2026",
    "as_of": "2026-10-11",

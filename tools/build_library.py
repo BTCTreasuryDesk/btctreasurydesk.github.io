@@ -128,7 +128,7 @@ F = '/library-files/f31a01ec624a/'
 NEWD = D['treasuries']['as_of']
 LIBR = [ # key (Kit tag lib_<key>), title, 1-line benefit, file, type, cover, updated, featured
  ('tcs', 'Treasury Company Cheat Sheet', 'The top 20 bitcoin holders on one page: BTC held, mNAV, BTC per share, preferreds and last buy. Updated weekly.', F + 'treasury-company-cheat-sheet.pdf', '1-page PDF', 'treasury-company-cheat-sheet', NEWD, 1),
- ('pguide', 'Strategy Preferreds Guide', 'STRC, STRF, STRK, STRD and SATA explained: terms, yields, seniority, dividend dates and how each behaves.', F + 'strategy-preferreds-guide.pdf', '3-page PDF', 'strategy-preferreds-guide', NEWD, 1),
+ ('pguide', 'Strategy Preferreds Guide', 'STRC, STRF, STRK, STRD, SATA and SATS explained: terms, yields, seniority, dividend dates and how each behaves.', F + 'strategy-preferreds-guide.pdf', '3-page PDF', 'strategy-preferreds-guide', NEWD, 1),
  ('cycle', 'Long-Term Cycle Playbook', 'The models, a monthly cycle checklist and how HODLers plan macro entries and exits by rules.', F + 'long-term-cycle-playbook.pdf', '2-page PDF', 'long-term-cycle-playbook', NEWD, 1),
  ('numbers', 'MSTR & ASST by the Numbers', 'Holdings, share counts and preferreds for both companies, every figure sourced.', F + 'mstr-asst-by-the-numbers-ff665f.pdf', '3-page PDF', 'by-the-numbers', '2026-10-05', 0),
  ('cheat', 'Treasury Metrics Explained', 'Read any treasury company in minutes: mNAV, BTC Yield and sats per share on two pages.', F + 'bitcoin-treasury-cheat-sheet-6e605f.pdf', '2-page PDF', 'cheat-sheet', '2026-10-18', 0),

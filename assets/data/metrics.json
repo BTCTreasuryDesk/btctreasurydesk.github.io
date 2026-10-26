@@ -1,47 +1,47 @@
 {
- "retrieved": "2026-10-19T00:20+00:00",
+ "retrieved": "2026-10-26T00:16+00:00",
  "source_name": "strategy.com (Strategy's official dashboard)",
  "securities": {
   "MSTR": {
    "url": "https://www.strategy.com/",
-   "price": "$136.83",
-   "mnav": "1.08x",
-   "amplification": "1.27x",
-   "usd_reserve_musd": "$4,880",
-   "usd_reserve_src": "Strategy 8-K Ex. 99.1, Oct 12, 2026 (USD Reserve as of Oct 11)"
+   "price": "$146.01",
+   "mnav": "1.155x",
+   "amplification": "1.28x",
+   "usd_reserve_musd": "$4,830",
+   "usd_reserve_src": "Strategy 8-K, Oct 19, 2026 (USD Reserve as of Oct 18)"
   },
   "STRC": {
    "url": "https://www.strategy.com/strc",
-   "price": "$97.72",
+   "price": "$99.36",
    "dividend": "12.00%",
-   "effective_yield": "12.28%",
+   "effective_yield": "12.08%",
    "record_date": "10/31/2026",
    "payout_date": "11/15/2026"
   },
   "STRF": {
    "url": "https://www.strategy.com/strf",
-   "price": "$103.60",
+   "price": "$101.20",
    "dividend": "10.00%",
-   "effective_yield": "9.65%",
+   "effective_yield": "9.88%",
    "record_date": "12/15/2026",
    "payout_date": "12/31/2026"
   },
   "STRK": {
    "url": "https://www.strategy.com/strk",
-   "price": "$71.24",
+   "price": "$69.30",
    "dividend": "8.00%",
-   "effective_yield": "11.23%",
+   "effective_yield": "11.54%",
    "record_date": "12/15/2026",
    "payout_date": "12/31/2026"
   },
   "STRD": {
    "url": "https://www.strategy.com/strd",
-   "price": "$70.86",
+   "price": "$69.71",
    "dividend": "10.00%",
-   "effective_yield": "14.11%",
+   "effective_yield": "14.35%",
    "record_date": "12/15/2026",
    "payout_date": "12/31/2026"
   }
  },
- "market_data_as_of": "10/16/2026 04:00 PM ET"
+ "market_data_as_of": "10/23/2026 04:00 PM ET"
 }

@@ -11,6 +11,8 @@ MIN_ANALYSTS = 3
 # Curated notable notes (public reports only). Keep ~3-6 recent per company; drop ones older than ~2 months.
 NOTES = {
   'MSTR': [
+    {'date': '2026-10-20', 'firm': 'Clear Street', 'action': 'Price target raised', 'rating': 'Buy', 'from': 201, 'to': 211, 'note': 'Ahead of the Oct 29 Q3 report: says Strategy strengthened its financing in Q3 by using common issuance to buy back preferred and build its dollar reserve, leaving it better placed to resume preferred issuance with STRC near par.',
+     'src': 'TipRanks (TheFly)', 'url': 'https://www.tipranks.com/news/the-fly/strategy-price-target-raised-to-211-from-201-at-clear-street-thefly-news'},
     {'date': '2026-10-16', 'firm': 'Cantor Fitzgerald', 'action': 'Price target raised', 'rating': 'Overweight', 'from': 186, 'to': 208, 'note': 'Q3 preview: says FinTech and digital asset companies have largely calibrated Q3 expectations well.',
      'src': 'TipRanks (TheFly)', 'url': 'https://www.tipranks.com/news/the-fly/strategy-price-target-raised-to-208-from-186-at-cantor-fitzgerald-thefly-news'},
     {'date': '2026-10-09', 'firm': 'Barclays', 'action': 'Price target raised', 'rating': 'Overweight', 'from': 160, 'to': 175, 'note': 'Part of its Q3 fintech earnings preview.',
