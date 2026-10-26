@@ -211,3 +211,7 @@ html,body{max-width:100%;overflow-x:hidden}@supports (overflow:clip){html,body{o
 .tc-pane,.tc-read,.p-live,.tc-bar{min-width:0;max-width:100%}.tc-read{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:600px){.tc-bar>.tc-type{flex:1 1 auto;min-width:0;max-width:none}.tc-bar .tc-more{flex:0 0 auto}.tc-rng button{min-width:0;flex:1 1 0;padding:0 2px}}
 .tc-tg.tc-reset{color:#8b95a3}
+/* Reset view: one control in the top bar (desktop) and Desk Mode; phone keeps it in chart Tools */
+.tbtn.tbtn-rs{color:#e6e9ee;border-color:#3a434f}.tbtn.tbtn-rs:hover{color:#F7931A;border-color:#F7931A}
+@media (min-width:601px){.tc-tg.tc-reset{display:none}}
+@media (max-width:600px){body:not(.dm) .tbtn.tbtn-rs{display:none}}
