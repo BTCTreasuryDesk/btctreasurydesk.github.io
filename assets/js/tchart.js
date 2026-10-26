@@ -228,7 +228,7 @@
     if (SM !== 'c') { var tr = TRS().filter(function (r) { return !q || r.tk.indexOf(q) === 0 || r.name.toUpperCase().indexOf(q) >= 0; }).slice(0, q ? 20 : 12);
       if (SM === 'b' && tr.length) h += '<li class="tps-sep">BTC treasury stocks</li>'; tr.forEach(function (r) { h += row(r.tk, r.name, 's'); });
       Object.keys(IDX).forEach(function (k) { if (!q || k.indexOf(q) === 0) h += row(k, IDX[k][1], 's'); });
-      if (q && /^[A-Z0-9.^@-]{1,10}$/.test(q) && !isC(q) && !tr.some(function (r) { return r.tk === q; }) && !IDX[q]) h = row(q, 'Chart ' + q + ' (stock, ETF or index)', 's') + h; }
+      if (q && /^[A-Z0-9.^@-]{1,10}$/.test(q) && !isC(q) && !tr.some(function (r) { return r.tk === q; }) && !IDX[q]) { var tr0 = row(q, 'Chart ' + q + ' (stock, ETF or index)', 's'); h = n ? h + tr0 : tr0 + h; } }
     SH.querySelector('[data-l]').innerHTML = h || '<li class="tps-none">No match. ' + (SM === 'c' ? 'Only the top 100 chartable coins are listed.' : '') + '</li>'; }
   function choose(sym, k) { var P = SP; if (!P) return; var e = SH.querySelector('[data-e]'), crypto = k === 'c' || (k !== 's' && isC(sym));
     if (crypto && !CB[sym]) CB[sym] = sym + '-USD'; e.hidden = false; e.className = 'tps-e'; e.textContent = 'Checking ' + sym + '…';
