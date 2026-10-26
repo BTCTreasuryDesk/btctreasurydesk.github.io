@@ -210,3 +210,4 @@ body[data-tab=companies] main.grid>.p-wl,body[data-tab=companies] main.grid>.p-t
 html,body{max-width:100%;overflow-x:hidden}@supports (overflow:clip){html,body{overflow-x:clip}}
 .tc-pane,.tc-read,.p-live,.tc-bar{min-width:0;max-width:100%}.tc-read{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:600px){.tc-bar>.tc-type{flex:1 1 auto;min-width:0;max-width:none}.tc-bar .tc-more{flex:0 0 auto}.tc-rng button{min-width:0;flex:1 1 0;padding:0 2px}}
+.tc-tg.tc-reset{color:#8b95a3}
