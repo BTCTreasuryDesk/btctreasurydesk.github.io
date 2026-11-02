@@ -1,0 +1,98 @@
+/* Homepage layout, readability, and tap-target fixes.
+   Loaded last so these win over the earlier desk styles. */
+
+/* ---- page title sits in the existing wordmark ---- */
+.sh-brand h1{margin:0;padding:0;font:inherit;letter-spacing:inherit;color:inherit;line-height:1;text-transform:none}
+
+/* ---- in-page anchors clear the sticky tab bar ---- */
+#markets,#calendar,#key-dates,#alerts{scroll-margin-top:72px}
+
+/* ---- Key dates: stay inside the half column beside the episode ---- */
+.p-kd{min-width:0;max-width:100%;overflow:hidden;position:relative;z-index:0}
+.kd-l{min-width:0;max-width:100%}
+.kd-l li{grid-template-columns:96px minmax(0,1fr) auto;min-width:0;max-width:100%}
+.kd-t{min-width:0;overflow:hidden}
+.kd-t b,.kd-t small{min-width:0;white-space:normal;overflow-wrap:break-word}
+.kd-c{text-align:right}
+.kd-c a{display:block;max-width:16em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* the home rule forced the detail line onto one unbreakable row, which spilled over the episode */
+body[data-tab=home] main.grid>.p-kd .kd-t small{white-space:normal;overflow:visible;text-overflow:clip}
+@media (min-width:1024px){
+  body[data-tab=home] main.grid>.p-ep{position:relative;z-index:1}
+  body[data-tab=home] main.grid>.p-ep .votw{margin-top:12px}
+}
+
+/* ---- Market pulse rows: second line must not paint over the next row ---- */
+.hb-c{align-items:start;row-gap:3px;overflow:hidden}
+.hb-c>*{min-width:0}
+.hb-f{overflow:hidden;text-overflow:ellipsis}
+.hb-s{overflow:hidden}
+.hb-xl{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){
+  .hb-f,.hb-s,.hb-f+.hb-s{grid-column:1/-1;text-align:left;white-space:normal;overflow:visible}
+  .hb-f{text-overflow:clip}
+  .hb-xl{display:inline;white-space:normal;overflow:visible;text-overflow:clip}
+  .hb-m{white-space:nowrap}
+}
+
+/* source note under Market pulse: kept, collapsed so the prices lead */
+.hb-note{margin:8px 0 0}
+.hb-note summary{min-height:44px;align-items:center}
+.hb-note .p-f{margin-top:0}
+
+/* macro tiles: an odd last tile spans the row instead of leaving a blank cell */
+@media (max-width:1023px){
+  .mac-g>.mac-c:last-child:nth-child(odd){grid-column:1/-1}
+}
+
+/* ---- readable meta (about 12px, a step larger on a phone) ---- */
+.p-f,.p-t,.tag,.more,.kd-sub,.kd-d small,.kd-t small,.kd-c,.kd-c a,
+.hb-s,.hb-f,.hb-ses,.hb-ctx,.hb-ctx em,.hb-nm,.hb-tag,.hb-md button,.hb-ed,.mac-sub,.mac-l b,.mac-l i,.mac-d,.mac-a,.mac-fomc,
+.n5-k,.n5-c small,.n5-c em,.n5-h,.bm-n,.votw small,.shorts a,.clock,.mstat,.t-foot,.links small,
+.tk-sess,.hb-note summary{
+  font-size:12px;
+}
+.p-t{font-size:12px}
+.hb-tag{font-size:12px;line-height:1.35;padding:1px 5px}
+.n5-c em{font-size:12px}
+.mac-a,.mac-l i{font-size:12px}
+@media (max-width:600px){
+  .p-f,.p-t,.tag,.more,.kd-sub,.kd-d small,.kd-t small,.kd-c,.hb-s,.hb-f,.hb-ses,.hb-ctx,.hb-ctx em,
+  .mac-sub,.mac-l b,.mac-d,.mac-a,.n5-k,.n5-c small,.n5-c em,.bm-n,.votw small,.shorts a,.t-foot,.links small,.f-links a{
+    font-size:13px;
+  }
+  .ticker{font-size:12.5px!important;line-height:44px!important;height:44px!important}
+  .sh-nav a{font-size:13px}
+}
+
+/* ---- tap targets: about 44px on a phone, larger primary controls on desktop ---- */
+.p-ep .tbtn-yt,.p-ep .tbtn-sub{min-height:44px;display:inline-flex;align-items:center;box-sizing:border-box;padding:0 14px}
+.hb-md button,.hb-ed{min-height:32px}
+@media (min-width:1024px){
+  .tabs-next:not([hidden]){min-height:44px;display:inline-flex;align-items:center;padding:0 8px}
+}
+.tbtn.tbtn-rs,.tbtn.tbtn-o{min-height:40px;padding:0 12px}
+.mac-fomc{min-height:36px;display:inline-flex;align-items:center;gap:4px}
+@media (max-width:720px){
+  .sh-menu,.sh-yt{width:44px;height:44px;min-width:44px;min-height:44px}
+  .sh.sh-open .sh-nav a{min-height:44px;height:auto;display:flex;align-items:center;padding:0 12px}
+}
+@media (max-width:600px){
+  .tabs-in button,.hb-tabs button,.hb-md button,.hb-ed,.seg button,.tc-seg button,.tc-tg,.tc-pkb,.tc-pick,.tc-bar>.tc-type,
+  .p-ep .tbtn,.shorts a,.kd-more,.chip,.mac-fomc,.f-links a,.p-hb .more,.hsc-ch,.shr{
+    min-height:44px!important;
+  }
+  .hsc-ch{width:44px;height:44px;line-height:44px}
+  .shr{min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+  .ep-tools a,.votw-more a,.t-foot a{display:inline-flex;align-items:center;min-height:44px;padding:8px 2px}
+  .kd-c a{display:flex;justify-content:flex-end;align-items:center;min-height:44px;padding:8px 0;max-width:11em}
+  .hb-md button,.hb-ed{font-size:13px;padding:0 12px}
+  .hb-tabs button{font-size:13px}
+  .shorts{gap:8px}
+  .shorts a{padding:8px 12px;align-items:center}
+  .f-links a{display:inline-flex;align-items:center;padding:8px 2px}
+  .p-hb .more{display:inline-flex;align-items:center}
+  .tk-wrap .strip-pp,.tk-wrap .tk-edit{width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important}
+  .tk-wrap>.ticker{overflow:hidden}
+  .mac-fomc{padding:8px 12px}
+}
