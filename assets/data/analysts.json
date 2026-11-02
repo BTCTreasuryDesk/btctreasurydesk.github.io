@@ -1,6 +1,6 @@
 {
  "_note": "Third-party analyst views (not ours). Consensus: Nasdaq.com analyst API, refreshed weekly. Notes: curated public reports with source links. Education only.",
- "as_of": "2026-10-25",
+ "as_of": "2026-11-01",
  "source": "Nasdaq.com analyst research (consensus price targets and ratings)",
  "source_url": "https://www.nasdaq.com/market-activity/stocks/mstr/analyst-research",
  "actions_source": "MarketBeat (public analyst ratings by firm)",
@@ -21,13 +21,13 @@
    "hold": 1,
    "sell": 0,
    "cons": "Buy",
-   "pt": 228.57,
+   "pt": 215.21,
    "lo": 100.0,
-   "hi": 435.0,
+   "hi": 350.0,
    "hist": [
     {
      "d": "2025-10-01",
-     "buy": 13,
+     "buy": 12,
      "hold": 0,
      "sell": 1,
      "cons": "Buy"
@@ -119,6 +119,26 @@
    ],
    "name": "Strategy",
    "firms": [
+    {
+     "date": "2026-10-30",
+     "firm": "HC Wainwright",
+     "action": "Reiterated Rating",
+     "r_from": "Buy",
+     "rating": "Buy",
+     "pt_from": null,
+     "pt": 250.0,
+     "kind": "pt_new"
+    },
+    {
+     "date": "2026-10-30",
+     "firm": "BTIG Research",
+     "action": "Reiterated Rating",
+     "r_from": "Buy",
+     "rating": "Buy",
+     "pt_from": null,
+     "pt": 250.0,
+     "kind": "pt_new"
+    },
     {
      "date": "2026-10-16",
      "firm": "Cantor Fitzgerald",
@@ -220,16 +240,6 @@
      "kind": "down"
     },
     {
-     "date": "2026-08-03",
-     "firm": "HC Wainwright",
-     "action": "Set Target",
-     "r_from": null,
-     "rating": null,
-     "pt_from": null,
-     "pt": 325.0,
-     "kind": "pt_new"
-    },
-    {
      "date": "2026-07-31",
      "firm": "UBS Group",
      "action": "Reiterated Rating",
@@ -238,16 +248,6 @@
      "pt_from": null,
      "pt": null,
      "kind": "reit"
-    },
-    {
-     "date": "2026-07-31",
-     "firm": "BTIG Research",
-     "action": "Reiterated Rating",
-     "r_from": "Buy",
-     "rating": "Buy",
-     "pt_from": null,
-     "pt": 250.0,
-     "kind": "pt_new"
     },
     {
      "date": "2026-07-27",
@@ -334,67 +334,72 @@
     },
     {
      "d": "2026-08-02",
-     "avg": 292.6,
-     "n": 5
+     "avg": 303.25,
+     "n": 4
     },
     {
      "d": "2026-08-09",
-     "avg": 298.0,
-     "n": 6
+     "avg": 303.25,
+     "n": 4
     },
     {
      "d": "2026-08-16",
-     "avg": 279.0,
-     "n": 7
+     "avg": 275.6,
+     "n": 5
     },
     {
      "d": "2026-08-23",
-     "avg": 279.0,
-     "n": 7
+     "avg": 275.6,
+     "n": 5
     },
     {
      "d": "2026-08-30",
-     "avg": 287.88,
-     "n": 8
+     "avg": 288.0,
+     "n": 6
     },
     {
      "d": "2026-09-06",
-     "avg": 280.0,
-     "n": 9
+     "avg": 277.86,
+     "n": 7
     },
     {
      "d": "2026-09-13",
-     "avg": 269.9,
-     "n": 10
+     "avg": 265.5,
+     "n": 8
     },
     {
      "d": "2026-09-20",
-     "avg": 269.9,
-     "n": 10
+     "avg": 265.5,
+     "n": 8
     },
     {
      "d": "2026-09-27",
-     "avg": 263.09,
-     "n": 11
+     "avg": 257.67,
+     "n": 9
     },
     {
      "d": "2026-10-04",
-     "avg": 261.17,
-     "n": 12
+     "avg": 255.9,
+     "n": 10
     },
     {
      "d": "2026-10-11",
-     "avg": 254.54,
-     "n": 13
+     "avg": 248.55,
+     "n": 11
     },
     {
      "d": "2026-10-18",
-     "avg": 251.21,
-     "n": 14
+     "avg": 245.17,
+     "n": 12
     },
     {
      "d": "2026-10-25",
-     "avg": 251.21,
+     "avg": 245.17,
+     "n": 12
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 245.86,
      "n": 14
     }
    ]
@@ -571,6 +576,11 @@
      "d": "2026-10-25",
      "avg": 35.33,
      "n": 3
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 35.33,
+     "n": 3
     }
    ]
   },
@@ -580,14 +590,14 @@
    "hold": 3,
    "sell": 2,
    "cons": "Buy",
-   "pt": 14.78,
+   "pt": 14.44,
    "lo": 10.0,
    "hi": 27.0,
    "hist": [
     {
      "d": "2025-10-01",
      "buy": 5,
-     "hold": 5,
+     "hold": 4,
      "sell": 0,
      "cons": "Buy"
     },
@@ -711,12 +721,12 @@
     {
      "date": "2026-09-14",
      "firm": "JPMorgan Chase & Co.",
-     "action": "Reiterated Rating",
+     "action": "Downgrade",
      "r_from": "Overweight",
      "rating": "Underweight",
      "pt_from": 13.0,
      "pt": 11.0,
-     "kind": "pt_down"
+     "kind": "down"
     },
     {
      "date": "2026-09-11",
@@ -870,22 +880,27 @@
      "d": "2026-10-25",
      "avg": 17.78,
      "n": 9
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 17.78,
+     "n": 9
     }
    ]
   },
   "CLSK": {
-   "n": 11,
-   "buy": 11,
+   "n": 10,
+   "buy": 10,
    "hold": 0,
    "sell": 0,
    "cons": "Buy",
-   "pt": 23.15,
+   "pt": 22.39,
    "lo": 19.0,
    "hi": 26.0,
    "hist": [
     {
      "d": "2025-10-01",
-     "buy": 8,
+     "buy": 6,
      "hold": 1,
      "sell": 0,
      "cons": "Buy"
@@ -978,6 +993,16 @@
    "name": "CleanSpark",
    "firms": [
     {
+     "date": "2026-10-30",
+     "firm": "B. Riley Financial",
+     "action": "Lower Target",
+     "r_from": "Buy",
+     "rating": "Buy",
+     "pt_from": 26.0,
+     "pt": 21.0,
+     "kind": "pt_down"
+    },
+    {
      "date": "2026-10-22",
      "firm": "Zacks Research",
      "action": "Downgrade",
@@ -1036,16 +1061,6 @@
      "pt_from": null,
      "pt": null,
      "kind": "reit"
-    },
-    {
-     "date": "2026-08-03",
-     "firm": "B. Riley Financial",
-     "action": "Boost Target",
-     "r_from": "Buy",
-     "rating": "Buy",
-     "pt_from": 19.0,
-     "pt": 26.0,
-     "kind": "pt_up"
     },
     {
      "date": "2026-07-28",
@@ -1332,62 +1347,67 @@
     },
     {
      "d": "2026-08-09",
-     "avg": 23.78,
-     "n": 9
+     "avg": 23.5,
+     "n": 8
     },
     {
      "d": "2026-08-16",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-08-23",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-08-30",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-09-06",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-09-13",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-09-20",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-09-27",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-10-04",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-10-11",
-     "avg": 23.5,
-     "n": 10
+     "avg": 23.22,
+     "n": 9
     },
     {
      "d": "2026-10-18",
-     "avg": 23.09,
-     "n": 11
+     "avg": 22.8,
+     "n": 10
     },
     {
      "d": "2026-10-25",
-     "avg": 22.83,
+     "avg": 22.55,
+     "n": 11
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 22.42,
      "n": 12
     }
    ]
@@ -1398,7 +1418,7 @@
    "hold": 0,
    "sell": 0,
    "cons": "Buy",
-   "pt": 31.68,
+   "pt": 31.11,
    "lo": 19.0,
    "hi": 42.0,
    "hist": [
@@ -1497,6 +1517,16 @@
    "name": "Riot Platforms",
    "firms": [
     {
+     "date": "2026-10-30",
+     "firm": "B. Riley Financial",
+     "action": "Lower Target",
+     "r_from": "Buy",
+     "rating": "Buy",
+     "pt_from": 33.0,
+     "pt": 25.0,
+     "kind": "pt_down"
+    },
+    {
      "date": "2026-10-20",
      "firm": "Piper Sandler",
      "action": "Lower Target",
@@ -1525,16 +1555,6 @@
      "pt_from": 43.0,
      "pt": 35.5,
      "kind": "pt_down"
-    },
-    {
-     "date": "2026-09-29",
-     "firm": "B. Riley Financial",
-     "action": "Boost Target",
-     "r_from": "Buy",
-     "rating": "Buy",
-     "pt_from": 28.0,
-     "pt": 33.0,
-     "kind": "pt_up"
     },
     {
      "date": "2026-09-15",
@@ -1771,22 +1791,27 @@
     },
     {
      "d": "2026-10-04",
-     "avg": 31.3,
-     "n": 10
+     "avg": 31.11,
+     "n": 9
     },
     {
      "d": "2026-10-11",
-     "avg": 31.3,
-     "n": 10
+     "avg": 31.11,
+     "n": 9
     },
     {
      "d": "2026-10-18",
-     "avg": 31.04,
-     "n": 12
+     "avg": 30.86,
+     "n": 11
     },
     {
      "d": "2026-10-25",
-     "avg": 30.12,
+     "avg": 29.88,
+     "n": 12
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 29.5,
      "n": 13
     }
    ]
@@ -1797,7 +1822,7 @@
    "hold": 1,
    "sell": 0,
    "cons": "Buy",
-   "pt": 156.47,
+   "pt": 154.77,
    "lo": 96.0,
    "hi": 275.0,
    "hist": [
@@ -1896,6 +1921,16 @@
    "name": "Hut 8",
    "firms": [
     {
+     "date": "2026-10-30",
+     "firm": "B. Riley Financial",
+     "action": "Lower Target",
+     "r_from": "Buy",
+     "rating": "Buy",
+     "pt_from": 163.0,
+     "pt": 134.0,
+     "kind": "pt_down"
+    },
+    {
      "date": "2026-10-20",
      "firm": "Piper Sandler",
      "action": "Lower Target",
@@ -1938,12 +1973,12 @@
     {
      "date": "2026-10-07",
      "firm": "Roth Capital",
-     "action": "Reiterated Rating",
+     "action": "Initiated Coverage",
      "r_from": null,
      "rating": "Buy",
      "pt_from": null,
      "pt": 108.0,
-     "kind": "pt_new"
+     "kind": "init"
     },
     {
      "date": "2026-10-07",
@@ -2044,16 +2079,6 @@
      "pt_from": null,
      "pt": 124.0,
      "kind": "pt_new"
-    },
-    {
-     "date": "2026-08-03",
-     "firm": "B. Riley Financial",
-     "action": "Boost Target",
-     "r_from": "Buy",
-     "rating": "Buy",
-     "pt_from": 130.0,
-     "pt": 163.0,
-     "kind": "pt_up"
     },
     {
      "date": "2026-07-22",
@@ -2265,62 +2290,67 @@
     },
     {
      "d": "2026-08-09",
-     "avg": 146.93,
-     "n": 14
+     "avg": 145.69,
+     "n": 13
     },
     {
      "d": "2026-08-16",
-     "avg": 146.93,
-     "n": 14
+     "avg": 145.69,
+     "n": 13
     },
     {
      "d": "2026-08-23",
-     "avg": 146.93,
-     "n": 14
+     "avg": 145.69,
+     "n": 13
     },
     {
      "d": "2026-08-30",
-     "avg": 146.93,
-     "n": 14
+     "avg": 145.69,
+     "n": 13
     },
     {
      "d": "2026-09-06",
-     "avg": 146.93,
-     "n": 14
+     "avg": 145.69,
+     "n": 13
     },
     {
      "d": "2026-09-13",
-     "avg": 146.93,
-     "n": 14
+     "avg": 145.69,
+     "n": 13
     },
     {
      "d": "2026-09-20",
-     "avg": 148.8,
-     "n": 15
+     "avg": 147.79,
+     "n": 14
     },
     {
      "d": "2026-09-27",
-     "avg": 145.5,
-     "n": 16
+     "avg": 144.33,
+     "n": 15
     },
     {
      "d": "2026-10-04",
-     "avg": 145.5,
-     "n": 16
+     "avg": 144.33,
+     "n": 15
     },
     {
      "d": "2026-10-11",
-     "avg": 149.53,
-     "n": 19
+     "avg": 148.78,
+     "n": 18
     },
     {
      "d": "2026-10-18",
-     "avg": 149.6,
-     "n": 20
+     "avg": 148.89,
+     "n": 19
     },
     {
      "d": "2026-10-25",
-     "avg": 148.33,
+     "avg": 147.6,
+     "n": 20
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 146.95,
      "n": 21
     }
    ]
@@ -2480,12 +2510,39 @@
      "d": "2026-10-25",
      "avg": 28.25,
      "n": 4
+    },
+    {
+     "d": "2026-11-01",
+     "avg": 28.25,
+     "n": 4
     }
    ]
   }
  },
  "notes": {
   "MSTR": [
+   {
+    "date": "2026-10-30",
+    "firm": "StoneX",
+    "action": "Target kept",
+    "rating": "Buy",
+    "from": 435,
+    "to": 435,
+    "note": "After Q3: says the $4.83B cash reserve and a steadier STRC leave Strategy better placed to resume bitcoin buying.",
+    "src": "The Block",
+    "url": "https://www.theblock.co/news/business/2026-10-30-strategy-mstr-preferred-stock-bitcoin-buying-analysts-432214"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "TD Cowen",
+    "action": "Target kept",
+    "rating": "Buy",
+    "from": 260,
+    "to": 260,
+    "note": "After Q3: says deeper distribution and liquidity for the preferreds could raise Strategy’s capacity to issue Digital Credit efficiently.",
+    "src": "The Block",
+    "url": "https://www.theblock.co/news/business/2026-10-30-strategy-mstr-preferred-stock-bitcoin-buying-analysts-432214"
+   },
    {
     "date": "2026-10-20",
     "firm": "Clear Street",
@@ -2744,6 +2801,81 @@
      "sell": 0,
      "cons": "Buy",
      "pt": 156.47,
+     "lo": 96.0,
+     "hi": 275.0
+    },
+    "ABTC": {
+     "n": 3,
+     "buy": 3,
+     "hold": 0,
+     "sell": 0,
+     "cons": "Buy",
+     "pt": 17.67,
+     "lo": 15.0,
+     "hi": 22.0
+    }
+   }
+  },
+  {
+   "date": "2026-11-01",
+   "cos": {
+    "MSTR": {
+     "n": 14,
+     "buy": 13,
+     "hold": 1,
+     "sell": 0,
+     "cons": "Buy",
+     "pt": 215.21,
+     "lo": 100.0,
+     "hi": 350.0
+    },
+    "ASST": {
+     "n": 3,
+     "buy": 3,
+     "hold": 0,
+     "sell": 0,
+     "cons": "Buy",
+     "pt": 38.0,
+     "lo": 33.0,
+     "hi": 44.0
+    },
+    "MARA": {
+     "n": 10,
+     "buy": 5,
+     "hold": 3,
+     "sell": 2,
+     "cons": "Buy",
+     "pt": 14.44,
+     "lo": 10.0,
+     "hi": 27.0
+    },
+    "CLSK": {
+     "n": 10,
+     "buy": 10,
+     "hold": 0,
+     "sell": 0,
+     "cons": "Buy",
+     "pt": 22.39,
+     "lo": 19.0,
+     "hi": 26.0
+    },
+    "RIOT": {
+     "n": 15,
+     "buy": 15,
+     "hold": 0,
+     "sell": 0,
+     "cons": "Buy",
+     "pt": 31.11,
+     "lo": 19.0,
+     "hi": 42.0
+    },
+    "HUT": {
+     "n": 19,
+     "buy": 18,
+     "hold": 1,
+     "sell": 0,
+     "cons": "Buy",
+     "pt": 154.77,
      "lo": 96.0,
      "hi": 275.0
     },

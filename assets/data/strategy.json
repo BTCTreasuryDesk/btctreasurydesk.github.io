@@ -2,7 +2,7 @@
   "company": "Strategy Inc",
   "ticker": "MSTR",
   "as_of": "2026-10-19",
-  "retrieved": "2026-10-25",
+  "retrieved": "2026-11-01",
   "source_name": "Strategy — Bitcoin ledger (strategy.com/purchases)",
   "source_url": "https://www.strategy.com/purchases",
   "btc_held": 848517.0,
@@ -12,8 +12,8 @@
   "adso_note": "Assumed diluted shares outstanding (ADSO) as reported in Strategy's ledger for the latest row.",
   "cost_note": "Totals row on strategy.com: aggregate cost and average price inclusive of fees; per Strategy, figures for BTC sold are removed from the totals.",
   "confirming_filing": {
-    "name": "8-K, Oct 19, 2026",
-    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526424688/mstr-20261019.htm"
+    "name": "8-K, Oct 26, 2026 (no purchase Oct 19–25)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526431146/mstr-20261026.htm"
   },
   "purchases": [
     {

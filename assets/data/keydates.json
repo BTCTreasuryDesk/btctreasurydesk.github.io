@@ -1,41 +1,30 @@
 {
- "as_of": "2026-10-25",
+ "as_of": "2026-11-01",
  "note": "Official calendars only (Federal Reserve, BLS, strategy.com). Strategy earnings are added only once Strategy announces the date.",
  "items": [
   {
-   "date": "2026-10-28",
-   "time": "2:00 PM ET",
-   "kind": "macro",
-   "title": "FOMC rate decision",
-   "detail": "Meeting October 27-28; statement 2:00 PM ET, press conference 2:30 PM ET",
-   "source": "Federal Reserve FOMC calendar",
-   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
-  },
-  {
-   "date": "2026-10-28",
-   "time": "10:00 AM ET",
-   "kind": "strategy",
-   "title": "Strategy special meeting: daily dividends vote",
-   "detail": "Vote on daily record dates for STRC, STRF, STRK and STRD",
-   "source": "Strategy DEF 14A",
-   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526413159/d503578ddef14a.htm"
-  },
-  {
-   "date": "2026-10-29",
-   "time": "5:00 PM ET",
-   "kind": "strategy",
-   "title": "Strategy Q3 2026 earnings",
-   "detail": "Results after the close; live Video Webinar 5:00 PM ET",
-   "source": "Strategy press release",
-   "url": "https://www.strategy.com/press/strategy-announces-earnings-release-date-and-live-video-webinar-for-third-quarter-2026-financial-results_10-08-2026"
-  },
-  {
-   "date": "2026-10-31",
+   "date": "2026-11-01",
    "kind": "dividend",
    "title": "STRC dividend record date",
    "detail": "STRC stated rate 12.00%",
    "source": "strategy.com",
    "url": "https://www.strategy.com/strc"
+  },
+  {
+   "date": "2026-11-02",
+   "kind": "dividend",
+   "title": "STRC dividend payment date",
+   "detail": "STRC stated rate 12.00%",
+   "source": "strategy.com",
+   "url": "https://www.strategy.com/strc"
+  },
+  {
+   "date": "2026-11-05",
+   "kind": "strategy",
+   "title": "Strategy CFO Andrew Kang's resignation takes effect",
+   "detail": "Phong Le acts as principal financial officer from Nov 6; Reza Virasteh becomes CFO Jan 1, 2027",
+   "source": "Strategy 8-K, Oct 29, 2026 (Item 5.02)",
+   "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000047/mstr-20261026.htm"
   },
   {
    "date": "2026-11-06",
@@ -54,14 +43,6 @@
    "detail": "Consumer Price Index for October 2026",
    "source": "BLS release schedule",
    "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
-  },
-  {
-   "date": "2026-11-15",
-   "kind": "dividend",
-   "title": "STRC dividend payment date",
-   "detail": "STRC stated rate 12.00%",
-   "source": "strategy.com",
-   "url": "https://www.strategy.com/strc"
   },
   {
    "date": "2026-12-04",

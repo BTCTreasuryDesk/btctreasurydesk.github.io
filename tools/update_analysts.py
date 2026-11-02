@@ -11,6 +11,10 @@ MIN_ANALYSTS = 3
 # Curated notable notes (public reports only). Keep ~3-6 recent per company; drop ones older than ~2 months.
 NOTES = {
   'MSTR': [
+    {'date': '2026-10-30', 'firm': 'StoneX', 'action': 'Target kept', 'rating': 'Buy', 'from': 435, 'to': 435, 'note': 'After Q3: says the $4.83B cash reserve and a steadier STRC leave Strategy better placed to resume bitcoin buying.',
+     'src': 'The Block', 'url': 'https://www.theblock.co/news/business/2026-10-30-strategy-mstr-preferred-stock-bitcoin-buying-analysts-432214'},
+    {'date': '2026-10-30', 'firm': 'TD Cowen', 'action': 'Target kept', 'rating': 'Buy', 'from': 260, 'to': 260, 'note': 'After Q3: says deeper distribution and liquidity for the preferreds could raise Strategy\u2019s capacity to issue Digital Credit efficiently.',
+     'src': 'The Block', 'url': 'https://www.theblock.co/news/business/2026-10-30-strategy-mstr-preferred-stock-bitcoin-buying-analysts-432214'},
     {'date': '2026-10-20', 'firm': 'Clear Street', 'action': 'Price target raised', 'rating': 'Buy', 'from': 201, 'to': 211, 'note': 'Ahead of the Oct 29 Q3 report: says Strategy strengthened its financing in Q3 by using common issuance to buy back preferred and build its dollar reserve, leaving it better placed to resume preferred issuance with STRC near par.',
      'src': 'TipRanks (TheFly)', 'url': 'https://www.tipranks.com/news/the-fly/strategy-price-target-raised-to-211-from-201-at-clear-street-thefly-news'},
     {'date': '2026-10-16', 'firm': 'Cantor Fitzgerald', 'action': 'Price target raised', 'rating': 'Overweight', 'from': 186, 'to': 208, 'note': 'Q3 preview: says FinTech and digital asset companies have largely calibrated Q3 expectations well.',
